@@ -1,0 +1,108 @@
+# Klondike Solitaire — test strategy and acceptance
+
+Status: planned tests, none executed against an application yet. [REQUIREMENTS.md](REQUIREMENTS.md) is the acceptance contract; [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) assigns implementation ownership.
+
+## 1. Layers and test discipline
+
+- **Vitest, Node:** pure engine, history, statistics, serialization/replay and layout math. Freeze engine inputs; assert exact output plus global invariants. Use small manually constructed full-deck fixtures and deterministic seeds, not an additional property-testing dependency.
+- **Playwright:** built application on Chromium, Firefox and WebKit. Test real DOM rendering, focus, input, storage and worker behavior. Each test has a fresh context/save slot unless it explicitly tests recovery.
+- **Real devices:** Android Chrome and iOS Safari touch arbitration, safe areas, dynamic browser bars, zoom, scrolling, installation and offline updates. Emulation supplements this evidence.
+- **Visual/accessibility/performance:** stable screenshot states, manual screen-reader and contrast checks, production asset measurements and recorded physical-device traces.
+
+Add a regression test before fixing nontrivial behavior. Avoid snapshots as the only proof of a rule. All board fixtures contain exactly 52 cards: small piles under test plus valid supporting piles, never malformed boards accepted for convenience. Invalid-state fixtures are explicitly marked and tested only at validation boundaries.
+
+Use accessible Polish labels to drive E2E. Near-win, long-column and corrupt-save fixtures are seeded via the versioned save schema before app boot. Do not add a production-only backdoor or debug API to manipulate state. For a board that cannot be expressed by a supported persisted action trace, mount the ordinary renderer/controller in a test-only Vite entry excluded from production output; keep its scope to interaction/layout tests, not persistence claims.
+
+## 2. Rule, session and persistence cases
+
+| ID | Cases and required assertions | Requirements |
+| --- | --- | --- |
+| T01 | Deck has each ID 0–51 once; mapping of all suits/ranks/colors; golden shuffle/deal vectors for 0/1/42/4294967295; same seed/options reproduce; row-wise deal sizes 1–7, 7 visible, 24 stock. Reject fractional, negative, overflow, NaN/Infinity seeds and unsupported modes/versions. | R01–R03, N07 |
+| T02 | Tableau accepts red 6 on black 7 and inverse; rejects same color, rank gaps, Ace wrap, self-move, out-of-range index and hidden source. Empty column accepts King only. Invalid command leaves frozen state unchanged. | R04, N07 |
+| T03 | Valid 7-black/6-red/5-black suffix moves as a unit; every selected card remains ordered. Reject invalid internal order, partial suffix, hidden crossing or a suffix sent to foundation. Source uncover flips exactly one card atomically; moving an all-visible suffix may empty its column. | R05, R10 |
+| T04 | Each fixed foundation accepts its Ace and next same-suit rank only; wrong suit, gaps and non-Ace empty placement reject. Only exposed single card moves out to a legal tableau; foundation-to-foundation rejects. Foundation King completes rank 13. | R06 |
+| T05 | Only waste top is playable; buried waste, stock-to-tableau/foundation and any move targeting stock/waste reject. Source/destination shapes and enums are validated. | R07, N08 |
+| T06 | Draw 1 removes/pushes exactly one; Draw 3 does so three times in correct order. Remaining stock lengths 1 and 2 draw only remainder. Nonempty waste is retained below new cards. No accidental playable middle card. | R08 |
+| T07 | Recycling requires empty stock and nonempty waste; reverses remaining waste once and does not draw. Test multiple complete cycles with zero/one/two played waste cards, partial final batch, and empty/empty no-op. Exact next drawn cards match hand-calculated fixtures. | R09 |
+| T08 | 52 correctly placed foundation cards wins; 51 does not. Illegal foundation contents reject at validation. No-move state is not automatically lost; legal draw/recycle prevents a false “no move” hint. | R11 |
+| T09 | Undo/Redo each transfer/reveal/draw/recycle; repeated Undo reaches exact deal; repeated Redo reaches exact final state. Empty history bounds are no-ops. New accepted move after Undo erases future; rejected move, hint or selection does not. | F03, F06 |
+| T10 | Move count equals cursor; sequence and auto-reveal count once; recycle counts once. Undo/Redo change count correctly. Restart reproduces original board/mode, clears history/time and creates a distinct attempt ID. | F05–F07 |
+| T11 | Round-trip seed/versions/mode, cursor, complete redo tail, elapsed time, preferences, flags and stats. Replay rejects one invalid command anywhere, even beyond cursor. JSON malformed, wrong types, prototype-like keys, extra untrusted strings, invalid cursor, duplicate IDs in derived state and unsupported schema fail safely. | F08/F09, N08 |
+| T12 | Reject >1 MiB UTF-8 input and >10,000 commands before excessive replay work; accept boundary values if otherwise valid. Unknown/future schema and corrupt input remain byte-for-byte in storage. Quota/read denial/serialization failure preserve previous save and expose Polish warning; temporary session stays playable. No silent history truncation. | F09, N08 |
+| T13 | Fake monotonic clock: first legal action starts time; hidden/dialog/pause periods add zero; cancelled replacement resumes without lost time; reload starts paused; Undo does not rewind. Five-second checkpoint and pagehide settle elapsed time once. Current win pauses clock; Undo resumes practice, without changing the recorded best. | F07/F08 |
+| T14 | Per-mode attempts increment only on first accepted action. Win increments once through Undo/Redo, save/reload and re-win. Restart counts as another attempt only when started. Win % uses started attempts, including abandoned/ongoing; zero denominator gives 0%. Equal/better/worse winning records update correctly. Two tabs: lock denies second writer; revision fallback detects conflict, preserves remote save and explains its race limitation. | F10/F11/F13 |
+
+Malformed command fuzz cases must include null, strings, arrays, negative/fractional/oversized indices and unknown pile/type names. Reject safely, without a thrown UI exception. Restore diagnostics must not evaluate saved strings or leak hidden identities into user messages.
+
+## 3. Browser, UX and optional feature cases
+
+| ID | Cases and required assertions | Requirements |
+| --- | --- | --- |
+| T15 | Tap source/target moves exactly once; deselect/reselect rules; illegal destination feedback; stock draw/recycle controls; disabled Undo/Redo; New Game/Restart/mode-change confirmation accept/cancel; valid/invalid decimal seed and clipboard failure feedback. Check actual card identities/state through save output and visible board. | F01/F03/F05/F06 |
+| T16 | Mouse click/drag; touch tap and selected-source drag lifecycle; 6 px threshold; outside drop; pointercancel/lost capture; second pointer; release beyond viewport; rapid tap after drag; Escape; hide; resize; autoscroll to lower cards and return to foundation. Each successful gesture creates one move; all cancelled gestures create zero and clean overlays/capture. | F02, U08/U09 |
+| T17 | Seven columns stay in bounds at every viewport; no horizontal overflow (`scrollWidth ≤ clientWidth + 1px`); cards have expected aspect ratio and ≥14 px ranks; visible bands ≥24 px; fan stays inside waste area. Long-column fixture, 6 hidden + 13 alternating face-up cards, is reachable without clipped bottom card. Scroll handle/buttons appear only on overflow. Selection survives manual scroll. | U01–U06/U09 |
+| T18 | Complete legal play path with keyboard only; arrow focus across empty/occupied piles; stock via Space; Escape; Ctrl/Cmd Undo/Redo except in seed input; dialogs focus/restore; controls labelled in Polish. Screen-reader sample includes reveal and rejects without timer spam. Hidden identities absent from DOM/accessibility markup. | N01/N02 |
+| T19 | Normal/reduced motion, 200% text and browser zoom, contrast and focus visibility; safe areas and toolbar changes on device; landscape resize mid-gesture; DPI 1/2/3 screenshots. No required action relies on hover, color or animation. Inspect all four suits' A/10/J/Q/K at 320 px. | U07–U09, N02–N04 |
+| T20 | Hint set is legal and stable; reveal outranks foundation, then transfers, then stock action. Repeated hints cycle; board change resets cycle. Swap identities of hidden cards while preserving visible state: hint order is unchanged. Empty action list gives the exact Polish message without declaring a loss. | F04 |
+| T21 | Optional only: no completion with hidden tableau/stock/waste; preflight result consists solely of legal single-card foundation moves and ends won. Cancel/Undo/pause/hide stops execution; individual moves undo; award occurs once; reduced motion does not alter command sequence. | F12 |
+| T22 | Measure initial route, bundles, interaction latency and drag frame times with the fixed profile below. Start-up/restore of a near-limit history remains responsive; no per-frame synchronous storage or forced-layout loop. No console errors/unhandled promise rejections during full game flow. | N05/N06/N11 |
+| T23 | At root and repository base: asset/manifest/worker URLs are correct; after readiness, disable network and reload/play/restart/save/restore. First-ever offline visit is not claimed supported. Partial install keeps old worker usable. v1→v2 waits during play, updates only after accepted saved safe reload, retains history/stats, does not clear sibling app cache or older live tab assets. Offline update failure leaves a playable version. | N09/N10 |
+
+Playwright's documented touchscreen support is limited to taps; use device contexts for taps, mouse APIs for true mouse drags and explicitly labelled synthetic Pointer Events for handler edge cases. Synthetic touch/pointer dispatch does not demonstrate native browser scroll arbitration. See [Playwright Touchscreen](https://playwright.dev/docs/api/class-touchscreen) and [device emulation](https://playwright.dev/docs/emulation). T16/T19 physical-device evidence remains mandatory.
+
+## 4. Seeded simulations
+
+Use independent deterministic generators for the game seed and the action selector; do not reuse the engine PRNG implementation as the only test oracle. Every failure prints seed, drawCount, rule/shuffle versions, selector seed, step, action history and failed assertion so it can become a compact regression fixture.
+
+Profiles exposed by the planned `npm run test:simulation -- --profile=ci|release` command:
+
+| Profile | Deals | Bound |
+| --- | --- | --- |
+| CI | Seeds 0–999 in each draw mode, plus max-uint32 fixture | Up to 300 simulation steps per deal |
+| Release | Seeds 0–9999 in each mode, plus max-uint32 fixture | Up to 1,000 simulation steps per deal |
+
+A step chooses a legal command, an intentionally invalid command, Undo, Redo or save/restore through a deterministic schedule. Bias some runs toward revealing cards/foundation progress and others toward draws/recycles/returns. Continue across repeat board positions until the bound; unlimited recycling is intentional, not a test hang. Stop early only at win or no legal action when there is also no history navigation to exercise. Assert after each step:
+
+1. All board invariants; input state remains unchanged after a transition.
+2. Accepted moves agree with validation; every enumerated move is accepted.
+3. Invalid moves preserve board/history/redo/count exactly.
+4. Undo/Redo round-trip deep equality and cursor accounting.
+5. Periodic serialization/restore preserves current state and future redo branch; replay determinism.
+6. Card conservation, foundation order and one-award-per-attempt accounting.
+
+Report actual deals/steps and branch categories exercised. Golden fixtures and explicit rule tests are independent of getLegalMoves so simulation cannot hide a shared enumeration/transition bug. Simulations do not prove every seed is winnable or that hints solve games.
+
+## 5. Viewport and device matrix
+
+| Environment | Required coverage |
+| --- | --- |
+| Chromium phone contexts | 320×568, 360×640, 390×844, 430×932; touch taps; DPR 1/2/3 across the suite |
+| WebKit phone contexts | Same four portrait widths; storage, tap, focus and layout coverage |
+| Landscape | 568×320 and 844×390; all columns plus reachable scroll/toolbar/dialog controls |
+| Desktop Chromium/Firefox/WebKit | 1280×720 and 1920×1080; mouse/keyboard, constrained height, resize and reduced motion |
+| Physical Android | One midrange phone, Chrome current major; repeat critical flows on previous major using a retained device/browser setup when available |
+| Physical iPhone | Safari current and previous major OS/browser releases; notch/home indicator, toolbar expansion, pinch, selected-card drag, background/foreground and standalone mode |
+
+Record exact OS/browser/device versions when executing. Desktop Edge receives a smoke test on the release build; desktop Safari receives a real-browser smoke test in addition to Playwright WebKit. If a supported version/device is unavailable, report that gap and keep its release gate open rather than widening the claimed support from emulation alone.
+
+Minimum real-device gesture script per platform: 10 legal transfers (including a sequence and foundation return), 10 invalid/cancelled attempts, three stock recycle cycles in Draw 3, long-column scroll while selected/unselected, rotation during drag, background/foreground, pinch zoom, offline reload, install/launch and waiting update. Board state must remain consistent throughout.
+
+## 6. Performance, accessibility and visual measurements
+
+For startup use the production build on a recorded desktop Chromium machine with a 390×844 mobile viewport, 4× CPU slowdown, cold cache and network shaped to 1.6 Mbps down / 750 Kbps up / 150 ms latency. Record machine/browser/tool versions and five runs; median LCP ≤2.5 s, CLS ≤0.1 each run. Measure JS+CSS gzip ≤100 KiB and total first-load gzip assets ≤500 KiB using the built files, excluding source maps. These are project budgets, not universal device guarantees.
+
+For interaction use a recorded physical midrange Android phone: 30 tap moves and a 10-second drag over legal/illegal targets with autoscroll. Input-to-visible-feedback p95 ≤100 ms, frame interval p95 ≤20 ms, no app-induced >50 ms main-thread tasks in ordinary moves. Profile save/restore separately at the 10,000-command limit and record elapsed time/peak memory; if restore blocks interaction for >500 ms, chunk replay with progress/cancellation while retaining the same pure engine. Do not add a worker without measured need.
+
+Visual baselines use fixed seed, paused timer, fonts loaded, stable browser version and disabled animations. Include initial deal, selected long suffix, Draw 3 fan, near-win, empty columns, narrow landscape, open menu, storage error and reduced motion. Review changed baselines manually; do not automatically accept every screenshot update.
+
+Check contrast from computed colors; test keyboard focus and NVDA or VoiceOver on desktop, VoiceOver on iPhone and TalkBack on Android. A screen reader must be able to identify source, destination, legal feedback and win result. Confirm 200% text/menu reflow and native zoom. Automated label checks do not constitute a full accessibility certification.
+
+## 7. Automation and release gate
+
+Planned scripts: `npm test` (unit), `npm run test:coverage`, `npm run test:simulation -- --profile=ci`, `npm run build`, `npm run test:e2e`; the release profile runs before a release and on a scheduled/manual CI job. Implement profile selection in the simulation runner/script during P2; these commands do not exist during the design phase.
+
+Require ≥95% statements and ≥90% branches for src/engine, src/session.js and src/persistence.js, including all exported files, using the [Vitest V8 coverage provider](https://vitest.dev/guide/coverage.html). Coverage is a gap detector; every rule/edge case above is required even if thresholds pass. UI is evaluated by behavior/accessibility tests rather than a superficial coverage target.
+
+CI installs locked dependencies, runs unit/coverage/CI simulations, builds production output and runs the browser matrix against it. PR CI does not publish. Deployment uses the tested commit/artifact and is followed by a production URL smoke test. Retain failing traces/screenshots and seed histories; retry-only passes require investigation, not silent acceptance.
+
+Release is complete only when all mandatory T01–T20/T22/T23 pass, optional T21 passes if shipped, required real-device checks have evidence, performance/assets meet budgets, all player-facing text is Polish, licenses are resolved, and no known defect can lose cards, silently lose saves, duplicate wins, block an input method or make a supported viewport unusable. Store the evidence in implementation-era docs/release-check.md. This document records criteria, not current test results.
