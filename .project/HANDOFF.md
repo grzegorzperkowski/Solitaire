@@ -34,7 +34,7 @@
 - T010 original implementation DONE: accepted 2026-10-10 at `bdd275c`. Follow-up dialog-focus assertion revision is in REVIEW: Playwright now waits for the first menu button to receive focus. Validation: 20 repeated focus checks, 123 unit tests, and 55 preview E2E tests passed. See [reports/T010.md](reports/T010.md).
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`. Polish game menu, New Game, Restart, Pause and Help dialogs implemented in `src/ui/dialogs.js`, with replacement confirmation on started unwon attempts (F05), pause concealment (F07), Draw 1 / Draw 3 toggle, Polish rules (N02), focus trap and restoration (N01 / T18), and full responsive support at 320px width and landscape (568x320). Evidence: [reports/T011.md](reports/T011.md). Acceptance tracking commit: `6610e7d`.
 - T012 DONE: accepted by the human coordinator on 2026-10-10 at `916b3bd`; see [reports/T012.md](reports/T012.md).
-- T013 DONE: the coordinator reports physical Android and iPhone checks complete, accepted on 2026-10-10 at `916b3bd`. Device/browser versions were not supplied; see [reports/T013.md](reports/T013.md).
+- T013 DONE: physical checks on iPhone 15 and Android 12 found no problems; accepted 2026-10-10 at `916b3bd`. iOS/browser versions were not supplied; see [reports/T013.md](reports/T013.md).
 - T014 REVIEW: CI failure fixed. The empty-action browser test now uses the running app/controller and a temporary state fixture rather than importing `/src/ui/input.js`; all 55 E2E tests pass against a fresh Vite preview, matching CI. Unit tests and build pass. See [reports/T014.md](reports/T014.md).
 - P1–P6 are complete. P7 is in progress.
 
