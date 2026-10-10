@@ -146,7 +146,7 @@ function renderCenterArtSvg(details) {
   }
 
   if (rank >= 11) {
-    return `<image href="${COURT_ART[details.suitIndex][rank - 11]}" x="31" y="40" width="38" height="60" preserveAspectRatio="xMidYMid meet" />`;
+    return `<image href="${COURT_ART[details.suitIndex][rank - 11]}" x="24" y="50" width="52" height="84" preserveAspectRatio="xMidYMid meet" />`;
   }
 
   // Number cards (2–10): center badge with suit
@@ -186,7 +186,7 @@ export function createCardElement(cardId, isFaceUp = true) {
     </div>
   `;
 
-  const cornerBottomRight = `
+  const cornerBottomRight = details.rank >= 11 ? '' : `
     <div class="card-corner card-corner-br" aria-hidden="true">
       <span class="card-rank">${details.rankLabel}</span>
       <span class="card-mini-suit">${getSuitSvg(details.suit, 13)}</span>
