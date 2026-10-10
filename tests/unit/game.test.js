@@ -504,3 +504,262 @@ test('rejects malformed commands and defers draw or recycle', () => {
   expect(state.stock).toBe(stock);
   expect(isWon(state)).toBe(false);
 });
+
+test('reveals a hidden card when moving from tableau to foundation', () => {
+  const state = makeState({
+    tableau: [pile([card(CLUBS, 9), card(HEARTS, 1)], 1)],
+    foundations: [[], [], [], []],
+  });
+  const moved = expectAccepted(state, {
+    type: 'move',
+    from: { pile: 'tableau', index: 0, cardIndex: 1 },
+    to: { pile: 'foundation', index: HEARTS },
+  }, card(CLUBS, 9));
+  expect(moved.tableau[0]).toEqual({
+    cards: [card(CLUBS, 9)],
+    faceUpStart: 0,
+  });
+  expect(moved.foundations[HEARTS]).toEqual([card(HEARTS, 1)]);
+});
+
+test('moves a king from waste or foundation to an empty tableau column and rejects non-kings', () => {
+  // Waste King to empty tableau
+  const wasteKingState = makeState({
+    waste: [card(SPADES, 13)],
+  });
+  const movedFromWaste = expectAccepted(wasteKingState, {
+    type: 'move',
+    from: { pile: 'waste' },
+    to: { pile: 'tableau', index: 3 },
+  }, null);
+  expect(movedFromWaste.waste).toEqual([]);
+  expect(movedFromWaste.tableau[3]).toEqual({
+    cards: [card(SPADES, 13)],
+    faceUpStart: 0,
+  });
+
+  // Foundation King to empty tableau
+  const foundations = completedFoundations();
+  const foundationKingState = makeState({
+    foundations,
+    stock: [],
+  });
+  const movedFromFoundation = expectAccepted(foundationKingState, {
+    type: 'move',
+    from: { pile: 'foundation', index: SPADES },
+    to: { pile: 'tableau', index: 4 },
+  }, null);
+  expect(movedFromFoundation.foundations[SPADES]).toHaveLength(12);
+  expect(movedFromFoundation.tableau[4]).toEqual({
+    cards: [card(SPADES, 13)],
+    faceUpStart: 0,
+  });
+
+  // Rejection of non-King from waste to empty tableau
+  const wasteQueenState = makeState({
+    waste: [card(HEARTS, 12)],
+  });
+  expectRejected(wasteQueenState, {
+    type: 'move',
+    from: { pile: 'waste' },
+    to: { pile: 'tableau', index: 0 },
+  }, 'illegal-destination');
+
+  // Rejection of non-King from foundation to empty tableau
+  const foundationAceState = makeState({
+    foundations: [[card(CLUBS, 1)], [], [], []],
+  });
+  expectRejected(foundationAceState, {
+    type: 'move',
+    from: { pile: 'foundation', index: CLUBS },
+    to: { pile: 'tableau', index: 0 },
+  }, 'illegal-destination');
+});
+
+test('rejects invalid foundation destination indices for moves from tableau and foundation', () => {
+  const state = makeState({
+    tableau: [pile([card(HEARTS, 1)])],
+    foundations: [[card(CLUBS, 1)], [], [], []],
+  });
+  for (const badIndex of [-1, 4, 1.5, '0', null, undefined]) {
+    expectRejected(state, {
+      type: 'move',
+      from: { pile: 'tableau', index: 0, cardIndex: 0 },
+      to: { pile: 'foundation', index: badIndex },
+    }, 'invalid-command');
+
+    expectRejected(state, {
+      type: 'move',
+      from: { pile: 'foundation', index: CLUBS },
+      to: { pile: 'foundation', index: badIndex },
+    }, 'invalid-command');
+  }
+});
+
+test('rejects move from an empty tableau column', () => {
+  const state = makeState({
+    tableau: [],
+  });
+  expectRejected(state, {
+    type: 'move',
+    from: { pile: 'tableau', index: 0, cardIndex: 0 },
+    to: { pile: 'tableau', index: 1 },
+  }, 'invalid-command');
+});
+
+test('rejects corrupted board structures and malformed commands', () => {
+  const validState = makeState({ tableau: [pile([card(CLUBS, 13)])] });
+
+  // Malformed commands
+  expectRejected(validState, {
+    type: 'move',
+    from: { pile: 'tableau', index: 0, cardIndex: 0, extra: true },
+    to: { pile: 'tableau', index: 1 },
+  }, 'invalid-command');
+
+  expectRejected(validState, {
+    type: 'move',
+    from: { pile: 'tableau', index: 0, cardIndex: 0 },
+    to: { pile: 'tableau', index: 1, extra: true },
+  }, 'invalid-command');
+
+  expectRejected(validState, {
+    type: 'move',
+    from: { pile: 'tableau', index: 0, cardIndex: 99 },
+    to: { pile: 'tableau', index: 1 },
+  }, 'invalid-command');
+
+  // Corrupted state passed to validateMove / applyMove
+  const notAnObject = null;
+  expect(validateMove(notAnObject, { type: 'move', from: { pile: 'waste' }, to: { pile: 'tableau', index: 0 } }))
+    .toEqual({ ok: false, reason: 'invalid-state' });
+  expect(applyMove(notAnObject, { type: 'move', from: { pile: 'waste' }, to: { pile: 'tableau', index: 0 } }))
+    .toEqual({ ok: false, reason: 'invalid-state' });
+
+  const wrongColumns = { ...validState, tableau: validState.tableau.slice(0, 6) };
+  expect(validateMove(wrongColumns, { type: 'move', from: { pile: 'waste' }, to: { pile: 'tableau', index: 0 } }))
+    .toEqual({ ok: false, reason: 'invalid-state' });
+
+  const nullColumnSource = {
+    ...validState,
+    tableau: [null, ...validState.tableau.slice(1)],
+  };
+  expect(validateMove(nullColumnSource, {
+    type: 'move',
+    from: { pile: 'tableau', index: 0, cardIndex: 0 },
+    to: { pile: 'tableau', index: 1 },
+  })).toEqual({ ok: false, reason: 'invalid-state' });
+
+  const nullColumnDest = {
+    ...validState,
+    tableau: [validState.tableau[0], null, ...validState.tableau.slice(2)],
+  };
+  expect(validateMove(nullColumnDest, {
+    type: 'move',
+    from: { pile: 'tableau', index: 0, cardIndex: 0 },
+    to: { pile: 'tableau', index: 1 },
+  })).toEqual({ ok: false, reason: 'invalid-state' });
+
+  const nullFoundationDest = {
+    ...validState,
+    foundations: [null, [], [], []],
+  };
+  expect(validateMove(nullFoundationDest, {
+    type: 'move',
+    from: { pile: 'tableau', index: 0, cardIndex: 0 },
+    to: { pile: 'foundation', index: 0 },
+  })).toEqual({ ok: false, reason: 'invalid-state' });
+
+  const nullFoundationSource = {
+    ...validState,
+    foundations: [null, [], [], []],
+  };
+  expect(validateMove(nullFoundationSource, {
+    type: 'move',
+    from: { pile: 'foundation', index: 0 },
+    to: { pile: 'tableau', index: 1 },
+  })).toEqual({ ok: false, reason: 'invalid-state' });
+});
+
+test('assertInvariants rejects invalid versions, shapes, piles, and card distributions', () => {
+  const validState = makeState();
+
+  expect(() => assertInvariants(null)).toThrow(/invalid-state: shape/);
+  expect(() => assertInvariants({ ...validState, rulesVersion: 2 })).toThrow(/invalid-state: version/);
+  expect(() => assertInvariants({ ...validState, shuffleVersion: 2 })).toThrow(/invalid-state: version/);
+  expect(() => assertInvariants({ ...validState, seed: -1 })).toThrow(/invalid-state: seed/);
+  expect(() => assertInvariants({ ...validState, seed: 1.5 })).toThrow(/invalid-state: seed/);
+  expect(() => assertInvariants({ ...validState, drawCount: 2 })).toThrow(/invalid-state: draw/);
+  expect(() => assertInvariants({ ...validState, stock: null })).toThrow(/invalid-state: piles/);
+  expect(() => assertInvariants({ ...validState, waste: 'bad' })).toThrow(/invalid-state: piles/);
+  expect(() => assertInvariants({ ...validState, tableau: [] })).toThrow(/invalid-state: tableau/);
+  expect(() => assertInvariants({ ...validState, foundations: [] })).toThrow(/invalid-state: foundations/);
+
+  // Column shape errors
+  expect(() => assertInvariants({ ...validState, tableau: [null, ...validState.tableau.slice(1)] }))
+    .toThrow(/invalid-state: column/);
+  expect(() => assertInvariants({
+    ...validState,
+    tableau: [{ cards: [0], faceUpStart: 1.5 }, ...validState.tableau.slice(1)],
+  })).toThrow(/invalid-state: column/);
+
+  // Empty column faceUpStart !== 0
+  expect(() => assertInvariants({
+    ...validState,
+    tableau: [{ cards: [], faceUpStart: 1 }, ...validState.tableau.slice(1)],
+  })).toThrow(/invalid-state: empty-column/);
+
+  // Non-empty column faceUpStart out of bounds
+  expect(() => assertInvariants({
+    ...validState,
+    tableau: [{ cards: [card(CLUBS, 13)], faceUpStart: -1 }, ...validState.tableau.slice(1)],
+  })).toThrow(/invalid-state: face/);
+  expect(() => assertInvariants({
+    ...validState,
+    tableau: [{ cards: [card(CLUBS, 13)], faceUpStart: 1 }, ...validState.tableau.slice(1)],
+  })).toThrow(/invalid-state: face/);
+
+  // Invalid card ID or duplicate
+  expect(() => assertInvariants({
+    ...validState,
+    stock: [...validState.stock.slice(0, -1), 999],
+  })).toThrow(/invalid-state: card/);
+  expect(() => assertInvariants({
+    ...validState,
+    stock: [...validState.stock.slice(0, -1), validState.stock[0]],
+  })).toThrow(/invalid-state: card/);
+
+  // Foundation errors: wrong size or order
+  expect(() => assertInvariants({
+    ...validState,
+    foundations: [Array.from({ length: 14 }, (_, i) => i), [], [], []],
+  })).toThrow(/invalid-state: foundation/);
+
+  // Total count !== 52
+  expect(() => assertInvariants({
+    ...validState,
+    stock: validState.stock.slice(1),
+  })).toThrow(/invalid-state: count/);
+});
+
+test('isWon handles null, partial or malformed structures defensively', () => {
+  expect(isWon(null)).toBe(false);
+  expect(isWon(undefined)).toBe(false);
+  expect(isWon('string')).toBe(false);
+  expect(isWon({})).toBe(false);
+  expect(isWon({ stock: [0], waste: [], tableau: [], foundations: [] })).toBe(false);
+  expect(isWon({ stock: [], waste: [0], tableau: [], foundations: [] })).toBe(false);
+  expect(isWon({ stock: [], waste: [], tableau: [null], foundations: [] })).toBe(false);
+  expect(isWon({
+    stock: [],
+    waste: [],
+    tableau: Array.from({ length: 7 }, () => ({ cards: [] })),
+    foundations: [[], [], [], []],
+  })).toBe(false);
+  expect(isWon({
+    stock: [],
+    waste: [],
+    tableau: Array.from({ length: 7 }, () => ({ cards: [] })),
+    foundations: [null, [], [], []],
+  })).toBe(false);
+});

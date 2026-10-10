@@ -118,3 +118,20 @@ The implementation of T003 faithfully meets the core acceptance criteria:
 - Hidden card reveals are atomic with the uncovering move.
 - `isWon` and `assertInvariants` prevent invalid game states.
 - Functionality for stock draws and legal move enumeration is properly and safely deferred to T004 (`unsupported-command`).
+
+---
+
+## Post-review quality improvement resolution (2026-10-10)
+
+Following coordinator instructions, the identified issues and test gaps were resolved:
+
+1. **Validation order fix**:
+   - `src/engine/game.js` lines 180–182 now check `!isIndex(to.index, 4)` and `!Array.isArray(...)` before `source.pile === 'foundation'`.
+2. **Dead-code elimination**:
+   - Removed redundant `isWon(state)` check inside `assertInvariants`.
+3. **Regression tests added**:
+   - 7 new tests added to `tests/unit/game.test.js` (total test suite now 28 tests, all green).
+   - All review gaps covered: tableau-to-foundation reveals, waste/foundation Kings to empty tableau, non-King rejections, invalid foundation destination indices, empty tableau source moves, malformed commands, and corrupt state shapes.
+4. **Coverage verified**:
+   - `src/engine/game.js`: 97.96% statements, 98.23% branches, 100% functions, 100% lines (satisfies and exceeds the TEST_PLAN.md thresholds of ≥95% statements and ≥90% branches).
+   - Production build: exit 0.

@@ -118,11 +118,6 @@ export function assertInvariants(state) {
   for (const id of state.waste) collect(id);
   for (const id of state.stock) collect(id);
   if (seen.size !== 52) invalidState('count');
-  if (isWon(state)) {
-    const elsewhere = state.stock.length + state.waste.length
-      + state.tableau.reduce((sum, column) => sum + column.cards.length, 0);
-    if (elsewhere !== 0) invalidState('won-board');
-  }
 }
 
 function readSource(state, from) {
@@ -177,9 +172,9 @@ function readDestination(state, source, to) {
     return { ok: true, pile: 'tableau', index: to.index };
   }
   if (to.pile === 'foundation') {
-    if (source.pile === 'foundation') return failure('illegal-destination');
     if (!isIndex(to.index, 4)) return failure('invalid-command');
     if (!Array.isArray(state.foundations[to.index])) return failure('invalid-state');
+    if (source.pile === 'foundation') return failure('illegal-destination');
     if (source.suffix.length !== 1) return failure('illegal-sequence');
     const cardId = source.suffix[0];
     if (suitIndex(cardId) !== to.index || rank(cardId) !== state.foundations[to.index].length + 1) {
