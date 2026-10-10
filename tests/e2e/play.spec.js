@@ -282,9 +282,9 @@ test.describe('T010 Tap interaction and gameplay (T15)', () => {
     await expect(movedCard).toHaveCSS('animation-name', 'pile-arrival');
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect(movedCard).toHaveCSS('animation-name', 'none');
     await page.locator('#waste-pile .card-node').click();
     await expect(page.locator('#waste-pile .is-selected')).toHaveCSS('transition-duration', '0s');
-    await expect(movedCard).toHaveCSS('animation-name', 'none');
   });
 
   test('mobile touch interactions at 320px and 390px viewports', async ({ browser }) => {

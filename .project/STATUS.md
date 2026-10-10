@@ -1,7 +1,7 @@
 # Project status
 
-- State: T009 and T010 follow-ups are accepted; T000–T014 are DONE. T015 is REVIEW after chevron alignment refinement.
-- Current task: T015. Human assignment: “implementujemy teraz T015” (2026-10-10). T014 dependency accepted at `6149f52`.
+- State: T009 and T010 follow-ups are accepted; T000–T014 are DONE. T015 is DONE; accepted by the human coordinator on 2026-10-10 at `b01fb49`.
+- Current task: T017 IN_PROGRESS, assigned by the human coordinator on 2026-10-10. T015 dependency accepted at `b01fb49`.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T015.md](reports/T015.md).
 
@@ -22,7 +22,7 @@
 - T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
 - T013 DONE: physical checks on iPhone 15 and Android 12 found no problems; accepted 2026-10-10 at `916b3bd`. iOS/browser versions were not supplied; see [reports/T013.md](reports/T013.md).
 - T014 DONE: accepted 2026-10-10 by the human coordinator at commit `6149f52`; legal-hint ranking and empty-action feedback are implemented. See [reports/T014.md](reports/T014.md).
-- P1–P6 are complete. P7 is in progress; T015 awaits acceptance; T016–T023 remain TODO.
+- P1–P6 are complete. P7 is complete. T016–T023 remain TODO; T016 is optional.
 
 ## Known problems and blockers
 
@@ -33,10 +33,12 @@
 
 ## Next recommendation
 
-- T009 and T010 follow-ups are accepted; see their reports. Review T015; do not begin a successor without explicit assignment.
+- T009 and T010 follow-ups are accepted; see their reports. T015 is accepted; wait for an explicit assignment before starting T016 or T017.
 
 - T015 validation: 131 unit tests, 68 production-preview Chromium E2E tests and build passed. Seed/copy, per-mode statistics, win/reload/practice and safe preference/recovery flows implemented. No new physical-device evidence or push.
 
 - T015 follow-up: seed input and seed/copy summary are collapsed by default behind keyboard-accessible downward disclosures; production build and targeted UI checks passed. See reports/T015.md.
 
 - T015 chevron refinement: CSS-drawn indicator replaces the low-aligned text glyph. Build and 320px/landscape dialog checks passed; screenshot visually inspected. See reports/T015.md.
+
+- T015 accepted by the human coordinator at `b01fb49`. P7 task complete. Optional T016 was not selected.

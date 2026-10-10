@@ -220,7 +220,7 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
     expect(box.x).toBeGreaterThanOrEqual(0);
 
     // Verify buttons are at least 44px high
-    const actionBtns = await menuDialog.locator('.menu-action-btn, .mode-btn, .btn-primary').all();
+    const actionBtns = await menuDialog.locator('.menu-action-btn:visible, .mode-btn:visible, .btn-primary:visible').all();
     for (const btn of actionBtns) {
       const btnBox = await btn.boundingBox();
       expect(btnBox.height).toBeGreaterThanOrEqual(44);

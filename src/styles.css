@@ -470,7 +470,7 @@ body {
     flex: 1;
   }
   .bottom-bar {
-    margin-top: auto;
+    margin-top: 8px;
   }
 }
 
