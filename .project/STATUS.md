@@ -1,7 +1,7 @@
 # Project status
 
-- State: session history, Undo/Redo, snapshot caching, attempt restart, per-mode statistics and simulation extensions are implemented. T006 awaits acceptance. The page is still the Polish shell.
-- Current task: **T006 — REVIEW**. T000–T005 are DONE. T007 is not assigned.
+- State: session history, Undo/Redo, snapshot caching, attempt restart, per-mode statistics and simulation extensions are implemented. T006 is accepted. The page is still the Polish shell.
+- Current task: **T006 — DONE**. T000–T006 are DONE. T007 is assigned.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T006.md](reports/T006.md).
 
@@ -13,8 +13,8 @@
 - T003 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `774b3e634e2b6991a91c4e24952b1919b0e4a484`. Accepted quality improvements `75070087cb4d49db1323467f8a7efb1737d325c0`.
 - T004 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `1073dfb1828dff1944713c616c9019cfcdc14056`. Independent review `2af3ee4fead49ceab3d9d3cc9143c69c568429f4`.
 - T005 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `509fe7b911ce6d336bd55bfdc362778e93fd0cc1`.
-- T006 REVIEW: session history, Undo/Redo, snapshot caching, attempt restart and per-mode statistics. Not accepted. Persistence is not included.
-- P1 and P2 are complete. P3 is incomplete until T006 is DONE. T007–T023 remain TODO.
+- T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`.
+- P1, P2 and P3 are complete. P4 is incomplete until T008 is DONE. T007–T023 remain TODO.
 
 ## Known problems and blockers
 
@@ -27,4 +27,4 @@
 
 ## Next recommendation
 
-The coordinator reviews T006. After acceptance and a separate explicit assignment, [T007](tasks/T007.md) adds versioned persistence and replay validation. Do not start T007.
+T006 is accepted. The same instruction assigns [T007](tasks/T007.md): versioned persistence and replay validation. Do not start T008.
