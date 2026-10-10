@@ -2,7 +2,16 @@ import { readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { expect, test } from 'vitest';
 import { createGame } from '../../src/engine/cards.js';
-import { assertInvariants, isWon } from '../../src/engine/game.js';
+import { assertInvariants, getLegalMoves, isWon } from '../../src/engine/game.js';
+import {
+  canRedo,
+  canUndo,
+  createSession,
+  execute,
+  redo,
+  restartSession,
+  undo,
+} from '../../src/session.js';
 import {
   PROFILES,
   parseProfile,
@@ -129,6 +138,187 @@ test('max seed draw 1 survives a short run', () => {
   expect(result.state.drawCount).toBe(1);
   expect(result.steps).toBeGreaterThan(0);
   assertInvariants(result.state);
+});
+
+function simulateSessionPlay({ seed, drawCount, maxSteps = 100 }) {
+  let session = createSession({ seed, drawCount });
+  const selSeed = selectorSeed(seed, drawCount);
+  let selState = selSeed >>> 0;
+  const nextRand = () => {
+    selState = (selState + 0x9E3779B9) >>> 0;
+    let mixed = selState;
+    mixed = Math.imul(mixed ^ (mixed >>> 16), 0x21F0AAAD);
+    mixed = Math.imul(mixed ^ (mixed >>> 15), 0x735A2D97);
+    return (mixed ^ (mixed >>> 15)) >>> 0;
+  };
+
+  const bias = (seed + drawCount) % 3;
+  let undos = 0;
+  let redos = 0;
+  let executions = 0;
+  let rejections = 0;
+
+  for (let step = 0; step < maxSteps; step += 1) {
+    if (isWon(session.state)) break;
+    assertInvariants(session.state);
+    expect(session.cursor).toBe(session.moveCount);
+    expect(session.snapshots).toHaveLength(session.commands.length + 1);
+    expect(session.state).toBe(session.snapshots[session.cursor]);
+
+    const roll = nextRand() % 100;
+    // 10% chance to undo if canUndo
+    if (roll < 10 && canUndo(session)) {
+      const prevCursor = session.cursor;
+      session = undo(session);
+      expect(session.cursor).toBe(prevCursor - 1);
+      expect(session.started).toBe(true);
+      undos += 1;
+      continue;
+    }
+    // 10% chance to redo if canRedo
+    if (roll < 20 && canRedo(session)) {
+      const prevCursor = session.cursor;
+      session = redo(session);
+      expect(session.cursor).toBe(prevCursor + 1);
+      redos += 1;
+      continue;
+    }
+    // 10% chance to test invalid move
+    if (roll < 30) {
+      const prevCanRedo = canRedo(session);
+      const prevCursor = session.cursor;
+      const prevCommandsLen = session.commands.length;
+      const invalidCmd = {
+        type: 'move',
+        from: { pile: 'tableau', index: 0, cardIndex: 99 },
+        to: { pile: 'foundation', index: 0 },
+      };
+      const res = execute(session, invalidCmd);
+      expect(res.ok).toBe(false);
+      // Redo branch and history preserved
+      expect(canRedo(session)).toBe(prevCanRedo);
+      expect(session.cursor).toBe(prevCursor);
+      expect(session.commands).toHaveLength(prevCommandsLen);
+      rejections += 1;
+      continue;
+    }
+
+    // Otherwise legal move
+    const legal = getLegalMoves(session.state);
+    if (legal.length === 0) break;
+    const pref = legal.filter((cmd) => {
+      if (bias === 1) return cmd.type === 'draw' || cmd.type === 'recycle';
+      if (bias === 2) return cmd.type === 'move' && cmd.from.pile === 'foundation';
+      if (cmd.type !== 'move') return false;
+      if (cmd.to.pile === 'foundation') return true;
+      if (cmd.from.pile !== 'tableau') return false;
+      const col = session.state.tableau[cmd.from.index];
+      return cmd.from.cardIndex === col.faceUpStart && col.faceUpStart > 0;
+    });
+    const pool = pref.length > 0 ? pref : legal;
+    const chosen = pool[nextRand() % pool.length];
+
+    const hadRedo = canRedo(session);
+    const res = execute(session, chosen);
+    expect(res.ok).toBe(true);
+    session = res.session;
+    executions += 1;
+
+    // If had redo branch, it is now truncated!
+    if (hadRedo) {
+      expect(canRedo(session)).toBe(false);
+      expect(session.commands).toHaveLength(session.cursor);
+    }
+    expect(session.started).toBe(true);
+  }
+
+  // Full round trip check at end of simulation run:
+  const finalState = session.state;
+  const targetCursor = session.cursor;
+  // Repeated undo all the way to 0 reaches exact deal
+  while (canUndo(session)) {
+    session = undo(session);
+  }
+  expect(session.cursor).toBe(0);
+  expect(session.state).toEqual(createGame(session.options));
+  expect(canUndo(session)).toBe(false);
+
+  // Repeated redo back to targetCursor reaches exact finalState
+  while (session.cursor < targetCursor) {
+    session = redo(session);
+  }
+  expect(session.cursor).toBe(targetCursor);
+  expect(session.state).toEqual(finalState);
+
+  return { session, undos, redos, executions, rejections };
+}
+
+test('session simulation with undo, redo and branching satisfies all invariants and round-trips', () => {
+  // Test multiple deals and modes
+  for (const drawCount of [1, 3]) {
+    for (const seed of [0, 42, 999, MAX_SEED]) {
+      const result = simulateSessionPlay({ seed, drawCount, maxSteps: 80 });
+      expect(result.executions).toBeGreaterThan(0);
+      assertInvariants(result.session.state);
+    }
+  }
+});
+
+test('session simulation on deterministically won deal verifies exactly-once win accounting', () => {
+  // Won seed from T005: Seed 888, Draw 3 won in 166 steps
+  const dealResult = simulateDeal({ seed: 888, drawCount: 3, maxSteps: 200 });
+  expect(dealResult.stopped).toBe('win');
+
+  let session = createSession({ seed: 888, drawCount: 3 });
+  for (const cmd of dealResult.history) {
+    const res = execute(session, cmd);
+    if (res.ok) {
+      session = res.session;
+    }
+  }
+  expect(isWon(session.state)).toBe(true);
+  expect(session.winRecorded).toBe(true);
+  expect(session.statistics.draw3.wins).toBe(1);
+  expect(session.statistics.draw3.attempts).toBe(1);
+
+  // Undo 1 step from win
+  session = undo(session);
+  expect(isWon(session.state)).toBe(false);
+  expect(session.winRecorded).toBe(true);
+  expect(session.statistics.draw3.wins).toBe(1);
+
+  // Redo back to win
+  session = redo(session);
+  expect(isWon(session.state)).toBe(true);
+  expect(session.statistics.draw3.wins).toBe(1);
+
+  // Undo 50 steps from win
+  for (let i = 0; i < 50; i += 1) session = undo(session);
+  expect(isWon(session.state)).toBe(false);
+  expect(session.winRecorded).toBe(true);
+  expect(session.statistics.draw3.wins).toBe(1);
+
+  // Redo 50 steps back to win
+  for (let i = 0; i < 50; i += 1) session = redo(session);
+  expect(isWon(session.state)).toBe(true);
+  expect(session.statistics.draw3.wins).toBe(1);
+
+  // Undo all the way to deal
+  while (canUndo(session)) session = undo(session);
+  expect(session.cursor).toBe(0);
+  expect(session.state).toEqual(createGame({ seed: 888, drawCount: 3 }));
+  expect(session.started).toBe(true);
+  expect(session.winRecorded).toBe(true);
+  expect(session.statistics.draw3.wins).toBe(1);
+  expect(session.statistics.draw3.attempts).toBe(1);
+
+  // Restart session resets attempt state, keeps statistics
+  const restarted = restartSession(session);
+  expect(restarted.started).toBe(false);
+  expect(restarted.winRecorded).toBe(false);
+  expect(restarted.cursor).toBe(0);
+  expect(restarted.statistics.draw3.wins).toBe(1);
+  expect(restarted.statistics.draw3.attempts).toBe(1);
 });
 
 if (selectedProfile) {
