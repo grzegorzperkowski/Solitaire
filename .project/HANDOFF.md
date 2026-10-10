@@ -13,25 +13,26 @@
 - T000 DONE: eba965185ef8a60edf81f0318ab0fbf3481604f8.
 - T001 DONE: accepted 2026-10-10. Implementation commit `339e0f852b60c691f52d6204aa7225b899c5844f`.
 - T002 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation commit `d3c36f1df1d46d136e81d8c174f1636debed8a76`. Acceptance tracking commit: `2064a3da002e11209e463365c4d4a425980f5226`.
-- T003 REVIEW: DOM-free `src/engine/game.js`. `validateMove` / `applyMove` return `{ok:true}` or `{ok:false, reason}` and, on success, `{ok:true, state, revealed}`. Reasons: `invalid-command`, `unsupported-command`, `invalid-state`, `illegal-source`, `illegal-sequence`, `illegal-destination`. `draw` and `recycle` are `unsupported-command` until T004. Evidence: [reports/T003.md](reports/T003.md).
+- T003 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `774b3e634e2b6991a91c4e24952b1919b0e4a484`. Accepted quality improvements `75070087cb4d49db1323467f8a7efb1737d325c0`. DOM-free `validateMove`, `applyMove`, `assertInvariants` and `isWon` in `src/engine/game.js`. Evidence: [reports/T003.md](reports/T003.md).
 - Foundations use suit order trefl, karo, kier, pik. Tableau `cardIndex` starts the whole face-up suffix. A reveal is the newly exposed card id on that same move, or null. `isWon` requires four complete legal foundations and empty stock, waste and tableau.
 - `assertInvariants` throws `invalid-state` for broken decks, face-up order and foundation contents. Move evaluation does not call it; tests and later restore do.
 - Golden deals remain in `tests/fixtures/deals.json`. Hand-built boards are `tests/fixtures/boards.js`.
-- The page shell does not import the engine. No `getLegalMoves`, session, storage or Playwright.
+- The page shell does not import the engine. No `getLegalMoves`, session, storage or Playwright. `draw` and `recycle` still return `unsupported-command` in the acceptance commit.
 - QA still open, not passed: browser console and visual/layout checks. GitHub Actions has not run on a remote runner. `filelist.txt` is absent; do not recreate it.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies.
-- Resolve T003 delivery with `git log -1 --format="%h %s" --grep="^T003:"`. Do not treat this recommendation as permission to start T004.
+- T004 is assigned by the same 2026-10-10 instruction. It is not started in the acceptance commit. T005 is not assigned.
+- Resolve T003 implementation with `774b3e634e2b6991a91c4e24952b1919b0e4a484` and quality improvements with `75070087cb4d49db1323467f8a7efb1737d325c0`, not the later acceptance-tracking commit.
 
 ## Blockers / next steps
 
-- Await coordinator acceptance of T003. T004 is not assigned.
-- When T004 is assigned, implement Draw 1/Draw 3, separate recycle, and `getLegalMoves`, and keep T003 transfers unchanged.
-- Browser console, rendered layout and remote CI remain outstanding and are not T003 blockers.
+- Implement T004 only: [tasks/T004.md](tasks/T004.md). Dependency T003 is DONE.
+- T004 adds Draw 1/Draw 3, separate recycle and `getLegalMoves`. Keep the accepted tableau, waste and foundation transfers unchanged.
+- Browser console, rendered layout and remote CI remain outstanding and are not T004 blockers.
 
 ## Test commands
 
-Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run build`. Required T003 pair: `npm test -- tests/unit/game.test.js tests/unit/cards.test.js`. See [README.md](../README.md).
+Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run build`. Required T004 file: `npm test -- tests/unit/game.test.js`. See [README.md](../README.md).
 
-Latest local results are in [reports/T003.md](reports/T003.md): `npm test` 21 passed; the game-and-cards command 19 passed; `npm run build` exit 0.
+Latest local results at the T003 quality commit are in [reports/T003.md](reports/T003.md): `npm test` 28 passed; engine coverage statements 98.38% and branches 98.41%; `npm run build` exit 0.
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.
