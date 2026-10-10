@@ -116,7 +116,7 @@ Coordinator later confirmed iPhone and PC checks for T017 were performed. Device
 
 ## T024 assignment (2026-10-10)
 
-The human coordinator assigned the touch double-tap shortcut as T024, a follow-up to DONE T010. T024 is in REVIEW after the UI controller, behavior docs and deterministic tests were updated. `npm run test:e2e -- tests/e2e/play.spec.js tests/e2e/input.spec.js` passed 41 tests, `npm test` passed 134 tests, and `npm run build` passed. The new gesture has not been checked on physical iPhone/Safari. See [tasks/T024.md](tasks/T024.md) and [reports/T024.md](reports/T024.md). Wait for coordinator acceptance; do not start another task.
+The human coordinator assigned the touch double-tap shortcut as T024, a follow-up to DONE T010. Implementation and docs are in `ba7865e`; `npm run test:e2e -- tests/e2e/play.spec.js tests/e2e/input.spec.js` passed 41 tests, `npm test` passed 134 tests, and `npm run build` passed. The coordinator confirmed device testing with “testy pokazują, że to działa” on 2026-10-11; T024 is DONE. See [tasks/T024.md](tasks/T024.md) and [reports/T024.md](reports/T024.md). No task is currently assigned.
 
 
 ## T015 coordinator acceptance (2026-10-10)
