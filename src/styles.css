@@ -1027,7 +1027,7 @@ body {
   outline-offset: 2px;
 }
 
-#seed-error:empty, #seed-copy-status:empty {
+#seed-error:empty {
   display: none;
 }
 

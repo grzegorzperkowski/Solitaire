@@ -31,11 +31,11 @@ export function renderDialogs(rootElement, state, app) {
     dialogType = dialogKey;
 
     if (dialogKey === 'menu') {
-      dialogHtml = renderMenuHtml(currentDrawCount, state.session.options);
+      dialogHtml = renderMenuHtml();
     } else if (dialogKey === 'new-game') {
       dialogHtml = renderNewGameHtml(currentDrawCount, state.persistenceBlocked);
     } else if (dialogKey === 'statistics') {
-      dialogHtml = renderStatisticsHtml(state.session.statistics);
+      dialogHtml = renderStatisticsHtml(state.session.statistics, currentDrawCount);
     } else if (dialogKey === 'win') {
       dialogHtml = renderWinHtml(elapsedMs, moveCount);
     } else if (dialogKey === 'recovery') {
@@ -43,7 +43,7 @@ export function renderDialogs(rootElement, state, app) {
     } else if (dialogKey === 'help') {
       dialogHtml = renderHelpHtml();
     } else if (dialogKey.startsWith('confirm-') || dialogKey === 'confirm') {
-      dialogHtml = renderConfirmHtml(dialogKey, activeDialog, currentDrawCount);
+      dialogHtml = renderConfirmHtml(dialogKey, activeDialog);
     }
   } else if (isPaused) {
     dialogType = 'pause';
@@ -107,7 +107,7 @@ export function renderDialogs(rootElement, state, app) {
   });
 }
 
-function renderMenuHtml(currentDrawCount, options) {
+function renderMenuHtml() {
   return `
     <div class="dialog-card" id="menu-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title-menu">
       <header class="dialog-header">
@@ -117,25 +117,8 @@ function renderMenuHtml(currentDrawCount, options) {
       <div class="dialog-body">
         <button id="btn-menu-new-game" class="menu-action-btn">Nowa gra</button>
         <button id="btn-menu-restart" class="menu-action-btn">Rozdaj ponownie</button>
-        <button id="btn-menu-pause" class="menu-action-btn">Wstrzymaj grę</button>
-
-        <div class="menu-section">
-          <label class="menu-section-label" id="draw-mode-label">Tryb dobierania kart:</label>
-          <div class="draw-mode-options" role="radiogroup" aria-labelledby="draw-mode-label">
-            <button id="btn-mode-draw-1" class="mode-btn ${currentDrawCount === 1 ? 'is-active' : ''}" role="radio" aria-checked="${currentDrawCount === 1}">Dobieraj 1</button>
-            <button id="btn-mode-draw-3" class="mode-btn ${currentDrawCount === 3 ? 'is-active' : ''}" role="radio" aria-checked="${currentDrawCount === 3}">Dobieraj 3</button>
-          </div>
-        </div>
-
         <button id="btn-menu-statistics" class="menu-action-btn">Statystyki</button>
         <button id="btn-menu-help" class="menu-action-btn">Zasady i pomoc</button>
-        <details class="seed-disclosure">
-          <summary>Seed rozdania <span class="seed-chevron" aria-hidden="true"></span></summary>
-          <p>Seed: <strong>${options.seed}</strong> · Dobieraj ${options.drawCount}</p>
-          <small>Zasady ${options.rulesVersion}, tasowanie ${options.shuffleVersion}. Ten sam seed i tryb odtwarzają rozdanie.</small>
-          <button id="btn-copy-seed" class="menu-action-btn">Kopiuj seed</button>
-          <p id="seed-copy-status" role="status" aria-live="polite"></p>
-        </details>
       </div>
       <footer class="dialog-footer">
         <button id="btn-menu-resume" class="btn-primary w-full">Wróć do gry</button>
@@ -170,14 +153,18 @@ function renderNewGameHtml(drawCount, replacesSave) {
     </form>`;
 }
 
-function renderStatisticsHtml(statistics) {
+function renderStatisticsHtml(statistics, currentDrawCount) {
   return `
     <div class="dialog-card" id="statistics-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title-statistics">
       <header class="dialog-header"><h2 id="dialog-title-statistics" class="dialog-title">Statystyki</h2></header>
       <div class="dialog-body">
+        <div class="draw-mode-options" role="radiogroup" aria-label="Wybierz statystyki dla trybu">
+          <button id="btn-mode-draw-1" class="mode-btn ${currentDrawCount === 1 ? 'is-active' : ''}" role="radio" aria-checked="${currentDrawCount === 1}">Dobieraj 1</button>
+          <button id="btn-mode-draw-3" class="mode-btn ${currentDrawCount === 3 ? 'is-active' : ''}" role="radio" aria-checked="${currentDrawCount === 3}">Dobieraj 3</button>
+        </div>
         ${[1, 3].map((mode) => {
           const stats = statistics[`draw${mode}`];
-          return `<section role="region" aria-label="Dobieraj ${mode}">
+          return `<section role="region" aria-label="Dobieraj ${mode}" data-statistics-mode="${mode}" ${currentDrawCount === mode ? '' : 'hidden'}>
             <h3>Dobieraj ${mode}</h3>
             <dl class="statistics-list">
               <dt>Rozpoczęte partie</dt><dd>${stats.attempts}</dd>
@@ -192,6 +179,17 @@ function renderStatisticsHtml(statistics) {
       </div>
       <footer class="dialog-footer"><button id="btn-dialog-close" class="btn-primary">Zamknij</button></footer>
     </div>`;
+}
+
+function selectStatisticsMode(dialogEl, mode) {
+  for (const button of dialogEl.querySelectorAll('[role="radio"]')) {
+    const selected = button.id === `btn-mode-draw-${mode}`;
+    button.setAttribute('aria-checked', String(selected));
+    button.classList.toggle('is-active', selected);
+  }
+  for (const section of dialogEl.querySelectorAll('[data-statistics-mode]')) {
+    section.hidden = Number(section.dataset.statisticsMode) !== mode;
+  }
 }
 
 function renderWinHtml(elapsedMs, moveCount) {
@@ -241,7 +239,7 @@ function renderPauseHtml(elapsedMs, moveCount) {
   `;
 }
 
-function renderConfirmHtml(dialogKey, activeDialog, currentDrawCount) {
+function renderConfirmHtml(dialogKey, activeDialog) {
   let title = 'Rozpocząć nową grę?';
   let message = 'Bieżąca partia zostanie przerwana. Czy na pewno chcesz rozpocząć od nowa?';
   let confirmLabel = 'Rozpocznij';
@@ -250,14 +248,6 @@ function renderConfirmHtml(dialogKey, activeDialog, currentDrawCount) {
     title = 'Rozdać ponownie?';
     message = 'Bieżąca partia zostanie zresetowana do układu początkowego. Czy na pewno chcesz zacząć od nowa?';
     confirmLabel = 'Rozdaj ponownie';
-  } else if (dialogKey === 'confirm-mode-1' || (activeDialog?.action === 'changeMode' && activeDialog?.drawCount === 1)) {
-    title = 'Zmienić tryb na dobieranie po 1?';
-    message = 'Zmiana trybu dobierania przerwie obecną partię i rozpocznie nową grę.';
-    confirmLabel = 'Zmień i rozpocznij';
-  } else if (dialogKey === 'confirm-mode-3' || (activeDialog?.action === 'changeMode' && activeDialog?.drawCount === 3)) {
-    title = 'Zmienić tryb na dobieranie po 3?';
-    message = 'Zmiana trybu dobierania przerwie obecną partię i rozpocznie nową grę.';
-    confirmLabel = 'Zmień i rozpocznij';
   }
 
   return `
@@ -383,12 +373,6 @@ function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame
     }
 
     // Menu actions
-    if (e.target.closest('#btn-menu-pause')) {
-      app.closeDialog();
-      app.pause();
-      return;
-    }
-
     if (e.target.closest('#btn-menu-help')) {
       app.openDialog('help');
       return;
@@ -396,19 +380,6 @@ function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame
 
     if (e.target.closest('#btn-menu-statistics')) {
       app.openDialog('statistics');
-      return;
-    }
-
-    if (e.target.closest('#btn-copy-seed')) {
-      const status = dialogEl.querySelector('#seed-copy-status');
-      (async () => {
-        try {
-          await navigator.clipboard.writeText(String(state.session.options.seed));
-          status.textContent = 'Skopiowano seed.';
-        } catch {
-          status.textContent = 'Nie udało się skopiować seeda. Przepisz numer widoczny powyżej.';
-        }
-      })();
       return;
     }
 
@@ -428,24 +399,12 @@ function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame
     }
 
     if (e.target.closest('#btn-mode-draw-1')) {
-      if (currentDrawCount !== 1) {
-        if (isStartedAndUnwon) {
-          app.openDialog('confirm-mode-1');
-        } else {
-          startNewGame({ drawCount: 1 });
-        }
-      }
+      selectStatisticsMode(dialogEl, 1);
       return;
     }
 
     if (e.target.closest('#btn-mode-draw-3')) {
-      if (currentDrawCount !== 3) {
-        if (isStartedAndUnwon) {
-          app.openDialog('confirm-mode-3');
-        } else {
-          startNewGame({ drawCount: 3 });
-        }
-      }
+      selectStatisticsMode(dialogEl, 3);
       return;
     }
 
@@ -461,10 +420,6 @@ function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame
         app.restart();
       } else if (dialogKey === 'confirm-new-game' && state.activeDialog?.options) {
         startNewGame(state.activeDialog.options);
-      } else if (dialogKey === 'confirm-mode-1' || state.activeDialog?.drawCount === 1) {
-        startNewGame({ drawCount: 1 });
-      } else if (dialogKey === 'confirm-mode-3' || state.activeDialog?.drawCount === 3) {
-        startNewGame({ drawCount: 3 });
       } else {
         startNewGame({ drawCount: currentDrawCount });
       }

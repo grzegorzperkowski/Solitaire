@@ -348,9 +348,13 @@ test.describe('T011 Menu, dialogs and confirmation flows (T13, T15)', () => {
   });
 
   test('pause screen conceals board and blocks play until resumed (F07 / T13)', async ({ page }) => {
-    // Open menu and choose Pause
+    // Pause through the app API; the menu no longer exposes a pause button.
     await page.locator('#btn-menu').click();
-    await page.locator('#btn-menu-pause').click();
+    await expect(page.getByRole('button', { name: 'Wstrzymaj grę' })).toHaveCount(0);
+    await page.evaluate(() => {
+      window.__SOLITAIRE_APP__.closeDialog();
+      window.__SOLITAIRE_APP__.pause();
+    });
 
     // Pause dialog is visible and board is concealed
     const pauseDialog = page.locator('#pause-dialog');
@@ -427,29 +431,23 @@ test.describe('T011 Menu, dialogs and confirmation flows (T13, T15)', () => {
     await expect(page.locator('#stock-count-badge')).toHaveText('24');
   });
 
-  test('changing draw mode requires confirmation and switches mode (F05 / T15)', async ({ page }) => {
-    // Start game in Draw 1
-    await page.locator('#stock-container').click();
-    await expect(page.locator('#moves-display')).toHaveText('1');
-
-    // Menu -> Dobieraj 3
+  test('statistics mode buttons filter results without changing the game mode', async ({ page }) => {
+    const before = await page.evaluate(() => window.__SOLITAIRE_APP__.getState());
     await page.locator('#btn-menu').click();
+    await page.locator('#btn-menu-statistics').click();
+    await expect(page.getByRole('region', { name: 'Dobieraj 1' })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'Dobieraj 3' })).toBeHidden();
     await page.locator('#btn-mode-draw-3').click();
-
-    const confirmDialog = page.locator('#confirm-dialog');
-    await expect(confirmDialog).toBeVisible();
-    await expect(confirmDialog).toContainText('Zmienić tryb na dobieranie po 3?');
-
-    // Accept change
-    await page.locator('#btn-confirm-accept').click();
-    await expect(confirmDialog).toBeHidden();
-
-    // Now in Draw 3 mode: draw from stock produces up to 3 cards
+    await expect(page.getByRole('region', { name: 'Dobieraj 1' })).toBeHidden();
+    await expect(page.getByRole('region', { name: 'Dobieraj 3' })).toBeVisible();
+    await expect(page.locator('#btn-mode-draw-3')).toHaveAttribute('aria-checked', 'true');
+    const after = await page.evaluate(() => window.__SOLITAIRE_APP__.getState());
+    expect(after.preferences.drawCount).toBe(before.preferences.drawCount);
+    expect(after.session).toEqual(before.session);
+    await page.locator('#btn-dialog-close').click();
     await page.locator('#stock-container').click();
     await expect(page.locator('#moves-display')).toHaveText('1');
-    const wasteCards = await page.locator('#waste-pile .card-node.card-face-up').count();
-    expect(wasteCards).toBe(3);
-    await expect(page.locator('#stock-count-badge')).toHaveText('21');
+    await expect(page.locator('#waste-pile .card-node.card-face-up')).toHaveCount(1);
   });
 });
 
@@ -529,26 +527,11 @@ test.describe('T015 seed, statistics and results', () => {
     expect(saved.statistics.draw3.attempts).toBe(0);
   });
 
-  test('copy seed reports success and clipboard denial without changing the game', async ({ page }) => {
+  test('seed details and copy action are hidden from the game menu', async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
-    await page.evaluate(() => {
-      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: {
-        writeText: async (text) => { window.copiedSeed = text; },
-      } });
-    });
-    await expect(page.getByRole('button', { name: 'Kopiuj seed' })).toBeHidden();
-    await page.getByText('Seed rozdania').click();
-    await page.getByRole('button', { name: 'Kopiuj seed' }).click();
-    await expect(page.locator('#seed-copy-status')).toContainText('Skopiowano');
-    expect(await page.evaluate(() => window.copiedSeed)).toBe('42');
-    await page.evaluate(() => {
-      navigator.clipboard.writeText = async () => { throw new Error('Denied'); };
-    });
-    await page.getByRole('button', { name: 'Kopiuj seed' }).click();
-    await expect(page.locator('#seed-copy-status')).toContainText('Nie udało się skopiować');
-    await expect(page.locator('#menu-dialog')).toContainText('42');
-    expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().moveCount)).toBe(0);
+    await expect(page.getByText('Seed rozdania')).toHaveCount(0);
+    await expect(page.getByRole('button', { name: 'Kopiuj seed' })).toHaveCount(0);
   });
 
   for (const drawCount of [1, 3]) {
@@ -589,7 +572,11 @@ test.describe('T015 seed, statistics and results', () => {
       const mode = page.getByRole('region', { name: `Dobieraj ${drawCount}`, exact: true });
       await expect(mode).toContainText('Wygrane1');
       await expect(mode).toContainText('Wygrane procentowo100%');
-      await expect(page.getByRole('region', { name: `Dobieraj ${drawCount === 1 ? 3 : 1}`, exact: true })).toContainText('Wygrane procentowo0%');
+      const otherMode = drawCount === 1 ? 3 : 1;
+      const otherStats = page.getByRole('region', { name: `Dobieraj ${otherMode}`, exact: true });
+      await expect(otherStats).toBeHidden();
+      await page.locator(`#btn-mode-draw-${otherMode}`).click();
+      await expect(otherStats).toContainText('Wygrane procentowo0%');
     });
   }
 });
