@@ -935,5 +935,15 @@ body {
 }
 
 .seed-disclosure summary::-webkit-details-marker { display: none; }
-.seed-disclosure summary span { color: #e9d59f; font-size: 22px; }
-.seed-disclosure[open] summary span { transform: rotate(180deg); }
+.seed-chevron {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  margin: 0 4px;
+  border-right: 2px solid #e9d59f;
+  border-bottom: 2px solid #e9d59f;
+  transform: rotate(45deg);
+  transition: transform 120ms ease;
+}
+
+.seed-disclosure[open] .seed-chevron { transform: rotate(225deg); }

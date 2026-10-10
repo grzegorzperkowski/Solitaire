@@ -1,6 +1,6 @@
 # Project status
 
-- State: T009 and T010 follow-ups are accepted; T000–T014 are DONE. T015 is REVIEW after the coordinator-requested seed disclosure refinement.
+- State: T009 and T010 follow-ups are accepted; T000–T014 are DONE. T015 is REVIEW after chevron alignment refinement.
 - Current task: T015. Human assignment: “implementujemy teraz T015” (2026-10-10). T014 dependency accepted at `6149f52`.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T015.md](reports/T015.md).
@@ -38,3 +38,5 @@
 - T015 validation: 131 unit tests, 68 production-preview Chromium E2E tests and build passed. Seed/copy, per-mode statistics, win/reload/practice and safe preference/recovery flows implemented. No new physical-device evidence or push.
 
 - T015 follow-up: seed input and seed/copy summary are collapsed by default behind keyboard-accessible downward disclosures; production build and targeted UI checks passed. See reports/T015.md.
+
+- T015 chevron refinement: CSS-drawn indicator replaces the low-aligned text glyph. Build and 320px/landscape dialog checks passed; screenshot visually inspected. See reports/T015.md.

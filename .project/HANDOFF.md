@@ -83,3 +83,9 @@ Final checks: npm test — 131 passed; npm run build — passed; full Chromium E
 2026-10-10 coordinator request: hide seed entry behind a downward disclosure at the bottom of New Game; collapse seed display/copy behind a similar menu disclosure. T015 follow-up is implemented; targeted verification and a task-ID commit are recorded below.
 
 T015 refinement delivered in a follow-up task commit: seed entry now stays collapsed at the bottom of New Game, and menu seed display/copy is collapsed behind the same down-chevron disclosure. New E2E tests cover initial hidden state, reveal, keyboard focus and responsive dialog size. Await coordinator acceptance; no push.
+
+## T015 chevron alignment
+
+Coordinator supplied screenshot feedback: the text-glyph downward chevron sits too low. Follow-up replaces it with a CSS-drawn chevron; targeted visual verification pending.
+
+T015 chevron refinement: replaced the text character with a centered CSS chevron. Build and two responsive dialog E2E checks passed; screenshot inspected. T015 is REVIEW. See reports/T015.md; no successor assigned.

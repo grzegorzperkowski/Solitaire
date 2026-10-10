@@ -126,7 +126,7 @@ function renderMenuHtml(currentDrawCount, options) {
         <button id="btn-menu-statistics" class="menu-action-btn">Statystyki</button>
         <button id="btn-menu-help" class="menu-action-btn">Zasady i pomoc</button>
         <details class="seed-disclosure">
-          <summary>Seed rozdania <span aria-hidden="true">⌄</span></summary>
+          <summary>Seed rozdania <span class="seed-chevron" aria-hidden="true"></span></summary>
           <p>Seed: <strong>${options.seed}</strong> · Dobieraj ${options.drawCount}</p>
           <small>Zasady ${options.rulesVersion}, tasowanie ${options.shuffleVersion}. Ten sam seed i tryb odtwarzają rozdanie.</small>
           <button id="btn-copy-seed" class="menu-action-btn">Kopiuj seed</button>
@@ -151,7 +151,7 @@ function renderNewGameHtml(drawCount, replacesSave) {
           <option value="3" ${drawCount === 3 ? 'selected' : ''}>Dobieraj 3</option>
         </select>
         <details class="seed-disclosure">
-          <summary>Ustaw własny seed <span aria-hidden="true">⌄</span></summary>
+          <summary>Ustaw własny seed <span class="seed-chevron" aria-hidden="true"></span></summary>
           <label for="new-game-seed">Seed (opcjonalnie)</label>
           <input id="new-game-seed" class="dialog-input" type="text" inputmode="numeric" autocomplete="off" aria-describedby="seed-help seed-error">
           <small id="seed-help">Cyfry dziesiętne, od 0 do 4294967295. Puste pole losuje nowe rozdanie.</small>
