@@ -439,7 +439,7 @@ body {
   }
 }
 
-/* Interactive States and Feedback (T010) */
+/* Interactive States, Touch-Action and Drag Feedback (T010, T012) */
 .card-face-up,
 .stock-container,
 .pile-slot.can-recycle,
@@ -447,11 +447,51 @@ body {
   cursor: pointer;
 }
 
+.card-node {
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+.card-node svg {
+  -webkit-user-drag: none;
+}
+
 .card-node.is-selected {
+  touch-action: pinch-zoom;
   outline: 3px solid #f59e0b;
   outline-offset: 1px;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.6);
   z-index: 50 !important;
+}
+
+.card-node.is-dragging-source {
+  opacity: 0.25;
+}
+
+.drag-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 2000;
+  will-change: transform;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.55));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drag-overlay {
+    filter: none;
+    transition: none !important;
+  }
+}
+
+.tableau-column.is-drop-hover,
+.foundation-pile.is-drop-hover {
+  outline: 3px solid #38bdf8 !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.8) !important;
+  border-radius: 6px;
 }
 
 .card-node.is-legal-destination,

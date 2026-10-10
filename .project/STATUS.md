@@ -1,9 +1,9 @@
 # Project status
 
-- State: Polish game menu, New Game, Restart, Pause and Help dialogs accepted. T012 is assigned.
-- Current task: **T011 — DONE**. T000–T011 are DONE. T012 is assigned.
+- State: Pointer Events drag & drop, cancellation and edge autoscroll implemented and verified. T012 is in REVIEW.
+- Current task: **T012 — REVIEW**. T000–T011 are DONE. T012 is ready for review.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T011.md](reports/T011.md).
+- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T012.md](reports/T012.md).
 
 ## Completed deliverables / milestones
 
@@ -19,7 +19,8 @@
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`.
 - T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`.
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
-- P1, P2, P3, P4 and P5 are complete. T012 is assigned. T012–T023 remain TODO.
+- T012 REVIEW: Pointer drag & drop, touch/mouse lifecycle, cancellation and edge autoscroll implemented and verified.
+- P1, P2, P3, P4 and P5 are complete. P6 is pending T012 coordinator review and T013 gate. T013–T023 remain TODO.
 
 ## Known problems and blockers
 
@@ -30,4 +31,4 @@
 
 ## Next recommendation
 
-- T011 is accepted. The current instruction assigns [T012](tasks/T012.md): Pointer drag, cancellation and autoscroll. Do not start T013 until authorized.
+- T012 is in REVIEW. Await coordinator review and acceptance. Do not start T013 until authorized.

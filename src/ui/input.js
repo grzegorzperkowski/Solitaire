@@ -4,12 +4,17 @@
  */
 
 import { validateMove } from '../engine/game.js';
-import { getCardDetails, SUIT_NAMES } from './cards.js';
+import { getCardDetails, SUIT_NAMES, createCardElement } from './cards.js';
+import { calculateBoardDimensions } from './layout.js';
 
 export function createInputController(app, rootElement) {
   let selection = null; // { pile: 'waste' | 'tableau' | 'foundation', index?, cardIndex? }
   let legalDestinations = []; // array of { pile: 'tableau' | 'foundation', index }
   let onStateChangeCallback = null;
+  let activeGesture = null;
+  let suppressNextClick = false;
+  let rafId = null;
+  let lastTimestamp = 0;
 
   function announce(message) {
     const announcer = rootElement.querySelector('#live-announcer');
@@ -95,6 +100,264 @@ export function createInputController(app, rootElement) {
     if (a.pile === 'foundation') return a.index === b.index;
     if (a.pile === 'tableau') return a.index === b.index && a.cardIndex === b.cardIndex;
     return false;
+  }
+
+  function isSourcePartOfSelection(src) {
+    if (!selection || !src) return false;
+    if (selection.pile !== src.pile) return false;
+    if (selection.pile === 'waste') return true;
+    if (selection.pile === 'foundation') return selection.index === src.index;
+    if (selection.pile === 'tableau') {
+      return selection.index === src.index && src.cardIndex >= selection.cardIndex;
+    }
+    return false;
+  }
+
+  function getDraggableSource(targetEl) {
+    if (!targetEl) return null;
+    const appState = app.getState();
+    if (appState.activeDialog || appState.isPaused) return null;
+    const gameState = appState.state;
+    if (!gameState) return null;
+
+    // A. Tableau
+    const colEl = targetEl.closest('.tableau-column');
+    const cardEl = targetEl.closest('.card-node');
+    if (colEl && cardEl && colEl.contains(cardEl)) {
+      const colIdx = parseInt(colEl.dataset.column, 10);
+      const column = gameState.tableau[colIdx];
+      if (!column) return null;
+      const cards = Array.from(colEl.querySelectorAll('.card-node'));
+      const cardIndex = cards.indexOf(cardEl);
+      if (cardIndex < 0) return null;
+      if (cardIndex < column.faceUpStart) return null;
+      return {
+        source: { pile: 'tableau', index: colIdx, cardIndex },
+        element: cardEl,
+        columnElement: colEl,
+      };
+    }
+
+    // B. Waste
+    const wasteContainer = targetEl.closest('#waste-container');
+    if (wasteContainer && gameState.waste.length > 0) {
+      const playableCard = rootElement.querySelector('#waste-pile .card-node.is-playable')
+        || rootElement.querySelector('#waste-pile .card-node:last-child');
+      if (playableCard && (playableCard === cardEl || playableCard.contains(targetEl))) {
+        return {
+          source: { pile: 'waste' },
+          element: playableCard,
+        };
+      }
+    }
+
+    // C. Foundation
+    const foundEl = targetEl.closest('.foundation-pile');
+    if (foundEl) {
+      const foundIdx = parseInt(foundEl.dataset.foundationIndex, 10);
+      const foundPile = gameState.foundations[foundIdx];
+      if (foundPile && foundPile.length > 0) {
+        const topCardEl = foundEl.querySelector('.card-node:last-child');
+        if (topCardEl && (topCardEl === cardEl || topCardEl.contains(targetEl))) {
+          return {
+            source: { pile: 'foundation', index: foundIdx },
+            element: topCardEl,
+            foundationElement: foundEl,
+          };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function createDragOverlayDOM(source, gameState) {
+    const existing = rootElement.querySelector('#drag-overlay');
+    if (existing) existing.remove();
+
+    const dims = calculateBoardDimensions(rootElement.clientWidth || window.innerWidth);
+    const overlay = document.createElement('div');
+    overlay.id = 'drag-overlay';
+    overlay.className = 'drag-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+
+    let cardIds = [];
+    if (source.pile === 'tableau') {
+      const col = gameState.tableau[source.index];
+      if (col) {
+        cardIds = col.cards.slice(source.cardIndex);
+      }
+    } else if (source.pile === 'waste') {
+      if (gameState.waste.length > 0) {
+        cardIds = [gameState.waste[gameState.waste.length - 1]];
+      }
+    } else if (source.pile === 'foundation') {
+      const f = gameState.foundations[source.index];
+      if (f && f.length > 0) {
+        cardIds = [f[f.length - 1]];
+      }
+    }
+
+    overlay.style.width = `${dims.cardWidth}px`;
+    let currentTop = 0;
+    cardIds.forEach((cardId, i) => {
+      const cardEl = createCardElement(cardId, true);
+      cardEl.style.width = `${dims.cardWidth}px`;
+      cardEl.style.height = `${dims.cardHeight}px`;
+      cardEl.style.position = 'absolute';
+      cardEl.style.left = '0';
+      cardEl.style.top = `${currentTop}px`;
+      cardEl.style.zIndex = String(i + 1);
+      cardEl.style.pointerEvents = 'none';
+      overlay.appendChild(cardEl);
+      currentTop += dims.faceUpOverlap;
+    });
+
+    const totalHeight = currentTop - (cardIds.length > 1 ? dims.faceUpOverlap : 0) + dims.cardHeight;
+    overlay.style.height = `${totalHeight}px`;
+
+    const posX = Math.round(activeGesture.currentX - activeGesture.grabOffsetX);
+    const posY = Math.round(activeGesture.currentY - activeGesture.grabOffsetY);
+    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    overlay.style.transform = isReducedMotion
+      ? `translate3d(${posX}px, ${posY}px, 0)`
+      : `translate3d(${posX}px, ${posY}px, 0) scale(1.03)`;
+
+    const gameContainer = rootElement.querySelector('#game-container') || rootElement;
+    gameContainer.appendChild(overlay);
+  }
+
+  function cleanupDragVisuals() {
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    const overlay = rootElement.querySelector('#drag-overlay');
+    if (overlay) overlay.remove();
+
+    rootElement.querySelectorAll('.is-drop-hover').forEach((el) => el.classList.remove('is-drop-hover'));
+    rootElement.querySelectorAll('.is-dragging-source').forEach((el) => el.classList.remove('is-dragging-source'));
+  }
+
+  function cancelDrag() {
+    if (!activeGesture) return;
+
+    if (activeGesture.isDragging) {
+      suppressNextClick = true;
+      setTimeout(() => { suppressNextClick = false; }, 200);
+      try {
+        activeGesture.sourceElement.releasePointerCapture(activeGesture.pointerId);
+      } catch {}
+      cleanupDragVisuals();
+      if (onStateChangeCallback) onStateChangeCallback();
+    }
+    activeGesture = null;
+  }
+
+  function performAutoscroll(dt) {
+    if (!activeGesture || !activeGesture.isDragging) return;
+    const scroller = rootElement.querySelector('#tableau-scroller');
+    if (!scroller) return;
+
+    const rect = scroller.getBoundingClientRect();
+    const y = activeGesture.currentY;
+    const maxSpeed = (240 * dt) / 1000;
+
+    if (y >= rect.top - 12 && y <= rect.top + 32) {
+      const proximity = Math.max(0, Math.min(1, (rect.top + 32 - y) / 32));
+      scroller.scrollTop -= Math.round(proximity * maxSpeed);
+    } else if (y >= rect.bottom - 32 && y <= rect.bottom + 12) {
+      const proximity = Math.max(0, Math.min(1, (y - (rect.bottom - 32)) / 32));
+      scroller.scrollTop += Math.round(proximity * maxSpeed);
+    }
+  }
+
+  function performHitTesting() {
+    if (!activeGesture || !activeGesture.isDragging) return;
+    const x = activeGesture.currentX;
+    const y = activeGesture.currentY;
+    let hoveredDest = null;
+
+    // 1. Check foundations 0..3
+    for (let i = 0; i < 4; i++) {
+      const fEl = rootElement.querySelector(`#foundation-${i}`);
+      if (fEl) {
+        const rect = fEl.getBoundingClientRect();
+        if (x >= rect.left - 4 && x <= rect.right + 4 && y >= rect.top - 10 && y <= rect.bottom + 10) {
+          hoveredDest = { pile: 'foundation', index: i };
+          break;
+        }
+      }
+    }
+
+    // 2. Check tableau columns 0..6
+    if (!hoveredDest) {
+      for (let i = 0; i < 7; i++) {
+        const colEl = rootElement.querySelector(`#column-${i}`);
+        if (colEl) {
+          const rect = colEl.getBoundingClientRect();
+          if (
+            x >= rect.left - 4 &&
+            x <= rect.right + 4 &&
+            y >= rect.top - 20 &&
+            y <= Math.max(rect.bottom + 60, window.innerHeight - 50)
+          ) {
+            hoveredDest = { pile: 'tableau', index: i };
+            break;
+          }
+        }
+      }
+    }
+
+    activeGesture.hoveredDest = hoveredDest;
+
+    // Update .is-drop-hover highlight for legal target
+    rootElement.querySelectorAll('.is-drop-hover').forEach((el) => el.classList.remove('is-drop-hover'));
+    if (hoveredDest) {
+      const isLegal = legalDestinations.some(
+        (d) => d.pile === hoveredDest.pile && d.index === hoveredDest.index
+      );
+      if (isLegal) {
+        let targetEl = null;
+        if (hoveredDest.pile === 'foundation') {
+          targetEl = rootElement.querySelector(`#foundation-${hoveredDest.index}`);
+        } else {
+          targetEl = rootElement.querySelector(`#column-${hoveredDest.index}`);
+        }
+        targetEl?.classList.add('is-drop-hover');
+      }
+    }
+  }
+
+  function startDragLoop() {
+    if (rafId) cancelAnimationFrame(rafId);
+
+    const updateFrame = (now) => {
+      if (!activeGesture || !activeGesture.isDragging) {
+        rafId = null;
+        return;
+      }
+
+      const dt = Math.min(50, now - lastTimestamp);
+      lastTimestamp = now;
+
+      const overlay = rootElement.querySelector('#drag-overlay');
+      if (overlay) {
+        const posX = Math.round(activeGesture.currentX - activeGesture.grabOffsetX);
+        const posY = Math.round(activeGesture.currentY - activeGesture.grabOffsetY);
+        const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        overlay.style.transform = isReducedMotion
+          ? `translate3d(${posX}px, ${posY}px, 0)`
+          : `translate3d(${posX}px, ${posY}px, 0) scale(1.03)`;
+      }
+
+      performAutoscroll(dt);
+      performHitTesting();
+
+      rafId = requestAnimationFrame(updateFrame);
+    };
+
+    rafId = requestAnimationFrame(updateFrame);
   }
 
   function restoreFocusAfterAction(actionInfo) {
@@ -485,8 +748,14 @@ export function createInputController(app, rootElement) {
       return;
     }
 
-    // Escape: close active dialog, resume paused game, or clear selection
+    // Escape: cancel drag, close active dialog, resume paused game, or clear selection
     if (e.key === 'Escape') {
+      if (activeGesture && activeGesture.isDragging) {
+        e.preventDefault();
+        cancelDrag();
+        announce('Anulowano przeciąganie.');
+        return;
+      }
       const state = app.getState();
       if (state.activeDialog) {
         e.preventDefault();
@@ -570,8 +839,150 @@ export function createInputController(app, rootElement) {
     }
   }
 
+  function handlePointerDown(e) {
+    if (activeGesture) return;
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+    const draggable = getDraggableSource(e.target);
+    if (!draggable) return;
+
+    // Touch rule: only selected source can drag; unselected touch scrolls natively (F02 / ARCHITECTURE §9)
+    if (e.pointerType === 'touch' && !isSourcePartOfSelection(draggable.source)) {
+      return;
+    }
+
+    const cardRect = draggable.element.getBoundingClientRect();
+    activeGesture = {
+      pointerId: e.pointerId,
+      pointerType: e.pointerType,
+      startX: e.clientX,
+      startY: e.clientY,
+      currentX: e.clientX,
+      currentY: e.clientY,
+      grabOffsetX: e.clientX - cardRect.left,
+      grabOffsetY: e.clientY - cardRect.top,
+      source: draggable.source,
+      sourceElement: draggable.element,
+      isDragging: false,
+      hoveredDest: null,
+      draggedCardsElements: [],
+    };
+  }
+
+  function handlePointerMove(e) {
+    if (!activeGesture || e.pointerId !== activeGesture.pointerId) return;
+
+    activeGesture.currentX = e.clientX;
+    activeGesture.currentY = e.clientY;
+
+    if (!activeGesture.isDragging) {
+      const dist = Math.hypot(e.clientX - activeGesture.startX, e.clientY - activeGesture.startY);
+      if (dist < 6) return;
+
+      activeGesture.isDragging = true;
+      try {
+        activeGesture.sourceElement.setPointerCapture(activeGesture.pointerId);
+      } catch {}
+
+      const appState = app.getState();
+      const gameState = appState.state;
+
+      if (!isSameSource(selection, activeGesture.source)) {
+        selection = activeGesture.source;
+        legalDestinations = computeLegalDestinations(gameState, selection);
+        if (onStateChangeCallback) onStateChangeCallback();
+      } else if (legalDestinations.length === 0) {
+        legalDestinations = computeLegalDestinations(gameState, selection);
+      }
+
+      const draggedElements = [];
+      if (activeGesture.source.pile === 'tableau') {
+        const colEl = rootElement.querySelector(`#column-${activeGesture.source.index}`);
+        if (colEl) {
+          const cards = Array.from(colEl.querySelectorAll('.card-node'));
+          for (let i = activeGesture.source.cardIndex; i < cards.length; i++) {
+            cards[i].classList.add('is-dragging-source');
+            draggedElements.push(cards[i]);
+          }
+        }
+      } else {
+        activeGesture.sourceElement.classList.add('is-dragging-source');
+        draggedElements.push(activeGesture.sourceElement);
+      }
+      activeGesture.draggedCardsElements = draggedElements;
+
+      createDragOverlayDOM(activeGesture.source, gameState);
+      lastTimestamp = performance.now();
+      startDragLoop();
+    }
+  }
+
+  function handlePointerUp(e) {
+    if (!activeGesture || e.pointerId !== activeGesture.pointerId) return;
+
+    if (activeGesture.isDragging) {
+      activeGesture.currentX = e.clientX;
+      activeGesture.currentY = e.clientY;
+      performHitTesting();
+
+      suppressNextClick = true;
+      setTimeout(() => { suppressNextClick = false; }, 200);
+      try {
+        activeGesture.sourceElement.releasePointerCapture(activeGesture.pointerId);
+      } catch {}
+
+      cleanupDragVisuals();
+
+      const hovered = activeGesture.hoveredDest;
+      const src = activeGesture.source;
+      activeGesture = null;
+
+      if (hovered) {
+        const gameState = app.getState().state;
+        const valid = validateMove(gameState, { type: 'move', from: src, to: hovered });
+        if (valid.ok) {
+          executeMove(src, hovered);
+          return;
+        } else {
+          let targetEl = null;
+          if (hovered.pile === 'foundation') {
+            targetEl = rootElement.querySelector(`#foundation-${hovered.index}`);
+          } else {
+            targetEl = rootElement.querySelector(`#column-${hovered.index}`);
+          }
+          if (targetEl) triggerShake(targetEl);
+          announce('Niedozwolony ruch.');
+        }
+      }
+
+      if (onStateChangeCallback) onStateChangeCallback();
+      return;
+    }
+
+    activeGesture = null;
+  }
+
   function bindEvents() {
+    rootElement.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', cancelDrag);
+    window.addEventListener('lostpointercapture', cancelDrag);
+    rootElement.addEventListener('dragstart', (e) => e.preventDefault());
+    window.addEventListener('blur', cancelDrag);
+    window.addEventListener('pagehide', cancelDrag);
+    window.addEventListener('resize', cancelDrag);
+    window.addEventListener('orientationchange', cancelDrag);
+
     rootElement.addEventListener('click', (e) => {
+      if (suppressNextClick && !e.target.closest('.control-btn')) {
+        suppressNextClick = false;
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      suppressNextClick = false;
+
       // Menu button click
       const btnMenu = e.target.closest('#btn-menu');
       if (btnMenu) {
@@ -664,13 +1075,25 @@ export function createInputController(app, rootElement) {
     app,
     getSelection: () => selection,
     getLegalDestinations: () => legalDestinations,
+    getActiveGesture: () => activeGesture,
     clearSelection: () => setSelection(null),
+    cancelDrag,
     announce,
     onStateChange: (fn) => {
       onStateChangeCallback = fn;
     },
     destroy: () => {
       window.removeEventListener('keydown', handleGlobalKeydown);
+      rootElement.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', cancelDrag);
+      window.removeEventListener('lostpointercapture', cancelDrag);
+      window.removeEventListener('blur', cancelDrag);
+      window.removeEventListener('pagehide', cancelDrag);
+      window.removeEventListener('resize', cancelDrag);
+      window.removeEventListener('orientationchange', cancelDrag);
+      if (rafId) cancelAnimationFrame(rafId);
     },
   };
 }
