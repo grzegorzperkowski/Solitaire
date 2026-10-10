@@ -1,9 +1,9 @@
 # Project status
 
-- State: app controller, active clock, lifecycle scheduling, Web Locks single-writer tab ownership and Playwright storage tests implemented. T008 is accepted. P4 is complete.
-- Current task: **T008 — DONE**. T000–T008 are DONE. T009 is assigned.
+- State: responsive mobile-first board layout, SVG cards, tableau scroller and Playwright viewport tests implemented. T009 is in REVIEW.
+- Current task: **T009 — REVIEW**. T000–T008 are DONE.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T008.md](reports/T008.md).
+- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T009.md](reports/T009.md).
 
 ## Completed deliverables / milestones
 
@@ -16,16 +16,16 @@
 - T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`.
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`.
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
-- P1, P2, P3 and P4 are complete. P5 is incomplete until T009, T010 and T011 are DONE. T009–T023 remain TODO.
+- P1, P2, P3 and P4 are complete. P5 is incomplete until T009, T010 and T011 are DONE. T009 is in REVIEW. T010–T023 remain TODO.
 
 ## Known problems and blockers
 
 - GitHub Actions workflow is committed but has not run on a runner. No push was made.
-- Rendered UI layout not yet implemented (scheduled for P5 / T009).
+- Move-input system and card interactions not yet implemented (scheduled for P5 / T010).
 - `filelist.txt` is absent and was not recreated.
 - Hint ranking is not implemented. `getLegalMoves` uses a documented scan order, not the F04 hint order. There is no loss flag.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest/coverage-v8 5.0.3, Playwright 1.64.0; zero runtime dependencies.
 
 ## Next recommendation
 
-T008 is accepted. The same instruction assigns [T009](tasks/T009.md): responsive board and readable SVG card basics (leading directly toward mobile MVP with T010). Do not start T010 until authorized.
+T009 is ready for coordinator review. After acceptance of T009, proceed to [T010](tasks/T010.md): tap and keyboard play (input system) to complete the playable mobile MVP. Do not start T010 until authorized.

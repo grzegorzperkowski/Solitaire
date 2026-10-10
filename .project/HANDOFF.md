@@ -29,13 +29,14 @@
 - T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`. `src/session.js` implements session timeline, Undo/Redo, snapshot caching, attempt restart, per-mode statistics, elapsedMs independence of Undo, and simulation extended to history operations. Evidence: [reports/T006.md](reports/T006.md).
 - Passing CI counts, not a win rate: 2002 deals, 600427 steps, 3 wins, 0 stuck, 1999 step bounds. Categories: draw 222976, recycle 19046, tableau 166361, waste 14072, foundation 58227, invalid 119745. Won seeds: 827 Draw 1, 681 Draw 3, 888 Draw 3.
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`. `src/persistence.js` implements schema-v1 serialization, restore, pure-engine replay validation including redo tail, storage error and quota handling, byte retention on failure, defensive limits (1 MiB UTF-8, 10,000 commands), and simulation round trips. Evidence: [reports/T007.md](reports/T007.md). Acceptance tracking commit: `1249707`.
-- T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`. `src/app.js` implements application controller connecting session timeline and persistence, active-time measurement via `performance.now()`, pause/dialog/visibility suppression, 5s checkpoints and `pagehide` saves, Web Locks single-writer ownership (`pl.solitaire.writer`) and storage revision conflict fallback. Playwright E2E infrastructure and tests in `tests/e2e/storage.spec.js`. Evidence: [reports/T008.md](reports/T008.md).
+- T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`. `src/app.js` implements application controller connecting session timeline and persistence, active-time measurement via `performance.now()`, pause/dialog/visibility suppression, 5s checkpoints and `pagehide` saves, Web Locks single-writer ownership (`pl.solitaire.writer`) and storage revision conflict fallback. Playwright E2E infrastructure and tests in `tests/e2e/storage.spec.js`. Evidence: [reports/T008.md](reports/T008.md). Acceptance tracking commit: `b3f1a48`.
+- T009 in REVIEW: `src/ui/layout.js`, `src/ui/cards.js`, `src/ui/render.js`, `src/styles.css` implement responsive mobile-first board (320–430px portrait with zero horizontal scroll), SVG cards with >=14px corner ranks and >=24px exposed bands, N02 strict face-down card concealment, 2-column waste with Draw 3 fan, tableau scroller with 44px scroll handle and accessible buttons for long columns, and 44x44px bottom controls. Evidence: [reports/T009.md](reports/T009.md).
 - P1, P2, P3 and P4 are complete. P5 is incomplete until T009, T010 and T011 are DONE.
 
 ## Blockers / next steps
 
-- T008 is accepted. Implement T009 (responsive board and readable SVG card basics). Do not start T010.
-- Shortest path to playable mobile MVP: T008 (reviewed/accepted) -> T009 (responsive board and card rendering) -> T010 (tap play and mobile touch interactions).
+- T009 is in REVIEW, awaiting coordinator acceptance. Do not start T010.
+- Shortest path to playable mobile MVP: T009 (accepted) -> T010 (tap and touch play controls).
 - Remote GitHub Actions CI has not run on a remote runner.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
@@ -43,6 +44,6 @@
 
 Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:e2e` (playwright test), `npm run test:coverage`, `npm run test:simulation -- --profile=ci`, `npm run build`. The release profile is `npm run test:simulation -- --profile=release` and is a T022 gate. See [README.md](../README.md).
 
-Latest local results are in [reports/T008.md](reports/T008.md): `npm test` 114 passed across 7 files; `npm run test:e2e` 2 passed across 1 file (Chromium); `npm run build` exit 0 (JS bundle 24.93 kB, gzip 7.21 kB).
+Latest local results are in [reports/T009.md](reports/T009.md): `npm test` 120 passed across 8 files; `npm run test:e2e` 14 passed across 2 files (Chromium); `npm run build` exit 0 (JS bundle 39.91 kB, gzip 11.97 kB).
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.
