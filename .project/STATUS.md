@@ -1,6 +1,6 @@
 # Project status
 
-- State: T009 mobile spacing and card visibility follow-up is ready for review; T010 and T014 remain in REVIEW.
+- State: T009 mobile spacing and card visibility follow-up is ready for review; T010 remains in REVIEW; T014 is accepted.
 - Current task: **T009 — REVIEW**. Its original implementation remains accepted; this follow-up adjusts phone portrait spacing and tableau card visibility.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T009.md](reports/T009.md).
@@ -21,7 +21,7 @@
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
 - T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
 - T013 DONE: physical checks on iPhone 15 and Android 12 found no problems; accepted 2026-10-10 at `916b3bd`. iOS/browser versions were not supplied; see [reports/T013.md](reports/T013.md).
-- T014 REVIEW: empty-action E2E now exercises the running app through its public interface, with no source-module import. Full CI-style preview suite passes; see [reports/T014.md](reports/T014.md).
+- T014 DONE: accepted 2026-10-10 by the human coordinator at commit `6149f52`; legal-hint ranking and empty-action feedback are implemented. See [reports/T014.md](reports/T014.md).
 - P1–P6 are complete. P7 is in progress; T015–T023 remain TODO.
 
 ## Known problems and blockers
@@ -33,4 +33,4 @@
 
 ## Next recommendation
 
-- Review the T009 mobile spacing and card visibility follow-up; see [reports/T009.md](reports/T009.md). T010 and T014 remain in REVIEW; do not start T015 automatically.
+- Review the T009 mobile spacing and card visibility follow-up; see [reports/T009.md](reports/T009.md). T010 remains in REVIEW. T014 is accepted; T015 still needs an explicit assignment.
