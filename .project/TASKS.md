@@ -28,7 +28,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T007](tasks/T007.md) | P4 | Versioned persistence and replay validation | T006 | DONE | [Criteria](tasks/T007.md#acceptance-criteria); P4 persistence subset; TEST_PLAN T11/T12/T14 (restore) |
 | [T008](tasks/T008.md) | P4 | Clock, browser lifecycle and single-writer ownership | T007 | DONE | [Criteria](tasks/T008.md#acceptance-criteria); P4 exit; TEST_PLAN T11–T14 (browser/lifecycle) |
 | [T009](tasks/T009.md) | P5 | Responsive board and readable SVG card basics | T008 | DONE | [Criteria](tasks/T009.md#acceptance-criteria); P5 layout subset; TEST_PLAN T17/T19 (layout) |
-| [T010](tasks/T010.md) | P5 | Tap and keyboard play | T009 | TODO | [Criteria](tasks/T010.md#acceptance-criteria); P5 input subset; TEST_PLAN T15/T18 (board) |
+| [T010](tasks/T010.md) | P5 | Tap and keyboard play | T009 | REVIEW | [Criteria](tasks/T010.md#acceptance-criteria); P5 input subset; TEST_PLAN T15/T18 (board) |
 | [T011](tasks/T011.md) | P5 | New Game, Restart, Pause and Help dialogs | T010 | TODO | [Criteria](tasks/T011.md#acceptance-criteria); P5 exit; TEST_PLAN T13/T15/T18/T19 (dialogs) |
 | [T012](tasks/T012.md) | P6 | Pointer drag, cancellation and autoscroll | T011 | TODO | [Criteria](tasks/T012.md#acceptance-criteria); P6 automated subset; TEST_PLAN T16/T17 |
 | [T013](tasks/T013.md) | P6 | Physical-device touch feasibility gate | T012 | TODO | [Criteria](tasks/T013.md#acceptance-criteria); P6 exit; TEST_PLAN T16/T19 and §5 (pre-PWA subset) |

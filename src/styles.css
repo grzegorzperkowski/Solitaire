@@ -438,3 +438,57 @@ body {
     margin-top: 2px;
   }
 }
+
+/* Interactive States and Feedback (T010) */
+.card-face-up,
+.stock-container,
+.pile-slot.can-recycle,
+.is-playable {
+  cursor: pointer;
+}
+
+.card-node.is-selected {
+  outline: 3px solid #f59e0b;
+  outline-offset: 1px;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.6);
+  z-index: 50 !important;
+}
+
+.card-node.is-legal-destination,
+.pile-slot.is-legal-destination,
+.foundation-pile.is-legal-destination {
+  outline: 3px dashed #10b981;
+  outline-offset: 1px;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.card-node:focus-visible,
+.stock-container:focus-visible,
+.pile-slot:focus-visible {
+  outline: 3px solid #38bdf8;
+  outline-offset: 2px;
+  z-index: 60 !important;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+.shake-animation {
+  animation: shake 0.35s ease-in-out;
+}
+
+/* Screen reader only utility (N02) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

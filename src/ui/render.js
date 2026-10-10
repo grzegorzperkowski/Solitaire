@@ -1,6 +1,6 @@
 /**
  * DOM Renderer for Klondike Solitaire.
- * Follows ARCHITECTURE §8 and REQUIREMENTS U01–U06/N02.
+ * Follows ARCHITECTURE §8-§9 and REQUIREMENTS U01–U06/N01/N02.
  */
 
 import { createCardElement, createEmptySlotElement } from './cards.js';
@@ -29,11 +29,12 @@ export function createBoardStructure(rootElement) {
       </header>
 
       <div id="notice-banner" class="notice-banner hidden" role="status" aria-live="polite"></div>
+      <div id="live-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
       <div class="board-area" id="board-area">
         <!-- Top row: Stock (col 0), Waste (cols 1-2), Foundations (cols 3-6) -->
         <section class="top-row" aria-label="Górne stosy">
-          <div class="stock-container" id="stock-container">
+          <div class="stock-container" id="stock-container" role="button" tabindex="0" aria-label="Stos dobierania">
             <div class="stock-pile-wrapper" id="stock-pile"></div>
             <span class="stock-count-badge" id="stock-count-badge" aria-label="Liczba kart w stosie">0</span>
           </div>
@@ -43,10 +44,10 @@ export function createBoardStructure(rootElement) {
           </div>
 
           <div class="foundations-container" id="foundations-container" aria-label="Fundamenty">
-            <div class="foundation-pile" id="foundation-0" data-foundation-index="0"></div>
-            <div class="foundation-pile" id="foundation-1" data-foundation-index="1"></div>
-            <div class="foundation-pile" id="foundation-2" data-foundation-index="2"></div>
-            <div class="foundation-pile" id="foundation-3" data-foundation-index="3"></div>
+            <div class="foundation-pile" id="foundation-0" data-foundation-index="0" role="region" aria-label="Baza trefl"></div>
+            <div class="foundation-pile" id="foundation-1" data-foundation-index="1" role="region" aria-label="Baza karo"></div>
+            <div class="foundation-pile" id="foundation-2" data-foundation-index="2" role="region" aria-label="Baza kier"></div>
+            <div class="foundation-pile" id="foundation-3" data-foundation-index="3" role="region" aria-label="Baza pik"></div>
           </div>
         </section>
 
@@ -62,13 +63,13 @@ export function createBoardStructure(rootElement) {
 
           <div class="tableau-scroller" id="tableau-scroller">
             <div class="tableau-grid" id="tableau-grid">
-              <div class="tableau-column" id="column-0" data-column="0"></div>
-              <div class="tableau-column" id="column-1" data-column="1"></div>
-              <div class="tableau-column" id="column-2" data-column="2"></div>
-              <div class="tableau-column" id="column-3" data-column="3"></div>
-              <div class="tableau-column" id="column-4" data-column="4"></div>
-              <div class="tableau-column" id="column-5" data-column="5"></div>
-              <div class="tableau-column" id="column-6" data-column="6"></div>
+              <div class="tableau-column" id="column-0" data-column="0" role="region" aria-label="Kolumna 1"></div>
+              <div class="tableau-column" id="column-1" data-column="1" role="region" aria-label="Kolumna 2"></div>
+              <div class="tableau-column" id="column-2" data-column="2" role="region" aria-label="Kolumna 3"></div>
+              <div class="tableau-column" id="column-3" data-column="3" role="region" aria-label="Kolumna 4"></div>
+              <div class="tableau-column" id="column-4" data-column="4" role="region" aria-label="Kolumna 5"></div>
+              <div class="tableau-column" id="column-5" data-column="5" role="region" aria-label="Kolumna 6"></div>
+              <div class="tableau-column" id="column-6" data-column="6" role="region" aria-label="Kolumna 7"></div>
             </div>
           </div>
         </section>
@@ -104,7 +105,7 @@ export function createBoardStructure(rootElement) {
 /**
  * Main render function called whenever app state or viewport size changes.
  */
-export function renderGame(rootElement, state, layoutDims = null) {
+export function renderGame(rootElement, state, layoutDims = null, inputController = null) {
   if (!rootElement) return;
 
   let container = rootElement.querySelector('#game-container');
@@ -116,6 +117,10 @@ export function renderGame(rootElement, state, layoutDims = null) {
   // Calculate layout if not provided
   const dims = layoutDims || calculateBoardDimensions(container.clientWidth || window.innerWidth);
   applyLayoutVariables(container, dims);
+
+  // Extract input selection and legal destinations
+  const selection = inputController?.getSelection ? inputController.getSelection() : inputController?.selection || null;
+  const legalDestinations = inputController?.getLegalDestinations ? inputController.getLegalDestinations() : inputController?.legalDestinations || [];
 
   // Update header stats
   const timerDisplay = rootElement.querySelector('#timer-display');
@@ -161,27 +166,35 @@ export function renderGame(rootElement, state, layoutDims = null) {
 
   // Render Waste
   const drawCount = state.preferences?.drawCount ?? 1;
-  renderWaste(rootElement, gameState.waste, drawCount, dims);
+  renderWaste(rootElement, gameState.waste, drawCount, dims, selection);
 
   // Render Foundations
-  renderFoundations(rootElement, gameState.foundations);
+  renderFoundations(rootElement, gameState.foundations, selection, legalDestinations);
 
   // Render Tableau
-  renderTableau(rootElement, gameState.tableau, dims);
+  renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
 
   // Check overflow on tableau scroller and toggle scroll handle & buttons
   checkScrollerOverflow(rootElement);
 }
 
 function renderStock(rootElement, gameState) {
+  const stockContainer = rootElement.querySelector('#stock-container');
   const stockPile = rootElement.querySelector('#stock-pile');
   const countBadge = rootElement.querySelector('#stock-count-badge');
-  if (!stockPile) return;
+  if (!stockPile || !stockContainer) return;
 
   const count = gameState.stock.length;
   if (countBadge) {
     countBadge.textContent = String(count);
     countBadge.style.display = count > 0 ? 'block' : 'none';
+  }
+
+  if (count > 0) {
+    stockContainer.setAttribute('aria-label', `Stos dobierania: ${count} ${count === 1 ? 'karta' : 'kart'}`);
+  } else {
+    const canRecycle = gameState.waste.length > 0;
+    stockContainer.setAttribute('aria-label', canRecycle ? 'Stos pusty — kliknij, aby przetasować skrawek' : 'Stos pusty');
   }
 
   stockPile.innerHTML = '';
@@ -193,21 +206,31 @@ function renderStock(rootElement, gameState) {
   }
 }
 
-function renderWaste(rootElement, wasteCards, drawCount, dims) {
+function renderWaste(rootElement, wasteCards, drawCount, dims, selection) {
   const wastePile = rootElement.querySelector('#waste-pile');
   if (!wastePile) return;
 
   wastePile.innerHTML = '';
   if (!wasteCards || wasteCards.length === 0) {
-    wastePile.appendChild(createEmptySlotElement('waste'));
+    const emptySlot = createEmptySlotElement('waste');
+    emptySlot.setAttribute('tabindex', '0');
+    emptySlot.setAttribute('role', 'region');
+    wastePile.appendChild(emptySlot);
     return;
   }
+
+  const isWasteSelected = selection?.pile === 'waste';
 
   // Draw 1: show top card only
   if (drawCount === 1) {
     const topCardId = wasteCards[wasteCards.length - 1];
     const cardEl = createCardElement(topCardId, true);
     cardEl.classList.add('is-playable');
+    cardEl.setAttribute('tabindex', '0');
+    cardEl.setAttribute('role', 'button');
+    if (isWasteSelected) {
+      cardEl.classList.add('is-selected');
+    }
     wastePile.appendChild(cardEl);
     return;
   }
@@ -220,7 +243,16 @@ function renderWaste(rootElement, wasteCards, drawCount, dims) {
   fannedCards.forEach((cardId, i) => {
     const cardEl = createCardElement(cardId, true);
     const isTop = i === fannedCards.length - 1;
-    if (isTop) cardEl.classList.add('is-playable');
+    if (isTop) {
+      cardEl.classList.add('is-playable');
+      cardEl.setAttribute('tabindex', '0');
+      cardEl.setAttribute('role', 'button');
+      if (isWasteSelected) {
+        cardEl.classList.add('is-selected');
+      }
+    } else {
+      cardEl.setAttribute('tabindex', '-1');
+    }
 
     cardEl.style.position = 'absolute';
     cardEl.style.left = `${i * dims.fanOffset}px`;
@@ -230,33 +262,58 @@ function renderWaste(rootElement, wasteCards, drawCount, dims) {
   });
 }
 
-function renderFoundations(rootElement, foundations) {
+function renderFoundations(rootElement, foundations, selection, legalDestinations) {
   for (let i = 0; i < 4; i++) {
     const foundPile = rootElement.querySelector(`#foundation-${i}`);
     if (!foundPile) continue;
 
     foundPile.innerHTML = '';
     const pileCards = foundations[i] || [];
+    const isLegalDest = legalDestinations.some((d) => d.pile === 'foundation' && d.index === i);
+    const isSelected = selection?.pile === 'foundation' && selection.index === i;
+
     if (pileCards.length === 0) {
-      foundPile.appendChild(createEmptySlotElement('foundation', i));
+      const slotEl = createEmptySlotElement('foundation', i);
+      slotEl.setAttribute('tabindex', '0');
+      slotEl.setAttribute('role', 'button');
+      if (isLegalDest) {
+        slotEl.classList.add('is-legal-destination');
+      }
+      foundPile.appendChild(slotEl);
     } else {
       const topCardId = pileCards[pileCards.length - 1];
       const cardEl = createCardElement(topCardId, true);
       cardEl.classList.add('is-playable');
+      cardEl.setAttribute('tabindex', '0');
+      cardEl.setAttribute('role', 'button');
+      if (isSelected) {
+        cardEl.classList.add('is-selected');
+      }
+      if (isLegalDest) {
+        cardEl.classList.add('is-legal-destination');
+      }
       foundPile.appendChild(cardEl);
     }
   }
 }
 
-function renderTableau(rootElement, tableauColumns, dims) {
+function renderTableau(rootElement, tableauColumns, dims, selection, legalDestinations) {
   for (let colIdx = 0; colIdx < 7; colIdx++) {
     const colEl = rootElement.querySelector(`#column-${colIdx}`);
     if (!colEl) continue;
 
     colEl.innerHTML = '';
     const colData = tableauColumns[colIdx];
+    const isColLegalDest = legalDestinations.some((d) => d.pile === 'tableau' && d.index === colIdx);
+
     if (!colData || colData.cards.length === 0) {
-      colEl.appendChild(createEmptySlotElement('tableau', colIdx));
+      const slotEl = createEmptySlotElement('tableau', colIdx);
+      slotEl.setAttribute('tabindex', '0');
+      slotEl.setAttribute('role', 'button');
+      if (isColLegalDest) {
+        slotEl.classList.add('is-legal-destination');
+      }
+      colEl.appendChild(slotEl);
       colEl.style.minHeight = `${dims.cardHeight}px`;
       continue;
     }
@@ -272,6 +329,22 @@ function renderTableau(rootElement, tableauColumns, dims) {
       cardEl.style.left = '0';
       cardEl.style.top = `${currentTop}px`;
       cardEl.style.zIndex = String(i + 1);
+
+      if (isFaceUp) {
+        cardEl.setAttribute('tabindex', '0');
+        cardEl.setAttribute('role', 'button');
+        // Selection highlight: all cards in sequence from selected cardIndex downward
+        if (selection?.pile === 'tableau' && selection.index === colIdx && i >= selection.cardIndex) {
+          cardEl.classList.add('is-selected');
+        }
+        // Top card of column destination highlight
+        if (isColLegalDest && i === cards.length - 1) {
+          cardEl.classList.add('is-legal-destination');
+        }
+      } else {
+        cardEl.setAttribute('tabindex', '-1');
+      }
+
       colEl.appendChild(cardEl);
 
       // Increment vertical offset for next card
