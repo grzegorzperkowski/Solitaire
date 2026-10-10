@@ -126,10 +126,11 @@ function renderCenterArtSvg(details) {
   }
 
   if (rank >= 11) {
-    // Large court rank with a suit watermark stays legible on narrow cards.
-    return `<g>
-      <path d="${path}" transform="translate(22, 17) scale(2.3)" fill="${hexColor}" opacity="0.22" />
-      <text x="50" y="105" font-family="Georgia, 'Times New Roman', serif" font-size="68" font-weight="700" fill="${hexColor}" text-anchor="middle">${rankLabel}</text>
+    // Keep the court mark compact so it stays inside a phone-size card.
+    return `<g transform="translate(25, 42)">
+      <rect x="0" y="0" width="50" height="56" rx="4" fill="#fffdf4" stroke="#d4af37" stroke-width="1.2" />
+      <path d="${path}" transform="translate(10, 4) scale(1.2)" fill="${hexColor}" opacity="0.16" />
+      <text x="25" y="46" font-family="Georgia, 'Times New Roman', serif" font-size="38" font-weight="700" fill="${hexColor}" text-anchor="middle">${rankLabel}</text>
     </g>`;
   }
 

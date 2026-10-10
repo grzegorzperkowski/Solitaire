@@ -40,7 +40,7 @@
 
 ## Blockers / next steps
 
-- Review the T009 J/Q/K center icons on the local development server. T010 remains in REVIEW. T014 is accepted; wait for an explicit T015 assignment.
+- Review the T009 J/Q/K center icon adjustment on the local development server. T010 remains in REVIEW. T014 is accepted; wait for an explicit T015 assignment.
 - A user can play a complete game on mobile and desktop via tap, keyboard, and drag & drop.
 - Current task: [T009](tasks/T009.md) (J/Q/K center icon readability follow-up, REVIEW).
 - Remote GitHub Actions CI has not run on a remote runner.
