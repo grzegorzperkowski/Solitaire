@@ -212,6 +212,46 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     await expect(page.locator('#moves-display')).toHaveText('0');
   });
 
+  test('ignores cancellation events from another pointer during a drag', async ({ page }) => {
+    await page.evaluate(() => {
+      window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });
+    });
+    await page.locator('#column-3 .card-node.card-face-up').click();
+    await page.evaluate(() => {
+      const card = document.querySelector('#column-3 .card-node.card-face-up');
+      const box = card.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      card.dispatchEvent(new PointerEvent('pointerdown', {
+        pointerId: 11, pointerType: 'touch', clientX: x, clientY: y, bubbles: true,
+      }));
+      window.dispatchEvent(new PointerEvent('pointermove', {
+        pointerId: 11, pointerType: 'touch', clientX: x + 20, clientY: y + 20, bubbles: true,
+      }));
+    });
+
+    await expect(page.locator('#drag-overlay')).toBeVisible();
+    await page.evaluate(() => {
+      window.dispatchEvent(new PointerEvent('pointercancel', { pointerId: 12 }));
+      window.dispatchEvent(new PointerEvent('lostpointercapture', { pointerId: 12 }));
+    });
+    await expect(page.locator('#drag-overlay')).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.__SOLITAIRE_INPUT__.getActiveGesture()?.pointerId)).toBe(11);
+
+    await page.evaluate(() => {
+      const gesture = window.__SOLITAIRE_INPUT__.getActiveGesture();
+      window.dispatchEvent(new PointerEvent('pointerup', {
+        pointerId: gesture.pointerId,
+        pointerType: gesture.pointerType,
+        clientX: gesture.startX,
+        clientY: gesture.startY,
+        bubbles: true,
+      }));
+    });
+    await expect(page.locator('#drag-overlay')).not.toBeVisible();
+    await expect(page.locator('#moves-display')).toHaveText('0');
+  });
+
   test('movement below 6px threshold acts as tap selection without dragging', async ({ page }) => {
     await page.evaluate(() => {
       window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });

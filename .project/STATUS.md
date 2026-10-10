@@ -1,6 +1,6 @@
 # Project status
 
-- State: T012 review feedback addressed and automated checks pass; awaiting coordinator acceptance. Physical Android/iPhone retest remains part of T013.
+- State: T012 mobile drag interruption from unrelated pointer-cancel events is fixed and automated checks pass; awaiting coordinator acceptance. Physical Android/iPhone retest remains part of T013.
 - Current task: **T012 — REVIEW**. T000–T011 are DONE.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T012.md](reports/T012.md).

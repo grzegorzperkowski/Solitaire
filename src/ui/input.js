@@ -240,8 +240,8 @@ export function createInputController(app, rootElement) {
     rootElement.querySelectorAll('.is-dragging-source').forEach((el) => el.classList.remove('is-dragging-source'));
   }
 
-  function cancelDrag() {
-    if (!activeGesture) return;
+  function cancelDrag(e) {
+    if (!activeGesture || (e?.pointerId !== undefined && e.pointerId !== activeGesture.pointerId)) return;
 
     if (activeGesture.isDragging) {
       suppressNextClick = true;
