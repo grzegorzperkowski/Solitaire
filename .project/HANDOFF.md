@@ -106,6 +106,8 @@ Variant selection now uses a shuffled three-item queue so all effects are shown 
 
 Coordinator noted that the variants still looked alike. Motion is now more distinct: wide riffle, two-part cut, and staggered vertical cascade. Build and diff check passed; see reports/T017.md.
 
+Animation passes are now faster and repeat twice; total overlay duration is 2.2 s. The overlay is positioned over the tableau scroller instead of the viewport center. Build passed; no animation tests or visual inspection were run per coordinator instruction.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 

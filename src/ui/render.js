@@ -202,7 +202,9 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
 }
 
 function renderDealAnimation(container) {
-  container.querySelector('.deal-animation-overlay')?.remove();
+  const panel = container.querySelector('#tableau-scroller');
+  panel?.querySelector('.deal-animation-overlay')?.remove();
+  if (!panel) return;
   if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
 
   const overlay = document.createElement('div');
@@ -222,7 +224,7 @@ function renderDealAnimation(container) {
   overlay.addEventListener('animationend', (event) => {
     if (event.target === overlay) overlay.remove();
   });
-  container.append(overlay);
+  panel.append(overlay);
 }
 
 function nextDealVariant() {

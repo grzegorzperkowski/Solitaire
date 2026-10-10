@@ -267,6 +267,7 @@ body {
 }
 
 .tableau-scroller {
+  position: relative;
   width: 100%;
   max-height: calc(100dvh - 195px);
   min-height: calc(var(--card-height) * 2.2);
@@ -540,14 +541,14 @@ body {
 .deal-animation-overlay {
   --card-width: clamp(56px, 17vw, 86px);
   --card-height: calc(var(--card-width) * 1.4);
-  position: fixed;
+  position: absolute;
   inset: 0;
   z-index: 900;
   display: grid;
   place-items: center;
   perspective: 900px;
   pointer-events: none;
-  animation: deal-overlay-lifetime 1800ms ease-in both;
+  animation: deal-overlay-lifetime 2200ms ease-in both;
 }
 
 .deal-animation-card {
@@ -555,9 +556,10 @@ body {
   top: 50%;
   left: 50%;
   margin: calc(var(--card-height) / -2) 0 0 calc(var(--card-width) / -2);
-  animation-duration: 1450ms;
+  animation-duration: 900ms;
   animation-timing-function: cubic-bezier(0.22, 0.7, 0.25, 1);
   animation-fill-mode: both;
+  animation-iteration-count: 2;
 }
 
 .deal-animation-card:nth-child(odd) {
@@ -598,11 +600,11 @@ body {
 
 .deal-animation-overlay[data-variant="3"] .deal-animation-card {
   animation-name: deal-cascade;
-  animation-duration: 1200ms;
+  animation-duration: 760ms;
 }
 
 @keyframes deal-overlay-lifetime {
-  0%, 84% { opacity: 1; }
+  0%, 92% { opacity: 1; }
   100% { opacity: 0; }
 }
 
