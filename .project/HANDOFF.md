@@ -59,3 +59,5 @@ Before committing run `git diff --check` and `git diff --cached --check`. Do not
 User approved the proposed classical J/Q/K illustrations and will review on their running development server. Twelve local public-domain SVG illustrations now replace letter badges. Card clipping follows SVG corner proportions and shadows are softer. See reports/T009.md. Status REVIEW; no deployment or push.
 
 Latest T009 visual adjustment: enlarged J/Q/K illustration to 52x84 SVG units; upper index retained, lower duplicate omitted on court cards. Build and browser smoke checks passed; user review remains pending.
+
+T009 latest refinement: user requested less space above court artwork; y moved from 50 to 44 SVG units. Build passed; awaiting visual review.
