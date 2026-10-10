@@ -173,7 +173,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   if (!gameState) return;
 
   // Render Stock
-  renderStock(rootElement, gameState, animateDeal);
+  renderStock(rootElement, gameState);
 
   // Render Waste
   const drawCount = gameState.drawCount;
@@ -183,7 +183,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   renderFoundations(rootElement, gameState.foundations, selection, legalDestinations);
 
   // Render Tableau
-  renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations, animateDeal);
+  renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
   applyMoveFeedback(rootElement, state);
   renderHint(rootElement, gameState, inputController?.getHint?.());
 
@@ -195,6 +195,30 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   if (appInstance) {
     renderDialogs(rootElement, state, appInstance);
   }
+  if (animateDeal) renderDealAnimation(container);
+}
+
+function renderDealAnimation(container) {
+  container.querySelector('.deal-animation-overlay')?.remove();
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'deal-animation-overlay';
+  overlay.dataset.variant = String(Math.floor(Math.random() * 3) + 1);
+  overlay.setAttribute('aria-hidden', 'true');
+
+  for (let order = 0; order < 5; order++) {
+    const card = createCardElement(null, false);
+    card.classList.add('deal-animation-card');
+    card.style.zIndex = String(order);
+    card.style.animationDelay = `${order * 28}ms`;
+    overlay.append(card);
+  }
+
+  overlay.addEventListener('animationend', (event) => {
+    if (event.target === overlay) overlay.remove();
+  });
+  container.append(overlay);
 }
 
 function applyMoveFeedback(rootElement, state) {
@@ -249,7 +273,7 @@ function renderHint(rootElement, state, hint) {
   destinationCard?.classList.add('is-hint');
 }
 
-function renderStock(rootElement, gameState, animateDeal) {
+function renderStock(rootElement, gameState) {
   const stockContainer = rootElement.querySelector('#stock-container');
   const stockPile = rootElement.querySelector('#stock-pile');
   const countBadge = rootElement.querySelector('#stock-count-badge');
@@ -270,9 +294,7 @@ function renderStock(rootElement, gameState, animateDeal) {
 
   stockPile.innerHTML = '';
   if (count > 0) {
-    const card = createCardElement(null, false);
-    if (animateDeal) card.classList.add('stock-shuffle');
-    stockPile.appendChild(card);
+    stockPile.appendChild(createCardElement(null, false));
   } else {
     const canRecycle = gameState.waste.length > 0;
     stockPile.appendChild(createEmptySlotElement('stock', null, { canRecycle }));
@@ -370,7 +392,7 @@ function renderFoundations(rootElement, foundations, selection, legalDestination
   }
 }
 
-function renderTableau(rootElement, tableauColumns, dims, selection, legalDestinations, animateDeal) {
+function renderTableau(rootElement, tableauColumns, dims, selection, legalDestinations) {
   for (let colIdx = 0; colIdx < 7; colIdx++) {
     const colEl = rootElement.querySelector(`#column-${colIdx}`);
     if (!colEl) continue;
@@ -404,10 +426,6 @@ function renderTableau(rootElement, tableauColumns, dims, selection, legalDestin
       cardEl.style.zIndex = String(i + 1);
 
       if (isFaceUp) {
-        if (animateDeal) {
-          cardEl.classList.add('tableau-deal');
-          cardEl.style.setProperty('--deal-delay', `${colIdx * 55}ms`);
-        }
         cardEl.setAttribute('tabindex', '0');
         cardEl.setAttribute('role', 'button');
         // Selection highlight: all cards in sequence from selected cardIndex downward

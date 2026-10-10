@@ -100,6 +100,8 @@ Appearance correction: removed card opacity and transform effects that made card
 
 Bottom controls spacing increased by 4 px across desktop, portrait mobile and short landscape layouts. Build passed; see reports/T017.md.
 
+New-game animation now uses one random finite overlay from three shuffle variants, built from existing card backs. The board remains static, the overlay passes pointer input through, and reduced motion skips it. Build passed; no animation tests or visual inspection were run per coordinator instruction. See reports/T017.md.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 

@@ -47,3 +47,4 @@
 - T017 pacing refinement: increased per-card animation to 180 ms and column stagger to 55 ms (about 510 ms total). See reports/T017.md.
 - T017 appearance correction: new-game animation no longer scales, fades or moves cards; it sequences outline highlights instead. Build and diff check passed; see reports/T017.md.
 - T017 layout refinement: increased spacing between the tableau and bottom controls by 4 px at each responsive breakpoint. Build passed; see reports/T017.md.
+- T017 new game animation redesign: UI starts one of three random decorative shuffle overlays using local card backs; board state remains static and reduced motion skips it. Build passed; no animation tests or visual inspection were run. See reports/T017.md.

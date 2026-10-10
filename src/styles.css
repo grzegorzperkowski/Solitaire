@@ -537,22 +537,78 @@ body {
   animation: pile-arrival 150ms ease-out;
 }
 
-.card-node.stock-shuffle {
-  animation: stock-shuffle 180ms ease-in-out;
+.deal-animation-overlay {
+  --card-width: clamp(56px, 17vw, 86px);
+  --card-height: calc(var(--card-width) * 1.4);
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  perspective: 900px;
+  pointer-events: none;
+  animation: deal-overlay-lifetime 1800ms ease-in both;
 }
 
-.card-node.tableau-deal {
-  animation: tableau-deal 180ms ease-out both;
-  animation-delay: var(--deal-delay, 0ms);
+.deal-animation-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: calc(var(--card-height) / -2) 0 0 calc(var(--card-width) / -2);
+  animation-duration: 1450ms;
+  animation-timing-function: cubic-bezier(0.22, 0.7, 0.25, 1);
+  animation-fill-mode: both;
 }
 
-@keyframes stock-shuffle {
-  50% { box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.75), 0 1px 2px rgba(0, 0, 0, 0.4); }
+.deal-animation-card:nth-child(odd) {
+  --deal-out: -34px;
+  --deal-in: 22px;
+  --deal-angle: -6deg;
+  --deal-angle-back: 4deg;
 }
 
-@keyframes tableau-deal {
-  from { outline: 2px solid rgba(245, 158, 11, 0.8); outline-offset: 1px; }
-  to { outline: 2px solid transparent; outline-offset: 1px; }
+.deal-animation-card:nth-child(even) {
+  --deal-out: 34px;
+  --deal-in: -22px;
+  --deal-angle: 6deg;
+  --deal-angle-back: -4deg;
+}
+
+.deal-animation-overlay[data-variant="1"] .deal-animation-card {
+  animation-name: deal-riffle;
+}
+
+.deal-animation-overlay[data-variant="2"] .deal-animation-card {
+  animation-name: deal-split;
+}
+
+.deal-animation-overlay[data-variant="3"] .deal-animation-card {
+  animation-name: deal-weave;
+}
+
+@keyframes deal-overlay-lifetime {
+  0%, 84% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes deal-riffle {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  24% { transform: translateX(var(--deal-out)) rotate(var(--deal-angle)); }
+  48% { transform: translateX(var(--deal-in)) rotate(var(--deal-angle-back)); }
+  72% { transform: translateX(var(--deal-out)) rotate(var(--deal-angle-back)); }
+}
+
+@keyframes deal-split {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  32%, 58% { transform: translateX(var(--deal-out)) rotate(var(--deal-angle)); }
+  78% { transform: translateX(var(--deal-in)) rotate(var(--deal-angle-back)); }
+}
+
+@keyframes deal-weave {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  26% { transform: translate(var(--deal-out), -8px) rotate(var(--deal-angle)); }
+  52% { transform: translate(var(--deal-in), 6px) rotate(var(--deal-angle-back)); }
+  76% { transform: translate(var(--deal-out), -3px) rotate(var(--deal-angle-back)); }
 }
 
 .card-node.is-hint,
@@ -578,6 +634,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .deal-animation-overlay {
+    display: none;
+    animation: none;
+  }
   .drag-overlay,
   .card-node,
   .card-node.move-feedback,
