@@ -485,13 +485,32 @@ export function createInputController(app, rootElement) {
       return;
     }
 
-    // Escape: clear selection
+    // Escape: close active dialog, resume paused game, or clear selection
     if (e.key === 'Escape') {
+      const state = app.getState();
+      if (state.activeDialog) {
+        e.preventDefault();
+        app.closeDialog();
+        announce('Zamknięto okno dialogowe.');
+        return;
+      }
+      if (state.isPaused) {
+        e.preventDefault();
+        app.resume();
+        announce('Wznowiono grę.');
+        return;
+      }
       if (selection) {
         e.preventDefault();
         setSelection(null);
         announce('Odznaczono.');
       }
+      return;
+    }
+
+    // If dialog or pause is active, block board shortcuts and navigation
+    const appState = app.getState();
+    if (appState.activeDialog || appState.isPaused) {
       return;
     }
 
@@ -553,6 +572,21 @@ export function createInputController(app, rootElement) {
 
   function bindEvents() {
     rootElement.addEventListener('click', (e) => {
+      // Menu button click
+      const btnMenu = e.target.closest('#btn-menu');
+      if (btnMenu) {
+        setSelection(null);
+        app.openDialog('menu');
+        announce('Otwarto menu gry.');
+        return;
+      }
+
+      // If dialog or pause is active, ignore clicks on board
+      const appState = app.getState();
+      if (appState.activeDialog || appState.isPaused) {
+        return;
+      }
+
       // 1. Stock pile click
       const stockEl = e.target.closest('#stock-container');
       if (stockEl) {
@@ -627,6 +661,7 @@ export function createInputController(app, rootElement) {
   bindEvents();
 
   return {
+    app,
     getSelection: () => selection,
     getLegalDestinations: () => legalDestinations,
     clearSelection: () => setSelection(null),

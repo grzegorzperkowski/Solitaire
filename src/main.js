@@ -24,18 +24,18 @@ if (typeof document !== 'undefined') {
     }
 
     inputCtrl.onStateChange(() => {
-      renderGame(root, app.getState(), currentDims, inputCtrl);
+      renderGame(root, app.getState(), currentDims, inputCtrl, app);
     });
 
     setupResponsiveLayout(root, (dims) => {
       currentDims = dims;
-      renderGame(root, app.getState(), currentDims, inputCtrl);
+      renderGame(root, app.getState(), currentDims, inputCtrl, app);
     });
 
-    renderGame(root, app.getState(), currentDims, inputCtrl);
+    renderGame(root, app.getState(), currentDims, inputCtrl, app);
 
     app.subscribe((state) => {
-      renderGame(root, state, currentDims, inputCtrl);
+      renderGame(root, state, currentDims, inputCtrl, app);
     });
   }
 }

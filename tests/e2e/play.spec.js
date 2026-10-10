@@ -232,3 +232,131 @@ test.describe('T010 Tap interaction and gameplay (T15)', () => {
     }
   });
 });
+
+test.describe('T011 Menu, dialogs and confirmation flows (T13, T15)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.waitForFunction(() => typeof window.__SOLITAIRE_APP__ !== 'undefined');
+  });
+
+  test('menu dialog opens and closes properly', async ({ page }) => {
+    const menuBtn = page.locator('#btn-menu');
+    await menuBtn.click();
+
+    const menuDialog = page.locator('#menu-dialog');
+    await expect(menuDialog).toBeVisible();
+
+    // Close via ✕ button
+    await page.locator('#btn-dialog-close').click();
+    await expect(menuDialog).toBeHidden();
+
+    // Reopen and close via "Wróć do gry" button
+    await menuBtn.click();
+    await expect(menuDialog).toBeVisible();
+    await page.locator('#btn-menu-resume').click();
+    await expect(menuDialog).toBeHidden();
+  });
+
+  test('pause screen conceals board and blocks play until resumed (F07 / T13)', async ({ page }) => {
+    // Open menu and choose Pause
+    await page.locator('#btn-menu').click();
+    await page.locator('#btn-menu-pause').click();
+
+    // Pause dialog is visible and board is concealed
+    const pauseDialog = page.locator('#pause-dialog');
+    await expect(pauseDialog).toBeVisible();
+    await expect(page.locator('#board-area')).toHaveClass(/is-concealed/);
+
+    // Clicking stock should NOT trigger card draw while paused
+    await page.locator('#stock-container').click({ force: true });
+    await expect(page.locator('#moves-display')).toHaveText('0');
+
+    // Click "Wznów grę"
+    await page.locator('#btn-resume-game').click();
+    await expect(pauseDialog).toBeHidden();
+    await expect(page.locator('#board-area')).not.toHaveClass(/is-concealed/);
+
+    // Now clicking stock works normally
+    await page.locator('#stock-container').click();
+    await expect(page.locator('#moves-display')).toHaveText('1');
+  });
+
+  test('New Game requires confirmation when started; cancel preserves state (F05 / T15)', async ({ page }) => {
+    // Draw a card so started is true
+    await page.locator('#stock-container').click();
+    await expect(page.locator('#moves-display')).toHaveText('1');
+
+    // Click Menu -> Nowa gra
+    await page.locator('#btn-menu').click();
+    await page.locator('#btn-menu-new-game').click();
+
+    // Confirm dialog is displayed
+    const confirmDialog = page.locator('#confirm-dialog');
+    await expect(confirmDialog).toBeVisible();
+    await expect(confirmDialog).toContainText('Rozpocząć nową grę?');
+
+    // Click "Anuluj": dialog closes, move count remains 1
+    await page.locator('#btn-confirm-cancel').click();
+    await expect(confirmDialog).toBeHidden();
+    await expect(page.locator('#moves-display')).toHaveText('1');
+
+    // Click Menu -> Nowa gra -> Rozpocznij: new game started, move count resets to 0
+    await page.locator('#btn-menu').click();
+    await page.locator('#btn-menu-new-game').click();
+    await page.locator('#btn-confirm-accept').click();
+    await expect(confirmDialog).toBeHidden();
+    await expect(page.locator('#moves-display')).toHaveText('0');
+    await expect(page.locator('#stock-count-badge')).toHaveText('24');
+  });
+
+  test('Restart reproduces deal and requires confirmation when started (F05 / T15)', async ({ page }) => {
+    // Draw twice
+    await page.locator('#stock-container').click();
+    await page.locator('#stock-container').click();
+    await expect(page.locator('#moves-display')).toHaveText('2');
+
+    // Menu -> Rozdaj ponownie
+    await page.locator('#btn-menu').click();
+    await page.locator('#btn-menu-restart').click();
+
+    const confirmDialog = page.locator('#confirm-dialog');
+    await expect(confirmDialog).toBeVisible();
+    await expect(confirmDialog).toContainText('Rozdać ponownie?');
+
+    // Cancel preserves state
+    await page.locator('#btn-confirm-cancel').click();
+    await expect(page.locator('#moves-display')).toHaveText('2');
+
+    // Accept restarts session
+    await page.locator('#btn-menu').click();
+    await page.locator('#btn-menu-restart').click();
+    await page.locator('#btn-confirm-accept').click();
+    await expect(page.locator('#moves-display')).toHaveText('0');
+    await expect(page.locator('#stock-count-badge')).toHaveText('24');
+  });
+
+  test('changing draw mode requires confirmation and switches mode (F05 / T15)', async ({ page }) => {
+    // Start game in Draw 1
+    await page.locator('#stock-container').click();
+    await expect(page.locator('#moves-display')).toHaveText('1');
+
+    // Menu -> Dobieraj 3
+    await page.locator('#btn-menu').click();
+    await page.locator('#btn-mode-draw-3').click();
+
+    const confirmDialog = page.locator('#confirm-dialog');
+    await expect(confirmDialog).toBeVisible();
+    await expect(confirmDialog).toContainText('Zmienić tryb na dobieranie po 3?');
+
+    // Accept change
+    await page.locator('#btn-confirm-accept').click();
+    await expect(confirmDialog).toBeHidden();
+
+    // Now in Draw 3 mode: draw from stock produces up to 3 cards
+    await page.locator('#stock-container').click();
+    await expect(page.locator('#moves-display')).toHaveText('1');
+    const wasteCards = await page.locator('#waste-pile .card-node.card-face-up').count();
+    expect(wasteCards).toBe(3);
+    await expect(page.locator('#stock-count-badge')).toHaveText('21');
+  });
+});

@@ -5,6 +5,7 @@
 
 import { createCardElement, createEmptySlotElement } from './cards.js';
 import { calculateBoardDimensions, applyLayoutVariables } from './layout.js';
+import { renderDialogs } from './dialogs.js';
 
 export function formatTime(ms) {
   const totalSec = Math.floor(Math.max(0, ms) / 1000);
@@ -105,7 +106,7 @@ export function createBoardStructure(rootElement) {
 /**
  * Main render function called whenever app state or viewport size changes.
  */
-export function renderGame(rootElement, state, layoutDims = null, inputController = null) {
+export function renderGame(rootElement, state, layoutDims = null, inputController = null, app = null) {
   if (!rootElement) return;
 
   let container = rootElement.querySelector('#game-container');
@@ -176,6 +177,12 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
 
   // Check overflow on tableau scroller and toggle scroll handle & buttons
   checkScrollerOverflow(rootElement);
+
+  // Render Dialogs and Pause screen (T011)
+  const appInstance = app || inputController?.app || (typeof window !== 'undefined' ? window.__SOLITAIRE_APP__ : null);
+  if (appInstance) {
+    renderDialogs(rootElement, state, appInstance);
+  }
 }
 
 function renderStock(rootElement, gameState) {

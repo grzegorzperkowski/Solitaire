@@ -1,9 +1,9 @@
 # Project status
 
-- State: tap select/move, stock activation, Undo/Redo and accessible keyboard play implemented and accepted. T011 is assigned.
-- Current task: **T010 — DONE**. T000–T010 are DONE. T011 is assigned.
+- State: Polish game menu, New Game, Restart, Pause and Help dialogs implemented. T011 is in REVIEW.
+- Current task: **T011 — REVIEW**. T000–T010 are DONE. T011 is ready for review.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T010.md](reports/T010.md).
+- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T011.md](reports/T011.md).
 
 ## Completed deliverables / milestones
 
@@ -18,16 +18,16 @@
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`.
 - T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`.
-- P1, P2, P3 and P4 are complete. P5 is incomplete until T011 is DONE. T011–T023 remain TODO.
+- T011 REVIEW: Polish game menu, New Game, Restart, Pause and Help dialogs implemented and verified.
+- P1, P2, P3 and P4 are complete. P5 is complete pending T011 coordinator acceptance. T012–T023 remain TODO.
 
 ## Known problems and blockers
 
 - GitHub Actions workflow is committed but has not run on a runner. No push was made.
-- Game modal dialogs (New Game, Restart, Pause, Help) being implemented in T011.
 - `filelist.txt` is absent and was not recreated.
 - Hint ranking is not implemented. `getLegalMoves` uses a documented scan order, not the F04 hint order. There is no loss flag.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest/coverage-v8 5.0.3, Playwright 1.64.0; zero runtime dependencies.
 
 ## Next recommendation
 
-- T010 is accepted. The current instruction assigns [T011](tasks/T011.md): New Game, Restart, Pause and Help dialogs. Do not start T012 until authorized.
+- T011 is in REVIEW. Await coordinator review and acceptance. Do not start T012 until authorized.

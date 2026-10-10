@@ -31,14 +31,15 @@
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`. `src/persistence.js` implements schema-v1 serialization, restore, pure-engine replay validation including redo tail, storage error and quota handling, byte retention on failure, defensive limits (1 MiB UTF-8, 10,000 commands), and simulation round trips. Evidence: [reports/T007.md](reports/T007.md). Acceptance tracking commit: `1249707`.
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`. `src/app.js` implements application controller connecting session timeline and persistence, active-time measurement via `performance.now()`, pause/dialog/visibility suppression, 5s checkpoints and `pagehide` saves, Web Locks single-writer ownership (`pl.solitaire.writer`) and storage revision conflict fallback. Playwright E2E infrastructure and tests in `tests/e2e/storage.spec.js`. Evidence: [reports/T008.md](reports/T008.md). Acceptance tracking commit: `b3f1a48`.
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`. `src/ui/layout.js`, `src/ui/cards.js`, `src/ui/render.js`, `src/styles.css` implement responsive mobile-first board (320–430px portrait with zero horizontal scroll), SVG cards with >=14px corner ranks and >=24px exposed bands, N02 strict face-down card concealment, 2-column waste with Draw 3 fan, tableau scroller with 44px scroll handle and accessible buttons for long columns, and 44x44px bottom controls. Evidence: [reports/T009.md](reports/T009.md). Acceptance tracking commit: `ce965e0`.
-- T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`. `src/ui/input.js` implements tap select/move, stock draw and 24-card recycling, sequence transfers, Undo/Redo button and keyboard triggers, roving arrow navigation across piles and exposed cards (§9), Enter/Space activation, Escape cancellation, Polish screen reader announcements (`#live-announcer`), rejection feedback (shake animation + announcement), and focus survival. Tests in `tests/e2e/play.spec.js` and `tests/e2e/accessibility.spec.js`. Evidence: [reports/T010.md](reports/T010.md).
-- P1, P2, P3 and P4 are complete. P5 is incomplete until T011 is DONE.
+- T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`. `src/ui/input.js` implements tap select/move, stock draw and 24-card recycling, sequence transfers, Undo/Redo button and keyboard triggers, roving arrow navigation across piles and exposed cards (§9), Enter/Space activation, Escape cancellation, Polish screen reader announcements (`#live-announcer`), rejection feedback (shake animation + announcement), and focus survival. Tests in `tests/e2e/play.spec.js` and `tests/e2e/accessibility.spec.js`. Evidence: [reports/T010.md](reports/T010.md). Acceptance tracking commit: `dca0962`.
+- T011 REVIEW: Polish game menu, New Game, Restart, Pause and Help dialogs implemented in `src/ui/dialogs.js`, with replacement confirmation on started unwon attempts (F05), pause concealment (F07), Draw 1 / Draw 3 toggle, Polish rules (N02), focus trap and restoration (N01 / T18), and full responsive support at 320px width and landscape (568x320). Evidence: [reports/T011.md](reports/T011.md).
+- P1, P2, P3 and P4 are complete. P5 is complete pending T011 coordinator acceptance.
 
 ## Blockers / next steps
 
-- T010 is accepted. Implement T011 (Game dialogs: New Game, Restart, Pause, Help). Do not start T012.
-- A user can play a complete game on mobile and desktop via tap and keyboard.
-- Next step: [T011](tasks/T011.md) (Game dialogs).
+- T011 is in REVIEW, awaiting coordinator acceptance. Do not start T012 until authorized.
+- A user can play a complete game on mobile and desktop via tap and keyboard, pause, access game rules, restart, or start new games in Draw 1 or Draw 3 modes.
+- Next step: [T012](tasks/T012.md) (Pointer drag & drop) after T011 acceptance.
 - Remote GitHub Actions CI has not run on a remote runner.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
@@ -46,6 +47,6 @@
 
 Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:e2e` (playwright test), `npm run test:coverage`, `npm run test:simulation -- --profile=ci`, `npm run build`. The release profile is `npm run test:simulation -- --profile=release` and is a T022 gate. See [README.md](../README.md).
 
-Latest local results are in [reports/T010.md](reports/T010.md): `npm test` 120 passed across 8 files; `npm run test:e2e` 26 passed across 4 files (Chromium); `npm run build` exit 0 (JS bundle 51.19 kB, gzip 14.70 kB).
+Latest local results are in [reports/T011.md](reports/T011.md): `npm test` 120 passed across 8 files; `npm run test:e2e` 34 passed across 4 files (Chromium); `npm run build` exit 0 (JS bundle 60.76 kB, gzip 17.28 kB).
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.

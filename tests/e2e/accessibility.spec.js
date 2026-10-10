@@ -166,4 +166,78 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
       expect(dataset.suit).toBeUndefined();
     }
   });
+
+  test('focus is trapped within dialog and restored to trigger on close (N01 / T18)', async ({ page }) => {
+    const menuBtn = page.locator('#btn-menu');
+    await menuBtn.focus();
+    await expect(menuBtn).toBeFocused();
+
+    // Open menu with Enter
+    await page.keyboard.press('Enter');
+    const menuDialog = page.locator('#menu-dialog');
+    await expect(menuDialog).toBeVisible();
+
+    // Verify focus is inside menu dialog
+    const isFocusInside = await page.evaluate(() => {
+      const dialog = document.getElementById('menu-dialog');
+      return dialog ? dialog.contains(document.activeElement) : false;
+    });
+    expect(isFocusInside).toBe(true);
+
+    // Escape closes dialog and restores focus to #btn-menu
+    await page.keyboard.press('Escape');
+    await expect(menuDialog).toBeHidden();
+    await expect(menuBtn).toBeFocused();
+  });
+
+  test('Help dialog displays complete Polish rules and explanations (N02)', async ({ page }) => {
+    // Open menu then Help
+    await page.locator('#btn-menu').click();
+    await page.locator('#btn-menu-help').click();
+
+    const helpDialog = page.locator('#help-dialog');
+    await expect(helpDialog).toBeVisible();
+    await expect(helpDialog.locator('#dialog-title-help')).toHaveText('Zasady gry i pomoc');
+
+    // Verify key sections are present
+    await expect(helpDialog).toContainText('Cel gry');
+    await expect(helpDialog).toContainText('Kolumny robocze');
+    await expect(helpDialog).toContainText('Sekwencje');
+    await expect(helpDialog).toContainText('Stos i skrawek');
+    await expect(helpDialog).toContainText('Sterowanie dotykiem');
+    await expect(helpDialog).toContainText('Sterowanie klawiaturą');
+
+    // Close via Zamknij button
+    await page.locator('#btn-help-close').click();
+    await expect(helpDialog).toBeHidden();
+  });
+
+  test('dialogs are usable at 320px width and landscape 568x320 without overflow (U06 / T19)', async ({ page }) => {
+    // Test narrow portrait 320px
+    await page.setViewportSize({ width: 320, height: 568 });
+    await page.locator('#btn-menu').click();
+    const menuDialog = page.locator('#menu-dialog');
+    await expect(menuDialog).toBeVisible();
+
+    const box = await menuDialog.boundingBox();
+    expect(box.width).toBeLessThanOrEqual(320);
+    expect(box.x).toBeGreaterThanOrEqual(0);
+
+    // Verify buttons are at least 44px high
+    const actionBtns = await menuDialog.locator('.menu-action-btn, .mode-btn, .btn-primary').all();
+    for (const btn of actionBtns) {
+      const btnBox = await btn.boundingBox();
+      expect(btnBox.height).toBeGreaterThanOrEqual(44);
+    }
+    await page.locator('#btn-dialog-close').click();
+
+    // Test landscape 568x320
+    await page.setViewportSize({ width: 568, height: 320 });
+    await page.locator('#btn-menu').click();
+    await expect(menuDialog).toBeVisible();
+
+    const landscapeBox = await menuDialog.boundingBox();
+    expect(landscapeBox.height).toBeLessThanOrEqual(320);
+    await page.locator('#btn-dialog-close').click();
+  });
 });
