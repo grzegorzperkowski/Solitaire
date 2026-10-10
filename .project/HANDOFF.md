@@ -90,6 +90,10 @@ Coordinator supplied screenshot feedback: the text-glyph downward chevron sits t
 
 T015 chevron refinement: replaced the text character with a centered CSS chevron. Build and two responsive dialog E2E checks passed; screenshot inspected. See reports/T015.md.
 
+## T017 new game animation checkpoint (2026-10-10)
+
+The UI now marks deliberate new-game and mode-change deals for a one-shot stock shuffle and staggered tableau arrival. `npm run build` and `git diff --check` passed. At the coordinator's request, no animation tests or manual animation inspection were performed. T017 remains IN_PROGRESS; see reports/T017.md and continue the remaining acceptance checks there.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 

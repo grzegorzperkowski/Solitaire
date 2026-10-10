@@ -9,6 +9,10 @@ import { getWinPercentage } from '../session.js';
 let lastFocusedElement = null;
 
 export function renderDialogs(rootElement, state, app) {
+  const startNewGame = (options) => {
+    rootElement.dataset.animateDeal = 'true';
+    app.newGame(options);
+  };
   let modalContainer = rootElement.querySelector('#modal-container');
   if (!modalContainer) {
     modalContainer = document.createElement('div');
@@ -89,7 +93,7 @@ export function renderDialogs(rootElement, state, app) {
   modalContainer._dialogHtml = dialogHtml;
   modalContainer.innerHTML = dialogHtml;
 
-  attachDialogEvents(modalContainer, dialogType, state, app);
+  attachDialogEvents(modalContainer, dialogType, state, app, startNewGame);
 
   // Focus trap initialization: focus first interactive element
   requestAnimationFrame(() => {
@@ -312,7 +316,7 @@ function renderHelpHtml() {
   `;
 }
 
-function attachDialogEvents(modalContainer, dialogType, state, app) {
+function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame) {
   const dialogEl = modalContainer.querySelector('[role="dialog"]');
   if (!dialogEl) return;
 
@@ -354,7 +358,7 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
         replaceSave: state.persistenceBlocked,
       };
       if (isStartedAndUnwon) app.openDialog({ name: 'confirm-new-game', options });
-      else app.newGame(options);
+      else startNewGame(options);
     });
   }
 
@@ -428,7 +432,7 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
         if (isStartedAndUnwon) {
           app.openDialog('confirm-mode-1');
         } else {
-          app.newGame({ drawCount: 1 });
+          startNewGame({ drawCount: 1 });
         }
       }
       return;
@@ -439,7 +443,7 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
         if (isStartedAndUnwon) {
           app.openDialog('confirm-mode-3');
         } else {
-          app.newGame({ drawCount: 3 });
+          startNewGame({ drawCount: 3 });
         }
       }
       return;
@@ -456,13 +460,13 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
       if (dialogKey === 'confirm-restart' || state.activeDialog?.action === 'restart') {
         app.restart();
       } else if (dialogKey === 'confirm-new-game' && state.activeDialog?.options) {
-        app.newGame(state.activeDialog.options);
+        startNewGame(state.activeDialog.options);
       } else if (dialogKey === 'confirm-mode-1' || state.activeDialog?.drawCount === 1) {
-        app.newGame({ drawCount: 1 });
+        startNewGame({ drawCount: 1 });
       } else if (dialogKey === 'confirm-mode-3' || state.activeDialog?.drawCount === 3) {
-        app.newGame({ drawCount: 3 });
+        startNewGame({ drawCount: 3 });
       } else {
-        app.newGame({ drawCount: currentDrawCount });
+        startNewGame({ drawCount: currentDrawCount });
       }
       app.closeDialog();
       return;

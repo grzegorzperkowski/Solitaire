@@ -113,6 +113,8 @@ export function createBoardStructure(rootElement) {
  */
 export function renderGame(rootElement, state, layoutDims = null, inputController = null, app = null) {
   if (!rootElement) return;
+  const animateDeal = rootElement.dataset.animateDeal === 'true';
+  delete rootElement.dataset.animateDeal;
 
   let container = rootElement.querySelector('#game-container');
   if (!container) {
@@ -171,7 +173,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   if (!gameState) return;
 
   // Render Stock
-  renderStock(rootElement, gameState);
+  renderStock(rootElement, gameState, animateDeal);
 
   // Render Waste
   const drawCount = gameState.drawCount;
@@ -181,7 +183,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   renderFoundations(rootElement, gameState.foundations, selection, legalDestinations);
 
   // Render Tableau
-  renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
+  renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations, animateDeal);
   applyMoveFeedback(rootElement, state);
   renderHint(rootElement, gameState, inputController?.getHint?.());
 
@@ -247,7 +249,7 @@ function renderHint(rootElement, state, hint) {
   destinationCard?.classList.add('is-hint');
 }
 
-function renderStock(rootElement, gameState) {
+function renderStock(rootElement, gameState, animateDeal) {
   const stockContainer = rootElement.querySelector('#stock-container');
   const stockPile = rootElement.querySelector('#stock-pile');
   const countBadge = rootElement.querySelector('#stock-count-badge');
@@ -268,7 +270,9 @@ function renderStock(rootElement, gameState) {
 
   stockPile.innerHTML = '';
   if (count > 0) {
-    stockPile.appendChild(createCardElement(null, false));
+    const card = createCardElement(null, false);
+    if (animateDeal) card.classList.add('stock-shuffle');
+    stockPile.appendChild(card);
   } else {
     const canRecycle = gameState.waste.length > 0;
     stockPile.appendChild(createEmptySlotElement('stock', null, { canRecycle }));
@@ -366,7 +370,7 @@ function renderFoundations(rootElement, foundations, selection, legalDestination
   }
 }
 
-function renderTableau(rootElement, tableauColumns, dims, selection, legalDestinations) {
+function renderTableau(rootElement, tableauColumns, dims, selection, legalDestinations, animateDeal) {
   for (let colIdx = 0; colIdx < 7; colIdx++) {
     const colEl = rootElement.querySelector(`#column-${colIdx}`);
     if (!colEl) continue;
@@ -400,6 +404,10 @@ function renderTableau(rootElement, tableauColumns, dims, selection, legalDestin
       cardEl.style.zIndex = String(i + 1);
 
       if (isFaceUp) {
+        if (animateDeal) {
+          cardEl.classList.add('tableau-deal');
+          cardEl.style.setProperty('--deal-delay', `${colIdx * 30}ms`);
+        }
         cardEl.setAttribute('tabindex', '0');
         cardEl.setAttribute('role', 'button');
         // Selection highlight: all cards in sequence from selected cardIndex downward
