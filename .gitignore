@@ -1,0 +1,37 @@
+# Dependencies: npm / yarn / pnpm
+node_modules/
+
+# Build output and tool caches
+/dist/
+/build/
+/.cache/
+/.parcel-cache/
+/.vite/
+
+# Test results
+/coverage/
+/.nyc_output/
+
+# Local environment variables
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
+
+# Local IDE settings
+.idea/
+.vs/
+
+# System files
+.DS_Store
+Thumbs.db
+Desktop.ini
