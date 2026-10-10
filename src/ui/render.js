@@ -14,6 +14,8 @@ export function formatTime(ms) {
   return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 }
 
+export const BUILD_INFO = typeof __BUILD_INFO__ !== 'undefined' ? __BUILD_INFO__ : 'Build dev';
+
 export function createBoardStructure(rootElement) {
   rootElement.innerHTML = `
     <div class="game-container" id="game-container">
@@ -83,6 +85,8 @@ export function createBoardStructure(rootElement) {
         <button id="btn-hint" class="control-btn" aria-label="Pokaż podpowiedź">Podpowiedź</button>
         <button id="btn-menu" class="control-btn" aria-label="Otwórz menu gry">Menu</button>
       </footer>
+
+      <small id="build-stamp" class="build-stamp" aria-label="${BUILD_INFO}">${BUILD_INFO}</small>
     </div>
   `;
 
