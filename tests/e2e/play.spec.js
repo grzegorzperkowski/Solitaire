@@ -321,6 +321,36 @@ test.describe('T010 Tap interaction and gameplay (T15)', () => {
       await context.close();
     }
   });
+
+  test('double tap moves to the first legal destination and repeats from the updated pile', async ({ browser }) => {
+    const context = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+      hasTouch: true,
+    });
+    const page = await context.newPage();
+    await page.goto('/');
+    await page.waitForFunction(() => typeof window.__SOLITAIRE_APP__ !== 'undefined');
+    await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 2, drawCount: 1 }));
+
+    const firstCard = page.locator('#column-1 .card-node.card-face-up');
+    const firstId = await firstCard.getAttribute('data-card-id');
+    await firstCard.tap();
+    await expect.poll(() => page.evaluate(() => window.__SOLITAIRE_INPUT__.getLegalDestinations()))
+      .toEqual([{ pile: 'tableau', index: 0 }, { pile: 'tableau', index: 5 }]);
+    await firstCard.tap();
+    await expect(page.locator('#moves-display')).toHaveText('1');
+    expect(await page.locator(`#column-0 [data-card-id="${firstId}"]`).count()).toBe(1);
+
+    const movedCard = page.locator(`#column-0 [data-card-id="${firstId}"]`);
+    await movedCard.tap();
+    await expect.poll(() => page.evaluate(() => window.__SOLITAIRE_INPUT__.getLegalDestinations()))
+      .toEqual([{ pile: 'tableau', index: 5 }]);
+    await movedCard.tap();
+    await expect(page.locator('#moves-display')).toHaveText('2');
+    expect(await page.locator(`#column-5 [data-card-id="${firstId}"]`).count()).toBe(1);
+
+    await context.close();
+  });
 });
 
 test.describe('T011 Menu, dialogs and confirmation flows (T13, T15)', () => {

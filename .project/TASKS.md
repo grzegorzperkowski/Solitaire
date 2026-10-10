@@ -42,6 +42,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T021](tasks/T021.md) | P9 | GitHub Pages preparation and build gate | T020 | TODO | [Criteria](tasks/T021.md#acceptance-criteria); P9 exit; REQUIREMENTS N10; TEST_PLAN T23/§7 |
 | [T022](tasks/T022.md) | P10 | Full release verification and handoff | T021; T016 also DONE only if selected for release | TODO | [Criteria](tasks/T022.md#acceptance-criteria); P10 verification subset; TEST_PLAN T01–T23 (T21 conditional), §§4–7 |
 | [T023](tasks/T023.md) | P10 | Explicitly authorized publication and smoke test | T022; explicit publication authorization and hosting access | TODO | [Criteria](tasks/T023.md#acceptance-criteria); P10 publication exit; REQUIREMENTS N10; TEST_PLAN T23 |
+| [T024](tasks/T024.md) | P5 follow-up | Double-tap card shortcut | T010 | REVIEW | [Criteria](tasks/T024.md#acceptance-criteria); REQUIREMENTS F01; TEST_PLAN T15/T16 |
 
 ## Selection and model suitability
 

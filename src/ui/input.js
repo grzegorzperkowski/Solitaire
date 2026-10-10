@@ -13,6 +13,7 @@ export function createInputController(app, rootElement) {
   let legalDestinations = []; // array of { pile: 'tableau' | 'foundation', index }
   let onStateChangeCallback = null;
   let activeGesture = null;
+  let lastTouchTap = null;
   let suppressNextClick = false;
   let rafId = null;
   let lastTimestamp = 0;
@@ -27,6 +28,7 @@ export function createInputController(app, rootElement) {
       hintMoves = null;
       hintIndex = 0;
       currentHint = null;
+      lastTouchTap = null;
     }
   });
   const debugDrag = new URLSearchParams(window.location.search).has('debug-drag');
@@ -285,6 +287,7 @@ export function createInputController(app, rootElement) {
       matchesActivePointer: e?.pointerId === undefined || e.pointerId === activeGesture?.pointerId,
     });
     if (e?.type === 'lostpointercapture' && e.target !== rootElement && rootElement.hasPointerCapture(e.pointerId)) return;
+    if (e?.type !== 'lostpointercapture') lastTouchTap = null;
     if (!activeGesture || (e?.pointerId !== undefined && e.pointerId !== activeGesture.pointerId)) return;
 
     if (activeGesture.isDragging) {
@@ -980,6 +983,7 @@ export function createInputController(app, rootElement) {
       if (dist < 6) return;
 
       activeGesture.isDragging = true;
+      lastTouchTap = null;
       try {
         rootElement.setPointerCapture(activeGesture.pointerId);
         logDrag('pointer-capture-set', { pointerId: activeGesture.pointerId });
@@ -1067,7 +1071,30 @@ export function createInputController(app, rootElement) {
       return;
     }
 
+    const source = activeGesture.source;
+    const state = app.getState().state;
+    const endedOnSource = e.pointerType === 'touch'
+      && !activeGesture.isDragging
+      && isSameSource(getDraggableSource(e.target)?.source, source);
+    const now = performance.now();
+    const isDoubleTap = endedOnSource
+      && lastTouchTap?.state === state
+      && now - lastTouchTap.time <= 350
+      && isSameSource(lastTouchTap.source, source);
     activeGesture = null;
+
+    if (isDoubleTap) {
+      const destination = computeLegalDestinations(state, source)[0];
+      if (destination) {
+        suppressNextClick = true;
+        setTimeout(() => { suppressNextClick = false; }, 200);
+        lastTouchTap = null;
+        executeMove(source, destination);
+        return;
+      }
+    }
+
+    lastTouchTap = endedOnSource ? { source, state, time: now } : null;
   }
 
   function handleTouchStart(e) {

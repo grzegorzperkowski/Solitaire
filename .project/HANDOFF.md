@@ -112,6 +112,12 @@ Animation passes are now faster and repeat twice; total overlay duration is 2.2 
 
 The human coordinator declared T017 complete and authorized closing it. Accepted delivery: `92909b8` (`T017: reposition and retime shuffle overlay`). T017 is DONE. Outstanding visual, reduced-motion/rapid-input and initial asset-budget checks are listed in reports/T017.md; they were not run and are not claimed as passed. No successor is assigned; wait for explicit assignment before starting T018.
 
+Coordinator later confirmed iPhone and PC checks for T017 were performed. Device/OS/browser versions and case details were not supplied.
+
+## T024 assignment (2026-10-10)
+
+The human coordinator assigned the touch double-tap shortcut as T024, a follow-up to DONE T010. T024 is in REVIEW after the UI controller, behavior docs and deterministic tests were updated. `npm run test:e2e -- tests/e2e/play.spec.js tests/e2e/input.spec.js` passed 41 tests, `npm test` passed 134 tests, and `npm run build` passed. The new gesture has not been checked on physical iPhone/Safari. See [tasks/T024.md](tasks/T024.md) and [reports/T024.md](reports/T024.md). Wait for coordinator acceptance; do not start another task.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 
