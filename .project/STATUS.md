@@ -1,7 +1,7 @@
 # Project status
 
-- State: tap select/move, stock activation, Undo/Redo and accessible keyboard play implemented. T010 is in REVIEW.
-- Current task: **T010 — REVIEW**. T000–T009 are DONE. T010 is in REVIEW.
+- State: tap select/move, stock activation, Undo/Redo and accessible keyboard play implemented and accepted. T011 is assigned.
+- Current task: **T010 — DONE**. T000–T010 are DONE. T011 is assigned.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T010.md](reports/T010.md).
 
@@ -17,19 +17,17 @@
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`.
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`.
-- T010 REVIEW: tap play, stock activation, history controls and keyboard navigation implemented and verified.
-- P1, P2, P3 and P4 are complete. P5 is incomplete until T010 and T011 are DONE. T011–T023 remain TODO.
+- T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`.
+- P1, P2, P3 and P4 are complete. P5 is incomplete until T011 is DONE. T011–T023 remain TODO.
 
 ## Known problems and blockers
 
 - GitHub Actions workflow is committed but has not run on a runner. No push was made.
-- Game modal dialogs (New Game, Restart, Pause, Help) to be implemented in T011.
+- Game modal dialogs (New Game, Restart, Pause, Help) being implemented in T011.
 - `filelist.txt` is absent and was not recreated.
 - Hint ranking is not implemented. `getLegalMoves` uses a documented scan order, not the F04 hint order. There is no loss flag.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest/coverage-v8 5.0.3, Playwright 1.64.0; zero runtime dependencies.
 
 ## Next recommendation
 
-- T010 is ready for coordinator review.
-- The game is now playable on mobile and desktop via tap and keyboard.
-- Next step after coordinator approval: [T011](tasks/T011.md) (Game dialogs). Do not start T011 until authorized.
+- T010 is accepted. The current instruction assigns [T011](tasks/T011.md): New Game, Restart, Pause and Help dialogs. Do not start T012 until authorized.
