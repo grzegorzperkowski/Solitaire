@@ -92,7 +92,7 @@ T015 chevron refinement: replaced the text character with a centered CSS chevron
 
 ## T017 new game animation checkpoint (2026-10-10)
 
-The UI now marks deliberate new-game and mode-change deals for a one-shot stock shuffle and staggered tableau arrival. `npm run build` and `git diff --check` passed. At the coordinator's request, no animation tests or manual animation inspection were performed. T017 remains IN_PROGRESS; see reports/T017.md and continue the remaining acceptance checks there.
+The UI now marks deliberate new-game and mode-change deals for a one-shot stock shuffle and staggered tableau arrival. `npm run build` and `git diff --check` passed. At the coordinator's request, no animation tests or manual animation inspection were performed. T017 was IN_PROGRESS at this checkpoint; see reports/T017.md for checks left outstanding at acceptance.
 
 Pacing refinement: stock/card animations are 180 ms with 55 ms between tableau columns (about 510 ms total). No animation tests or manual inspection were performed.
 
@@ -107,6 +107,10 @@ Variant selection now uses a shuffled three-item queue so all effects are shown 
 Coordinator noted that the variants still looked alike. Motion is now more distinct: wide riffle, two-part cut, and staggered vertical cascade. Build and diff check passed; see reports/T017.md.
 
 Animation passes are now faster and repeat twice; total overlay duration is 2.2 s. The overlay is positioned over the tableau scroller instead of the viewport center. Build passed; no animation tests or visual inspection were run per coordinator instruction.
+
+## T017 coordinator acceptance (2026-10-10)
+
+The human coordinator declared T017 complete and authorized closing it. Accepted delivery: `92909b8` (`T017: reposition and retime shuffle overlay`). T017 is DONE. Outstanding visual, reduced-motion/rapid-input and initial asset-budget checks are listed in reports/T017.md; they were not run and are not claimed as passed. No successor is assigned; wait for explicit assignment before starting T018.
 
 
 ## T015 coordinator acceptance (2026-10-10)

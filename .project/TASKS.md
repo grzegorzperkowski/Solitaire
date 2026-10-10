@@ -35,7 +35,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T014](tasks/T014.md) | P7 | Deterministic legal hints | T013 | DONE | [Criteria](tasks/T014.md#acceptance-criteria); P7 hints subset; TEST_PLAN T20 |
 | [T015](tasks/T015.md) | P7 | Seed/settings/statistics and win flow | T014 | DONE | [Criteria](tasks/T015.md#acceptance-criteria); P7 exit; TEST_PLAN T10/T13–T15 |
 | [T016](tasks/T016.md) | P7a | Optional safe automatic completion | T015; explicit optional-feature selection | TODO | [Criteria](tasks/T016.md#acceptance-criteria); P7a exit (optional); TEST_PLAN T21 |
-| [T017](tasks/T017.md) | P8 | Final vector artwork and motion polish | T015 | IN_PROGRESS | [Criteria](tasks/T017.md#acceptance-criteria); P8 visual subset; TEST_PLAN T19 |
+| [T017](tasks/T017.md) | P8 | Final vector artwork and motion polish | T015 | DONE | [Criteria](tasks/T017.md#acceptance-criteria); coordinator accepted 2026-10-10 at `92909b8`; outstanding checks documented in [report](reports/T017.md) |
 | [T018](tasks/T018.md) | P8 | Accessibility and performance acceptance | T017 | TODO | [Criteria](tasks/T018.md#acceptance-criteria); P8 exit; TEST_PLAN T18/T19/T22 |
 | [T019](tasks/T019.md) | P9 | Manifest and complete offline app build | T018 | TODO | [Criteria](tasks/T019.md#acceptance-criteria); P9 offline subset; TEST_PLAN T23 |
 | [T020](tasks/T020.md) | P9 | Safe updates and installation flow | T019 | TODO | [Criteria](tasks/T020.md#acceptance-criteria); P9 lifecycle subset; TEST_PLAN T23 and §5 (PWA) |

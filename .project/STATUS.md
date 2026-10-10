@@ -1,7 +1,7 @@
 # Project status
 
 - State: T009 and T010 follow-ups are accepted; T000–T014 are DONE. T015 is DONE; accepted by the human coordinator on 2026-10-10 at `b01fb49`.
-- Current task: T017 IN_PROGRESS, assigned by the human coordinator on 2026-10-10. T015 dependency accepted at `b01fb49`.
+- Current task: none. T017 accepted by the human coordinator on 2026-10-10 at `92909b8`; T018 is TODO and awaits explicit assignment.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T015.md](reports/T015.md).
 
@@ -43,7 +43,8 @@
 
 - T015 accepted by the human coordinator at `b01fb49`. P7 task complete. Optional T016 was not selected.
 
-- T017 follow-up: added a one-shot stock shuffle and staggered tableau deal for new games started in the UI. Build and diff check passed; no animation tests or manual inspection were run per coordinator instruction. T017 remains IN_PROGRESS; see reports/T017.md.
+- T017 accepted by the human coordinator on 2026-10-10 at `92909b8`; see reports/T017.md. Some visual, rapid-input and asset-budget checks remain outstanding and were accepted as such.
+- T017 follow-up: added a one-shot stock shuffle and staggered tableau deal for new games started in the UI. Build and diff check passed; no animation tests or manual inspection were run per coordinator instruction. See reports/T017.md.
 - T017 pacing refinement: increased per-card animation to 180 ms and column stagger to 55 ms (about 510 ms total). See reports/T017.md.
 - T017 appearance correction: new-game animation no longer scales, fades or moves cards; it sequences outline highlights instead. Build and diff check passed; see reports/T017.md.
 - T017 layout refinement: increased spacing between the tableau and bottom controls by 4 px at each responsive breakpoint. Build passed; see reports/T017.md.
