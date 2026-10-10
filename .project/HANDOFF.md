@@ -104,6 +104,8 @@ New-game animation now uses one random finite overlay from three shuffle variant
 
 Variant selection now uses a shuffled three-item queue so all effects are shown in each three-game batch, without a repeat at batch boundaries. Build passed; see reports/T017.md.
 
+Coordinator noted that the variants still looked alike. Motion is now more distinct: wide riffle, two-part cut, and staggered vertical cascade. Build and diff check passed; see reports/T017.md.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 

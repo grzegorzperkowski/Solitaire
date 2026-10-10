@@ -207,14 +207,15 @@ function renderDealAnimation(container) {
 
   const overlay = document.createElement('div');
   overlay.className = 'deal-animation-overlay';
-  overlay.dataset.variant = String(nextDealVariant());
+  const variant = nextDealVariant();
+  overlay.dataset.variant = String(variant);
   overlay.setAttribute('aria-hidden', 'true');
 
   for (let order = 0; order < 5; order++) {
     const card = createCardElement(null, false);
     card.classList.add('deal-animation-card');
     card.style.zIndex = String(order);
-    card.style.animationDelay = `${order * 28}ms`;
+    card.style.animationDelay = `${order * (variant === 3 ? 90 : 28)}ms`;
     overlay.append(card);
   }
 

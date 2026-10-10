@@ -561,17 +561,31 @@ body {
 }
 
 .deal-animation-card:nth-child(odd) {
-  --deal-out: -34px;
-  --deal-in: 22px;
-  --deal-angle: -6deg;
-  --deal-angle-back: 4deg;
+  --deal-out: -42px;
+  --deal-in: 30px;
+  --deal-angle: -8deg;
+  --deal-angle-back: 5deg;
 }
 
 .deal-animation-card:nth-child(even) {
-  --deal-out: 34px;
-  --deal-in: -22px;
-  --deal-angle: 6deg;
-  --deal-angle-back: -4deg;
+  --deal-out: 42px;
+  --deal-in: -30px;
+  --deal-angle: 8deg;
+  --deal-angle-back: -5deg;
+}
+
+.deal-animation-overlay[data-variant="2"] .deal-animation-card:nth-child(-n+2) {
+  --deal-out: -62px;
+  --deal-in: 62px;
+  --deal-angle: -9deg;
+  --deal-angle-back: 9deg;
+}
+
+.deal-animation-overlay[data-variant="2"] .deal-animation-card:nth-child(n+3) {
+  --deal-out: 62px;
+  --deal-in: -62px;
+  --deal-angle: 9deg;
+  --deal-angle-back: -9deg;
 }
 
 .deal-animation-overlay[data-variant="1"] .deal-animation-card {
@@ -583,7 +597,8 @@ body {
 }
 
 .deal-animation-overlay[data-variant="3"] .deal-animation-card {
-  animation-name: deal-weave;
+  animation-name: deal-cascade;
+  animation-duration: 1200ms;
 }
 
 @keyframes deal-overlay-lifetime {
@@ -604,11 +619,12 @@ body {
   78% { transform: translateX(var(--deal-in)) rotate(var(--deal-angle-back)); }
 }
 
-@keyframes deal-weave {
-  0%, 100% { transform: translate(0, 0) rotate(0); }
-  26% { transform: translate(var(--deal-out), -8px) rotate(var(--deal-angle)); }
-  52% { transform: translate(var(--deal-in), 6px) rotate(var(--deal-angle-back)); }
-  76% { transform: translate(var(--deal-out), -3px) rotate(var(--deal-angle-back)); }
+@keyframes deal-cascade {
+  0% { transform: translateY(-44px) rotate(var(--deal-angle)); }
+  22% { transform: translateY(-44px) rotate(var(--deal-angle)); }
+  72% { transform: translateY(0) rotate(0); }
+  86% { transform: translateY(6px) rotate(var(--deal-angle-back)); }
+  100% { transform: translateY(0) rotate(0); }
 }
 
 .card-node.is-hint,
