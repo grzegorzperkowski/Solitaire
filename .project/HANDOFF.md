@@ -98,6 +98,8 @@ Pacing refinement: stock/card animations are 180 ms with 55 ms between tableau c
 
 Appearance correction: removed card opacity and transform effects that made cards appear incomplete; the sequence now uses outline/shadow highlights while cards stay stationary. Build and diff check passed; see reports/T017.md.
 
+Bottom controls spacing increased by 4 px across desktop, portrait mobile and short landscape layouts. Build passed; see reports/T017.md.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 
