@@ -420,4 +420,26 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     selectedText = await page.evaluate(() => window.getSelection().toString());
     expect(selectedText).toBe('');
   });
+
+  test('right-click context menu is completely blocked across the board', async ({ page }) => {
+    const wasDefaultPrevented = await page.evaluate(() => {
+      return new Promise((resolve) => {
+        window.addEventListener(
+          'contextmenu',
+          (e) => {
+            resolve(e.defaultPrevented);
+          },
+          { once: true }
+        );
+        const card = document.querySelector('.card-node') || document.body;
+        card.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, button: 2 }));
+      });
+    });
+
+    expect(wasDefaultPrevented).toBe(true);
+
+    const title = page.locator('#page-title');
+    await title.click({ button: 'right' });
+    await expect(page.locator('#game-container')).toBeVisible();
+  });
 });

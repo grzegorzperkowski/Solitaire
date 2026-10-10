@@ -746,6 +746,13 @@ export function createInputController(app, rootElement) {
     e.preventDefault();
   }
 
+  function handleContextMenu(e) {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) {
+      return;
+    }
+    e.preventDefault();
+  }
+
   function handleGlobalKeydown(e) {
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) {
       return;
@@ -1101,6 +1108,7 @@ export function createInputController(app, rootElement) {
     document.addEventListener('selectstart', handleSelectStart, { capture: true });
     document.addEventListener('selectionchange', handleSelectionChange);
     document.addEventListener('dragstart', handleDragStart, { capture: true });
+    document.addEventListener('contextmenu', handleContextMenu, { capture: true });
   }
 
   bindEvents();
@@ -1121,6 +1129,7 @@ export function createInputController(app, rootElement) {
       document.removeEventListener('selectstart', handleSelectStart, { capture: true });
       document.removeEventListener('selectionchange', handleSelectionChange);
       document.removeEventListener('dragstart', handleDragStart, { capture: true });
+      document.removeEventListener('contextmenu', handleContextMenu, { capture: true });
       rootElement.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
