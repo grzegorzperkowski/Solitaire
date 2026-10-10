@@ -456,6 +456,21 @@ body {
   }
 }
 
+@media (max-width: 599px) and (orientation: portrait) {
+  body {
+    padding-left: max(4px, env(safe-area-inset-left));
+    padding-right: max(4px, env(safe-area-inset-right));
+    padding-bottom: max(32px, calc(env(safe-area-inset-bottom) + 24px));
+  }
+  #game-app,
+  .game-container {
+    flex: 1;
+  }
+  .bottom-bar {
+    margin-top: auto;
+  }
+}
+
 @media (orientation: landscape) and (max-height: 500px) {
   body {
     padding-top: 4px;

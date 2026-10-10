@@ -1,9 +1,9 @@
 # Project status
 
-- State: T010's dialog-focus E2E race correction is committed for review; T014 remains in REVIEW.
-- Current task: **T010 — REVIEW**. Its original implementation is accepted; this follow-up changes only the test assertion.
+- State: T009 mobile spacing follow-up is ready for review; T010 and T014 remain in REVIEW.
+- Current task: **T009 — REVIEW**. Its original implementation remains accepted; this follow-up adjusts mobile page spacing and control placement.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T010.md](reports/T010.md).
+- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T009.md](reports/T009.md).
 
 ## Completed deliverables / milestones
 
@@ -16,7 +16,7 @@
 - T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`.
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`.
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
-- T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`.
+- T009 original implementation DONE: accepted 2026-10-10 at `ae85d6b`; mobile spacing follow-up is in REVIEW.
 - T010 original implementation DONE: accepted 2026-10-10 by the human coordinator and ChatGPT at `bdd275c`; follow-up dialog-focus test revision is in REVIEW.
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
 - T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
@@ -33,4 +33,4 @@
 
 ## Next recommendation
 
-- T010 follow-up is ready for coordinator review; see [reports/T010.md](reports/T010.md). T014 remains in REVIEW. Do not start T015 automatically.
+- Review the T009 mobile spacing follow-up; see [reports/T009.md](reports/T009.md). T010 and T014 remain in REVIEW; do not start T015 automatically.
