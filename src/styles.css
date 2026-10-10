@@ -496,6 +496,10 @@ body {
   -webkit-user-drag: none;
 }
 
+.card-node.card-face-up {
+  touch-action: pinch-zoom;
+}
+
 .card-node svg {
   -webkit-user-drag: none;
 }

@@ -198,7 +198,7 @@ function renderHelpHtml() {
         </section>
         <section>
           <h3 class="help-section-title">Sterowanie dotykiem i myszą</h3>
-          <p>Dotknij karty, aby ją zaznaczyć (zostanie podświetlona na złoto, a dozwolone cele na zielono). Następnie dotknij wybranego celu. Ponowne dotknięcie tej samej karty lub tła odznacza wybór.</p>
+          <p>Przeciągnij odkrytą kartę palcem, aby od razu ją przenieść. Krótkie dotknięcie zaznacza kartę; wtedy dotknij dozwolonego celu. Przewijaj kolumny, przesuwając palcem po wolnym miejscu lub zakrytej karcie albo użyj przycisków przewijania.</p>
         </section>
         <section>
           <h3 class="help-section-title">Sterowanie klawiaturą</h3>

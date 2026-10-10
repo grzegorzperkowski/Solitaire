@@ -325,13 +325,12 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     await page.evaluate(() => window.__SOLITAIRE_INPUT__.cancelDrag());
   });
 
-  test('real Chromium touch capture keeps a selected card drag active', async ({ page }) => {
+  test('real Chromium touch drag starts immediately on an unselected card', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 }));
 
     const sourceCard = page.locator('#column-3 .card-node.card-face-up');
-    await sourceCard.evaluate((card) => card.click());
-    await expect(sourceCard).toHaveClass(/is-selected/);
+    await expect(sourceCard).not.toHaveClass(/is-selected/);
     const source = await sourceCard.boundingBox();
     const target = await page.locator('#foundation-0').boundingBox();
     expect(source).toBeTruthy();
@@ -384,7 +383,7 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     await expect(sourceCard).toHaveClass(/is-selected/);
   });
 
-  test('touch lifecycle: unselected touch move does not drag; selected touch move drags', async ({ page }) => {
+  test('touch lifecycle: unselected and selected sources both drag', async ({ page }) => {
     await page.evaluate(() => {
       window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });
     });
@@ -393,7 +392,7 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     const box = await card.boundingBox();
     expect(box).toBeTruthy();
 
-    // 1. Unselected touch pointermove > 6px does NOT initiate drag (preserves native scroll)
+    // 1. An unselected card starts dragging once movement passes 6px.
     await page.evaluate((b) => {
       const el = document.querySelector('#column-3 .card-node.card-face-up');
       el.dispatchEvent(new PointerEvent('pointerdown', {
@@ -412,19 +411,18 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
       }));
     }, box);
 
-    // No overlay
-    await expect(page.locator('#drag-overlay')).not.toBeVisible();
+    await expect(page.locator('#drag-overlay')).toBeVisible();
 
     // End touch gesture
     await page.evaluate(() => {
       window.dispatchEvent(new PointerEvent('pointerup', { pointerId: 2, pointerType: 'touch', bubbles: true }));
     });
 
-    // 2. Tap to select the card (touch-action becomes pinch-zoom)
+    // 2. Cancel the first drag, then tap to select the card.
     await card.click();
     await expect(card).toHaveClass(/is-selected/);
 
-    // 3. Now touch on the selected card and move > 6px: drag DOES start!
+    // 3. A selected card still starts a drag.
     const foundBox = await page.locator('#foundation-0').boundingBox();
 
     await page.evaluate((b) => {

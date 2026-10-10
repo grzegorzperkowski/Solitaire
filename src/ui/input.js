@@ -116,17 +116,6 @@ export function createInputController(app, rootElement) {
     return false;
   }
 
-  function isSourcePartOfSelection(src) {
-    if (!selection || !src) return false;
-    if (selection.pile !== src.pile) return false;
-    if (selection.pile === 'waste') return true;
-    if (selection.pile === 'foundation') return selection.index === src.index;
-    if (selection.pile === 'tableau') {
-      return selection.index === src.index && src.cardIndex >= selection.cardIndex;
-    }
-    return false;
-  }
-
   function getDraggableSource(targetEl) {
     if (!targetEl) return null;
     const appState = app.getState();
@@ -915,11 +904,6 @@ export function createInputController(app, rootElement) {
 
     const draggable = getDraggableSource(e.target);
     if (!draggable) return;
-
-    // Touch rule: only selected source can drag; unselected touch scrolls natively (F02 / ARCHITECTURE §9)
-    if (e.pointerType === 'touch' && !isSourcePartOfSelection(draggable.source)) {
-      return;
-    }
 
     const cardRect = draggable.element.getBoundingClientRect();
     activeGesture = {
