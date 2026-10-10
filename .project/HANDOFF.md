@@ -20,7 +20,7 @@
 - T004 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `1073dfb1828dff1944713c616c9019cfcdc14056`. Independent review `2af3ee4fead49ceab3d9d3cc9143c69c568429f4`. Evidence: [reports/T004.md](reports/T004.md). Acceptance tracking for T003 is `70eee4ebedc27879b83087448b33de647c62e4f9`.
 - Stock and waste are bottom at index 0. Draw pops the stock top onto the waste up to `drawCount` (1 or 3); a short stock moves only the remainder. Recycle reverses the remaining waste into the stock and does not draw. Example: stock `[D,C,B,A]` draw 3 → waste `[A,B,C]`, stock `[D]`. Recycle `[A,B,C]` → stock `[C,B,A]`. Played waste cards are absent from that stock.
 - Failed draw/recycle preconditions return `illegal-source`. Extra command fields return `invalid-command`. `drawCount` other than 1 or 3 returns `invalid-state`. `unsupported-command` is no longer produced.
-- `getLegalMoves` scan order, not hint rank: draw, recycle, tableau columns 0..6 and face-up `cardIndex` ascending, waste, foundations 0..3. Destinations are tableau 0..6 then foundation 0..3. Empty legal list is not a loss. Hint ranking stays in T014.
+- `getLegalMoves` scan order is draw, recycle, tableau columns 0..6 and face-up `cardIndex` ascending, waste, foundations 0..3. Destinations are tableau 0..6 then foundation 0..3. T014 ranks this list by reveal, foundation, transfer, then draw/recycle while preserving scan order for ties. Empty legal list is not a loss.
 - The page shell does not import the engine. No session, storage or Playwright.
 - QA still open, not passed: browser console and visual/layout checks. GitHub Actions has not run on a remote runner. `filelist.txt` is absent; do not recreate it.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies.
@@ -33,14 +33,16 @@
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`. `src/ui/layout.js`, `src/ui/cards.js`, `src/ui/render.js`, `src/styles.css` implement responsive mobile-first board (320–430px portrait with zero horizontal scroll), SVG cards with >=14px corner ranks and >=24px exposed bands, N02 strict face-down card concealment, 2-column waste with Draw 3 fan, tableau scroller with 44px scroll handle and accessible buttons for long columns, and 44x44px bottom controls. Evidence: [reports/T009.md](reports/T009.md). Acceptance tracking commit: `ce965e0`.
 - T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`. `src/ui/input.js` implements tap select/move, stock draw and 24-card recycling, sequence transfers, Undo/Redo button and keyboard triggers, roving arrow navigation across piles and exposed cards (§9), Enter/Space activation, Escape cancellation, Polish screen reader announcements (`#live-announcer`), rejection feedback (shake animation + announcement), and focus survival. Tests in `tests/e2e/play.spec.js` and `tests/e2e/accessibility.spec.js`. Evidence: [reports/T010.md](reports/T010.md). Acceptance tracking commit: `dca0962`.
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`. Polish game menu, New Game, Restart, Pause and Help dialogs implemented in `src/ui/dialogs.js`, with replacement confirmation on started unwon attempts (F05), pause concealment (F07), Draw 1 / Draw 3 toggle, Polish rules (N02), focus trap and restoration (N01 / T18), and full responsive support at 320px width and landscape (568x320). Evidence: [reports/T011.md](reports/T011.md). Acceptance tracking commit: `6610e7d`.
-- T012 REVIEW: Direct one-gesture touch drag from an unselected face-up card is implemented and covered by real Chromium touch input. Taps still select; open tableau space and face-down cards remain native scroll surfaces, and scroll buttons remain available. Pinch zoom remains enabled. Automated checks pass; physical-device touch and native-scroll confirmation remain for T013. See [reports/T012.md](reports/T012.md).
-- P1, P2, P3, P4 and P5 are complete. P6 is pending T012 coordinator review and T013 physical touch gate.
+- T012 DONE: accepted by the human coordinator on 2026-10-10 at `916b3bd`; see [reports/T012.md](reports/T012.md).
+- T013 DONE: the coordinator reports physical Android and iPhone checks complete, accepted on 2026-10-10 at `916b3bd`. Device/browser versions were not supplied; see [reports/T013.md](reports/T013.md).
+- T014 REVIEW: deterministic legal hints and empty-list feedback; checks are recorded in [reports/T014.md](reports/T014.md), coordinator acceptance pending.
+- P1–P6 are complete. P7 is in progress.
 
 ## Blockers / next steps
 
-- T012 awaits coordinator review and acceptance; do not start T013 until T012 is accepted.
+- T012 and T013 are accepted. T014 is ready for coordinator review; do not start T015 automatically.
 - A user can play a complete game on mobile and desktop via tap, keyboard, and drag & drop.
-- Next step: [T013](tasks/T013.md) (Physical-device touch feasibility gate) after T012 acceptance.
+- Current task: [T014](tasks/T014.md) (Deterministic legal hints).
 - Remote GitHub Actions CI has not run on a remote runner.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
@@ -48,6 +50,6 @@
 
 Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:e2e` (playwright test), `npm run test:coverage`, `npm run test:simulation -- --profile=ci`, `npm run build`. The release profile is `npm run test:simulation -- --profile=release` and is a T022 gate. See [README.md](../README.md).
 
-Latest local results are in [reports/T012.md](reports/T012.md): `npm test` 120 passed across 8 files; `npm run test:e2e` 53 passed across 5 files (Chromium); `npm run build` exit 0 (JS bundle 71.32 kB, gzip 19.95 kB, CSS 11.84 kB, gzip 3.09 kB).
+Latest local results are in [reports/T014.md](reports/T014.md): `npm test` 123 passed across 9 files; `npm run test:e2e -- tests/e2e/play.spec.js` 12 passed in Chromium; `npm run build` exit 0 (JS bundle 73.66 kB, gzip 20.61 kB, CSS 11.97 kB, gzip 3.12 kB).
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.

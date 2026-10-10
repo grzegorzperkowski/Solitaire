@@ -178,6 +178,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
 
   // Render Tableau
   renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
+  renderHint(rootElement, gameState, inputController?.getHint?.());
 
   // Check overflow on tableau scroller and toggle scroll handle & buttons
   checkScrollerOverflow(rootElement);
@@ -187,6 +188,30 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   if (appInstance) {
     renderDialogs(rootElement, state, appInstance);
   }
+}
+
+function renderHint(rootElement, state, hint) {
+  rootElement.querySelectorAll('.is-hint').forEach((element) => element.classList.remove('is-hint'));
+  if (!hint) return;
+  if (hint.type !== 'move') {
+    rootElement.querySelector('#stock-container')?.classList.add('is-hint');
+    return;
+  }
+
+  const source = hint.from;
+  const sourcePile = source.pile === 'tableau' ? rootElement.querySelector(`#column-${source.index}`)
+    : source.pile === 'waste' ? rootElement.querySelector('#waste-pile')
+      : rootElement.querySelector(`#foundation-${source.index}`);
+  const sourceCard = source.pile === 'tableau'
+    ? sourcePile?.querySelectorAll('.card-node')[source.cardIndex]
+    : sourcePile?.querySelector('.card-node:last-child');
+  sourceCard?.classList.add('is-hint');
+
+  const destination = hint.to.pile === 'tableau'
+    ? rootElement.querySelector(`#column-${hint.to.index}`)
+    : rootElement.querySelector(`#foundation-${hint.to.index}`);
+  const destinationCard = destination?.querySelector('.card-node:last-child') || destination?.querySelector('.pile-slot');
+  destinationCard?.classList.add('is-hint');
 }
 
 function renderStock(rootElement, gameState) {

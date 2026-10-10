@@ -4,6 +4,7 @@
  */
 
 import { validateMove } from '../engine/game.js';
+import { rankHints } from '../engine/hints.js';
 import { getCardDetails, SUIT_NAMES, createCardElement } from './cards.js';
 import { calculateBoardDimensions } from './layout.js';
 
@@ -16,6 +17,18 @@ export function createInputController(app, rootElement) {
   let rafId = null;
   let lastTimestamp = 0;
   let lastTouchY = null;
+  let hintMoves = null;
+  let hintIndex = 0;
+  let currentHint = null;
+  let hintBoard = app.getState().state;
+  const unsubscribeFromApp = app.subscribe(({ state }) => {
+    if (state !== hintBoard) {
+      hintBoard = state;
+      hintMoves = null;
+      hintIndex = 0;
+      currentHint = null;
+    }
+  });
   const debugDrag = new URLSearchParams(window.location.search).has('debug-drag');
 
   function logDrag(event, detail = {}) {
@@ -38,6 +51,27 @@ export function createInputController(app, rootElement) {
         announcer.textContent = message;
       }, 50);
     }
+  }
+
+  function handleHint() {
+    if (!hintMoves) hintMoves = rankHints(app.getState().state);
+    if (!hintMoves.length) {
+      currentHint = null;
+      announce('Brak dostępnego ruchu');
+    } else {
+      currentHint = hintMoves[hintIndex];
+      hintIndex = (hintIndex + 1) % hintMoves.length;
+      const move = currentHint;
+      if (move.type === 'draw') announce('Podpowiedź: dobierz kartę ze stosu.');
+      else if (move.type === 'recycle') announce('Podpowiedź: przetasuj skrawek.');
+      else {
+        const from = move.from.pile === 'tableau' ? `kolumny ${move.from.index + 1}`
+          : move.from.pile === 'waste' ? 'skrawka' : `bazy ${SUIT_NAMES[move.from.index]}`;
+        const to = move.to.pile === 'tableau' ? `kolumny ${move.to.index + 1}` : `bazy ${SUIT_NAMES[move.to.index]}`;
+        announce(`Podpowiedź: przenieś kartę z ${from} na ${to}.`);
+      }
+    }
+    onStateChangeCallback?.();
   }
 
   function triggerShake(element) {
@@ -1102,6 +1136,11 @@ export function createInputController(app, rootElement) {
         return;
       }
 
+      if (e.target.closest('#btn-hint')) {
+        handleHint();
+        return;
+      }
+
       // 1. Stock pile click
       const stockEl = e.target.closest('#stock-container');
       if (stockEl) {
@@ -1183,6 +1222,7 @@ export function createInputController(app, rootElement) {
     app,
     getSelection: () => selection,
     getLegalDestinations: () => legalDestinations,
+    getHint: () => currentHint,
     getActiveGesture: () => activeGesture,
     clearSelection: () => setSelection(null),
     cancelDrag,
@@ -1191,6 +1231,7 @@ export function createInputController(app, rootElement) {
       onStateChangeCallback = fn;
     },
     destroy: () => {
+      unsubscribeFromApp();
       window.removeEventListener('keydown', handleGlobalKeydown);
       document.removeEventListener('selectstart', handleSelectStart, { capture: true });
       document.removeEventListener('selectionchange', handleSelectionChange);

@@ -512,6 +512,14 @@ body {
   z-index: 50 !important;
 }
 
+.card-node.is-hint,
+.pile-slot.is-hint,
+.stock-container.is-hint {
+  outline: 3px solid #38bdf8;
+  outline-offset: 2px;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
+}
+
 .card-node.is-dragging-source {
   opacity: 0.25;
 }

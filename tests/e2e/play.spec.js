@@ -1,4 +1,78 @@
 import { test, expect } from '@playwright/test';
+import { rankHints } from '../../src/engine/hints.js';
+import { CLUBS, DIAMONDS, HEARTS, SPADES, card, makeState, pile } from '../fixtures/boards.js';
+
+function blockedBoard() {
+  const foundations = Array.from({ length: 4 }, (_, suit) => Array.from({ length: 9 }, (__, rank) => card(suit, rank + 1)));
+  return makeState({
+    tableau: [
+      pile([card(HEARTS, 10), card(HEARTS, 12), card(CLUBS, 13)], 2),
+      pile([card(CLUBS, 10), card(CLUBS, 12), card(DIAMONDS, 13)], 2),
+      pile([card(DIAMONDS, 10), card(DIAMONDS, 12), card(SPADES, 13)], 2),
+      pile([card(SPADES, 10), card(SPADES, 12), card(HEARTS, 13)], 2),
+      pile([card(CLUBS, 11), card(DIAMONDS, 11)], 1),
+      pile([card(HEARTS, 11)]),
+      pile([card(SPADES, 11)]),
+    ],
+    foundations,
+    stock: [],
+  });
+}
+
+test.describe('T014 deterministic legal hints (T20)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+    await page.waitForFunction(() => typeof window.__SOLITAIRE_APP__ !== 'undefined');
+  });
+
+  test('cycles legal hints, resets after a board change and does not change game state', async ({ page }) => {
+    await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 }));
+    const before = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state);
+    const expected = rankHints(before);
+    const moveCountBefore = await page.locator('#moves-display').textContent();
+
+    await page.locator('#btn-hint').click();
+    await expect(page.locator('#live-announcer')).toContainText('Podpowiedź:');
+    const first = await page.evaluate(() => window.__SOLITAIRE_INPUT__.getHint());
+    await expect(page.locator('.is-hint')).toHaveCount(2);
+    await page.locator('#btn-hint').click();
+    const second = await page.evaluate(() => window.__SOLITAIRE_INPUT__.getHint());
+
+    expect(first).toEqual(expected[0]);
+    expect(second).toEqual(expected[1]);
+    for (let i = 2; i < expected.length; i++) await page.locator('#btn-hint').click();
+    await page.locator('#btn-hint').click();
+    expect(await page.evaluate(() => window.__SOLITAIRE_INPUT__.getHint())).toEqual(expected[0]);
+    expect(await page.locator('#moves-display').textContent()).toBe(moveCountBefore);
+    expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state)).toEqual(before);
+
+    await page.evaluate(() => window.__SOLITAIRE_APP__.executeCommand({ type: 'draw' }));
+    const afterDraw = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state);
+    await page.locator('#btn-hint').click();
+    expect(await page.evaluate(() => window.__SOLITAIRE_INPUT__.getHint())).toEqual(rankHints(afterDraw)[0]);
+  });
+
+  test('announces the exact empty-action message without a loss claim', async ({ page }) => {
+    const message = await page.evaluate(async (state) => {
+      const { createInputController } = await import('/src/ui/input.js');
+      const root = document.createElement('div');
+      root.innerHTML = '<button id="btn-hint">Podpowiedź</button><div id="live-announcer"></div>';
+      document.body.append(root);
+      const app = { getState: () => ({ state, activeDialog: null, isPaused: false }), subscribe: () => () => {} };
+      const controller = createInputController(app, root);
+      controller.onStateChange(() => {});
+      root.querySelector('#btn-hint').click();
+      await new Promise((resolve) => setTimeout(resolve, 60));
+      const announcement = root.querySelector('#live-announcer').textContent;
+      controller.destroy();
+      root.remove();
+      return announcement;
+    }, blockedBoard());
+
+    expect(message).toBe('Brak dostępnego ruchu');
+    expect(message).not.toMatch(/przegran|niewygrywaln/i);
+  });
+});
 
 test.describe('T010 Tap interaction and gameplay (T15)', () => {
   test.beforeEach(async ({ page }) => {

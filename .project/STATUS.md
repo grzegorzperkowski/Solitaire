@@ -1,9 +1,9 @@
 # Project status
 
-- State: T012 direct one-gesture touch drag is implemented and automated checks pass; coordinator review is pending.
-- Current task: **T012 — REVIEW**. T000–T011 are DONE.
+- State: T012 and T013 are accepted; T014 deterministic legal hints are ready for coordinator review.
+- Current task: **T014 — REVIEW**. T000–T013 are DONE.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T012.md](reports/T012.md).
+- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T014.md](reports/T014.md).
 
 ## Completed deliverables / milestones
 
@@ -19,16 +19,18 @@
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`.
 - T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`.
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
-- T012 REVIEW: Pointer drag & drop, cancellation, edge autoscroll and pull-to-refresh prevention implemented and automated checks pass.
-- P1, P2, P3, P4 and P5 are complete. P6 is pending T012 coordinator review and T013 gate. T013–T023 remain TODO.
+- T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
+- T013 DONE: physical Android and iPhone checks accepted 2026-10-10 by the human coordinator at commit `916b3bd`; device/browser versions were not included in the acceptance message.
+- T014 REVIEW: deterministic legal hints and empty-legal-action feedback; required checks pass, coordinator acceptance pending.
+- P1–P6 are complete. P7 is in progress; T015–T023 remain TODO.
 
 ## Known problems and blockers
 
 - GitHub Actions workflow is committed but has not run on a runner. No push was made.
 - `filelist.txt` is absent and was not recreated.
-- Hint ranking is not implemented. `getLegalMoves` uses a documented scan order, not the F04 hint order. There is no loss flag.
+- Hints now rank legal actions using visible information and the F04 order. Empty legal-action feedback does not imply a loss or solvability result.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest/coverage-v8 5.0.3, Playwright 1.64.0; zero runtime dependencies.
 
 ## Next recommendation
 
-- T012 is in REVIEW. Await coordinator review and acceptance. Do not start T013 until authorized.
+- T012 and T013 are accepted; T014 is ready for coordinator review. Do not start T015 until T014 is accepted and explicitly assigned.
