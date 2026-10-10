@@ -1,7 +1,7 @@
 # Project status
 
 - State: T000–T015, T017 and T024 are DONE; T024 accepted by the human coordinator on 2026-10-11 at `ba7865e`.
-- Current task: none. T018 and remaining tasks await explicit assignment.
+- Current task: T025 REVIEW, assigned by the human coordinator on 2026-10-11; implementation and required checks are complete; awaiting coordinator acceptance. T017 dependency is DONE.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T015.md](reports/T015.md).
 

@@ -1,4 +1,7 @@
 import { afterEach, expect, test, vi } from 'vitest';
+import { readdirSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { gzipSync } from 'node:zlib';
 
 import { createCardElement, renderCardBackSvg } from '../../src/ui/cards.js';
 
@@ -35,6 +38,17 @@ test('court cards retain the twelve original court illustrations', () => {
   }
   expect(new Set(portraits).size).toBe(12);
   expect(portraits.every((href) => href?.includes('/assets/'))).toBe(true);
+});
+
+test('court illustrations fit the first-load compressed asset budget', () => {
+  const assetsDir = fileURLToPath(new URL('../../src/assets/courts/', import.meta.url));
+  const sizes = readdirSync(assetsDir)
+    .filter((name) => name.endsWith('.svg'))
+    .map((name) => gzipSync(readFileSync(`${assetsDir}/${name}`)).byteLength);
+
+  expect(sizes).toHaveLength(12);
+  expect(Math.max(...sizes)).toBeLessThanOrEqual(60 * 1024);
+  expect(sizes.reduce((sum, size) => sum + size, 0)).toBeLessThanOrEqual(400 * 1024);
 });
 
 test('card back has a decorative vector pattern without card identity', () => {

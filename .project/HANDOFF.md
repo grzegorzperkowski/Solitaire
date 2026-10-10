@@ -116,7 +116,11 @@ Coordinator later confirmed iPhone and PC checks for T017 were performed. Device
 
 ## T024 assignment (2026-10-10)
 
-The human coordinator assigned the touch double-tap shortcut as T024, a follow-up to DONE T010. Implementation and docs are in `ba7865e`; `npm run test:e2e -- tests/e2e/play.spec.js tests/e2e/input.spec.js` passed 41 tests, `npm test` passed 134 tests, and `npm run build` passed. The coordinator confirmed device testing with “testy pokazują, że to działa” on 2026-10-11; T024 is DONE. See [tasks/T024.md](tasks/T024.md) and [reports/T024.md](reports/T024.md). No task is currently assigned.
+The human coordinator assigned the touch double-tap shortcut as T024, a follow-up to DONE T010. Implementation and docs are in `ba7865e`; `npm run test:e2e -- tests/e2e/play.spec.js tests/e2e/input.spec.js` passed 41 tests, `npm test` passed 134 tests, and `npm run build` passed. The coordinator confirmed device testing with “testy pokazują, że to działa” on 2026-10-11; T024 is DONE. See [tasks/T024.md](tasks/T024.md) and [reports/T024.md](reports/T024.md).
+
+## T025 assignment (2026-10-11)
+
+The human coordinator assigned a fix for delayed J/Q/K court artwork as T025, a P8 follow-up dependent on DONE T017. All twelve SVGs were optimized with SVGO, the gzip budget regression test and required unit, build, and E2E checks pass, and a 320px DPR 3 gallery screenshot was inspected. See [reports/T025.md](reports/T025.md). T025 is REVIEW pending coordinator acceptance; Codex did not perform a physical iPhone check.
 
 
 ## T015 coordinator acceptance (2026-10-10)
