@@ -1,7 +1,7 @@
 # Project status
 
-- State: deterministic deal, transfer rules, Draw 1/Draw 3, recycle, legal-move enumeration and the CI engine simulation are implemented. T005 awaits acceptance. The page is still the Polish shell.
-- Current task: **T005 — REVIEW**. T000–T004 are DONE. T006 is not assigned.
+- State: deterministic deal, transfer rules, Draw 1/Draw 3, recycle, legal-move enumeration and the CI engine simulation are implemented. T005 is accepted. The page is still the Polish shell.
+- Current task: **T005 — DONE**. T000–T005 are DONE. T006 is assigned.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T005.md](reports/T005.md).
 
@@ -12,8 +12,8 @@
 - T002 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted commit `d3c36f1df1d46d136e81d8c174f1636debed8a76`.
 - T003 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `774b3e634e2b6991a91c4e24952b1919b0e4a484`. Accepted quality improvements `75070087cb4d49db1323467f8a7efb1737d325c0`.
 - T004 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `1073dfb1828dff1944713c616c9019cfcdc14056`. Independent review `2af3ee4fead49ceab3d9d3cc9143c69c568429f4`.
-- T005 REVIEW: CI/release simulation profiles for engine moves and invalid actions. Not accepted. Undo and restore are not included.
-- P1 is complete. P2 is incomplete until T005 is DONE. T006–T023 remain TODO.
+- T005 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `509fe7b911ce6d336bd55bfdc362778e93fd0cc1`.
+- P1 and P2 are complete. P3 is incomplete until T006 is DONE. T006–T023 remain TODO.
 
 ## Known problems and blockers
 
@@ -26,4 +26,4 @@
 
 ## Next recommendation
 
-The coordinator reviews T005. After acceptance and a separate explicit assignment, [T006](tasks/T006.md) adds session history, Undo/Redo and exactly-once accounting. Do not start T006.
+T005 is accepted. The same instruction assigns [T006](tasks/T006.md): session history, Undo/Redo and exactly-once accounting. Do not start T007.

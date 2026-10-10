@@ -25,12 +25,13 @@
 - QA still open, not passed: browser console and visual/layout checks. GitHub Actions has not run on a remote runner. `filelist.txt` is absent; do not recreate it.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies.
 - Resolve T003 implementation with `774b3e634e2b6991a91c4e24952b1919b0e4a484` and quality improvements with `75070087cb4d49db1323467f8a7efb1737d325c0`. Resolve T004 implementation with `1073dfb1828dff1944713c616c9019cfcdc14056`.
-- T005 REVIEW: `scripts/run-simulation.mjs` runs the CI profile (seeds 0–999 in Draw 1 and Draw 3, plus seed 4294967295, at most 300 steps) through Vitest. Evidence: [reports/T005.md](reports/T005.md). The release profile is selected but was not executed. Undo, redo and restore stay in T006 and T007.
+- T005 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `509fe7b911ce6d336bd55bfdc362778e93fd0cc1`. Evidence: [reports/T005.md](reports/T005.md). `scripts/run-simulation.mjs` runs the CI profile (seeds 0–999 in Draw 1 and Draw 3, plus seed 4294967295, at most 300 steps) through Vitest.
 - Passing CI counts, not a win rate: 2002 deals, 600427 steps, 3 wins, 0 stuck, 1999 step bounds. Categories: draw 222976, recycle 19046, tableau 166361, waste 14072, foundation 58227, invalid 119745. Won seeds: 827 Draw 1, 681 Draw 3, 888 Draw 3.
+- P1 and P2 are complete. P3 is assigned with T006.
 
 ## Blockers / next steps
 
-- Await coordinator acceptance of T005. T006 is not assigned.
+- T005 is accepted. The same instruction assigns T006: session history, Undo/Redo and exactly-once accounting.
 - Browser console, rendered layout and remote CI remain outstanding and are not T005 blockers.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
