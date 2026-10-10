@@ -406,7 +406,7 @@ function renderTableau(rootElement, tableauColumns, dims, selection, legalDestin
       if (isFaceUp) {
         if (animateDeal) {
           cardEl.classList.add('tableau-deal');
-          cardEl.style.setProperty('--deal-delay', `${colIdx * 30}ms`);
+          cardEl.style.setProperty('--deal-delay', `${colIdx * 55}ms`);
         }
         cardEl.setAttribute('tabindex', '0');
         cardEl.setAttribute('role', 'button');

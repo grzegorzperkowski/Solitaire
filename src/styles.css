@@ -538,11 +538,11 @@ body {
 }
 
 .card-node.stock-shuffle {
-  animation: stock-shuffle 150ms ease-in-out;
+  animation: stock-shuffle 180ms ease-in-out;
 }
 
 .card-node.tableau-deal {
-  animation: tableau-deal 150ms ease-out both;
+  animation: tableau-deal 180ms ease-out both;
   animation-delay: var(--deal-delay, 0ms);
 }
 

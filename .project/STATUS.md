@@ -44,3 +44,4 @@
 - T015 accepted by the human coordinator at `b01fb49`. P7 task complete. Optional T016 was not selected.
 
 - T017 follow-up: added a one-shot stock shuffle and staggered tableau deal for new games started in the UI. Build and diff check passed; no animation tests or manual inspection were run per coordinator instruction. T017 remains IN_PROGRESS; see reports/T017.md.
+- T017 pacing refinement: increased per-card animation to 180 ms and column stagger to 55 ms (about 510 ms total). See reports/T017.md.

@@ -94,6 +94,8 @@ T015 chevron refinement: replaced the text character with a centered CSS chevron
 
 The UI now marks deliberate new-game and mode-change deals for a one-shot stock shuffle and staggered tableau arrival. `npm run build` and `git diff --check` passed. At the coordinator's request, no animation tests or manual animation inspection were performed. T017 remains IN_PROGRESS; see reports/T017.md and continue the remaining acceptance checks there.
 
+Pacing refinement: stock/card animations are 180 ms with 55 ms between tableau columns (about 510 ms total). No animation tests or manual inspection were performed.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 
