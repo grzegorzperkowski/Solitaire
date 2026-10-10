@@ -10,26 +10,23 @@
 
 ## Current state and recent changes
 
-- T000 DONE: eba965185ef8a60edf81f0318ab0fbf3481604f8. See reports/T000.md.
-- T001 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation commit `339e0f852b60c691f52d6204aa7225b899c5844f`. Acceptance tracking commit subject: `T001: record coordinator acceptance`.
-- QA exception still open: browser console and visual/layout checks were not run. They are waived only as a T001 completion gate. Do not report them as passed.
-- T002 REVIEW: DOM-free `src/engine/cards.js` deals a frozen GameState. Public entry is `createGame`. Suit order is trefl, karo, kier, pik. Rejected options throw `Error` with a `reason` string (`invalid-options`, `invalid-seed`, `invalid-draw-count`, `unsupported-rules-version`, `unsupported-shuffle-version`). Golden deals: `tests/fixtures/deals.json`. Evidence: [reports/T002.md](reports/T002.md).
-- The page shell does not import the engine. No moves, history, storage or Playwright.
-- Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies. `package.json` and `vite.config.js` were not changed in T002.
-- Resolve T002 delivery with `git log -1 --format="%h %s" --grep="^T002:"`. Do not treat this recommendation as permission to start T003.
-- `filelist.txt` is not in the tree. Do not recreate it.
+- T000 DONE: eba965185ef8a60edf81f0318ab0fbf3481604f8.
+- T001 DONE: accepted 2026-10-10. Implementation commit `339e0f852b60c691f52d6204aa7225b899c5844f`.
+- T002 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation commit `d3c36f1df1d46d136e81d8c174f1636debed8a76`. DOM-free `createGame` in `src/engine/cards.js`. Golden deals: `tests/fixtures/deals.json`. Evidence: [reports/T002.md](reports/T002.md).
+- QA still open, not passed: browser console and visual/layout checks (waived only as a T001 gate). GitHub Actions has not run on a remote runner. `filelist.txt` is absent; do not recreate it.
+- The page shell does not import the engine. No move rules in the T002 acceptance commit.
+- Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies.
+- T003 is assigned by the same 2026-10-10 instruction. It is not started in the acceptance commit. T004 is not assigned.
+- Resolve T002 implementation with commit `d3c36f1df1d46d136e81d8c174f1636debed8a76`, not the later acceptance-tracking commit.
 
 ## Blockers / next steps
 
-- Await coordinator acceptance of T002. T003 is not assigned.
-- GitHub Actions (`.github/workflows/ci.yml`) has not been executed remotely.
-- Browser console and 320px/desktop rendering remain outstanding QA from T001.
-- The local Vite process started by `npm run dev` was stopped during T002 so `npm ci` could delete a locked native module. Start it again only when a human wants a preview.
+- Implement T003 only: [tasks/T003.md](tasks/T003.md). Dependency T002 is DONE.
+- T003 includes tableau suffix moves, foundation build and return, waste top moves, atomic reveal, `assertInvariants` and `isWon`. Draw, recycle and `getLegalMoves` belong to T004; unsupported stock commands must reject without changing state.
+- Browser console, rendered layout and remote CI remain outstanding and are not T003 blockers.
 
 ## Test commands
 
 Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run build`. Card-only: `npm test -- tests/unit/cards.test.js`. See [README.md](../README.md).
 
-Latest local results are in [reports/T002.md](reports/T002.md): `npm ci` exit 0 after stopping Vite; `npm test` 8 passed; card file 6 passed; `npm run build` exit 0; engine coverage 100%.
-
-Before committing run `git diff --check` and `git diff --cached --check`. Simulation/E2E scripts do not exist until their assigned tasks create them. Do not report unexecuted browser, device or GitHub Actions checks as passed.
+Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.
