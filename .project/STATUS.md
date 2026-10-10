@@ -1,7 +1,7 @@
 # Project status
 
-- State: app controller, active clock, lifecycle scheduling, Web Locks single-writer tab ownership and Playwright storage tests implemented. T008 is in REVIEW.
-- Current task: **T008 — REVIEW**. T000–T007 are DONE.
+- State: app controller, active clock, lifecycle scheduling, Web Locks single-writer tab ownership and Playwright storage tests implemented. T008 is accepted. P4 is complete.
+- Current task: **T008 — DONE**. T000–T008 are DONE. T009 is assigned.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T008.md](reports/T008.md).
 
@@ -15,7 +15,8 @@
 - T005 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `509fe7b911ce6d336bd55bfdc362778e93fd0cc1`.
 - T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`.
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`.
-- P1, P2 and P3 are complete. P4 exit met pending coordinator acceptance of T008. T009–T023 remain TODO.
+- T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
+- P1, P2, P3 and P4 are complete. P5 is incomplete until T009, T010 and T011 are DONE. T009–T023 remain TODO.
 
 ## Known problems and blockers
 
@@ -27,4 +28,4 @@
 
 ## Next recommendation
 
-T008 is ready for coordinator review. After acceptance of T008, P4 is complete. The next task in the dependency graph is [T009](tasks/T009.md): responsive board and readable SVG card basics (leading directly toward mobile MVP with T010). Do not start T009 until authorized.
+T008 is accepted. The same instruction assigns [T009](tasks/T009.md): responsive board and readable SVG card basics (leading directly toward mobile MVP with T010). Do not start T010 until authorized.
