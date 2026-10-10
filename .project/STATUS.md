@@ -1,9 +1,9 @@
 # Project status
 
-- State: T014's CI E2E failure is fixed and the full suite passes against a fresh Vite preview; coordinator review is pending.
-- Current task: **T014 — REVIEW**. T000–T013 are DONE.
+- State: T010's dialog-focus E2E race correction is committed for review; T014 remains in REVIEW.
+- Current task: **T010 — REVIEW**. Its original implementation is accepted; this follow-up changes only the test assertion.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T014.md](reports/T014.md).
+- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T010.md](reports/T010.md).
 
 ## Completed deliverables / milestones
 
@@ -17,7 +17,7 @@
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`.
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`.
-- T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`.
+- T010 original implementation DONE: accepted 2026-10-10 by the human coordinator and ChatGPT at `bdd275c`; follow-up dialog-focus test revision is in REVIEW.
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
 - T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
 - T013 DONE: physical Android and iPhone checks accepted 2026-10-10 by the human coordinator at commit `916b3bd`; device/browser versions were not included in the acceptance message.
@@ -33,4 +33,4 @@
 
 ## Next recommendation
 
-- T012 and T013 are accepted. T014 awaits coordinator review; do not start T015 automatically.
+- T010 follow-up is ready for coordinator review; see [reports/T010.md](reports/T010.md). T014 remains in REVIEW. Do not start T015 automatically.

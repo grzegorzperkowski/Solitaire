@@ -178,11 +178,7 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
     await expect(menuDialog).toBeVisible();
 
     // Verify focus is inside menu dialog
-    const isFocusInside = await page.evaluate(() => {
-      const dialog = document.getElementById('menu-dialog');
-      return dialog ? dialog.contains(document.activeElement) : false;
-    });
-    expect(isFocusInside).toBe(true);
+    await expect(menuDialog.locator('button').first()).toBeFocused();
 
     // Escape closes dialog and restores focus to #btn-menu
     await page.keyboard.press('Escape');
