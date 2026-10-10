@@ -40,9 +40,9 @@
 
 ## Blockers / next steps
 
-- Review the T009 mobile spacing follow-up. T010 and T014 remain in REVIEW; do not start T015 automatically.
+- Review the T009 mobile spacing and card visibility follow-up. T010 and T014 remain in REVIEW; do not start T015 automatically.
 - A user can play a complete game on mobile and desktop via tap, keyboard, and drag & drop.
-- Current task: [T009](tasks/T009.md) (mobile spacing follow-up, REVIEW).
+- Current task: [T009](tasks/T009.md) (mobile spacing and card visibility follow-up, REVIEW).
 - Remote GitHub Actions CI has not run on a remote runner.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 

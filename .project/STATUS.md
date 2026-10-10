@@ -1,7 +1,7 @@
 # Project status
 
-- State: T009 mobile spacing follow-up is ready for review; T010 and T014 remain in REVIEW.
-- Current task: **T009 — REVIEW**. Its original implementation remains accepted; this follow-up adjusts mobile page spacing and control placement.
+- State: T009 mobile spacing and card visibility follow-up is ready for review; T010 and T014 remain in REVIEW.
+- Current task: **T009 — REVIEW**. Its original implementation remains accepted; this follow-up adjusts phone portrait spacing and tableau card visibility.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T009.md](reports/T009.md).
 
@@ -16,7 +16,7 @@
 - T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`.
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`.
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
-- T009 original implementation DONE: accepted 2026-10-10 at `ae85d6b`; mobile spacing follow-up is in REVIEW.
+- T009 original implementation DONE: accepted 2026-10-10 at `ae85d6b`; mobile spacing and card visibility follow-up is in REVIEW.
 - T010 original implementation DONE: accepted 2026-10-10 by the human coordinator and ChatGPT at `bdd275c`; follow-up dialog-focus test revision is in REVIEW.
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
 - T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
@@ -33,4 +33,4 @@
 
 ## Next recommendation
 
-- Review the T009 mobile spacing follow-up; see [reports/T009.md](reports/T009.md). T010 and T014 remain in REVIEW; do not start T015 automatically.
+- Review the T009 mobile spacing and card visibility follow-up; see [reports/T009.md](reports/T009.md). T010 and T014 remain in REVIEW; do not start T015 automatically.

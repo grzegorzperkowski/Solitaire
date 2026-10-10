@@ -6,7 +6,7 @@
 export const MIN_CARD_WIDTH = 38;
 export const MAX_CARD_WIDTH = 104;
 export const CARD_ASPECT_RATIO = 1.4; // 5:7 ratio (height = 1.4 * width)
-export const MIN_FACE_UP_OVERLAP = 24;
+export const MIN_FACE_UP_OVERLAP = 32;
 export const MIN_FACE_DOWN_OVERLAP = 8;
 export const PREFERRED_FACE_DOWN_OVERLAP = 12;
 export const MIN_CORNER_RANK_FONT_SIZE = 14;

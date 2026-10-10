@@ -457,6 +457,9 @@ body {
 }
 
 @media (max-width: 599px) and (orientation: portrait) {
+  .top-row {
+    margin-top: 6px;
+  }
   body {
     padding-left: max(4px, env(safe-area-inset-left));
     padding-right: max(4px, env(safe-area-inset-right));
