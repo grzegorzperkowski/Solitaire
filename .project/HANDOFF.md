@@ -53,3 +53,7 @@ Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:e2e` 
 Latest local results are in [reports/T014.md](reports/T014.md): `npm test` 123 passed across 9 files; `npm run test:e2e -- tests/e2e/play.spec.js` 12 passed in Chromium; `npm run build` exit 0 (JS bundle 73.66 kB, gzip 20.61 kB, CSS 11.97 kB, gzip 3.12 kB).
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.
+
+## T009 classical court artwork trial (2026-10-10)
+
+User approved the proposed classical J/Q/K illustrations and will review on their running development server. Twelve local public-domain SVG illustrations now replace letter badges. Card clipping follows SVG corner proportions and shadows are softer. See reports/T009.md. Status REVIEW; no deployment or push.

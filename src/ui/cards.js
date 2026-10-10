@@ -5,6 +5,26 @@
 
 import { suitIndex as getSuitIndex, rank as getRank, color as getColor } from '../engine/cards.js';
 
+import jackClubs from '../assets/courts/jack_of_clubs.svg';
+import jackDiamonds from '../assets/courts/jack_of_diamonds.svg';
+import jackHearts from '../assets/courts/jack_of_hearts.svg';
+import jackSpades from '../assets/courts/jack_of_spades.svg';
+import queenClubs from '../assets/courts/queen_of_clubs.svg';
+import queenDiamonds from '../assets/courts/queen_of_diamonds.svg';
+import queenHearts from '../assets/courts/queen_of_hearts.svg';
+import queenSpades from '../assets/courts/queen_of_spades.svg';
+import kingClubs from '../assets/courts/king_of_clubs.svg';
+import kingDiamonds from '../assets/courts/king_of_diamonds.svg';
+import kingHearts from '../assets/courts/king_of_hearts.svg';
+import kingSpades from '../assets/courts/king_of_spades.svg';
+
+const COURT_ART = [
+  [jackClubs, queenClubs, kingClubs],
+  [jackDiamonds, queenDiamonds, kingDiamonds],
+  [jackHearts, queenHearts, kingHearts],
+  [jackSpades, queenSpades, kingSpades],
+];
+
 export const SUIT_NAMES = ['trefl', 'karo', 'kier', 'pik'];
 export const SUIT_LABELS = ['trefl', 'karo', 'kier', 'pik'];
 export const SUIT_SYMBOLS = ['♣', '♦', '♥', '♠'];
@@ -117,7 +137,7 @@ export function renderCardBackSvg() {
  * Generates center artwork SVG markup for a face-up card.
  */
 function renderCenterArtSvg(details) {
-  const { rank, suit, hexColor, rankLabel } = details;
+  const { rank, suit, hexColor } = details;
   const path = SUIT_PATHS[suit];
 
   if (rank === 1) {
@@ -126,12 +146,7 @@ function renderCenterArtSvg(details) {
   }
 
   if (rank >= 11) {
-    // Keep the court mark compact so it stays inside a phone-size card.
-    return `<g transform="translate(25, 42)">
-      <rect x="0" y="0" width="50" height="56" rx="4" fill="#fffdf4" stroke="#d4af37" stroke-width="1.2" />
-      <path d="${path}" transform="translate(10, 4) scale(1.2)" fill="${hexColor}" opacity="0.16" />
-      <text x="25" y="46" font-family="Georgia, 'Times New Roman', serif" font-size="38" font-weight="700" fill="${hexColor}" text-anchor="middle">${rankLabel}</text>
-    </g>`;
+    return `<image href="${COURT_ART[details.suitIndex][rank - 11]}" x="31" y="40" width="38" height="60" preserveAspectRatio="xMidYMid meet" />`;
   }
 
   // Number cards (2–10): center badge with suit
