@@ -370,4 +370,54 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     await expect(page.locator('#moves-display')).toHaveText('1');
     await expect(page.locator('#foundation-0 .card-node.card-face-up')).toBeVisible();
   });
+
+  test('text selection is completely blocked even with userscript forcing user-select: text !important', async ({ page }) => {
+    // Inject hostile userscript that forces * { user-select: text !important }
+    await page.evaluate(() => {
+      const style = document.createElement('style');
+      style.textContent = `
+        * {
+          user-select: text !important;
+          -webkit-user-select: text !important;
+        }
+      `;
+      document.documentElement.appendChild(style);
+    });
+
+    // 1. Try dragging across title
+    const title = page.locator('#page-title');
+    const titleBox = await title.boundingBox();
+    expect(titleBox).toBeTruthy();
+
+    await page.mouse.move(titleBox.x, titleBox.y + titleBox.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(titleBox.x + titleBox.width, titleBox.y + titleBox.height / 2);
+    await page.mouse.up();
+
+    let selectedText = await page.evaluate(() => window.getSelection().toString());
+    expect(selectedText).toBe('');
+
+    // 2. Try double-clicking title
+    await title.dblclick();
+    selectedText = await page.evaluate(() => window.getSelection().toString());
+    expect(selectedText).toBe('');
+
+    // 3. Try Ctrl+A
+    await page.keyboard.press('Control+a');
+    selectedText = await page.evaluate(() => window.getSelection().toString());
+    expect(selectedText).toBe('');
+
+    // 4. Try dragging across button
+    const btnMenu = page.locator('#btn-menu');
+    const menuBox = await btnMenu.boundingBox();
+    expect(menuBox).toBeTruthy();
+
+    await page.mouse.move(menuBox.x, menuBox.y + menuBox.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(menuBox.x + menuBox.width, menuBox.y + menuBox.height / 2);
+    await page.mouse.up();
+
+    selectedText = await page.evaluate(() => window.getSelection().toString());
+    expect(selectedText).toBe('');
+  });
 });

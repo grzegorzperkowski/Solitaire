@@ -721,12 +721,43 @@ export function createInputController(app, rootElement) {
     }
   }
 
+  function handleSelectStart(e) {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) {
+      return;
+    }
+    e.preventDefault();
+  }
+
+  function handleSelectionChange() {
+    const active = document.activeElement;
+    if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) {
+      return;
+    }
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+      sel.removeAllRanges();
+    }
+  }
+
+  function handleDragStart(e) {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) {
+      return;
+    }
+    e.preventDefault();
+  }
+
   function handleGlobalKeydown(e) {
     if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) {
       return;
     }
 
     const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+
+    // Prevent Select All (Ctrl/Cmd+A) across the board
+    if (isCtrlOrCmd && (e.key === 'a' || e.key === 'A')) {
+      e.preventDefault();
+      return;
+    }
 
     // Undo: Ctrl/Cmd+Z (without shift)
     if (isCtrlOrCmd && (e.key === 'z' || e.key === 'Z') && !e.shiftKey) {
@@ -1067,6 +1098,9 @@ export function createInputController(app, rootElement) {
     });
 
     window.addEventListener('keydown', handleGlobalKeydown);
+    document.addEventListener('selectstart', handleSelectStart, { capture: true });
+    document.addEventListener('selectionchange', handleSelectionChange);
+    document.addEventListener('dragstart', handleDragStart, { capture: true });
   }
 
   bindEvents();
@@ -1084,6 +1118,9 @@ export function createInputController(app, rootElement) {
     },
     destroy: () => {
       window.removeEventListener('keydown', handleGlobalKeydown);
+      document.removeEventListener('selectstart', handleSelectStart, { capture: true });
+      document.removeEventListener('selectionchange', handleSelectionChange);
+      document.removeEventListener('dragstart', handleDragStart, { capture: true });
       rootElement.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
