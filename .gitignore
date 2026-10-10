@@ -11,6 +11,8 @@ node_modules/
 # Test results
 /coverage/
 /.nyc_output/
+/test-results/
+/playwright-report/
 
 # Local environment variables
 .env

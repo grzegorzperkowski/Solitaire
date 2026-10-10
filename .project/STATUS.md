@@ -1,9 +1,9 @@
 # Project status
 
-- State: versioned persistence, pure-engine command replay validation, defensive storage limits, error handling and simulation round-trips are implemented. T007 is accepted. The page is still the Polish shell.
-- Current task: **T007 — DONE**. T000–T007 are DONE. T008 is assigned.
+- State: app controller, active clock, lifecycle scheduling, Web Locks single-writer tab ownership and Playwright storage tests implemented. T008 is in REVIEW.
+- Current task: **T008 — REVIEW**. T000–T007 are DONE.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T007.md](reports/T007.md).
+- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T008.md](reports/T008.md).
 
 ## Completed deliverables / milestones
 
@@ -15,17 +15,16 @@
 - T005 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `509fe7b911ce6d336bd55bfdc362778e93fd0cc1`.
 - T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`.
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`.
-- P1, P2 and P3 are complete. P4 is incomplete until T008 is DONE. T008–T023 remain TODO.
+- P1, P2 and P3 are complete. P4 exit met pending coordinator acceptance of T008. T009–T023 remain TODO.
 
 ## Known problems and blockers
 
 - GitHub Actions workflow is committed but has not run on a runner. No push was made.
-- Browser console and rendered layout were not verified. Browser automation still cannot start (`DevToolsActivePort not found`).
+- Rendered UI layout not yet implemented (scheduled for P5 / T009).
 - `filelist.txt` is absent and was not recreated.
 - Hint ranking is not implemented. `getLegalMoves` uses a documented scan order, not the F04 hint order. There is no loss flag.
-- Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest/coverage-v8 5.0.3; zero runtime dependencies. The production bundle does not import the engine yet.
-- CI has no explicit `permissions: contents: read`. The workflow does not deploy or read secrets.
+- Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest/coverage-v8 5.0.3, Playwright 1.64.0; zero runtime dependencies.
 
 ## Next recommendation
 
-T007 is accepted. The same instruction assigns [T008](tasks/T008.md): clock, browser lifecycle and single-writer ownership. Do not start T009.
+T008 is ready for coordinator review. After acceptance of T008, P4 is complete. The next task in the dependency graph is [T009](tasks/T009.md): responsive board and readable SVG card basics (leading directly toward mobile MVP with T010). Do not start T009 until authorized.
