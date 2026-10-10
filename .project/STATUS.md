@@ -1,7 +1,7 @@
 # Project status
 
-- State: T009 mobile spacing and card visibility follow-up is ready for review; T010 remains in REVIEW; T014 is accepted.
-- Current task: **T009 — REVIEW**. Its original implementation remains accepted; this follow-up adjusts phone portrait spacing and tableau card visibility.
+- State: T009 face-card icon follow-up is ready for coordinator visual review; T010 remains in REVIEW; T014 is accepted.
+- Current task: **T009 — REVIEW**. The original implementation remains accepted; this follow-up improves J/Q/K center marks for phone-size cards.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T009.md](reports/T009.md).
 
@@ -33,4 +33,4 @@
 
 ## Next recommendation
 
-- Review the T009 mobile spacing and card visibility follow-up; see [reports/T009.md](reports/T009.md). T010 remains in REVIEW. T014 is accepted; T015 still needs an explicit assignment.
+- Review the T009 J/Q/K center icons on the local development server; see [reports/T009.md](reports/T009.md). T010 remains in REVIEW. T014 is accepted; T015 still needs an explicit assignment.

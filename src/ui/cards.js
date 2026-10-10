@@ -117,7 +117,7 @@ export function renderCardBackSvg() {
  * Generates center artwork SVG markup for a face-up card.
  */
 function renderCenterArtSvg(details) {
-  const { rank, suit, hexColor } = details;
+  const { rank, suit, hexColor, rankLabel } = details;
   const path = SUIT_PATHS[suit];
 
   if (rank === 1) {
@@ -125,33 +125,11 @@ function renderCenterArtSvg(details) {
     return `<g transform="translate(30, 48) scale(1.67)"><path d="${path}" fill="${hexColor}" /></g>`;
   }
 
-  if (rank === 11) {
-    // Court Jack
-    return `<g transform="translate(25, 42)">
-      <rect x="0" y="0" width="50" height="56" rx="4" fill="none" stroke="#d4af37" stroke-width="1.2" />
-      <path d="M 12 14 L 38 14 L 25 38 Z" fill="${hexColor}" opacity="0.8" />
-      <circle cx="25" cy="22" r="6" fill="#d4af37" />
-      <text x="25" y="50" font-family="system-ui, sans-serif" font-size="14" font-weight="900" fill="${hexColor}" text-anchor="middle">J</text>
-    </g>`;
-  }
-
-  if (rank === 12) {
-    // Court Queen
-    return `<g transform="translate(25, 42)">
-      <rect x="0" y="0" width="50" height="56" rx="4" fill="none" stroke="#d4af37" stroke-width="1.2" />
-      <path d="M 10 36 C 10 18 40 18 40 36 Z" fill="${hexColor}" opacity="0.8" />
-      <circle cx="25" cy="18" r="8" fill="#d4af37" />
-      <text x="25" y="50" font-family="system-ui, sans-serif" font-size="14" font-weight="900" fill="${hexColor}" text-anchor="middle">Q</text>
-    </g>`;
-  }
-
-  if (rank === 13) {
-    // Court King
-    return `<g transform="translate(25, 42)">
-      <rect x="0" y="0" width="50" height="56" rx="4" fill="none" stroke="#d4af37" stroke-width="1.2" />
-      <path d="M 8 36 L 15 16 L 25 28 L 35 16 L 42 36 Z" fill="#d4af37" />
-      <circle cx="25" cy="14" r="3" fill="${hexColor}" />
-      <text x="25" y="50" font-family="system-ui, sans-serif" font-size="14" font-weight="900" fill="${hexColor}" text-anchor="middle">K</text>
+  if (rank >= 11) {
+    // Large court rank with a suit watermark stays legible on narrow cards.
+    return `<g>
+      <path d="${path}" transform="translate(22, 17) scale(2.3)" fill="${hexColor}" opacity="0.22" />
+      <text x="50" y="105" font-family="Georgia, 'Times New Roman', serif" font-size="68" font-weight="700" fill="${hexColor}" text-anchor="middle">${rankLabel}</text>
     </g>`;
   }
 

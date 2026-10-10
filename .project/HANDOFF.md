@@ -40,9 +40,9 @@
 
 ## Blockers / next steps
 
-- Review the T009 mobile spacing and card visibility follow-up. T010 remains in REVIEW. T014 is accepted; wait for an explicit T015 assignment.
+- Review the T009 J/Q/K center icons on the local development server. T010 remains in REVIEW. T014 is accepted; wait for an explicit T015 assignment.
 - A user can play a complete game on mobile and desktop via tap, keyboard, and drag & drop.
-- Current task: [T009](tasks/T009.md) (mobile spacing and card visibility follow-up, REVIEW).
+- Current task: [T009](tasks/T009.md) (J/Q/K center icon readability follow-up, REVIEW).
 - Remote GitHub Actions CI has not run on a remote runner.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
