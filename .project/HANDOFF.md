@@ -61,3 +61,5 @@ User approved the proposed classical J/Q/K illustrations and will review on thei
 Latest T009 visual adjustment: enlarged J/Q/K illustration to 52x84 SVG units; upper index retained, lower duplicate omitted on court cards. Build and browser smoke checks passed; user review remains pending.
 
 T009 latest refinement: user requested less space above court artwork; y moved from 50 to 44 SVG units. Build passed; awaiting visual review.
+
+Latest T009 request: another approximately 1 CSS px upward nudge (SVG y=42), commit and push authorized. Build passed; user will review on iPhone.

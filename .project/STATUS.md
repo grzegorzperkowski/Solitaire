@@ -1,7 +1,7 @@
 # Project status
 
 - State: T009 classical court artwork follow-up is ready for visual review; T010 remains in REVIEW; T014 is accepted.
-- Current task: **T009 — REVIEW**. The original implementation remains accepted; this follow-up enlarges classical J/Q/K artwork, keeps their upper indices, and reduces the gap above illustrations.
+- Current task: **T009 — REVIEW**. The original implementation remains accepted; this follow-up enlarges classical J/Q/K artwork, keeps their upper indices, and reduces the gap above illustrations (latest SVG y=42); user will review on iPhone after the authorized push.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T009.md](reports/T009.md).
 

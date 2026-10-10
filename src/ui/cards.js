@@ -146,7 +146,7 @@ function renderCenterArtSvg(details) {
   }
 
   if (rank >= 11) {
-    return `<image href="${COURT_ART[details.suitIndex][rank - 11]}" x="24" y="44" width="52" height="84" preserveAspectRatio="xMidYMid meet" />`;
+    return `<image href="${COURT_ART[details.suitIndex][rank - 11]}" x="24" y="42" width="52" height="84" preserveAspectRatio="xMidYMid meet" />`;
   }
 
   // Number cards (2–10): center badge with suit
