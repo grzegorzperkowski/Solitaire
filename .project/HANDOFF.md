@@ -17,20 +17,21 @@
 - Foundations use suit order trefl, karo, kier, pik. Tableau `cardIndex` starts the whole face-up suffix. A reveal is the newly exposed card id on that same move, or null. `isWon` requires four complete legal foundations and empty stock, waste and tableau.
 - `assertInvariants` throws `invalid-state` for broken decks, face-up order and foundation contents. Move evaluation does not call it; tests and later restore do.
 - Golden deals remain in `tests/fixtures/deals.json`. Hand-built boards are `tests/fixtures/boards.js`.
-- T004 REVIEW: DOM-free `draw`, `recycle` and `getLegalMoves` in `src/engine/game.js`. Evidence: [reports/T004.md](reports/T004.md). Acceptance tracking for T003 is `70eee4ebedc27879b83087448b33de647c62e4f9`.
+- T004 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `1073dfb1828dff1944713c616c9019cfcdc14056`. Independent review `2af3ee4fead49ceab3d9d3cc9143c69c568429f4`. Evidence: [reports/T004.md](reports/T004.md). Acceptance tracking for T003 is `70eee4ebedc27879b83087448b33de647c62e4f9`.
 - Stock and waste are bottom at index 0. Draw pops the stock top onto the waste up to `drawCount` (1 or 3); a short stock moves only the remainder. Recycle reverses the remaining waste into the stock and does not draw. Example: stock `[D,C,B,A]` draw 3 → waste `[A,B,C]`, stock `[D]`. Recycle `[A,B,C]` → stock `[C,B,A]`. Played waste cards are absent from that stock.
 - Failed draw/recycle preconditions return `illegal-source`. Extra command fields return `invalid-command`. `drawCount` other than 1 or 3 returns `invalid-state`. `unsupported-command` is no longer produced.
 - `getLegalMoves` scan order, not hint rank: draw, recycle, tableau columns 0..6 and face-up `cardIndex` ascending, waste, foundations 0..3. Destinations are tableau 0..6 then foundation 0..3. Empty legal list is not a loss. Hint ranking stays in T014.
 - The page shell does not import the engine. No session, storage or Playwright.
 - QA still open, not passed: browser console and visual/layout checks. GitHub Actions has not run on a remote runner. `filelist.txt` is absent; do not recreate it.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies.
-- Resolve T003 implementation with `774b3e634e2b6991a91c4e24952b1919b0e4a484` and quality improvements with `75070087cb4d49db1323467f8a7efb1737d325c0`. Resolve T004 delivery with `git log -1 --format="%h %s" --grep="^T004:"`. Do not treat this recommendation as permission to start T005.
+- Resolve T003 implementation with `774b3e634e2b6991a91c4e24952b1919b0e4a484` and quality improvements with `75070087cb4d49db1323467f8a7efb1737d325c0`. Resolve T004 implementation with `1073dfb1828dff1944713c616c9019cfcdc14056`.
+- The same coordinator instruction assigns T005, deterministic engine simulations in [tasks/T005.md](tasks/T005.md). Exercise moves and invalid actions only. Undo, redo and restore are T006 and T007. Do not start T006.
 
 ## Blockers / next steps
 
-- Await coordinator acceptance of T004. T005 is not assigned.
+- Set T005 IN_PROGRESS, then add the CI simulation profile. T006 is not assigned.
 - Browser console, rendered layout and remote CI remain outstanding and are not T004 blockers.
-- `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`.
+- `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
 ## Test commands
 
