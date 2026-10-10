@@ -31,7 +31,7 @@
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`. `src/persistence.js` implements schema-v1 serialization, restore, pure-engine replay validation including redo tail, storage error and quota handling, byte retention on failure, defensive limits (1 MiB UTF-8, 10,000 commands), and simulation round trips. Evidence: [reports/T007.md](reports/T007.md). Acceptance tracking commit: `1249707`.
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`. `src/app.js` implements application controller connecting session timeline and persistence, active-time measurement via `performance.now()`, pause/dialog/visibility suppression, 5s checkpoints and `pagehide` saves, Web Locks single-writer ownership (`pl.solitaire.writer`) and storage revision conflict fallback. Playwright E2E infrastructure and tests in `tests/e2e/storage.spec.js`. Evidence: [reports/T008.md](reports/T008.md). Acceptance tracking commit: `b3f1a48`.
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`. `src/ui/layout.js`, `src/ui/cards.js`, `src/ui/render.js`, `src/styles.css` implement responsive mobile-first board (320–430px portrait with zero horizontal scroll), SVG cards with >=14px corner ranks and >=24px exposed bands, N02 strict face-down card concealment, 2-column waste with Draw 3 fan, tableau scroller with 44px scroll handle and accessible buttons for long columns, and 44x44px bottom controls. Evidence: [reports/T009.md](reports/T009.md). Acceptance tracking commit: `ce965e0`.
-- T010 original implementation DONE: accepted 2026-10-10 at `bdd275c`. Follow-up dialog-focus assertion revision is in REVIEW: Playwright now waits for the first menu button to receive focus. Validation: 20 repeated focus checks, 123 unit tests, and 55 preview E2E tests passed. See [reports/T010.md](reports/T010.md).
+- T010 original implementation DONE: accepted 2026-10-10 at `bdd275c`. Follow-up dialog-focus assertion revision accepted 2026-10-10 at `496f33f`: Playwright now waits for the first menu button to receive focus. Validation: 20 repeated focus checks, 123 unit tests, and 55 preview E2E tests passed. See [reports/T010.md](reports/T010.md).
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`. Polish game menu, New Game, Restart, Pause and Help dialogs implemented in `src/ui/dialogs.js`, with replacement confirmation on started unwon attempts (F05), pause concealment (F07), Draw 1 / Draw 3 toggle, Polish rules (N02), focus trap and restoration (N01 / T18), and full responsive support at 320px width and landscape (568x320). Evidence: [reports/T011.md](reports/T011.md). Acceptance tracking commit: `6610e7d`.
 - T012 DONE: accepted by the human coordinator on 2026-10-10 at `916b3bd`; see [reports/T012.md](reports/T012.md).
 - T013 DONE: physical checks on iPhone 15 and Android 12 found no problems; accepted 2026-10-10 at `916b3bd`. iOS/browser versions were not supplied; see [reports/T013.md](reports/T013.md).
@@ -40,9 +40,9 @@
 
 ## Blockers / next steps
 
-- Review the T009 J/Q/K center icon adjustment on the local development server. T010 remains in REVIEW. T014 is accepted; wait for an explicit T015 assignment.
+- T009 and T010 follow-ups are accepted. Wait for an explicit T015 assignment.
 - A user can play a complete game on mobile and desktop via tap, keyboard, and drag & drop.
-- Current task: [T009](tasks/T009.md) (J/Q/K center icon readability follow-up, REVIEW).
+- Current task: none. T009 and T010 follow-ups accepted 2026-10-10; T015 remains unassigned.
 - Remote GitHub Actions CI has not run on a remote runner.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
@@ -54,7 +54,7 @@ Latest local results are in [reports/T014.md](reports/T014.md): `npm test` 123 p
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.
 
-## T009 classical court artwork trial (2026-10-10)
+## T009 classical court artwork trial history (2026-10-10)
 
 User approved the proposed classical J/Q/K illustrations and will review on their running development server. Twelve local public-domain SVG illustrations now replace letter badges. Card clipping follows SVG corner proportions and shadows are softer. See reports/T009.md. Status REVIEW; no deployment or push.
 
@@ -63,3 +63,7 @@ Latest T009 visual adjustment: enlarged J/Q/K illustration to 52x84 SVG units; u
 T009 latest refinement: user requested less space above court artwork; y moved from 50 to 44 SVG units. Build passed; awaiting visual review.
 
 Latest T009 request: another approximately 1 CSS px upward nudge (SVG y=42), commit and push authorized. Build passed; user will review on iPhone.
+
+## Follow-up acceptance (2026-10-10)
+
+The human coordinator explicitly closed T009 and T010: “Zamykamy, wszystko działa!” Accepted T009 follow-ups through `ccc955641043bcbd68bba784b29bcaa2540a0b5c` and T010 focus-test correction `496f33f68320bfa2a639761888cb88434563157f`. Both are DONE; the historical review-pending notes above are superseded. No new device/browser version details were supplied. T015 remains TODO and unassigned.

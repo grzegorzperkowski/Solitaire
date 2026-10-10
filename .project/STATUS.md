@@ -1,7 +1,7 @@
 # Project status
 
-- State: T009 classical court artwork follow-up is ready for visual review; T010 remains in REVIEW; T014 is accepted.
-- Current task: **T009 — REVIEW**. The original implementation remains accepted; this follow-up enlarges classical J/Q/K artwork, keeps their upper indices, and reduces the gap above illustrations (latest SVG y=42); user will review on iPhone after the authorized push.
+- State: T009 and T010 follow-ups are accepted; T000–T014 are DONE. T015 awaits explicit assignment.
+- Current task: none. The human coordinator accepted the T009 and T010 follow-ups on 2026-10-10 (commits `ccc9556` and `496f33f`). T015 is not assigned.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T009.md](reports/T009.md).
 
@@ -16,8 +16,8 @@
 - T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`.
 - T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`.
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
-- T009 original implementation DONE: accepted 2026-10-10 at `ae85d6b`; mobile spacing and card visibility follow-up is in REVIEW.
-- T010 original implementation DONE: accepted 2026-10-10 by the human coordinator and ChatGPT at `bdd275c`; follow-up dialog-focus test revision is in REVIEW.
+- T009 original implementation DONE: accepted 2026-10-10 at `ae85d6b`; mobile spacing, card visibility and classical court artwork follow-ups accepted 2026-10-10 at `ccc9556`.
+- T010 original implementation DONE: accepted 2026-10-10 by the human coordinator and ChatGPT at `bdd275c`; follow-up dialog-focus test revision accepted 2026-10-10 at `496f33f`.
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
 - T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
 - T013 DONE: physical checks on iPhone 15 and Android 12 found no problems; accepted 2026-10-10 at `916b3bd`. iOS/browser versions were not supplied; see [reports/T013.md](reports/T013.md).
@@ -33,4 +33,4 @@
 
 ## Next recommendation
 
-- Review the T009 J/Q/K center icon adjustment on the local development server; see [reports/T009.md](reports/T009.md). T010 remains in REVIEW. T014 is accepted; T015 still needs an explicit assignment.
+- T009 and T010 follow-ups are accepted; see their reports. T015 is the next recommended task and still needs an explicit assignment.
