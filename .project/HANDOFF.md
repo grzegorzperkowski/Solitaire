@@ -96,6 +96,8 @@ The UI now marks deliberate new-game and mode-change deals for a one-shot stock 
 
 Pacing refinement: stock/card animations are 180 ms with 55 ms between tableau columns (about 510 ms total). No animation tests or manual inspection were performed.
 
+Appearance correction: removed card opacity and transform effects that made cards appear incomplete; the sequence now uses outline/shadow highlights while cards stay stationary. Build and diff check passed; see reports/T017.md.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 
