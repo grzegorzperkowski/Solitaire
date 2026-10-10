@@ -234,10 +234,43 @@ function canReadBoard(state) {
     && state.foundations.length === 4;
 }
 
+// Stock and waste keep the bottom card at index 0. Draw pops the last stock
+// id onto the waste, repeating up to drawCount. Recycle reverses the waste
+// into the stock and does not draw. [D,C,B,A] drawn by 3 becomes waste
+// [A,B,C] and stock [D]. Recycling [A,B,C] becomes stock [C,B,A].
+function stockAction(state, command) {
+  if (!exactKeys(command, ['type'])) return failure('invalid-command');
+  if (state.drawCount !== 1 && state.drawCount !== 3) return failure('invalid-state');
+  if (command.type === 'draw') {
+    if (state.stock.length === 0) return failure('illegal-source');
+    const count = Math.min(state.drawCount, state.stock.length);
+    const drawn = state.stock.slice(-count).reverse();
+    return {
+      ok: true,
+      revealed: null,
+      state: freezeState({
+        ...state,
+        stock: state.stock.slice(0, -count),
+        waste: state.waste.concat(drawn),
+      }),
+    };
+  }
+  if (state.stock.length !== 0 || state.waste.length === 0) return failure('illegal-source');
+  return {
+    ok: true,
+    revealed: null,
+    state: freezeState({
+      ...state,
+      stock: state.waste.slice().reverse(),
+      waste: [],
+    }),
+  };
+}
+
 function evaluate(state, command) {
   if (!canReadBoard(state)) return failure('invalid-state');
   if (command === null || typeof command !== 'object' || Array.isArray(command)) return failure('invalid-command');
-  if (command.type === 'draw' || command.type === 'recycle') return failure('unsupported-command');
+  if (command.type === 'draw' || command.type === 'recycle') return stockAction(state, command);
   if (!exactKeys(command, ['type', 'from', 'to']) || command.type !== 'move') return failure('invalid-command');
 
   const source = readSource(state, command.from);
@@ -260,4 +293,37 @@ export function applyMove(state, command) {
   const result = evaluate(state, command);
   if (!result.ok) return failure(result.reason);
   return { ok: true, state: result.state, revealed: result.revealed };
+}
+
+function addDestinations(state, from, moves) {
+  for (let index = 0; index < 7; index += 1) {
+    const command = { type: 'move', from, to: { pile: 'tableau', index } };
+    if (validateMove(state, command).ok) moves.push(command);
+  }
+  for (let index = 0; index < 4; index += 1) {
+    const command = { type: 'move', from, to: { pile: 'foundation', index } };
+    if (validateMove(state, command).ok) moves.push(command);
+  }
+}
+
+// Stable scan, not hint rank: draw, recycle, tableau columns and face-up
+// cardIndex ascending, waste, then foundations. Each source tries tableau
+// destinations 0..6 before foundation destinations 0..3.
+export function getLegalMoves(state) {
+  if (!canReadBoard(state)) return [];
+  const moves = [];
+  if (validateMove(state, { type: 'draw' }).ok) moves.push({ type: 'draw' });
+  if (validateMove(state, { type: 'recycle' }).ok) moves.push({ type: 'recycle' });
+  for (let index = 0; index < 7; index += 1) {
+    const column = state.tableau[index];
+    for (let cardIndex = column.faceUpStart; cardIndex < column.cards.length; cardIndex += 1) {
+      addDestinations(state, { pile: 'tableau', index, cardIndex }, moves);
+    }
+  }
+  if (state.waste.length > 0) addDestinations(state, { pile: 'waste' }, moves);
+  for (let index = 0; index < 4; index += 1) {
+    if (state.foundations[index].length === 0) continue;
+    addDestinations(state, { pile: 'foundation', index }, moves);
+  }
+  return moves;
 }
