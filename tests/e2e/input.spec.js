@@ -325,6 +325,45 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     await page.evaluate(() => window.__SOLITAIRE_INPUT__.cancelDrag());
   });
 
+  test('real Chromium touch capture keeps a selected card drag active', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 }));
+
+    const sourceCard = page.locator('#column-3 .card-node.card-face-up');
+    await sourceCard.evaluate((card) => card.click());
+    await expect(sourceCard).toHaveClass(/is-selected/);
+    const source = await sourceCard.boundingBox();
+    const target = await page.locator('#foundation-0').boundingBox();
+    expect(source).toBeTruthy();
+    expect(target).toBeTruthy();
+
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });
+    const touch = (x, y) => ({ x, y, id: 1, radiusX: 1, radiusY: 1, force: 1 });
+    const startX = source.x + source.width / 2;
+    const startY = source.y + source.height / 2;
+    await cdp.send('Input.dispatchTouchEvent', {
+      type: 'touchStart', touchPoints: [touch(startX, startY)],
+    });
+    await cdp.send('Input.dispatchTouchEvent', {
+      type: 'touchMove', touchPoints: [touch(startX + 8, startY + 8)],
+    });
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+
+    await expect(page.locator('#drag-overlay')).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.__SOLITAIRE_INPUT__.getActiveGesture()?.isDragging)).toBe(true);
+
+    await cdp.send('Input.dispatchTouchEvent', {
+      type: 'touchMove', touchPoints: [touch(target.x + target.width / 2, target.y + target.height / 2)],
+    });
+    await page.evaluate(() => new Promise(requestAnimationFrame));
+    await expect(page.locator('#drag-overlay')).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.__SOLITAIRE_INPUT__.getActiveGesture()?.isDragging)).toBe(true);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await expect(page.locator('#moves-display')).toHaveText('1');
+    await cdp.detach();
+  });
+
   test('movement below 6px threshold acts as tap selection without dragging', async ({ page }) => {
     await page.evaluate(() => {
       window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });

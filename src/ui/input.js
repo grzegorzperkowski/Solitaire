@@ -257,8 +257,11 @@ export function createInputController(app, rootElement) {
     logDrag('cancel-event', {
       type: e?.type ?? 'manual',
       eventPointerId: e?.pointerId ?? null,
+      eventTarget: e?.target?.id || e?.target?.className || null,
+      rootHasCapture: e?.pointerId !== undefined && rootElement.hasPointerCapture(e.pointerId),
       matchesActivePointer: e?.pointerId === undefined || e.pointerId === activeGesture?.pointerId,
     });
+    if (e?.type === 'lostpointercapture' && e.target !== rootElement && rootElement.hasPointerCapture(e.pointerId)) return;
     if (!activeGesture || (e?.pointerId !== undefined && e.pointerId !== activeGesture.pointerId)) return;
 
     if (activeGesture.isDragging) {

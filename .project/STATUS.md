@@ -1,6 +1,6 @@
 # Project status
 
-- State: T012's active-pointer capture-loss fix and automated checks are complete; coordinator review is pending.
+- State: T012's real touch capture-transfer fix and automated checks are complete; coordinator review is pending.
 - Current task: **T012 — REVIEW**. T000–T011 are DONE.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T012.md](reports/T012.md).
