@@ -18,8 +18,8 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 
 | ID | Milestone | Description | Dependencies (must be DONE) | Status | Acceptance reference |
 | --- | --- | --- | --- | --- | --- |
-| [T000](tasks/T000.md) | Setup | Workflow preparation | None | REVIEW | [Criteria](tasks/T000.md#acceptance-criteria); All milestones (mapping only); no product implementation |
-| [T001](tasks/T001.md) | P1 | Toolchain and minimal Polish shell | T000 | TODO | [Criteria](tasks/T001.md#acceptance-criteria); P1 toolchain subset; REQUIREMENTS N06/N10 |
+| [T000](tasks/T000.md) | Setup | Workflow preparation | None | DONE | [Criteria](tasks/T000.md#acceptance-criteria); All milestones (mapping only); no product implementation |
+| [T001](tasks/T001.md) | P1 | Toolchain and minimal Polish shell | T000 | REVIEW | [Criteria](tasks/T001.md#acceptance-criteria); P1 toolchain subset; REQUIREMENTS N06/N10 |
 | [T002](tasks/T002.md) | P1 | Deterministic cards, shuffle and deal | T001 | TODO | [Criteria](tasks/T002.md#acceptance-criteria); P1 exit; TEST_PLAN T01 |
 | [T003](tasks/T003.md) | P2 | Transfer rules and board invariants | T002 | TODO | [Criteria](tasks/T003.md#acceptance-criteria); P2 transfer/invariant subset; TEST_PLAN T02–T05/T08 |
 | [T004](tasks/T004.md) | P2 | Stock recycling and complete legal-action enumeration | T003 | TODO | [Criteria](tasks/T004.md#acceptance-criteria); P2 rules complete; TEST_PLAN T06–T08 |
@@ -45,7 +45,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 
 ## Selection and model suitability
 
-The first recommended implementation task is **T001**, after T000 acceptance and explicit assignment. T016 is optional and stays TODO unless selected; its absence does not block T017–T021. T022 additionally requires T016 DONE only if that feature is included. T023 is the separate publication step, never implied by a successful release build. Milestones are accepted only when all required member tasks are DONE and the original phase exit is satisfied.
+T000 is DONE and T001 is delivered for REVIEW. The next recommended implementation task is **T002**, after T001 acceptance and explicit assignment. T016 is optional and stays TODO unless selected; its absence does not block T017–T021. T022 additionally requires T016 DONE only if that feature is included. T023 is the separate publication step, never implied by a successful release build. Milestones are accepted only when all required member tasks are DONE and the original phase exit is satisfied.
 
 Suitability suggestions in each task describe needed tools/skills, not performance rankings or permanent owners. Codex or another CLI-capable model suits toolchain/CI/persistence work; Codex, Grok or another algorithm-capable model can handle pure engine/session work; Grok, Codex or another browser/SVG-capable model can handle UI/artwork. Physical-device gates require actual device evidence or human assistance regardless of model. The human may assign any capable model; the implementer records its identity only when assigned.
 

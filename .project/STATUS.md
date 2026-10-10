@@ -1,23 +1,23 @@
 # Project status
 
-- State: design documents exist; sequential task workflow prepared for review. No game implementation or dependencies installed.
-- Current task: **T000 — REVIEW**, awaiting human coordinator acceptance. No implementation task assigned.
-- Branch: `master` at workflow setup; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Latest delivery details: [reports/T000.md](reports/T000.md).
+- State: minimal Polish bootstrap implemented and verified within T001 scope. No Solitaire logic or card interaction exists.
+- Current task: **T001 — REVIEW**, awaiting coordinator acceptance. No subsequent task assigned.
+- Branch: `master`; use the existing branch and verify it each session.
+- Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T001.md](reports/T001.md).
 
 ## Completed deliverables / milestones
 
-- REQUIREMENTS, ARCHITECTURE, IMPLEMENTATION_PLAN, TEST_PLAN and AGENTS prepared in the earlier design session and now included in the repository baseline.
-- T000 workflow/task documents prepared; approval is pending, so it is not DONE.
-- P1–P10 and optional P7a have not started; no implementation milestone is complete.
+- T000 DONE: coordinator acceptance of eba965185ef8a60edf81f0318ab0fbf3481604f8 recorded after commit/file/criteria verification.
+- T001: vanilla ES-module/Vite shell, Polish semantic HTML, mobile-first CSS, locked dev dependencies and two bootstrap smoke tests delivered for review.
+- P1 is incomplete until T002. T002–T023 remain TODO; no game-engine work started.
 
 ## Known problems and blockers
 
-- At setup, `filelist.txt` was an unrelated untracked file. It was left unchanged and excluded from the task commit; do not remove or stage it automatically.
-- Application tests/build cannot run yet: package.json and source/test files do not exist.
-- Real Android/iPhone checks will require device access at T013/T018/T020/T022. Missing device evidence must remain an open gate.
-- No technical blocker to T001 identified. Starting it still requires T000 acceptance and explicit assignment.
+- No implementation/test failure remains in T001. Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest/coverage-v8 5.0.3; zero runtime dependencies.
+- Browser inventory was empty and the embedded browser could not be opened. Console, rendered layout and physical-device behavior were not verified; HTTP and Node tests are not substitutes. The assignment explicitly permits reporting this limitation.
+- `filelist.txt` remains unrelated, unchanged and untracked; do not remove or stage it automatically.
+- Coverage currently has zero executable application statements because main.js only imports CSS; no gameplay coverage claim.
 
 ## Next recommendation
 
-The coordinator reviews T000, records approval, then may explicitly assign [T001](tasks/T001.md): reproducible toolchain and minimal Polish shell. This recommendation does not authorize work.
+The coordinator reviews T001. After acceptance and a separate explicit assignment, [T002](tasks/T002.md) adds deterministic card identity, shuffle/deal and initial unit CI. Stop until then.

@@ -11,4 +11,4 @@ Product/rule/data decisions remain in REQUIREMENTS.md and ARCHITECTURE.md. This 
 | D005 / 2026-10-10 | Model suitability is advice based on capabilities needed, never a permanent assignment. All task specs are model-neutral; no model-specific tooling or private context is required. | Models/tools change; the human chooses the available implementer each time. |
 | D006 / 2026-10-10 | Include previously untracked design files in T000's baseline commit; leave unrelated filelist.txt untouched/untracked. | Repository-only recovery requires the design in Git; unrelated local work must be preserved. |
 
-These decisions are proposed/delivered under T000 and await its acceptance. The owner's explicit sequential/no-implementation instructions apply immediately, independently of accepting the deliverable.
+T000 decisions accepted by the coordinator on 2026-10-10 after verification of commit eba965185ef8a60edf81f0318ab0fbf3481604f8; see reports/T000.md. The separate T001 assignment authorizes only bootstrap work.
