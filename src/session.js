@@ -97,6 +97,30 @@ export function createSession(options, attemptId, statistics) {
   });
 }
 
+export function restoreSessionState({
+  attemptId,
+  options,
+  commands,
+  cursor,
+  snapshots,
+  elapsedMs,
+  started,
+  winRecorded,
+  statistics,
+}) {
+  return createSessionObject({
+    attemptId,
+    options,
+    commands,
+    cursor,
+    snapshots,
+    elapsedMs,
+    started,
+    winRecorded,
+    statistics: cloneStatistics(statistics),
+  });
+}
+
 export function canUndo(session) {
   return session.cursor > 0;
 }

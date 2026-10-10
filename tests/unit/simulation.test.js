@@ -13,6 +13,10 @@ import {
   undo,
 } from '../../src/session.js';
 import {
+  restoreSession,
+  serializeSession,
+} from '../../src/persistence.js';
+import {
   PROFILES,
   parseProfile,
   selectorSeed,
@@ -235,6 +239,20 @@ function simulateSessionPlay({ seed, drawCount, maxSteps = 100 }) {
   // Full round trip check at end of simulation run:
   const finalState = session.state;
   const targetCursor = session.cursor;
+
+  // Persistence round-trip validation:
+  const serialized = serializeSession(session);
+  const restoreRes = restoreSession(serialized);
+  expect(restoreRes.ok).toBe(true);
+  const restoredSession = restoreRes.session;
+  expect(restoredSession.cursor).toBe(session.cursor);
+  expect(restoredSession.commands).toHaveLength(session.commands.length);
+  expect(restoredSession.snapshots).toHaveLength(session.snapshots.length);
+  expect(restoredSession.state).toEqual(finalState);
+  expect(restoredSession.started).toBe(session.started);
+  expect(restoredSession.winRecorded).toBe(session.winRecorded);
+  expect(restoredSession.statistics).toEqual(session.statistics);
+
   // Repeated undo all the way to 0 reaches exact deal
   while (canUndo(session)) {
     session = undo(session);
