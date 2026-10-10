@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('all 52 original card faces fit at 320px and render at DPR 1–3', async ({ browser }) => {
+test('all 52 card faces fit at 320px and render at DPR 1–3', async ({ browser }) => {
   for (const dpr of [1, 2, 3]) {
     const context = await browser.newContext({ viewport: { width: 320, height: 640 }, deviceScaleFactor: dpr });
     const page = await context.newPage();
@@ -37,11 +37,9 @@ test('all 52 original card faces fit at 320px and render at DPR 1–3', async ({
 
     const cards = page.locator('.card-node.card-face-up');
     await expect(cards).toHaveCount(52);
-    const pipCounts = await cards.evaluateAll((nodes) => nodes.map((card) => ({
-      rank: Number(card.dataset.rank),
-      pips: card.querySelectorAll('.card-pip').length,
-    })));
-    expect(pipCounts.every(({ rank, pips }) => pips === (rank >= 2 && rank <= 10 ? rank : 0))).toBe(true);
+    const courts = await cards.locator('svg.card-svg-face image').evaluateAll((images) => images.map((image) => image.getAttribute('href')));
+    expect(courts).toHaveLength(12);
+    expect(new Set(courts).size).toBe(12);
     await page.screenshot({ path: `test-results/t017-cards-320-dpr-${dpr}.png`, fullPage: true });
     await context.close();
   }

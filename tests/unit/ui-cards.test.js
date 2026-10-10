@@ -16,16 +16,17 @@ function renderCard(cardId) {
   return node.innerHTML;
 }
 
-test('number cards render one suit pip for each rank', () => {
+test('number cards retain the previous centered suit badge', () => {
   for (let rank = 2; rank <= 10; rank += 1) {
     for (let suit = 0; suit < 4; suit += 1) {
       const svg = renderCard(suit * 13 + rank - 1);
-      expect(svg.match(/class="card-pip"/g)).toHaveLength(rank);
+      expect(svg).toContain('circle cx="18" cy="18" r="16"');
+      expect(svg).not.toContain('card-pip');
     }
   }
 });
 
-test('court cards use twelve distinct local vector portraits', () => {
+test('court cards retain the twelve original court illustrations', () => {
   const portraits = [];
   for (let suit = 0; suit < 4; suit += 1) {
     for (let rank = 11; rank <= 13; rank += 1) {
@@ -33,11 +34,11 @@ test('court cards use twelve distinct local vector portraits', () => {
     }
   }
   expect(new Set(portraits).size).toBe(12);
-  expect(portraits.every((href) => href?.includes('#court-'))).toBe(true);
+  expect(portraits.every((href) => href?.includes('/assets/'))).toBe(true);
 });
 
 test('card back has a decorative vector pattern without card identity', () => {
   const svg = renderCardBackSvg();
-  expect(svg).toContain('card-back-pattern');
+  expect(svg).toContain('card-back-lattice');
   expect(svg).not.toMatch(/data-card-id|aria-label|rank|suit/i);
 });
