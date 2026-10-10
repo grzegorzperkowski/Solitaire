@@ -25,18 +25,19 @@
 - QA still open, not passed: browser console and visual/layout checks. GitHub Actions has not run on a remote runner. `filelist.txt` is absent; do not recreate it.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies.
 - Resolve T003 implementation with `774b3e634e2b6991a91c4e24952b1919b0e4a484` and quality improvements with `75070087cb4d49db1323467f8a7efb1737d325c0`. Resolve T004 implementation with `1073dfb1828dff1944713c616c9019cfcdc14056`.
-- The same coordinator instruction assigns T005, deterministic engine simulations in [tasks/T005.md](tasks/T005.md). Exercise moves and invalid actions only. Undo, redo and restore are T006 and T007. Do not start T006.
+- T005 REVIEW: `scripts/run-simulation.mjs` runs the CI profile (seeds 0–999 in Draw 1 and Draw 3, plus seed 4294967295, at most 300 steps) through Vitest. Evidence: [reports/T005.md](reports/T005.md). The release profile is selected but was not executed. Undo, redo and restore stay in T006 and T007.
+- Passing CI counts, not a win rate: 2002 deals, 600427 steps, 3 wins, 0 stuck, 1999 step bounds. Categories: draw 222976, recycle 19046, tableau 166361, waste 14072, foundation 58227, invalid 119745. Won seeds: 827 Draw 1, 681 Draw 3, 888 Draw 3.
 
 ## Blockers / next steps
 
-- Set T005 IN_PROGRESS, then add the CI simulation profile. T006 is not assigned.
-- Browser console, rendered layout and remote CI remain outstanding and are not T004 blockers.
+- Await coordinator acceptance of T005. T006 is not assigned.
+- Browser console, rendered layout and remote CI remain outstanding and are not T005 blockers.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
 ## Test commands
 
-Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run build`. Required T004 file: `npm test -- tests/unit/game.test.js`. See [README.md](../README.md).
+Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run test:simulation -- --profile=ci`, `npm run build`. The release profile is `npm run test:simulation -- --profile=release` and is a T022 gate. See [README.md](../README.md).
 
-Latest local results are in [reports/T004.md](reports/T004.md): `npm test` 58 passed; engine coverage statements 98.63% and branches 98.57%; `npm run build` exit 0.
+Latest local results are in [reports/T005.md](reports/T005.md): `npm test` 68 passed; engine coverage statements 98.63% and branches 98.57%; CI simulation 11 passed (2002 deals, 600427 steps); `npm run build` exit 0.
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.
