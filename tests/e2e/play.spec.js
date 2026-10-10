@@ -259,6 +259,8 @@ test.describe('T010 Tap interaction and gameplay (T15)', () => {
     });
 
     await page.locator(illegalTargetSelector).click();
+    await expect(page.locator(illegalTargetSelector)).toHaveClass(/shake-animation/);
+    await expect(page.locator(illegalTargetSelector)).toHaveCSS('animation-duration', '0.15s');
 
     // State and moveCount must be unchanged
     const movesAfter = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().moveCount);
@@ -267,6 +269,22 @@ test.describe('T010 Tap interaction and gameplay (T15)', () => {
     // Announcement indicates rejection
     const announcer = page.locator('#live-announcer');
     await expect(announcer).toContainText('Niedozwolony ruch');
+  });
+
+  test('committed draws animate the changed pile, and reduced motion removes card motion', async ({ page }) => {
+    await page.waitForFunction(() => typeof window.__SOLITAIRE_APP__ !== 'undefined');
+    await page.evaluate(() => {
+      window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });
+      window.__SOLITAIRE_APP__.executeCommand({ type: 'draw' });
+    });
+    const movedCard = page.locator('#waste-pile .move-feedback');
+    await expect(movedCard).toHaveCount(1);
+    await expect(movedCard).toHaveCSS('animation-name', 'pile-arrival');
+
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.locator('#waste-pile .card-node').click();
+    await expect(page.locator('#waste-pile .is-selected')).toHaveCSS('transition-duration', '0s');
+    await expect(movedCard).toHaveCSS('animation-name', 'none');
   });
 
   test('mobile touch interactions at 320px and 390px viewports', async ({ browser }) => {
@@ -547,6 +565,7 @@ test.describe('T015 seed, statistics and results', () => {
       await page.locator(source).click();
       await page.locator(`#foundation-${move.to.index}`).click();
       await expect(page.getByRole('dialog', { name: 'Wygrana!' })).toBeVisible();
+      await expect(page.locator('#win-dialog')).toHaveCSS('animation-name', 'win-arrival');
       await expect(page.locator('#win-dialog')).toContainText(`Liczba ruchów: ${fixture.session.cursor + 1}`);
       const stats = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session.statistics);
       expect(stats[`draw${drawCount}`].wins).toBe(1);

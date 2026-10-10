@@ -182,6 +182,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
 
   // Render Tableau
   renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
+  applyMoveFeedback(rootElement, state);
   renderHint(rootElement, gameState, inputController?.getHint?.());
 
   // Check overflow on tableau scroller and toggle scroll handle & buttons
@@ -192,6 +193,34 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   if (appInstance) {
     renderDialogs(rootElement, state, appInstance);
   }
+}
+
+function applyMoveFeedback(rootElement, state) {
+  const cursor = state.session?.cursor ?? 0;
+  const previousCursor = Number(rootElement.dataset.renderedCursor);
+  rootElement.dataset.renderedCursor = String(cursor);
+  if (!Number.isFinite(previousCursor) || cursor === previousCursor) return;
+
+  const forward = cursor > previousCursor;
+  const command = state.session.commands[forward ? cursor - 1 : cursor];
+  if (!command) return;
+
+  let target;
+  if (command.type === 'move') {
+    const position = forward ? command.to : command.from;
+    target = position.pile === 'tableau' ? `#column-${position.index}`
+      : position.pile === 'foundation' ? `#foundation-${position.index}` : '#waste-pile';
+  } else if (command.type === 'draw' || command.type === 'recycle') {
+    target = (command.type === 'draw') === forward ? '#waste-pile' : '#stock-pile';
+  }
+  if (!target) return;
+
+  const pile = rootElement.querySelector(target);
+  const card = pile?.querySelector('.card-node:last-child') || pile?.querySelector('.pile-slot');
+  if (!card) return;
+  card.classList.remove('move-feedback');
+  void card.offsetWidth;
+  card.classList.add('move-feedback');
 }
 
 function renderHint(rootElement, state, hint) {

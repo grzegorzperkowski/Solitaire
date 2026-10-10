@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140">
+  <defs>
+    <pattern id="back-diamonds" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <path d="M0 6h12M6 0v12" stroke="#41658b" stroke-width="1"/>
+      <circle cx="6" cy="6" r="1.5" fill="#dfc36a"/>
+    </pattern>
+    <g id="portrait-body">
+      <path d="M8 138q2-38 27-45l15-7 15 7q25 7 27 45z" fill="#244466" stroke="#142c46" stroke-width="2"/>
+      <path d="m38 91 12 13 12-13-4-9H42z" fill="#f8f1dc"/>
+      <path d="m36 96 14 12 14-12-5 42H41z" fill="#b74336"/>
+      <path d="M30 58q0-29 20-29t20 29v11q-5 17-20 18-15-1-20-18z" fill="#e9bd91" stroke="#6f493b" stroke-width="2"/>
+      <path d="M36 58q7-8 14 0M52 58q7-8 14 0" fill="none" stroke="#3d302a" stroke-width="3"/>
+      <path d="M46 73q4 3 8 0" fill="none" stroke="#8f5546" stroke-width="2"/>
+      <path d="M29 49q3-23 21-23t21 23l-7-7-8 3-7-6-9 7-8-2z" fill="#47352c"/>
+      <path d="M18 111h18l14 9 14-9h18l6 27H12z" fill="#345f7a"/>
+    </g>
+    <g id="jack-cap">
+      <path d="M28 38q4-21 22-21 19 0 23 21l-8 7H36z" fill="#386e65" stroke="#183d3d" stroke-width="2"/>
+      <path d="M51 19q19-19 27-7-8 2-12 18" fill="#d1ad55" stroke="#8b713a" stroke-width="2"/>
+      <circle cx="52" cy="37" r="4" fill="#dfc36a"/>
+    </g>
+    <g id="queen-crown">
+      <path d="M28 40 25 20l13 10 12-17 12 17 13-10-3 20z" fill="#dfc36a" stroke="#8b713a" stroke-width="2"/>
+      <path d="M30 38h40" stroke="#fff1b9" stroke-width="3"/>
+      <path d="M28 44q2-17 22-17t22 17l-6 8H34z" fill="#624735"/>
+      <circle cx="50" cy="22" r="3" fill="#b74336"/>
+    </g>
+    <g id="king-crown">
+      <path d="M28 40 24 17l14 12 12-17 12 17 14-12-4 23z" fill="#dfc36a" stroke="#8b713a" stroke-width="2"/>
+      <path d="M30 38h40" stroke="#fff1b9" stroke-width="3"/>
+      <path d="M31 67q4 22 19 23 15-1 19-23l-8 7-11-5-11 5z" fill="#513b30"/>
+      <circle cx="50" cy="20" r="3" fill="#b74336"/>
+    </g>
+  </defs>
+  <symbol id="card-back-pattern" viewBox="0 0 100 140">
+    <rect x="1" y="1" width="98" height="138" rx="6" fill="#102e50" stroke="#fffdf5" stroke-width="2"/>
+    <rect x="6" y="6" width="88" height="128" rx="4" fill="url(#back-diamonds)" stroke="#dfc36a" stroke-width="2"/>
+    <path d="M50 42 75 70 50 98 25 70z" fill="#102e50" stroke="#dfc36a" stroke-width="2"/>
+    <path d="M50 51 67 70 50 89 33 70z" fill="none" stroke="#fff1b9" stroke-width="1.5"/>
+    <circle cx="50" cy="70" r="4" fill="#dfc36a"/>
+  </symbol>
+  <symbol id="court-jack-clubs" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#jack-cap"/><path d="M40 119h20l-10 12z" fill="#dfc36a"/><path d="M50 113c-8-7-15 3-5 8-4 5 6 8 5 2 1 6 9 3 5-2 10-5 3-15-5-8z" fill="#244466"/></symbol>
+  <symbol id="court-jack-diamonds" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#jack-cap"/><path d="M50 112 62 124 50 136 38 124z" fill="#dfc36a"/><path d="M28 102 37 111 28 120 19 111z" fill="#b74336"/></symbol>
+  <symbol id="court-jack-hearts" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#jack-cap"/><path d="M50 135s-14-9-14-17q0-10 14-3 14-7 14 3 0 8-14 17z" fill="#b74336"/></symbol>
+  <symbol id="court-jack-spades" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#jack-cap"/><path d="M50 112 38 126q-2-11 7-14-5-7 5-13 10 6 5 13 9 3 7 14z" fill="#244466"/></symbol>
+  <symbol id="court-queen-clubs" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#queen-crown"/><path d="M50 111c-8-7-15 3-5 8-4 5 6 8 5 2 1 6 9 3 5-2 10-5 3-15-5-8z" fill="#244466"/><path d="M24 78q-8 7-3 20M76 78q8 7 3 20" fill="none" stroke="#d7a75e" stroke-width="6"/></symbol>
+  <symbol id="court-queen-diamonds" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#queen-crown"/><path d="M50 112 62 124 50 136 38 124z" fill="#b74336"/><path d="M23 86q8-9 14 0M63 86q6-9 14 0" fill="none" stroke="#d7a75e" stroke-width="6"/></symbol>
+  <symbol id="court-queen-hearts" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#queen-crown"/><path d="M50 135s-14-9-14-17q0-10 14-3 14-7 14 3 0 8-14 17z" fill="#b74336"/><path d="M24 79q-8 7-3 20M76 79q8 7 3 20" fill="none" stroke="#d7a75e" stroke-width="6"/></symbol>
+  <symbol id="court-queen-spades" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#queen-crown"/><path d="M50 112 38 126q-2-11 7-14-5-7 5-13 10 6 5 13 9 3 7 14z" fill="#244466"/><path d="M24 79q-8 7-3 20M76 79q8 7 3 20" fill="none" stroke="#d7a75e" stroke-width="6"/></symbol>
+  <symbol id="court-king-clubs" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#king-crown"/><path d="M50 111c-8-7-15 3-5 8-4 5 6 8 5 2 1 6 9 3 5-2 10-5 3-15-5-8z" fill="#244466"/><path d="M20 82h14M66 82h14" stroke="#dfc36a" stroke-width="5"/></symbol>
+  <symbol id="court-king-diamonds" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#king-crown"/><path d="M50 112 62 124 50 136 38 124z" fill="#b74336"/><path d="M20 82h14M66 82h14" stroke="#dfc36a" stroke-width="5"/></symbol>
+  <symbol id="court-king-hearts" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#king-crown"/><path d="M50 135s-14-9-14-17q0-10 14-3 14-7 14 3 0 8-14 17z" fill="#b74336"/><path d="M20 82h14M66 82h14" stroke="#dfc36a" stroke-width="5"/></symbol>
+  <symbol id="court-king-spades" viewBox="0 0 100 140"><use href="#portrait-body"/><use href="#king-crown"/><path d="M50 112 38 126q-2-11 7-14-5-7 5-13 10 6 5 13 9 3 7 14z" fill="#244466"/><path d="M20 82h14M66 82h14" stroke="#dfc36a" stroke-width="5"/></symbol>
+</svg>

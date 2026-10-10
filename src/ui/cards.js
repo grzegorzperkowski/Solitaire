@@ -5,25 +5,7 @@
 
 import { suitIndex as getSuitIndex, rank as getRank, color as getColor } from '../engine/cards.js';
 
-import jackClubs from '../assets/courts/jack_of_clubs.svg';
-import jackDiamonds from '../assets/courts/jack_of_diamonds.svg';
-import jackHearts from '../assets/courts/jack_of_hearts.svg';
-import jackSpades from '../assets/courts/jack_of_spades.svg';
-import queenClubs from '../assets/courts/queen_of_clubs.svg';
-import queenDiamonds from '../assets/courts/queen_of_diamonds.svg';
-import queenHearts from '../assets/courts/queen_of_hearts.svg';
-import queenSpades from '../assets/courts/queen_of_spades.svg';
-import kingClubs from '../assets/courts/king_of_clubs.svg';
-import kingDiamonds from '../assets/courts/king_of_diamonds.svg';
-import kingHearts from '../assets/courts/king_of_hearts.svg';
-import kingSpades from '../assets/courts/king_of_spades.svg';
-
-const COURT_ART = [
-  [jackClubs, queenClubs, kingClubs],
-  [jackDiamonds, queenDiamonds, kingDiamonds],
-  [jackHearts, queenHearts, kingHearts],
-  [jackSpades, queenSpades, kingSpades],
-];
+import cardAssets from '../assets/cards.svg';
 
 export const SUIT_NAMES = ['trefl', 'karo', 'kier', 'pik'];
 export const SUIT_LABELS = ['trefl', 'karo', 'kier', 'pik'];
@@ -117,21 +99,20 @@ export function getSuitSvg(suit, size = 16) {
  * Strictly complies with N02: no card ID, rank, or suit in DOM or markup.
  */
 export function renderCardBackSvg() {
-  return `<svg class="card-svg card-svg-back" viewBox="0 0 100 140" width="100%" height="100%" aria-hidden="true">
-  <defs>
-    <pattern id="card-back-lattice" width="10" height="10" patternUnits="userSpaceOnUse">
-      <path d="M 0 5 L 5 0 L 10 5 L 5 10 Z" fill="none" stroke="#254d7e" stroke-width="0.8" />
-      <circle cx="5" cy="5" r="1" fill="#d4af37" />
-    </pattern>
-  </defs>
-  <rect x="1" y="1" width="98" height="138" rx="6" ry="6" fill="#0d2b45" stroke="#ffffff" stroke-width="2"/>
-  <rect x="4" y="4" width="92" height="132" rx="4" ry="4" fill="none" stroke="#d4af37" stroke-width="1"/>
-  <rect x="7" y="7" width="86" height="126" rx="3" ry="3" fill="url(#card-back-lattice)" stroke="#254d7e" stroke-width="0.5"/>
-  <circle cx="50" cy="70" r="16" fill="#0d2b45" stroke="#d4af37" stroke-width="1.5" />
-  <circle cx="50" cy="70" r="11" fill="none" stroke="#254d7e" stroke-width="1" />
-  <circle cx="50" cy="70" r="4" fill="#d4af37" />
-</svg>`;
+  return `<svg class="card-svg card-svg-back" viewBox="0 0 100 140" width="100%" height="100%" aria-hidden="true"><use href="${cardAssets}#card-back-pattern" /></svg>`;
 }
+
+const PIP_POSITIONS = {
+  2: [[50, 38], [50, 102]],
+  3: [[50, 32], [50, 70], [50, 108]],
+  4: [[35, 38], [65, 38], [35, 102], [65, 102]],
+  5: [[35, 38], [65, 38], [50, 70], [35, 102], [65, 102]],
+  6: [[34, 30], [66, 30], [34, 70], [66, 70], [34, 110], [66, 110]],
+  7: [[34, 26], [66, 26], [34, 70], [66, 70], [34, 114], [66, 114], [50, 48]],
+  8: [[34, 26], [66, 26], [34, 70], [66, 70], [34, 114], [66, 114], [50, 48], [50, 92]],
+  9: [[31, 25], [69, 25], [31, 48], [69, 48], [31, 92], [69, 92], [31, 115], [69, 115], [50, 70]],
+  10: [[31, 24], [69, 24], [31, 47], [69, 47], [31, 70], [69, 70], [31, 93], [69, 93], [31, 116], [69, 116]],
+};
 
 /**
  * Generates center artwork SVG markup for a face-up card.
@@ -146,14 +127,11 @@ function renderCenterArtSvg(details) {
   }
 
   if (rank >= 11) {
-    return `<image href="${COURT_ART[details.suitIndex][rank - 11]}" x="24" y="42" width="52" height="84" preserveAspectRatio="xMidYMid meet" />`;
+    const courtRank = ['jack', 'queen', 'king'][rank - 11];
+    return `<svg class="court-art" x="24" y="42" width="52" height="84" viewBox="0 0 100 140" aria-hidden="true"><use href="${cardAssets}#court-${courtRank}-${suit}" /></svg>`;
   }
 
-  // Number cards (2–10): center badge with suit
-  return `<g transform="translate(32, 52)">
-    <circle cx="18" cy="18" r="16" fill="none" stroke="${hexColor}" stroke-width="0.8" opacity="0.3" />
-    <g transform="translate(6, 6) scale(1.0)"><path d="${path}" fill="${hexColor}" /></g>
-  </g>`;
+  return PIP_POSITIONS[rank].map(([x, y]) => `<g class="card-pip" transform="translate(${x} ${y}) scale(.68) translate(-12 -12)"><path d="${path}" fill="${hexColor}" /></g>`).join('');
 }
 
 /**

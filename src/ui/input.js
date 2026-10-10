@@ -81,7 +81,7 @@ export function createInputController(app, rootElement) {
     element.classList.add('shake-animation');
     setTimeout(() => {
       element.classList.remove('shake-animation');
-    }, 400);
+    }, 180);
   }
 
   function computeLegalDestinations(state, from) {

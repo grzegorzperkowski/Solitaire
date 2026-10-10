@@ -512,6 +512,7 @@ body {
   user-select: none;
   -webkit-user-select: none;
   -webkit-user-drag: none;
+  transition: transform 150ms ease, box-shadow 150ms ease;
 }
 
 .card-node.card-face-up {
@@ -528,6 +529,12 @@ body {
   outline-offset: 1px;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.6);
   z-index: 50 !important;
+  transform: translateY(-2px);
+}
+
+.card-node.move-feedback,
+.pile-slot.move-feedback {
+  animation: pile-arrival 150ms ease-out;
 }
 
 .card-node.is-hint,
@@ -553,8 +560,14 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .drag-overlay {
+  .drag-overlay,
+  .card-node,
+  .card-node.move-feedback,
+  .pile-slot.move-feedback,
+  .shake-animation,
+  #win-dialog {
     filter: none;
+    animation: none !important;
     transition: none !important;
   }
 }
@@ -588,8 +601,22 @@ body {
   40%, 80% { transform: translateX(6px); }
 }
 
+@keyframes pile-arrival {
+  from { opacity: 0.7; transform: translateY(-4px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes win-arrival {
+  from { opacity: 0.7; transform: translateY(8px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+#win-dialog {
+  animation: win-arrival 180ms ease-out;
+}
+
 .shake-animation {
-  animation: shake 0.35s ease-in-out;
+  animation: shake 150ms ease-in-out;
 }
 
 /* Screen reader only utility (N02) */
