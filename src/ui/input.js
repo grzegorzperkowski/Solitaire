@@ -16,6 +16,19 @@ export function createInputController(app, rootElement) {
   let rafId = null;
   let lastTimestamp = 0;
   let lastTouchY = null;
+  const debugDrag = new URLSearchParams(window.location.search).has('debug-drag');
+
+  function logDrag(event, detail = {}) {
+    if (!debugDrag) return;
+    console.info('[Solitaire drag]', event, {
+      ...detail,
+      activePointerId: activeGesture?.pointerId ?? null,
+      activePointerType: activeGesture?.pointerType ?? null,
+      dragging: Boolean(activeGesture?.isDragging),
+      viewport: `${window.innerWidth}x${window.innerHeight}`,
+      visibility: document.visibilityState,
+    });
+  }
 
   function announce(message) {
     const announcer = rootElement.querySelector('#live-announcer');
@@ -241,14 +254,22 @@ export function createInputController(app, rootElement) {
   }
 
   function cancelDrag(e) {
+    logDrag('cancel-event', {
+      type: e?.type ?? 'manual',
+      eventPointerId: e?.pointerId ?? null,
+      matchesActivePointer: e?.pointerId === undefined || e.pointerId === activeGesture?.pointerId,
+    });
     if (!activeGesture || (e?.pointerId !== undefined && e.pointerId !== activeGesture.pointerId)) return;
 
     if (activeGesture.isDragging) {
+      logDrag('gesture-cancelled', { reason: e?.type ?? 'manual' });
       suppressNextClick = true;
       setTimeout(() => { suppressNextClick = false; }, 200);
       try {
         activeGesture.sourceElement.releasePointerCapture(activeGesture.pointerId);
-      } catch {}
+      } catch (error) {
+        logDrag('pointer-capture-release-failed', { pointerId: activeGesture.pointerId, message: error.message });
+      }
       cleanupDragVisuals();
       if (onStateChangeCallback) onStateChangeCallback();
     }
@@ -879,6 +900,13 @@ export function createInputController(app, rootElement) {
   }
 
   function handlePointerDown(e) {
+    logDrag('pointerdown', {
+      pointerId: e.pointerId,
+      pointerType: e.pointerType,
+      x: e.clientX,
+      y: e.clientY,
+      target: e.target?.closest?.('.card-node')?.className ?? e.target?.tagName,
+    });
     if (activeGesture) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
 
@@ -906,9 +934,19 @@ export function createInputController(app, rootElement) {
       hoveredDest: null,
       draggedCardsElements: [],
     };
+    logDrag('gesture-start', { source: activeGesture.source, x: e.clientX, y: e.clientY });
   }
 
   function handlePointerMove(e) {
+    if (activeGesture) {
+      logDrag('pointermove', {
+        pointerId: e.pointerId,
+        x: e.clientX,
+        y: e.clientY,
+        dx: e.clientX - activeGesture.startX,
+        dy: e.clientY - activeGesture.startY,
+      });
+    }
     if (!activeGesture || e.pointerId !== activeGesture.pointerId) return;
 
     activeGesture.currentX = e.clientX;
@@ -921,7 +959,11 @@ export function createInputController(app, rootElement) {
       activeGesture.isDragging = true;
       try {
         activeGesture.sourceElement.setPointerCapture(activeGesture.pointerId);
-      } catch {}
+        logDrag('pointer-capture-set', { pointerId: activeGesture.pointerId });
+      } catch (error) {
+        logDrag('pointer-capture-failed', { pointerId: activeGesture.pointerId, message: error.message });
+      }
+      logDrag('drag-started', { distance: dist });
 
       const appState = app.getState();
       const gameState = appState.state;
@@ -957,6 +999,7 @@ export function createInputController(app, rootElement) {
   }
 
   function handlePointerUp(e) {
+    logDrag('pointerup', { pointerId: e.pointerId, x: e.clientX, y: e.clientY });
     if (!activeGesture || e.pointerId !== activeGesture.pointerId) return;
 
     if (activeGesture.isDragging) {
@@ -968,12 +1011,15 @@ export function createInputController(app, rootElement) {
       setTimeout(() => { suppressNextClick = false; }, 200);
       try {
         activeGesture.sourceElement.releasePointerCapture(activeGesture.pointerId);
-      } catch {}
+      } catch (error) {
+        logDrag('pointer-capture-release-failed', { pointerId: activeGesture.pointerId, message: error.message });
+      }
 
       cleanupDragVisuals();
 
       const hovered = activeGesture.hoveredDest;
       const src = activeGesture.source;
+      logDrag('drop-target', { source: src, target: hovered });
       activeGesture = null;
 
       if (hovered) {

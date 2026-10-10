@@ -39,6 +39,36 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     expect(result).toMatchObject({ allowedWhileScrollable: true, pinchAllowed: true, innerScrollWorks: true });
   });
 
+  test('debug-drag query logs pointer lifecycle', async ({ page }) => {
+    const logs = [];
+    page.on('console', (message) => {
+      if (message.text().startsWith('[Solitaire drag]')) logs.push(message.text());
+    });
+    await page.goto('/?debug-drag=1');
+    await page.waitForFunction(() => typeof window.__SOLITAIRE_APP__ !== 'undefined');
+    await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 }));
+    await page.locator('#column-3 .card-node.card-face-up').click();
+    await page.evaluate(() => {
+      const card = document.querySelector('#column-3 .card-node.card-face-up');
+      const box = card.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      card.dispatchEvent(new PointerEvent('pointerdown', {
+        pointerId: 21, pointerType: 'touch', clientX: x, clientY: y, bubbles: true,
+      }));
+      window.dispatchEvent(new PointerEvent('pointermove', {
+        pointerId: 21, pointerType: 'touch', clientX: x + 20, clientY: y + 20, bubbles: true,
+      }));
+      window.dispatchEvent(new PointerEvent('pointerup', {
+        pointerId: 21, pointerType: 'touch', clientX: x, clientY: y, bubbles: true,
+      }));
+    });
+
+    expect(logs.some((line) => line.includes('pointerdown'))).toBe(true);
+    expect(logs.some((line) => line.includes('drag-started'))).toBe(true);
+    expect(logs.some((line) => line.includes('pointerup'))).toBe(true);
+  });
+
   test('mouse drag moves a single card to a legal foundation (seed 42)', async ({ page }) => {
     await page.evaluate(() => {
       window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });
