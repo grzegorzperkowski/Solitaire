@@ -12,21 +12,26 @@
 
 - T000 DONE: eba965185ef8a60edf81f0318ab0fbf3481604f8.
 - T001 DONE: accepted 2026-10-10. Implementation commit `339e0f852b60c691f52d6204aa7225b899c5844f`.
-- T002 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation commit `d3c36f1df1d46d136e81d8c174f1636debed8a76`. DOM-free `createGame` in `src/engine/cards.js`. Golden deals: `tests/fixtures/deals.json`. Evidence: [reports/T002.md](reports/T002.md).
-- QA still open, not passed: browser console and visual/layout checks (waived only as a T001 gate). GitHub Actions has not run on a remote runner. `filelist.txt` is absent; do not recreate it.
-- The page shell does not import the engine. No move rules in the T002 acceptance commit.
+- T002 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation commit `d3c36f1df1d46d136e81d8c174f1636debed8a76`. Acceptance tracking commit: `2064a3da002e11209e463365c4d4a425980f5226`.
+- T003 REVIEW: DOM-free `src/engine/game.js`. `validateMove` / `applyMove` return `{ok:true}` or `{ok:false, reason}` and, on success, `{ok:true, state, revealed}`. Reasons: `invalid-command`, `unsupported-command`, `invalid-state`, `illegal-source`, `illegal-sequence`, `illegal-destination`. `draw` and `recycle` are `unsupported-command` until T004. Evidence: [reports/T003.md](reports/T003.md).
+- Foundations use suit order trefl, karo, kier, pik. Tableau `cardIndex` starts the whole face-up suffix. A reveal is the newly exposed card id on that same move, or null. `isWon` requires four complete legal foundations and empty stock, waste and tableau.
+- `assertInvariants` throws `invalid-state` for broken decks, face-up order and foundation contents. Move evaluation does not call it; tests and later restore do.
+- Golden deals remain in `tests/fixtures/deals.json`. Hand-built boards are `tests/fixtures/boards.js`.
+- The page shell does not import the engine. No `getLegalMoves`, session, storage or Playwright.
+- QA still open, not passed: browser console and visual/layout checks. GitHub Actions has not run on a remote runner. `filelist.txt` is absent; do not recreate it.
 - Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies.
-- T003 is assigned by the same 2026-10-10 instruction. It is not started in the acceptance commit. T004 is not assigned.
-- Resolve T002 implementation with commit `d3c36f1df1d46d136e81d8c174f1636debed8a76`, not the later acceptance-tracking commit.
+- Resolve T003 delivery with `git log -1 --format="%h %s" --grep="^T003:"`. Do not treat this recommendation as permission to start T004.
 
 ## Blockers / next steps
 
-- Implement T003 only: [tasks/T003.md](tasks/T003.md). Dependency T002 is DONE.
-- T003 includes tableau suffix moves, foundation build and return, waste top moves, atomic reveal, `assertInvariants` and `isWon`. Draw, recycle and `getLegalMoves` belong to T004; unsupported stock commands must reject without changing state.
+- Await coordinator acceptance of T003. T004 is not assigned.
+- When T004 is assigned, implement Draw 1/Draw 3, separate recycle, and `getLegalMoves`, and keep T003 transfers unchanged.
 - Browser console, rendered layout and remote CI remain outstanding and are not T003 blockers.
 
 ## Test commands
 
-Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run build`. Card-only: `npm test -- tests/unit/cards.test.js`. See [README.md](../README.md).
+Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run build`. Required T003 pair: `npm test -- tests/unit/game.test.js tests/unit/cards.test.js`. See [README.md](../README.md).
+
+Latest local results are in [reports/T003.md](reports/T003.md): `npm test` 21 passed; the game-and-cards command 19 passed; `npm run build` exit 0.
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.

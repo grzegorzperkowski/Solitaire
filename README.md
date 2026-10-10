@@ -1,6 +1,6 @@
 # Pasjans Klondike
 
-Polish, mobile-first Klondike project. Current implementation: a responsive Polish HTML page and a DOM-free engine that identifies 52 cards and deals a deterministic game (`createGame` in `src/engine/cards.js`). Move rules, interactions and persistence are not implemented yet.
+Polish, mobile-first Klondike project. Current implementation: a responsive Polish HTML page and a DOM-free engine. `createGame` in `src/engine/cards.js` deals a deterministic game. `src/engine/game.js` validates tableau, waste and foundation transfers, reveals one uncovered card in that same move, and reports a win only when all 52 cards sit on the legal foundations. Draw, recycle, hints, interactions and persistence are not implemented yet.
 
 For a fresh AI session start with [AGENTS.md](AGENTS.md), [.project/STATUS.md](.project/STATUS.md) and [.project/HANDOFF.md](.project/HANDOFF.md). Work only on the explicitly assigned task.
 
