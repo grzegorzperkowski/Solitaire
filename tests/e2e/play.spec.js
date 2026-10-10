@@ -447,6 +447,9 @@ test.describe('T015 seed, statistics and results', () => {
     await openNewGame(page);
     const seed = page.getByLabel('Seed (opcjonalnie)');
     const start = page.getByRole('button', { name: 'Rozpocznij', exact: true });
+    await expect(seed).toBeHidden();
+    await page.getByText('Ustaw własny seed').click();
+    await expect(seed).toBeVisible();
     for (const value of ['-1', '1.5', '1e3', '0x10', '+1', '4294967296', 'abc', ' 42 ']) {
       await seed.fill(value);
       await start.click();
@@ -467,10 +470,12 @@ test.describe('T015 seed, statistics and results', () => {
     expect(first.drawCount).toBe(3);
     await openNewGame(page);
     await expect(page.getByLabel('Tryb nowej gry')).toHaveValue('3');
+    await page.getByText('Ustaw własny seed').click();
     await seed.fill('4294967295');
     await start.click();
     expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state)).toEqual(first);
     await openNewGame(page);
+    await page.getByText('Ustaw własny seed').click();
     await seed.fill('0');
     await start.click();
     expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state.seed)).toBe(0);
@@ -483,6 +488,8 @@ test.describe('T015 seed, statistics and results', () => {
     await page.clock.runFor(2000);
     await openNewGame(page);
     const before = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session);
+    await expect(page.getByLabel('Seed (opcjonalnie)')).toBeHidden();
+    await page.getByText('Ustaw własny seed').click();
     await page.getByLabel('Seed (opcjonalnie)').fill('123');
     await page.getByLabel('Tryb nowej gry').selectOption('3');
     await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
@@ -491,6 +498,7 @@ test.describe('T015 seed, statistics and results', () => {
     const after = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session);
     expect(after).toEqual(before);
     await openNewGame(page);
+    await page.getByText('Ustaw własny seed').click();
     await page.getByLabel('Seed (opcjonalnie)').fill('123');
     await page.getByLabel('Tryb nowej gry').selectOption('3');
     await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
@@ -511,6 +519,8 @@ test.describe('T015 seed, statistics and results', () => {
         writeText: async (text) => { window.copiedSeed = text; },
       } });
     });
+    await expect(page.getByRole('button', { name: 'Kopiuj seed' })).toBeHidden();
+    await page.getByText('Seed rozdania').click();
     await page.getByRole('button', { name: 'Kopiuj seed' }).click();
     await expect(page.locator('#seed-copy-status')).toContainText('Skopiowano');
     expect(await page.evaluate(() => window.copiedSeed)).toBe('42');
@@ -571,13 +581,21 @@ test('T015 seed form keeps keyboard focus and blocks game shortcuts while open',
   await page.locator('#btn-menu').click();
   await page.getByRole('button', { name: 'Nowa gra', exact: true }).click();
   const seed = page.getByLabel('Seed (opcjonalnie)');
-  await expect(seed).toBeFocused();
+  await expect(seed).toBeHidden();
+  await page.getByText('Ustaw własny seed').click();
+  await expect(page.getByText('Ustaw własny seed')).toBeFocused();
   await page.keyboard.press('Shift+Tab');
+  await expect(page.getByLabel('Tryb nowej gry')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByText('Ustaw własny seed')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(seed).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: 'Anuluj', exact: true })).toBeFocused();
+  await page.keyboard.press('Tab');
   await expect(page.getByRole('button', { name: 'Rozpocznij', exact: true })).toBeFocused();
   await page.keyboard.press('Control+z');
   await expect(page.locator('#moves-display')).toHaveText('1');
-  await page.keyboard.press('Tab');
-  await expect(seed).toBeFocused();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toBeHidden();
   await expect(page.locator('#btn-menu')).toBeFocused();
@@ -593,6 +611,12 @@ for (const viewport of [{ width: 320, height: 640 }, { width: 568, height: 320 }
       await page.locator('#btn-menu').click();
       await page.getByRole('button', { name, exact: true }).click();
       const dialog = page.getByRole('dialog');
+      if (name === 'Nowa gra') {
+        await expect(page.getByLabel('Seed (opcjonalnie)')).toBeHidden();
+        await page.getByText('Ustaw własny seed').click();
+        await expect(page.getByLabel('Seed (opcjonalnie)')).toBeVisible();
+        await page.getByText('Ustaw własny seed').click();
+      }
       const box = await dialog.boundingBox();
       expect(box.x).toBeGreaterThanOrEqual(0);
       expect(box.y).toBeGreaterThanOrEqual(0);

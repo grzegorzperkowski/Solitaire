@@ -918,3 +918,22 @@ body {
   margin: 0;
   text-align: right;
 }
+
+.seed-disclosure {
+  border-top: 1px solid rgba(212, 175, 55, 0.2);
+  padding-top: 8px;
+}
+
+.seed-disclosure summary {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  color: #cfded6;
+  cursor: pointer;
+  list-style: none;
+}
+
+.seed-disclosure summary::-webkit-details-marker { display: none; }
+.seed-disclosure summary span { color: #e9d59f; font-size: 22px; }
+.seed-disclosure[open] summary span { transform: rotate(180deg); }

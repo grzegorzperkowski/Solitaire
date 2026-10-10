@@ -103,6 +103,7 @@ test.describe('T015 safe preferences and recovery', () => {
       await page.locator('#btn-menu').click();
       await page.getByRole('button', { name: 'Nowa gra', exact: true }).click();
       await expect(page.getByRole('dialog')).toContainText('zastąpi');
+      await page.getByText('Ustaw własny seed').click();
       await page.getByLabel('Seed (opcjonalnie)').fill('0');
       await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
       await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();

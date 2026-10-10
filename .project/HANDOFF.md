@@ -77,3 +77,9 @@ T015 explicitly assigned: implementujemy teraz T015. IN_PROGRESS on master from 
 T015 is REVIEW. Seed form/copy, per-mode statistics and win/reload/practice views are implemented. Dialogs retain input/focus across ticks. New-game mode and state save together; unreadable saves require explicit replacement and save failures are visible. Revision bookkeeping now compares the last successful stored revision. Schema remains v1; engine/session accounting unchanged.
 
 Final checks: npm test — 131 passed; npm run build — passed; full Chromium E2E against fresh production preview on port 5185 — 68 passed. Details, commands and red/green regressions: reports/T015.md. No physical-device checks, push or deployment. Existing large court assets remain a later performance gate. Await coordinator acceptance; do not start T016/T017.
+
+## T015 seed disclosure refinement
+
+2026-10-10 coordinator request: hide seed entry behind a downward disclosure at the bottom of New Game; collapse seed display/copy behind a similar menu disclosure. T015 follow-up is implemented; targeted verification and a task-ID commit are recorded below.
+
+T015 refinement delivered in a follow-up task commit: seed entry now stays collapsed at the bottom of New Game, and menu seed display/copy is collapsed behind the same down-chevron disclosure. New E2E tests cover initial hidden state, reveal, keyboard focus and responsive dialog size. Await coordinator acceptance; no push.
