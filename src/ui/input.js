@@ -15,6 +15,7 @@ export function createInputController(app, rootElement) {
   let suppressNextClick = false;
   let rafId = null;
   let lastTimestamp = 0;
+  let lastTouchY = null;
 
   function announce(message) {
     const announcer = rootElement.querySelector('#live-announcer');
@@ -1000,6 +1001,34 @@ export function createInputController(app, rootElement) {
     activeGesture = null;
   }
 
+  function handleTouchStart(e) {
+    lastTouchY = e.touches.length === 1 ? e.touches[0].clientY : null;
+  }
+
+  function handleTouchMove(e) {
+    if (e.touches.length !== 1 || lastTouchY === null) {
+      lastTouchY = null;
+      return;
+    }
+
+    const touchY = e.touches[0].clientY;
+    const pullingDown = touchY > lastTouchY;
+    lastTouchY = touchY;
+    if (!pullingDown) return;
+
+    for (let element = e.target instanceof Element ? e.target : null;
+      element && element !== document.body && element !== document.documentElement;
+      element = element.parentElement) {
+      if (/(auto|scroll)/.test(getComputedStyle(element).overflowY) && element.scrollTop > 0) return;
+    }
+
+    if (window.scrollY <= 0 && e.cancelable) e.preventDefault();
+  }
+
+  function handleTouchEnd(e) {
+    lastTouchY = e.touches.length === 1 ? e.touches[0].clientY : null;
+  }
+
   function bindEvents() {
     rootElement.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('pointermove', handlePointerMove);
@@ -1011,6 +1040,10 @@ export function createInputController(app, rootElement) {
     window.addEventListener('pagehide', cancelDrag);
     window.addEventListener('resize', cancelDrag);
     window.addEventListener('orientationchange', cancelDrag);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
+    window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
     rootElement.addEventListener('click', (e) => {
       if (suppressNextClick && !e.target.closest('.control-btn')) {
@@ -1139,6 +1172,10 @@ export function createInputController(app, rootElement) {
       window.removeEventListener('pagehide', cancelDrag);
       window.removeEventListener('resize', cancelDrag);
       window.removeEventListener('orientationchange', cancelDrag);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+      window.removeEventListener('touchcancel', handleTouchEnd);
       if (rafId) cancelAnimationFrame(rafId);
     },
   };

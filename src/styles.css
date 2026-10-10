@@ -47,6 +47,10 @@ html, body {
   -webkit-touch-callout: none;
 }
 
+html {
+  overscroll-behavior-y: none;
+}
+
 body {
   display: flex;
   flex-direction: column;

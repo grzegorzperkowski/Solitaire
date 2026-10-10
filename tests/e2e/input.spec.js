@@ -6,6 +6,39 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     await page.waitForFunction(() => typeof window.__SOLITAIRE_APP__ !== 'undefined');
   });
 
+  test('blocks pull-to-refresh at the top without stopping inner scrolling', async ({ page }) => {
+    const result = await page.evaluate(() => {
+      const rootBehavior = getComputedStyle(document.documentElement).overscrollBehaviorY;
+      const scroller = document.createElement('div');
+      scroller.style.cssText = 'position:fixed;top:0;left:0;width:20px;height:20px;overflow-y:auto';
+      scroller.innerHTML = '<div style="height:100px"></div>';
+      document.body.append(scroller);
+
+      const makeTouches = (y, count) => Array.from({ length: count }, (_, i) => ({ clientY: y + i }));
+      const dispatchTouchMove = (startY, endY, touchCount = 1) => {
+        const event = new Event('touchmove', { bubbles: true, cancelable: true });
+        Object.defineProperty(event, 'touches', { value: makeTouches(endY, touchCount) });
+        const start = new Event('touchstart', { bubbles: true, cancelable: true });
+        Object.defineProperty(start, 'touches', { value: makeTouches(startY, touchCount) });
+        scroller.dispatchEvent(start);
+        scroller.dispatchEvent(event);
+        return event.defaultPrevented;
+      };
+
+      const blockedAtTop = dispatchTouchMove(100, 140);
+      scroller.scrollTop = 10;
+      const allowedWhileScrollable = !dispatchTouchMove(100, 140);
+      const pinchAllowed = !dispatchTouchMove(100, 140, 2);
+      const innerScrollWorks = scroller.scrollTop === 10 && scroller.scrollHeight > scroller.clientHeight;
+      scroller.remove();
+      return { rootBehavior, blockedAtTop, allowedWhileScrollable, pinchAllowed, innerScrollWorks };
+    });
+
+    expect(result.rootBehavior).toBe('none');
+    expect(result.blockedAtTop).toBe(true);
+    expect(result).toMatchObject({ allowedWhileScrollable: true, pinchAllowed: true, innerScrollWorks: true });
+  });
+
   test('mouse drag moves a single card to a legal foundation (seed 42)', async ({ page }) => {
     await page.evaluate(() => {
       window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });
