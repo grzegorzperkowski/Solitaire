@@ -266,7 +266,7 @@ export function createInputController(app, rootElement) {
       suppressNextClick = true;
       setTimeout(() => { suppressNextClick = false; }, 200);
       try {
-        activeGesture.sourceElement.releasePointerCapture(activeGesture.pointerId);
+        rootElement.releasePointerCapture(activeGesture.pointerId);
       } catch (error) {
         logDrag('pointer-capture-release-failed', { pointerId: activeGesture.pointerId, message: error.message });
       }
@@ -958,7 +958,7 @@ export function createInputController(app, rootElement) {
 
       activeGesture.isDragging = true;
       try {
-        activeGesture.sourceElement.setPointerCapture(activeGesture.pointerId);
+        rootElement.setPointerCapture(activeGesture.pointerId);
         logDrag('pointer-capture-set', { pointerId: activeGesture.pointerId });
       } catch (error) {
         logDrag('pointer-capture-failed', { pointerId: activeGesture.pointerId, message: error.message });
@@ -1010,7 +1010,7 @@ export function createInputController(app, rootElement) {
       suppressNextClick = true;
       setTimeout(() => { suppressNextClick = false; }, 200);
       try {
-        activeGesture.sourceElement.releasePointerCapture(activeGesture.pointerId);
+        rootElement.releasePointerCapture(activeGesture.pointerId);
       } catch (error) {
         logDrag('pointer-capture-release-failed', { pointerId: activeGesture.pointerId, message: error.message });
       }

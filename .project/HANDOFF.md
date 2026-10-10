@@ -33,12 +33,12 @@
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`. `src/ui/layout.js`, `src/ui/cards.js`, `src/ui/render.js`, `src/styles.css` implement responsive mobile-first board (320–430px portrait with zero horizontal scroll), SVG cards with >=14px corner ranks and >=24px exposed bands, N02 strict face-down card concealment, 2-column waste with Draw 3 fan, tableau scroller with 44px scroll handle and accessible buttons for long columns, and 44x44px bottom controls. Evidence: [reports/T009.md](reports/T009.md). Acceptance tracking commit: `ce965e0`.
 - T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`. `src/ui/input.js` implements tap select/move, stock draw and 24-card recycling, sequence transfers, Undo/Redo button and keyboard triggers, roving arrow navigation across piles and exposed cards (§9), Enter/Space activation, Escape cancellation, Polish screen reader announcements (`#live-announcer`), rejection feedback (shake animation + announcement), and focus survival. Tests in `tests/e2e/play.spec.js` and `tests/e2e/accessibility.spec.js`. Evidence: [reports/T010.md](reports/T010.md). Acceptance tracking commit: `dca0962`.
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`. Polish game menu, New Game, Restart, Pause and Help dialogs implemented in `src/ui/dialogs.js`, with replacement confirmation on started unwon attempts (F05), pause concealment (F07), Draw 1 / Draw 3 toggle, Polish rules (N02), focus trap and restoration (N01 / T18), and full responsive support at 320px width and landscape (568x320). Evidence: [reports/T011.md](reports/T011.md). Acceptance tracking commit: `6610e7d`.
-- T012 IN_PROGRESS: The prior fix filters cancellation events by active `pointerId`, but the user still sees intermittent drag interruption. Opt-in lifecycle logs are enabled with `?debug-drag=1`; reproduce in mobile emulation and send console entries beginning `[Solitaire drag]`. The diagnosis is incomplete; see [reports/T012.md](reports/T012.md). Physical Android/iPhone evidence remains for T013.
+- T012 REVIEW: User's trace showed matching `lostpointercapture` on the active touch pointer. Capture moved from the rerendered card to stable `#game-app`; regression and full automated checks pass. See [reports/T012.md](reports/T012.md). Physical Android/iPhone evidence remains for T013.
 - P1, P2, P3, P4 and P5 are complete. P6 is pending T012 coordinator review and T013 physical touch gate.
 
 ## Blockers / next steps
 
-- T012 awaits the user's local reproduction and console trace before further changes; do not start T013 until T012 is accepted.
+- T012 awaits coordinator review and acceptance; do not start T013 until T012 is accepted.
 - A user can play a complete game on mobile and desktop via tap, keyboard, and drag & drop.
 - Next step: [T013](tasks/T013.md) (Physical-device touch feasibility gate) after T012 acceptance.
 - Remote GitHub Actions CI has not run on a remote runner.
@@ -48,6 +48,6 @@
 
 Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:e2e` (playwright test), `npm run test:coverage`, `npm run test:simulation -- --profile=ci`, `npm run build`. The release profile is `npm run test:simulation -- --profile=release` and is a T022 gate. See [README.md](../README.md).
 
-Latest local results are in [reports/T012.md](reports/T012.md): `npm test` 120 passed across 8 files; `npm run test:e2e` 46 passed across 5 files (Chromium); `npm run build` exit 0 (JS bundle 67.88 kB, gzip 19.07 kB, CSS 11.20 kB, gzip 2.94 kB).
+Latest local results are in [reports/T012.md](reports/T012.md): `npm test` 120 passed across 8 files; `npm run test:e2e` 52 passed across 5 files (Chromium); `npm run build` exit 0 (JS bundle 71.28 kB, gzip 19.95 kB, CSS 11.79 kB, gzip 3.09 kB).
 
 Before committing run `git diff --check` and `git diff --cached --check`. Do not report unexecuted browser, device or GitHub Actions checks as passed.

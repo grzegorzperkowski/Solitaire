@@ -282,6 +282,49 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     await expect(page.locator('#moves-display')).toHaveText('0');
   });
 
+  test('keeps touch capture on the stable game root when selection rerenders the source card', async ({ page }) => {
+    await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 9, drawCount: 1 }));
+
+    const from = await page.locator('#column-5 .card-node.card-face-up').boundingBox();
+    const to = await page.locator('#column-2').boundingBox();
+    await page.mouse.move(from.x + from.width / 2, from.y + from.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(to.x + to.width / 2, to.y + to.height / 2);
+    await page.mouse.up();
+
+    const sequence = page.locator('#column-2 .card-node.card-face-up');
+    await expect(sequence).toHaveCount(2);
+    await page.waitForTimeout(250); // Let the drag's synthetic-click suppression expire.
+    await sequence.first().evaluate((card) => card.click());
+    await expect(sequence.first()).toHaveClass(/is-selected/);
+    const lowerCard = page.locator('#column-2 .card-node.card-face-up').nth(1);
+    const result = await lowerCard.evaluate((card) => {
+      const root = document.querySelector('#game-app');
+      Element.prototype.setPointerCapture = function (pointerId) {
+        window.__capturedPointer = { pointerId, target: this.id || this.className };
+      };
+      Element.prototype.releasePointerCapture = () => {};
+
+      const box = card.getBoundingClientRect();
+      const x = box.left + box.width / 2;
+      const y = box.top + box.height / 2;
+      window.__originalDragCard = card;
+      card.dispatchEvent(new PointerEvent('pointerdown', {
+        pointerId: 31, pointerType: 'touch', clientX: x, clientY: y, bubbles: true,
+      }));
+      window.dispatchEvent(new PointerEvent('pointermove', {
+        pointerId: 31, pointerType: 'touch', clientX: x + 20, clientY: y + 20, bubbles: true,
+      }));
+      return { rootId: root.id, sourceWasReplaced: !card.isConnected };
+    });
+
+    expect(result.sourceWasReplaced).toBe(true);
+    await expect.poll(() => page.evaluate(() => window.__capturedPointer?.target)).toBe(result.rootId);
+    await expect(page.locator('#drag-overlay')).toBeVisible();
+    await expect.poll(() => page.evaluate(() => window.__SOLITAIRE_INPUT__.getActiveGesture()?.pointerId)).toBe(31);
+    await page.evaluate(() => window.__SOLITAIRE_INPUT__.cancelDrag());
+  });
+
   test('movement below 6px threshold acts as tap selection without dragging', async ({ page }) => {
     await page.evaluate(() => {
       window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });
