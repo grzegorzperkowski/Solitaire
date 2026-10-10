@@ -16,6 +16,9 @@ export function formatTime(ms) {
 
 export const BUILD_INFO = typeof __BUILD_INFO__ !== 'undefined' ? __BUILD_INFO__ : 'Build dev';
 
+let dealVariantOrder = [];
+let lastDealVariant = null;
+
 export function createBoardStructure(rootElement) {
   rootElement.innerHTML = `
     <div class="game-container" id="game-container">
@@ -204,7 +207,7 @@ function renderDealAnimation(container) {
 
   const overlay = document.createElement('div');
   overlay.className = 'deal-animation-overlay';
-  overlay.dataset.variant = String(Math.floor(Math.random() * 3) + 1);
+  overlay.dataset.variant = String(nextDealVariant());
   overlay.setAttribute('aria-hidden', 'true');
 
   for (let order = 0; order < 5; order++) {
@@ -219,6 +222,22 @@ function renderDealAnimation(container) {
     if (event.target === overlay) overlay.remove();
   });
   container.append(overlay);
+}
+
+function nextDealVariant() {
+  if (dealVariantOrder.length === 0) {
+    dealVariantOrder = [1, 2, 3];
+    for (let i = dealVariantOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [dealVariantOrder[i], dealVariantOrder[j]] = [dealVariantOrder[j], dealVariantOrder[i]];
+    }
+    if (dealVariantOrder[2] === lastDealVariant) {
+      const swapIndex = Math.floor(Math.random() * 2);
+      [dealVariantOrder[2], dealVariantOrder[swapIndex]] = [dealVariantOrder[swapIndex], dealVariantOrder[2]];
+    }
+  }
+  lastDealVariant = dealVariantOrder.pop();
+  return lastDealVariant;
 }
 
 function applyMoveFeedback(rootElement, state) {

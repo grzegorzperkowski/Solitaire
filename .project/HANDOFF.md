@@ -102,6 +102,8 @@ Bottom controls spacing increased by 4 px across desktop, portrait mobile and sh
 
 New-game animation now uses one random finite overlay from three shuffle variants, built from existing card backs. The board remains static, the overlay passes pointer input through, and reduced motion skips it. Build passed; no animation tests or visual inspection were run per coordinator instruction. See reports/T017.md.
 
+Variant selection now uses a shuffled three-item queue so all effects are shown in each three-game batch, without a repeat at batch boundaries. Build passed; see reports/T017.md.
+
 
 ## T015 coordinator acceptance (2026-10-10)
 
