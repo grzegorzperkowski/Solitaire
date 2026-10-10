@@ -10,25 +10,26 @@
 
 ## Current state and recent changes
 
-- T000 DONE: coordinators authorized acceptance subject to verification, which passed for eba965185ef8a60edf81f0318ab0fbf3481604f8; see reports/T000.md.
-- T001 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted commit `339e0f852b60c691f52d6204aa7225b899c5844f`. Minimal Polish page, semantic HTML, responsive CSS and an ES module importing CSS. No cards, rules, interactions, storage or Playwright in that commit.
-- QA exception: browser console and visual checks are outstanding. Closure tried browser automation; the daemon did not start because remote debugging is off. Those checks are waived as a T001 gate and are not passed. HTTP smokes and Node tests remain the recorded evidence.
-- Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies; lockfile committed. Details in [reports/T001.md](reports/T001.md).
-- Relative Vite base (`./`) is the bootstrap default. Deployment, manifest and worker work remain later tasks.
-- Resolve T001 delivery with `git log -1 --format="%h %s" --grep="^T001:"`. Reports do not embed their own commit hash. The acceptance commit is the implementation commit above; the tracking commit that records DONE is separate.
-- T002 is assigned by the same 2026-10-10 coordinator instruction. It is not started in the acceptance commit. T003 is not assigned.
+- T000 DONE: eba965185ef8a60edf81f0318ab0fbf3481604f8. See reports/T000.md.
+- T001 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation commit `339e0f852b60c691f52d6204aa7225b899c5844f`. Acceptance tracking commit subject: `T001: record coordinator acceptance`.
+- QA exception still open: browser console and visual/layout checks were not run. They are waived only as a T001 completion gate. Do not report them as passed.
+- T002 REVIEW: DOM-free `src/engine/cards.js` deals a frozen GameState. Public entry is `createGame`. Suit order is trefl, karo, kier, pik. Rejected options throw `Error` with a `reason` string (`invalid-options`, `invalid-seed`, `invalid-draw-count`, `unsupported-rules-version`, `unsupported-shuffle-version`). Golden deals: `tests/fixtures/deals.json`. Evidence: [reports/T002.md](reports/T002.md).
+- The page shell does not import the engine. No moves, history, storage or Playwright.
+- Node 22.22.0 / npm 10.9.4; Vite 8.3.4, Vitest and coverage-v8 5.0.3. Zero runtime dependencies. `package.json` and `vite.config.js` were not changed in T002.
+- Resolve T002 delivery with `git log -1 --format="%h %s" --grep="^T002:"`. Do not treat this recommendation as permission to start T003.
+- `filelist.txt` is not in the tree. Do not recreate it.
 
 ## Blockers / next steps
 
-- Implement T002 only: [tasks/T002.md](tasks/T002.md). Dependencies T000 and T001 are DONE.
-- Browser console and rendered layout at 320px and desktop remain outstanding QA from T001.
-- `filelist.txt` was not in the tree at T001 closure. Do not invent or recreate it.
-- Bootstrap tests verify HTML/module wiring, not engine rules or browser behavior. Coverage reports zero statements until engine modules exist.
+- Await coordinator acceptance of T002. T003 is not assigned.
+- GitHub Actions (`.github/workflows/ci.yml`) has not been executed remotely.
+- Browser console and 320px/desktop rendering remain outstanding QA from T001.
+- The local Vite process started by `npm run dev` was stopped during T002 so `npm ci` could delete a locked native module. Start it again only when a human wants a preview.
 
 ## Test commands
 
-Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run build`. See [README.md](../README.md) for dev/preview and repository-subpath checks.
+Available now: `npm ci`, `npm test` (vitest run, non-watch), `npm run test:coverage`, `npm run build`. Card-only: `npm test -- tests/unit/cards.test.js`. See [README.md](../README.md).
 
-Verified during T001: `npm run dev -- --host 127.0.0.1 --port 5173 --strictPort` and `npm run preview -- --host 127.0.0.1 --port 4173 --strictPort`, plus an explicit `/Solitaire/` base. Stop servers after testing.
+Latest local results are in [reports/T002.md](reports/T002.md): `npm ci` exit 0 after stopping Vite; `npm test` 8 passed; card file 6 passed; `npm run build` exit 0; engine coverage 100%.
 
-Before committing run `git diff --check` and `git diff --cached --check`. Simulation/E2E scripts do not exist until their assigned tasks create them. Do not report unexecuted browser/device checks as passed.
+Before committing run `git diff --check` and `git diff --cached --check`. Simulation/E2E scripts do not exist until their assigned tasks create them. Do not report unexecuted browser, device or GitHub Actions checks as passed.
