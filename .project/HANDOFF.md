@@ -28,12 +28,12 @@
 - T005 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `509fe7b911ce6d336bd55bfdc362778e93fd0cc1`. Evidence: [reports/T005.md](reports/T005.md). `scripts/run-simulation.mjs` runs the CI profile (seeds 0–999 in Draw 1 and Draw 3, plus seed 4294967295, at most 300 steps) through Vitest.
 - T006 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `63b28ce3ee585ee8f243aca37e382e1f2f74983d`. `src/session.js` implements session timeline, Undo/Redo, snapshot caching, attempt restart, per-mode statistics, elapsedMs independence of Undo, and simulation extended to history operations. Evidence: [reports/T006.md](reports/T006.md).
 - Passing CI counts, not a win rate: 2002 deals, 600427 steps, 3 wins, 0 stuck, 1999 step bounds. Categories: draw 222976, recycle 19046, tableau 166361, waste 14072, foundation 58227, invalid 119745. Won seeds: 827 Draw 1, 681 Draw 3, 888 Draw 3.
-- T007 REVIEW: `src/persistence.js` implements schema-v1 serialization, restore, pure-engine replay validation including redo tail, storage error and quota handling, byte retention on failure, defensive limits (1 MiB UTF-8, 10,000 commands), and simulation round trips. Evidence: [reports/T007.md](reports/T007.md).
+- T007 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a4b2f853598d6020caac4cd97938a7b8ff8b97d2`. `src/persistence.js` implements schema-v1 serialization, restore, pure-engine replay validation including redo tail, storage error and quota handling, byte retention on failure, defensive limits (1 MiB UTF-8, 10,000 commands), and simulation round trips. Evidence: [reports/T007.md](reports/T007.md).
 - P1, P2 and P3 are complete. P4 is incomplete until T008 is DONE.
 
 ## Blockers / next steps
 
-- Await coordinator acceptance of T007. T008 is not assigned.
+- T007 is accepted. Implement T008 (clock, browser lifecycle and single-writer ownership). Do not start T009.
 - Browser console, rendered layout and remote CI remain outstanding and are not T007 blockers.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
