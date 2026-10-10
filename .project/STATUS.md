@@ -1,6 +1,6 @@
 # Project status
 
-- State: T012 and T013 are accepted; T014 deterministic legal hints are ready for coordinator review.
+- State: T014's CI E2E failure is fixed and the full suite passes against a fresh Vite preview; coordinator review is pending.
 - Current task: **T014 — REVIEW**. T000–T013 are DONE.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T014.md](reports/T014.md).
@@ -21,7 +21,7 @@
 - T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
 - T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
 - T013 DONE: physical Android and iPhone checks accepted 2026-10-10 by the human coordinator at commit `916b3bd`; device/browser versions were not included in the acceptance message.
-- T014 REVIEW: deterministic legal hints and empty-legal-action feedback; required checks pass, coordinator acceptance pending.
+- T014 REVIEW: empty-action E2E now exercises the running app through its public interface, with no source-module import. Full CI-style preview suite passes; see [reports/T014.md](reports/T014.md).
 - P1–P6 are complete. P7 is in progress; T015–T023 remain TODO.
 
 ## Known problems and blockers
@@ -33,4 +33,4 @@
 
 ## Next recommendation
 
-- T012 and T013 are accepted; T014 is ready for coordinator review. Do not start T015 until T014 is accepted and explicitly assigned.
+- T012 and T013 are accepted. T014 awaits coordinator review; do not start T015 automatically.

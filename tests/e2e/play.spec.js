@@ -54,19 +54,16 @@ test.describe('T014 deterministic legal hints (T20)', () => {
 
   test('announces the exact empty-action message without a loss claim', async ({ page }) => {
     const message = await page.evaluate(async (state) => {
-      const { createInputController } = await import('/src/ui/input.js');
-      const root = document.createElement('div');
-      root.innerHTML = '<button id="btn-hint">Podpowiedź</button><div id="live-announcer"></div>';
-      document.body.append(root);
-      const app = { getState: () => ({ state, activeDialog: null, isPaused: false }), subscribe: () => () => {} };
-      const controller = createInputController(app, root);
-      controller.onStateChange(() => {});
-      root.querySelector('#btn-hint').click();
-      await new Promise((resolve) => setTimeout(resolve, 60));
-      const announcement = root.querySelector('#live-announcer').textContent;
-      controller.destroy();
-      root.remove();
-      return announcement;
+      const app = window.__SOLITAIRE_APP__;
+      const getState = app.getState;
+      app.getState = () => ({ ...getState(), state });
+      try {
+        document.querySelector('#btn-hint').click();
+        await new Promise((resolve) => setTimeout(resolve, 60));
+        return document.querySelector('#live-announcer').textContent;
+      } finally {
+        app.getState = getState;
+      }
     }, blockedBoard());
 
     expect(message).toBe('Brak dostępnego ruchu');
