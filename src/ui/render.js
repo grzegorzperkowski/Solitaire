@@ -32,6 +32,7 @@ export function createBoardStructure(rootElement) {
       </header>
 
       <div id="notice-banner" class="notice-banner hidden" role="status" aria-live="polite"></div>
+      <div id="practice-status" class="notice-banner hidden">Tryb ćwiczeniowy — wygrana tej partii jest już zaliczona.</div>
       <div id="live-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
       <div class="board-area" id="board-area">
@@ -154,14 +155,17 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   // Notice banner (locks / conflict)
   const noticeBanner = rootElement.querySelector('#notice-banner');
   if (noticeBanner) {
-    if (state.lockNotice) {
-      noticeBanner.textContent = state.lockNotice;
+    if (state.lockNotice || state.saveError) {
+      noticeBanner.textContent = [state.lockNotice, state.saveError,
+        state.persistenceBlocked ? 'Gra tymczasowa — zapis wyłączony.' : null].filter(Boolean).join(' ');
       noticeBanner.classList.remove('hidden');
     } else {
       noticeBanner.textContent = '';
       noticeBanner.classList.add('hidden');
     }
   }
+
+  rootElement.querySelector('#practice-status')?.classList.toggle('hidden', !state.winRecorded || state.activeDialog === 'win');
 
   const gameState = state.state;
   if (!gameState) return;
@@ -170,7 +174,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   renderStock(rootElement, gameState);
 
   // Render Waste
-  const drawCount = state.preferences?.drawCount ?? 1;
+  const drawCount = gameState.drawCount;
   renderWaste(rootElement, gameState.waste, drawCount, dims, selection);
 
   // Render Foundations

@@ -33,7 +33,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T012](tasks/T012.md) | P6 | Pointer drag, cancellation and autoscroll | T011 | DONE | [Criteria](tasks/T012.md#acceptance-criteria); P6 automated subset; TEST_PLAN T16/T17 |
 | [T013](tasks/T013.md) | P6 | Physical-device touch feasibility gate | T012 | DONE | [Criteria](tasks/T013.md#acceptance-criteria); P6 exit; TEST_PLAN T16/T19 and §5 (pre-PWA subset) |
 | [T014](tasks/T014.md) | P7 | Deterministic legal hints | T013 | DONE | [Criteria](tasks/T014.md#acceptance-criteria); P7 hints subset; TEST_PLAN T20 |
-| [T015](tasks/T015.md) | P7 | Seed/settings/statistics and win flow | T014 | TODO | [Criteria](tasks/T015.md#acceptance-criteria); P7 exit; TEST_PLAN T10/T13–T15 |
+| [T015](tasks/T015.md) | P7 | Seed/settings/statistics and win flow | T014 | REVIEW | [Criteria](tasks/T015.md#acceptance-criteria); P7 exit; TEST_PLAN T10/T13–T15 |
 | [T016](tasks/T016.md) | P7a | Optional safe automatic completion | T015; explicit optional-feature selection | TODO | [Criteria](tasks/T016.md#acceptance-criteria); P7a exit (optional); TEST_PLAN T21 |
 | [T017](tasks/T017.md) | P8 | Final vector artwork and motion polish | T015 | TODO | [Criteria](tasks/T017.md#acceptance-criteria); P8 visual subset; TEST_PLAN T19 |
 | [T018](tasks/T018.md) | P8 | Accessibility and performance acceptance | T017 | TODO | [Criteria](tasks/T018.md#acceptance-criteria); P8 exit; TEST_PLAN T18/T19/T22 |

@@ -1,6 +1,7 @@
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { createApp, LOCK_NAME } from '../../src/app.js';
 import { STORAGE_KEY } from '../../src/persistence.js';
+import { nearWin } from '../fixtures/wins.js';
 
 function createMockStorage(initial = {}) {
   const map = new Map(Object.entries(initial));
@@ -21,6 +22,103 @@ describe('T008 app controller: clock, lifecycle and ownership', () => {
   beforeEach(() => {
     fakeNow = 1000;
     vi.useFakeTimers();
+  });
+
+  test.each([1, 3])('T015 first win, reload and practice preserve one award in Draw %s', (drawCount) => {
+    const fixture = nearWin(drawCount);
+    const storage = createMockStorage({ [STORAGE_KEY]: fixture.save });
+    let app = createApp({ storage, performance: mockPerformance });
+    app.init();
+    app.resume();
+    fakeNow += 2000;
+    expect(app.executeCommand(fixture.command).ok).toBe(true);
+    expect(app.getState().activeDialog).toBe('win');
+    expect(app.getState().elapsedMs).toBe(14000);
+    const stats = app.getState().session.statistics;
+    expect(stats[`draw${drawCount}`]).toEqual({ attempts: 1, wins: 1, bestTimeMs: 14000, fewestMoves: fixture.session.cursor + 1 });
+    fakeNow += 10000;
+    app.closeDialog();
+    app.settleElapsed();
+    expect(app.getState().elapsedMs).toBe(14000);
+    app.destroy();
+
+    app = createApp({ storage, performance: mockPerformance });
+    app.init();
+    expect(app.getState().activeDialog).toBe('win');
+    expect(app.getState().isPaused).toBe(false);
+    app.closeDialog();
+    app.undo();
+    fakeNow += 3000;
+    app.settleElapsed();
+    expect(app.getState().elapsedMs).toBe(17000);
+    app.redo();
+    expect(app.getState().activeDialog).toBe(null);
+    app.undo();
+    app.destroy();
+
+    app = createApp({ storage, performance: mockPerformance });
+    app.init();
+    expect(app.getState().isPaused).toBe(true);
+    app.resume();
+    app.executeCommand(fixture.command);
+    expect(app.getState().isWon).toBe(true);
+    expect(app.getState().activeDialog).toBe(null);
+    expect(app.getState().session.statistics).toEqual(stats);
+    app.destroy();
+  });
+
+  test('T015 new game saves chosen mode and deal in one envelope', () => {
+    const storage = createMockStorage();
+    const app = createApp({ storage }).init();
+    app.newGame({ seed: 0, drawCount: 3 });
+    const saved = JSON.parse(storage.getItem(STORAGE_KEY));
+    expect(saved.preferences.drawCount).toBe(3);
+    expect(saved.session.options).toMatchObject({ seed: 0, drawCount: 3 });
+    expect(saved.statistics.draw3.attempts).toBe(0);
+    app.destroy();
+  });
+
+  test('T015 unreadable saves survive temporary play and preferences until explicit replacement', () => {
+    const original = '{broken save';
+    const storage = createMockStorage({ [STORAGE_KEY]: original });
+    const app = createApp({ storage }).init();
+    expect(app.getState().activeDialog).toBe('recovery');
+    app.closeDialog();
+    app.executeCommand({ type: 'draw' });
+    app.setDrawPreference(3);
+    app.restart();
+    app.save();
+    expect(storage.getItem(STORAGE_KEY)).toBe(original);
+    app.newGame({ seed: 0, drawCount: 3, replaceSave: true });
+    expect(JSON.parse(storage.getItem(STORAGE_KEY)).session.options.seed).toBe(0);
+    app.destroy();
+  });
+
+  test('T015 recovery never overwrites a different save written after startup', () => {
+    const storage = createMockStorage({ [STORAGE_KEY]: '{broken' });
+    const app = createApp({ storage, lockManager: null }).init();
+    const foreignSave = nearWin().save;
+    storage.setItem(STORAGE_KEY, foreignSave);
+    app.newGame({ seed: 0, replaceSave: true });
+    expect(storage.getItem(STORAGE_KEY)).toBe(foreignSave);
+    expect(app.getState().hasConflict).toBe(true);
+    app.destroy();
+  });
+
+  test.each(['preference', 'newGame', 'restart'])('T015 %s cannot overwrite the next remote revision', (action) => {
+    const storage = createMockStorage();
+    const app = createApp({ storage, lockManager: null }).init();
+    app.executeCommand({ type: 'draw' });
+    const foreign = JSON.parse(storage.getItem(STORAGE_KEY));
+    foreign.revision += 1;
+    const raw = JSON.stringify(foreign);
+    storage.setItem(STORAGE_KEY, raw);
+    if (action === 'preference') app.setDrawPreference(3);
+    else if (action === 'newGame') app.newGame({ seed: 0, drawCount: 3 });
+    else app.restart();
+    expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+    expect(app.getState().hasConflict).toBe(true);
+    app.destroy();
   });
 
   test('clock does not start before first legal action; starts on first legal action', () => {

@@ -685,6 +685,7 @@ body {
 
 .dialog-footer {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-end;
   padding: 12px 16px;
@@ -883,4 +884,37 @@ body {
   color: #e9d59f;
   font-size: 14.5px;
   margin: 4px 0 2px 0;
+}
+
+.dialog-input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px;
+  border: 1px solid #597663;
+  border-radius: 8px;
+  background: #f8f4e9;
+  color: #0d2b23;
+  font: inherit;
+  font-size: 16px;
+}
+
+.dialog-input:focus-visible {
+  outline: 2px solid #d4af37;
+  outline-offset: 2px;
+}
+
+#seed-error:empty, #seed-copy-status:empty {
+  display: none;
+}
+
+.statistics-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.statistics-list dd {
+  margin: 0;
+  text-align: right;
 }

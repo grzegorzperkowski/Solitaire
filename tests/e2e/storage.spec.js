@@ -54,3 +54,72 @@ test.describe('T008 storage and tab ownership E2E', () => {
     await page2.close();
   });
 });
+
+test.describe('T015 safe preferences and recovery', () => {
+  test('mode cancellation preserves attempt, then preference survives reload and restart', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#stock-container').click();
+    const before = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session);
+    await page.locator('#btn-menu').click();
+    await page.getByRole('radio', { name: 'Dobieraj 3' }).click();
+    await page.getByRole('button', { name: 'Anuluj' }).click();
+    const cancelled = await page.evaluate(() => window.__SOLITAIRE_APP__.getState());
+    expect(cancelled.session.state).toEqual(before.state);
+    expect(cancelled.session.attemptId).toBe(before.attemptId);
+    expect(cancelled.preferences.drawCount).toBe(1);
+    await page.locator('#btn-menu').click();
+    await page.getByRole('radio', { name: 'Dobieraj 3' }).click();
+    await page.getByRole('button', { name: 'Zmień i rozpocznij' }).click();
+    const deal = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state);
+    await page.reload();
+    await page.locator('#btn-menu').click();
+    await expect(page.getByRole('radio', { name: 'Dobieraj 3' })).toHaveAttribute('aria-checked', 'true');
+    await page.getByRole('button', { name: 'Rozdaj ponownie', exact: true }).click();
+    expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state)).toEqual(deal);
+  });
+
+  test('quota failure on preference change retains the prior bytes and shows warning', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#stock-container').click();
+    const original = await page.evaluate(() => localStorage.getItem('pl.solitaire.save'));
+    await page.evaluate(() => { Storage.prototype.setItem = () => { throw new DOMException('Quota', 'QuotaExceededError'); }; });
+    await page.locator('#btn-menu').click();
+    await page.getByRole('radio', { name: 'Dobieraj 3' }).click();
+    await page.getByRole('button', { name: 'Zmień i rozpocznij' }).click();
+    await expect(page.getByRole('status').filter({ hasText: 'Nie udało się zapisać gry' })).toBeVisible();
+    expect(await page.evaluate(() => localStorage.getItem('pl.solitaire.save'))).toBe(original);
+    await page.locator('#stock-container').click();
+    await expect(page.locator('#stock-count-badge')).toHaveText('21');
+  });
+
+  for (const raw of ['{broken', '{"schemaVersion":999,"revision":99}']) {
+    test(`unreadable save is retained until explicit replacement: ${raw}`, async ({ page }) => {
+      await page.addInitScript((raw) => localStorage.setItem('pl.solitaire.save', raw), raw);
+      await page.goto('/');
+      await expect(page.getByRole('dialog', { name: 'Nie można wczytać gry' })).toBeVisible();
+      await page.getByRole('button', { name: 'Graj tymczasowo' }).click();
+      await page.locator('#stock-container').click();
+      expect(await page.evaluate(() => localStorage.getItem('pl.solitaire.save'))).toBe(raw);
+      await page.locator('#btn-menu').click();
+      await page.getByRole('button', { name: 'Nowa gra', exact: true }).click();
+      await expect(page.getByRole('dialog')).toContainText('zastąpi');
+      await page.getByLabel('Seed (opcjonalnie)').fill('0');
+      await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
+      await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
+      const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.save')));
+      expect(saved.session.options.seed).toBe(0);
+      expect(saved.schemaVersion).toBe(1);
+    });
+  }
+
+  test('denied localStorage getter still allows temporary play', async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('Denied', 'SecurityError'); } });
+    });
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Graj tymczasowo' }).click();
+    await page.locator('#stock-container').click();
+    await expect(page.locator('#moves-display')).toHaveText('1');
+    await expect(page.locator('#notice-banner')).toContainText('niedostępna');
+  });
+});

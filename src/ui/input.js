@@ -802,9 +802,12 @@ export function createInputController(app, rootElement) {
   }
 
   function handleGlobalKeydown(e) {
-    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) {
+    if (e.key !== 'Escape' && e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable)) {
       return;
     }
+
+    const appState = app.getState();
+    if (e.key !== 'Escape' && (appState.activeDialog || appState.isPaused)) return;
 
     const isCtrlOrCmd = e.ctrlKey || e.metaKey;
 
@@ -864,7 +867,6 @@ export function createInputController(app, rootElement) {
     }
 
     // If dialog or pause is active, block board shortcuts and navigation
-    const appState = app.getState();
     if (appState.activeDialog || appState.isPaused) {
       return;
     }

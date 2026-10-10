@@ -4,6 +4,7 @@
  */
 
 import { formatTime } from './render.js';
+import { getWinPercentage } from '../session.js';
 
 let lastFocusedElement = null;
 
@@ -26,7 +27,15 @@ export function renderDialogs(rootElement, state, app) {
     dialogType = dialogKey;
 
     if (dialogKey === 'menu') {
-      dialogHtml = renderMenuHtml(currentDrawCount);
+      dialogHtml = renderMenuHtml(currentDrawCount, state.session.options);
+    } else if (dialogKey === 'new-game') {
+      dialogHtml = renderNewGameHtml(currentDrawCount, state.persistenceBlocked);
+    } else if (dialogKey === 'statistics') {
+      dialogHtml = renderStatisticsHtml(state.session.statistics);
+    } else if (dialogKey === 'win') {
+      dialogHtml = renderWinHtml(elapsedMs, moveCount);
+    } else if (dialogKey === 'recovery') {
+      dialogHtml = renderRecoveryHtml();
     } else if (dialogKey === 'help') {
       dialogHtml = renderHelpHtml();
     } else if (dialogKey.startsWith('confirm-') || dialogKey === 'confirm') {
@@ -51,6 +60,7 @@ export function renderDialogs(rootElement, state, app) {
   if (!dialogHtml) {
     if (modalContainer.innerHTML !== '') {
       modalContainer.innerHTML = '';
+      modalContainer._dialogHtml = null;
       modalContainer.className = 'modal-overlay';
       if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
         try {
@@ -74,6 +84,9 @@ export function renderDialogs(rootElement, state, app) {
   }
 
   modalContainer.className = 'modal-overlay is-active';
+  // Clock and layout notifications must not erase form values, focus or feedback.
+  if (modalContainer._dialogHtml === dialogHtml) return;
+  modalContainer._dialogHtml = dialogHtml;
   modalContainer.innerHTML = dialogHtml;
 
   attachDialogEvents(modalContainer, dialogType, state, app);
@@ -82,7 +95,7 @@ export function renderDialogs(rootElement, state, app) {
   requestAnimationFrame(() => {
     const dialogEl = modalContainer.querySelector('[role="dialog"]');
     if (dialogEl && !dialogEl.contains(document.activeElement)) {
-      const firstFocusable = dialogEl.querySelector('button, [tabindex="0"]');
+      const firstFocusable = dialogEl.querySelector('input, select, button, [tabindex="0"]');
       if (firstFocusable) {
         firstFocusable.focus();
       }
@@ -90,7 +103,7 @@ export function renderDialogs(rootElement, state, app) {
   });
 }
 
-function renderMenuHtml(currentDrawCount) {
+function renderMenuHtml(currentDrawCount, options) {
   return `
     <div class="dialog-card" id="menu-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title-menu">
       <header class="dialog-header">
@@ -110,6 +123,13 @@ function renderMenuHtml(currentDrawCount) {
           </div>
         </div>
 
+        <div class="menu-section">
+          <p>Seed: <strong>${options.seed}</strong> · Dobieraj ${options.drawCount}</p>
+          <small>Zasady ${options.rulesVersion}, tasowanie ${options.shuffleVersion}. Ten sam seed i tryb odtwarzają rozdanie.</small>
+          <button id="btn-copy-seed" class="menu-action-btn">Kopiuj seed</button>
+          <p id="seed-copy-status" role="status" aria-live="polite"></p>
+        </div>
+        <button id="btn-menu-statistics" class="menu-action-btn">Statystyki</button>
         <button id="btn-menu-help" class="menu-action-btn">Zasady i pomoc</button>
       </div>
       <footer class="dialog-footer">
@@ -117,6 +137,82 @@ function renderMenuHtml(currentDrawCount) {
       </footer>
     </div>
   `;
+}
+
+function renderNewGameHtml(drawCount, replacesSave) {
+  return `
+    <form class="dialog-card" id="new-game-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title-new-game" novalidate>
+      <header class="dialog-header"><h2 id="dialog-title-new-game" class="dialog-title">Nowa gra</h2></header>
+      <div class="dialog-body">
+        <label for="new-game-seed">Seed (opcjonalnie)</label>
+        <input id="new-game-seed" class="dialog-input" type="text" inputmode="numeric" autocomplete="off" aria-describedby="seed-help seed-error">
+        <small id="seed-help">Cyfry dziesiętne, od 0 do 4294967295. Puste pole losuje nowe rozdanie.</small>
+        <p id="seed-error" role="alert"></p>
+        <label for="new-game-mode">Tryb nowej gry</label>
+        <select id="new-game-mode" class="dialog-input">
+          <option value="1" ${drawCount === 1 ? 'selected' : ''}>Dobieraj 1</option>
+          <option value="3" ${drawCount === 3 ? 'selected' : ''}>Dobieraj 3</option>
+        </select>
+        ${replacesSave ? '<p>Rozpoczęcie nowej gry zastąpi poprzedni, nieczytelny zapis.</p>' : ''}
+      </div>
+      <footer class="dialog-footer">
+        <button type="button" id="btn-dialog-close" class="btn-secondary">Anuluj</button>
+        <button type="submit" class="btn-primary">Rozpocznij</button>
+      </footer>
+    </form>`;
+}
+
+function renderStatisticsHtml(statistics) {
+  return `
+    <div class="dialog-card" id="statistics-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title-statistics">
+      <header class="dialog-header"><h2 id="dialog-title-statistics" class="dialog-title">Statystyki</h2></header>
+      <div class="dialog-body">
+        ${[1, 3].map((mode) => {
+          const stats = statistics[`draw${mode}`];
+          return `<section role="region" aria-label="Dobieraj ${mode}">
+            <h3>Dobieraj ${mode}</h3>
+            <dl class="statistics-list">
+              <dt>Rozpoczęte partie</dt><dd>${stats.attempts}</dd>
+              <dt>Wygrane</dt><dd>${stats.wins}</dd>
+              <dt>Wygrane procentowo</dt><dd>${getWinPercentage(statistics, mode).toLocaleString('pl-PL', { maximumFractionDigits: 1 })}%</dd>
+              <dt>Najlepszy czas</dt><dd>${stats.bestTimeMs === null ? '—' : formatTime(stats.bestTimeMs)}</dd>
+              <dt>Najmniej ruchów</dt><dd>${stats.fewestMoves ?? '—'}</dd>
+            </dl>
+          </section>`;
+        }).join('')}
+        <p>Statystyki są lokalne. Partia liczy się od pierwszego ruchu; także trwająca i porzucona. Każda partia może zdobyć tylko jedną wygraną.</p>
+      </div>
+      <footer class="dialog-footer"><button id="btn-dialog-close" class="btn-primary">Zamknij</button></footer>
+    </div>`;
+}
+
+function renderWinHtml(elapsedMs, moveCount) {
+  return `
+    <div class="dialog-card" id="win-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title-win">
+      <header class="dialog-header"><h2 id="dialog-title-win" class="dialog-title">Wygrana!</h2></header>
+      <div class="dialog-body">
+        <p>Wszystkie karty są na bazach. Gratulacje!</p>
+        <p>Czas gry: <strong>${formatTime(elapsedMs)}</strong></p>
+        <p>Liczba ruchów: <strong>${moveCount}</strong></p>
+        <p>Po zamknięciu możesz cofnąć ruch i ćwiczyć dalej. Wynik tej partii jest już zaliczony.</p>
+      </div>
+      <footer class="dialog-footer flex-col">
+        <button id="btn-dialog-close" class="btn-secondary">Oglądaj planszę</button>
+        <button id="btn-menu-new-game" class="btn-primary">Nowa gra</button>
+      </footer>
+    </div>`;
+}
+
+function renderRecoveryHtml() {
+  return `
+    <div class="dialog-card" role="dialog" aria-modal="true" aria-labelledby="dialog-title-recovery">
+      <header class="dialog-header"><h2 id="dialog-title-recovery" class="dialog-title">Nie można wczytać gry</h2></header>
+      <div class="dialog-body"><p>Poprzedni zapis pozostaje bez zmian. Możesz grać tymczasowo bez zapisywania albo świadomie zastąpić go nową grą.</p></div>
+      <footer class="dialog-footer flex-col">
+        <button id="btn-dialog-close" class="btn-secondary">Graj tymczasowo</button>
+        <button id="btn-menu-new-game" class="btn-danger">Nowa gra i zastąp zapis</button>
+      </footer>
+    </div>`;
 }
 
 function renderPauseHtml(elapsedMs, moveCount) {
@@ -222,7 +318,7 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
   // 1. Focus trap on Tab
   dialogEl.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
-      const focusables = Array.from(dialogEl.querySelectorAll('button:not(:disabled), [tabindex="0"]:not(:disabled)'));
+      const focusables = Array.from(dialogEl.querySelectorAll('input:not(:disabled), select:not(:disabled), button:not(:disabled), [tabindex="0"]:not(:disabled)'));
       if (focusables.length === 0) return;
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
@@ -236,6 +332,27 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
       }
     }
   });
+
+  if (dialogType === 'new-game') {
+    dialogEl.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const input = dialogEl.querySelector('#new-game-seed');
+      const value = input.value;
+      if (value !== '' && (!/^[0-9]+$/.test(value) || Number(value) > 4294967295)) {
+        input.setAttribute('aria-invalid', 'true');
+        dialogEl.querySelector('#seed-error').textContent = 'Wpisz seed jako liczbę całkowitą 0–4294967295 (same cyfry) lub pozostaw puste pole.';
+        input.focus();
+        return;
+      }
+      const options = {
+        drawCount: Number(dialogEl.querySelector('#new-game-mode').value),
+        ...(value === '' ? {} : { seed: Number(value) }),
+        replaceSave: state.persistenceBlocked,
+      };
+      if (isStartedAndUnwon) app.openDialog({ name: 'confirm-new-game', options });
+      else app.newGame(options);
+    });
+  }
 
   // 2. Click actions
   dialogEl.addEventListener('click', (e) => {
@@ -269,13 +386,26 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
       return;
     }
 
+    if (e.target.closest('#btn-menu-statistics')) {
+      app.openDialog('statistics');
+      return;
+    }
+
+    if (e.target.closest('#btn-copy-seed')) {
+      const status = dialogEl.querySelector('#seed-copy-status');
+      (async () => {
+        try {
+          await navigator.clipboard.writeText(String(state.session.options.seed));
+          status.textContent = 'Skopiowano seed.';
+        } catch {
+          status.textContent = 'Nie udało się skopiować seeda. Przepisz numer widoczny powyżej.';
+        }
+      })();
+      return;
+    }
+
     if (e.target.closest('#btn-menu-new-game')) {
-      if (isStartedAndUnwon) {
-        app.openDialog('confirm-new-game');
-      } else {
-        app.closeDialog();
-        app.newGame({ drawCount: currentDrawCount });
-      }
+      app.openDialog('new-game');
       return;
     }
 
@@ -294,7 +424,6 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
         if (isStartedAndUnwon) {
           app.openDialog('confirm-mode-1');
         } else {
-          app.setDrawPreference(1);
           app.newGame({ drawCount: 1 });
         }
       }
@@ -306,7 +435,6 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
         if (isStartedAndUnwon) {
           app.openDialog('confirm-mode-3');
         } else {
-          app.setDrawPreference(3);
           app.newGame({ drawCount: 3 });
         }
       }
@@ -323,11 +451,11 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
       const dialogKey = typeof state.activeDialog === 'string' ? state.activeDialog : state.activeDialog?.name;
       if (dialogKey === 'confirm-restart' || state.activeDialog?.action === 'restart') {
         app.restart();
+      } else if (dialogKey === 'confirm-new-game' && state.activeDialog?.options) {
+        app.newGame(state.activeDialog.options);
       } else if (dialogKey === 'confirm-mode-1' || state.activeDialog?.drawCount === 1) {
-        app.setDrawPreference(1);
         app.newGame({ drawCount: 1 });
       } else if (dialogKey === 'confirm-mode-3' || state.activeDialog?.drawCount === 3) {
-        app.setDrawPreference(3);
         app.newGame({ drawCount: 3 });
       } else {
         app.newGame({ drawCount: currentDrawCount });
@@ -338,11 +466,11 @@ function attachDialogEvents(modalContainer, dialogType, state, app) {
   });
 
   // Clicking backdrop outside menu or help closes dialog
-  modalContainer.addEventListener('click', (e) => {
+  modalContainer.onclick = (e) => {
     if (e.target === modalContainer) {
       if (dialogType === 'menu' || dialogType === 'help') {
         app.closeDialog();
       }
     }
-  });
+  };
 }

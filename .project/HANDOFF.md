@@ -40,9 +40,9 @@
 
 ## Blockers / next steps
 
-- T009 and T010 follow-ups are accepted. Wait for an explicit T015 assignment.
+- T009 and T010 follow-ups are accepted. T015 is now REVIEW; see reports/T015.md.
 - A user can play a complete game on mobile and desktop via tap, keyboard, and drag & drop.
-- Current task: none. T009 and T010 follow-ups accepted 2026-10-10; T015 remains unassigned.
+- Current task: T015, REVIEW. Coordinator acceptance pending; no successor assigned.
 - Remote GitHub Actions CI has not run on a remote runner.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 
@@ -67,3 +67,13 @@ Latest T009 request: another approximately 1 CSS px upward nudge (SVG y=42), com
 ## Follow-up acceptance (2026-10-10)
 
 The human coordinator explicitly closed T009 and T010: “Zamykamy, wszystko działa!” Accepted T009 follow-ups through `ccc955641043bcbd68bba784b29bcaa2540a0b5c` and T010 focus-test correction `496f33f68320bfa2a639761888cb88434563157f`. Both are DONE; the historical review-pending notes above are superseded. No new device/browser version details were supplied. T015 remains TODO and unassigned.
+
+## T015 assignment (2026-10-10)
+
+T015 explicitly assigned: implementujemy teraz T015. IN_PROGRESS on master from 98bada8; initial worktree clean. T014 DONE/accepted at 6149f52. Only T015 is authorized; prior unassigned notes are superseded. See reports/T015.md.
+
+## T015 delivery (2026-10-10)
+
+T015 is REVIEW. Seed form/copy, per-mode statistics and win/reload/practice views are implemented. Dialogs retain input/focus across ticks. New-game mode and state save together; unreadable saves require explicit replacement and save failures are visible. Revision bookkeeping now compares the last successful stored revision. Schema remains v1; engine/session accounting unchanged.
+
+Final checks: npm test — 131 passed; npm run build — passed; full Chromium E2E against fresh production preview on port 5185 — 68 passed. Details, commands and red/green regressions: reports/T015.md. No physical-device checks, push or deployment. Existing large court assets remain a later performance gate. Await coordinator acceptance; do not start T016/T017.

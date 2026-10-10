@@ -1,9 +1,9 @@
 # Project status
 
-- State: T009 and T010 follow-ups are accepted; T000–T014 are DONE. T015 awaits explicit assignment.
-- Current task: none. The human coordinator accepted the T009 and T010 follow-ups on 2026-10-10 (commits `ccc9556` and `496f33f`). T015 is not assigned.
+- State: T009 and T010 follow-ups are accepted; T000–T014 are DONE. T015 is REVIEW; implementation and required checks are ready for coordinator acceptance.
+- Current task: T015. Human assignment: “implementujemy teraz T015” (2026-10-10). T014 dependency accepted at `6149f52`.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T009.md](reports/T009.md).
+- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T015.md](reports/T015.md).
 
 ## Completed deliverables / milestones
 
@@ -22,7 +22,7 @@
 - T012 DONE: accepted 2026-10-10 by the human coordinator at commit `916b3bd`.
 - T013 DONE: physical checks on iPhone 15 and Android 12 found no problems; accepted 2026-10-10 at `916b3bd`. iOS/browser versions were not supplied; see [reports/T013.md](reports/T013.md).
 - T014 DONE: accepted 2026-10-10 by the human coordinator at commit `6149f52`; legal-hint ranking and empty-action feedback are implemented. See [reports/T014.md](reports/T014.md).
-- P1–P6 are complete. P7 is in progress; T015–T023 remain TODO.
+- P1–P6 are complete. P7 is in progress; T015 awaits acceptance; T016–T023 remain TODO.
 
 ## Known problems and blockers
 
@@ -33,4 +33,6 @@
 
 ## Next recommendation
 
-- T009 and T010 follow-ups are accepted; see their reports. T015 is the next recommended task and still needs an explicit assignment.
+- T009 and T010 follow-ups are accepted; see their reports. Review T015; do not begin a successor without explicit assignment.
+
+- T015 validation: 131 unit tests, 68 production-preview Chromium E2E tests and build passed. Seed/copy, per-mode statistics, win/reload/practice and safe preference/recovery flows implemented. No new physical-device evidence or push.

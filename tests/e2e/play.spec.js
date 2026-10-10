@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { rankHints } from '../../src/engine/hints.js';
+import { nearWin } from '../fixtures/wins.js';
 import { CLUBS, DIAMONDS, HEARTS, SPADES, card, makeState, pile } from '../fixtures/boards.js';
 
 function blockedBoard() {
@@ -362,6 +363,7 @@ test.describe('T011 Menu, dialogs and confirmation flows (T13, T15)', () => {
     await page.locator('#btn-menu-new-game').click();
 
     // Confirm dialog is displayed
+    await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
     const confirmDialog = page.locator('#confirm-dialog');
     await expect(confirmDialog).toBeVisible();
     await expect(confirmDialog).toContainText('Rozpocząć nową grę?');
@@ -374,6 +376,7 @@ test.describe('T011 Menu, dialogs and confirmation flows (T13, T15)', () => {
     // Click Menu -> Nowa gra -> Rozpocznij: new game started, move count resets to 0
     await page.locator('#btn-menu').click();
     await page.locator('#btn-menu-new-game').click();
+    await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
     await page.locator('#btn-confirm-accept').click();
     await expect(confirmDialog).toBeHidden();
     await expect(page.locator('#moves-display')).toHaveText('0');
@@ -431,3 +434,174 @@ test.describe('T011 Menu, dialogs and confirmation flows (T13, T15)', () => {
     await expect(page.locator('#stock-count-badge')).toHaveText('21');
   });
 });
+
+test.describe('T015 seed, statistics and results', () => {
+  async function openNewGame(page) {
+    await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
+    await page.getByRole('button', { name: 'Nowa gra', exact: true }).click();
+  }
+
+  test('decimal seed validation, input retention and exact deal reproduction', async ({ page }) => {
+    await page.clock.install();
+    await page.goto('/');
+    await openNewGame(page);
+    const seed = page.getByLabel('Seed (opcjonalnie)');
+    const start = page.getByRole('button', { name: 'Rozpocznij', exact: true });
+    for (const value of ['-1', '1.5', '1e3', '0x10', '+1', '4294967296', 'abc', ' 42 ']) {
+      await seed.fill(value);
+      await start.click();
+      await expect(page.getByRole('alert')).toContainText('0–4294967295');
+      await expect(page.getByRole('dialog', { name: 'Nowa gra', exact: true })).toBeVisible();
+    }
+    await seed.fill('4294967295');
+    await page.clock.runFor(2100);
+    await expect(seed).toHaveValue('4294967295');
+    await expect(seed).toBeFocused();
+    await page.keyboard.press('Control+z');
+    expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().moveCount)).toBe(0);
+    await seed.fill('4294967295');
+    await page.getByLabel('Tryb nowej gry').selectOption('3');
+    await start.click();
+    const first = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state);
+    expect(first.seed).toBe(4294967295);
+    expect(first.drawCount).toBe(3);
+    await openNewGame(page);
+    await expect(page.getByLabel('Tryb nowej gry')).toHaveValue('3');
+    await seed.fill('4294967295');
+    await start.click();
+    expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state)).toEqual(first);
+    await openNewGame(page);
+    await seed.fill('0');
+    await start.click();
+    expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state.seed)).toBe(0);
+  });
+
+  test('replacement cancel preserves history/time; accept retains entered seed and mode', async ({ page }) => {
+    await page.clock.install();
+    await page.goto('/');
+    await page.locator('#stock-container').click();
+    await page.clock.runFor(2000);
+    await openNewGame(page);
+    const before = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session);
+    await page.getByLabel('Seed (opcjonalnie)').fill('123');
+    await page.getByLabel('Tryb nowej gry').selectOption('3');
+    await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
+    await page.clock.runFor(5000);
+    await page.getByRole('button', { name: 'Anuluj', exact: true }).click();
+    const after = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session);
+    expect(after).toEqual(before);
+    await openNewGame(page);
+    await page.getByLabel('Seed (opcjonalnie)').fill('123');
+    await page.getByLabel('Tryb nowej gry').selectOption('3');
+    await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
+    await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.save')));
+    expect(saved.session.options).toMatchObject({ seed: 123, drawCount: 3 });
+    expect(saved.preferences.drawCount).toBe(3);
+    expect(saved.session.cursor).toBe(0);
+    expect(saved.statistics.draw1.attempts).toBe(1);
+    expect(saved.statistics.draw3.attempts).toBe(0);
+  });
+
+  test('copy seed reports success and clipboard denial without changing the game', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
+    await page.evaluate(() => {
+      Object.defineProperty(navigator, 'clipboard', { configurable: true, value: {
+        writeText: async (text) => { window.copiedSeed = text; },
+      } });
+    });
+    await page.getByRole('button', { name: 'Kopiuj seed' }).click();
+    await expect(page.locator('#seed-copy-status')).toContainText('Skopiowano');
+    expect(await page.evaluate(() => window.copiedSeed)).toBe('42');
+    await page.evaluate(() => {
+      navigator.clipboard.writeText = async () => { throw new Error('Denied'); };
+    });
+    await page.getByRole('button', { name: 'Kopiuj seed' }).click();
+    await expect(page.locator('#seed-copy-status')).toContainText('Nie udało się skopiować');
+    await expect(page.locator('#menu-dialog')).toContainText('42');
+    expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().moveCount)).toBe(0);
+  });
+
+  for (const drawCount of [1, 3]) {
+    test(`first win, saved result, Undo and practice in Draw ${drawCount}`, async ({ page }) => {
+      const fixture = nearWin(drawCount);
+      await page.addInitScript((save) => {
+        if (!localStorage.getItem('pl.solitaire.save')) localStorage.setItem('pl.solitaire.save', save);
+      }, fixture.save);
+      await page.clock.install();
+      await page.goto('/');
+      await page.getByRole('button', { name: 'Wznów grę' }).click();
+      const move = fixture.command;
+      const source = move.from.pile === 'waste' ? '#waste-pile .is-playable' : `#column-${move.from.index} .card-node:last-child`;
+      await page.locator(source).click();
+      await page.locator(`#foundation-${move.to.index}`).click();
+      await expect(page.getByRole('dialog', { name: 'Wygrana!' })).toBeVisible();
+      await expect(page.locator('#win-dialog')).toContainText(`Liczba ruchów: ${fixture.session.cursor + 1}`);
+      const stats = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session.statistics);
+      expect(stats[`draw${drawCount}`].wins).toBe(1);
+      const time = await page.locator('#timer-display').textContent();
+      await page.clock.runFor(3000);
+      await expect(page.locator('#timer-display')).toHaveText(time);
+      await page.reload();
+      await expect(page.getByRole('dialog', { name: 'Wygrana!' })).toBeVisible();
+      await page.getByRole('button', { name: 'Oglądaj planszę' }).click();
+      await page.getByRole('button', { name: 'Cofnij ostatni ruch' }).click();
+      await page.clock.runFor(2000);
+      await page.reload();
+      await page.getByRole('button', { name: 'Wznów grę' }).click();
+      await page.locator(source).click();
+      await page.locator(`#foundation-${move.to.index}`).click();
+      await expect(page.getByRole('dialog')).toBeHidden();
+      await expect(page.locator('#practice-status')).toContainText('ćwiczeniowy');
+      expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session.statistics)).toEqual(stats);
+      await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
+      await page.getByRole('button', { name: 'Statystyki', exact: true }).click();
+      const mode = page.getByRole('region', { name: `Dobieraj ${drawCount}`, exact: true });
+      await expect(mode).toContainText('Wygrane1');
+      await expect(mode).toContainText('Wygrane procentowo100%');
+      await expect(page.getByRole('region', { name: `Dobieraj ${drawCount === 1 ? 3 : 1}`, exact: true })).toContainText('Wygrane procentowo0%');
+    });
+  }
+});
+
+test('T015 seed form keeps keyboard focus and blocks game shortcuts while open', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('#stock-container').click();
+  await page.locator('#btn-menu').click();
+  await page.getByRole('button', { name: 'Nowa gra', exact: true }).click();
+  const seed = page.getByLabel('Seed (opcjonalnie)');
+  await expect(seed).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(page.getByRole('button', { name: 'Rozpocznij', exact: true })).toBeFocused();
+  await page.keyboard.press('Control+z');
+  await expect(page.locator('#moves-display')).toHaveText('1');
+  await page.keyboard.press('Tab');
+  await expect(seed).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.locator('#btn-menu')).toBeFocused();
+});
+
+for (const viewport of [{ width: 320, height: 640 }, { width: 568, height: 320 }]) {
+  test(`T015 new dialogs fit ${viewport.width}x${viewport.height}`, async ({ page }, testInfo) => {
+    const errors = [];
+    page.on('pageerror', (error) => errors.push(error.message));
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    for (const name of ['Nowa gra', 'Statystyki']) {
+      await page.locator('#btn-menu').click();
+      await page.getByRole('button', { name, exact: true }).click();
+      const dialog = page.getByRole('dialog');
+      const box = await dialog.boundingBox();
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.y).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(viewport.width);
+      expect(box.y + box.height).toBeLessThanOrEqual(viewport.height);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+      await page.screenshot({ path: testInfo.outputPath(`${name === 'Nowa gra' ? 'seed' : 'stats'}.png`) });
+      await page.getByRole('button', { name: name === 'Nowa gra' ? 'Anuluj' : 'Zamknij', exact: true }).click();
+    }
+    expect(errors).toEqual([]);
+  });
+}

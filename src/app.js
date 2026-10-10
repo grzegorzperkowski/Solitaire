@@ -5,7 +5,7 @@ import { isWon } from './engine/game.js';
 export const LOCK_NAME = 'pl.solitaire.writer';
 
 export function createApp({
-  storage = globalThis?.localStorage,
+  storage,
   lockManager = globalThis?.navigator?.locks,
   performance = globalThis?.performance,
   document = globalThis?.document,
@@ -21,6 +21,8 @@ export function createApp({
   let hasConflict = false;
   let lockNotice = null;
   let saveError = null;
+  let persistenceBlocked = false;
+  let unreadableSave = null;
   let lastTickTime = performance ? performance.now() : Date.now();
   let timerIntervalId = null;
   let checkpointIntervalId = null;
@@ -108,9 +110,11 @@ export function createApp({
     if (!storage || typeof storage.getItem !== 'function') return false;
     try {
       const item = storage.getItem(STORAGE_KEY);
-      if (item) {
-        const parsed = JSON.parse(item);
-        if (Number.isInteger(parsed.revision) && parsed.revision > metadata.revision) {
+      // Explicit recovery may replace only the unreadable bytes seen at startup.
+      if (unreadableSave !== null && item === unreadableSave) return false;
+      if (item || unreadableSave !== null) {
+        const parsed = unreadableSave === null ? JSON.parse(item) : null;
+        if (unreadableSave !== null || (Number.isInteger(parsed?.revision) && parsed.revision > metadata.revision)) {
           isWriter = false;
           hasConflict = true;
           lockNotice = 'Wykryto konflikt zapisu z innej karty. Przeładowano do trybu tylko do odczytu.';
@@ -167,6 +171,7 @@ export function createApp({
 
   function save() {
     if (!session) return { ok: false, reason: 'no-session' };
+    if (persistenceBlocked) return { ok: false, reason: 'recovery-required', message: saveError };
     if (!isWriter || hasConflict) {
       return { ok: false, reason: 'read-only', message: lockNotice || 'Tryb tylko do odczytu' };
     }
@@ -178,16 +183,17 @@ export function createApp({
     settleElapsed();
 
     const saveMeta = {
-      revision: metadata.revision,
+      revision: metadata.revision + 1,
       savedAt: new Date().toISOString(),
       preferences,
     };
 
     const res = saveSession(session, saveMeta, storage);
     if (res.ok) {
-      metadata.revision += 1;
+      metadata.revision = saveMeta.revision;
       metadata.savedAt = saveMeta.savedAt;
       saveError = null;
+      unreadableSave = null;
     } else {
       saveError = res.message;
     }
@@ -195,26 +201,28 @@ export function createApp({
   }
 
   function init() {
-    if (storage) {
-      const loadResult = loadSession(storage);
-      if (loadResult.ok && !loadResult.empty) {
-        session = loadResult.session;
-        metadata = {
-          schemaVersion: loadResult.metadata.schemaVersion,
-          revision: loadResult.metadata.revision,
-          savedAt: loadResult.metadata.savedAt,
-        };
-        preferences = { ...loadResult.metadata.preferences };
-        // F07 / T13: Restore starts paused if already started
-        isPaused = session.started;
-      } else if (!loadResult.ok) {
-        session = createSession(initialOptions);
-        saveError = loadResult.message;
-        isPaused = false;
-      } else {
-        session = createSession(initialOptions);
-        isPaused = false;
-      }
+    if (storage === undefined) {
+      try { storage = globalThis.localStorage; } catch { storage = null; }
+    }
+    const loadResult = loadSession(storage);
+    if (loadResult.ok && !loadResult.empty) {
+      session = loadResult.session;
+      metadata = {
+        schemaVersion: loadResult.metadata.schemaVersion,
+        revision: loadResult.metadata.revision,
+        savedAt: loadResult.metadata.savedAt,
+      };
+      preferences = { ...loadResult.metadata.preferences };
+      // F07 / T13: Restore starts paused if already started
+      isPaused = session.started && !isWon(session.state);
+      if (isWon(session.state)) activeDialog = 'win';
+    } else if (!loadResult.ok) {
+      session = createSession(initialOptions);
+      saveError = loadResult.message;
+      persistenceBlocked = true;
+      unreadableSave = loadResult.rawBytes ?? null;
+      activeDialog = 'recovery';
+      isPaused = false;
     } else {
       session = createSession(initialOptions);
       isPaused = false;
@@ -255,10 +263,12 @@ export function createApp({
     settleElapsed();
 
     const wasStarted = session.started;
+    const hadWin = session.winRecorded;
     const result = execute(session, command);
 
     if (result.ok) {
       session = result.session;
+      if (!hadWin && session.winRecorded) activeDialog = 'win';
       if (!wasStarted && session.started) {
         lastTickTime = performance ? performance.now() : Date.now();
       }
@@ -301,12 +311,13 @@ export function createApp({
     const seed =
       typeof options.seed === 'number'
         ? options.seed
-        : Math.floor(Math.random() * 4294967296);
+        : crypto.getRandomValues(new Uint32Array(1))[0];
 
     session = createSession({ seed, drawCount }, null, session ? session.statistics : null);
+    preferences.drawCount = drawCount;
+    if (options.replaceSave === true) persistenceBlocked = false;
     isPaused = false;
     activeDialog = null;
-    metadata.revision += 1;
     save();
     notifyListeners();
     return session;
@@ -318,7 +329,6 @@ export function createApp({
     session = restartSession(session);
     isPaused = false;
     activeDialog = null;
-    metadata.revision += 1;
     save();
     notifyListeners();
     return session;
@@ -379,6 +389,7 @@ export function createApp({
       hasConflict,
       lockNotice,
       saveError,
+      persistenceBlocked,
       preferences: Object.freeze({ ...preferences }),
       metadata: Object.freeze({ ...metadata }),
     });
