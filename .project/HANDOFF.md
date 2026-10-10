@@ -32,14 +32,14 @@
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`. `src/app.js` implements application controller connecting session timeline and persistence, active-time measurement via `performance.now()`, pause/dialog/visibility suppression, 5s checkpoints and `pagehide` saves, Web Locks single-writer ownership (`pl.solitaire.writer`) and storage revision conflict fallback. Playwright E2E infrastructure and tests in `tests/e2e/storage.spec.js`. Evidence: [reports/T008.md](reports/T008.md). Acceptance tracking commit: `b3f1a48`.
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`. `src/ui/layout.js`, `src/ui/cards.js`, `src/ui/render.js`, `src/styles.css` implement responsive mobile-first board (320–430px portrait with zero horizontal scroll), SVG cards with >=14px corner ranks and >=24px exposed bands, N02 strict face-down card concealment, 2-column waste with Draw 3 fan, tableau scroller with 44px scroll handle and accessible buttons for long columns, and 44x44px bottom controls. Evidence: [reports/T009.md](reports/T009.md). Acceptance tracking commit: `ce965e0`.
 - T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`. `src/ui/input.js` implements tap select/move, stock draw and 24-card recycling, sequence transfers, Undo/Redo button and keyboard triggers, roving arrow navigation across piles and exposed cards (§9), Enter/Space activation, Escape cancellation, Polish screen reader announcements (`#live-announcer`), rejection feedback (shake animation + announcement), and focus survival. Tests in `tests/e2e/play.spec.js` and `tests/e2e/accessibility.spec.js`. Evidence: [reports/T010.md](reports/T010.md). Acceptance tracking commit: `dca0962`.
-- T011 REVIEW: Polish game menu, New Game, Restart, Pause and Help dialogs implemented in `src/ui/dialogs.js`, with replacement confirmation on started unwon attempts (F05), pause concealment (F07), Draw 1 / Draw 3 toggle, Polish rules (N02), focus trap and restoration (N01 / T18), and full responsive support at 320px width and landscape (568x320). Evidence: [reports/T011.md](reports/T011.md).
-- P1, P2, P3 and P4 are complete. P5 is complete pending T011 coordinator acceptance.
+- T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`. Polish game menu, New Game, Restart, Pause and Help dialogs implemented in `src/ui/dialogs.js`, with replacement confirmation on started unwon attempts (F05), pause concealment (F07), Draw 1 / Draw 3 toggle, Polish rules (N02), focus trap and restoration (N01 / T18), and full responsive support at 320px width and landscape (568x320). Evidence: [reports/T011.md](reports/T011.md).
+- P1, P2, P3, P4 and P5 are complete. P6 is incomplete until T012 and T013 are DONE.
 
 ## Blockers / next steps
 
-- T011 is in REVIEW, awaiting coordinator acceptance. Do not start T012 until authorized.
+- T011 is accepted. Implement T012 (Pointer drag, cancellation and autoscroll). Do not start T013 until authorized.
 - A user can play a complete game on mobile and desktop via tap and keyboard, pause, access game rules, restart, or start new games in Draw 1 or Draw 3 modes.
-- Next step: [T012](tasks/T012.md) (Pointer drag & drop) after T011 acceptance.
+- Next step: [T012](tasks/T012.md) (Pointer drag & drop).
 - Remote GitHub Actions CI has not run on a remote runner.
 - `getLegalMoves` assumes tableau columns have `cards` and `faceUpStart`. A null column can throw. An unreadable board returns `[]`. The accepted review calls that non-blocking.
 

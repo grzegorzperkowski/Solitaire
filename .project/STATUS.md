@@ -1,7 +1,7 @@
 # Project status
 
-- State: Polish game menu, New Game, Restart, Pause and Help dialogs implemented. T011 is in REVIEW.
-- Current task: **T011 — REVIEW**. T000–T010 are DONE. T011 is ready for review.
+- State: Polish game menu, New Game, Restart, Pause and Help dialogs accepted. T012 is assigned.
+- Current task: **T011 — DONE**. T000–T011 are DONE. T012 is assigned.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Delivery/evidence: [reports/T011.md](reports/T011.md).
 
@@ -18,8 +18,8 @@
 - T008 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `a1a7567`.
 - T009 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `ae85d6b`.
 - T010 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `bdd275c`.
-- T011 REVIEW: Polish game menu, New Game, Restart, Pause and Help dialogs implemented and verified.
-- P1, P2, P3 and P4 are complete. P5 is complete pending T011 coordinator acceptance. T012–T023 remain TODO.
+- T011 DONE: accepted 2026-10-10 by the human coordinator and ChatGPT. Accepted implementation `fa1aa9c`.
+- P1, P2, P3, P4 and P5 are complete. T012 is assigned. T012–T023 remain TODO.
 
 ## Known problems and blockers
 
@@ -30,4 +30,4 @@
 
 ## Next recommendation
 
-- T011 is in REVIEW. Await coordinator review and acceptance. Do not start T012 until authorized.
+- T011 is accepted. The current instruction assigns [T012](tasks/T012.md): Pointer drag, cancellation and autoscroll. Do not start T013 until authorized.
