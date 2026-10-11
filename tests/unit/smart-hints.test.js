@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { searchSmartHint } from '../../src/engine/smart-hints.js';
 import { visibleCards } from '../../src/engine/knowledge.js';
+import { createGame } from '../../src/engine/cards.js';
 import { assertInvariants, applyMove } from '../../src/engine/game.js';
 import {
   h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, h11, h15
@@ -14,6 +15,33 @@ function runSearch(state, known = visibleCards(state), options = {}) {
   } while (!res.done);
   return res.value;
 }
+
+test.each([1, 3])('unknown stock values cannot affect scores in Draw %i', (drawCount) => {
+  for (let seed = 0; seed < 100; seed++) {
+    const state = createGame({ seed, drawCount });
+    const changed = { ...state, stock: [...state.stock].reverse() };
+    assertInvariants(changed);
+    const options = { maxDepth: 1, maxStates: 100 };
+    expect(runSearch(changed, visibleCards(state), options), `seed ${seed}`)
+      .toEqual(runSearch(state, visibleCards(state), options));
+  }
+});
+
+test('unknown card exposed by a waste transfer cannot affect scores', () => {
+  for (let seed = 0; seed < 100; seed++) {
+    const initial = createGame({ seed, drawCount: 1 });
+    const state = { ...initial, stock: initial.stock.slice(0, -2), waste: initial.stock.slice(-2) };
+    const stock = [...state.stock];
+    const waste = [...state.waste];
+    [stock[0], waste[0]] = [waste[0], stock[0]];
+    const changed = { ...state, stock, waste };
+    assertInvariants(state);
+    assertInvariants(changed);
+    const options = { maxDepth: 1, maxStates: 100 };
+    expect(runSearch(changed, visibleCards(state), options), `seed ${seed}`)
+      .toEqual(runSearch(state, visibleCards(state), options));
+  }
+});
 
 describe('SmartHint v1 — Engine & Acceptance H01–H15', { timeout: 15000 }, () => {
   test('all fixtures satisfy full-deck board invariants', () => {

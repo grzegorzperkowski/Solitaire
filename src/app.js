@@ -133,7 +133,7 @@ export function createApp({
           visitedStates: 0,
           truncated: true,
         });
-        hint = Object.freeze(result);
+        hint = Object.freeze(next.done ? result : { ...result, truncated: true });
         notifyListeners();
       } else {
         hintTimer = setTimeout(hintBatch, 0);

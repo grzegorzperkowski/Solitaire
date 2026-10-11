@@ -3,6 +3,8 @@ import { createApp } from '../../src/app.js';
 import { progressFixture, fixtureSession } from '../fixtures/progress.js';
 import { h01, h02, h07, h15 } from '../fixtures/smart-hints.js';
 import { visibleCards } from '../../src/engine/knowledge.js';
+import { createGame } from '../../src/engine/cards.js';
+import { searchSmartHint } from '../../src/engine/smart-hints.js';
 
 afterEach(() => vi.useRealTimers());
 
@@ -17,6 +19,44 @@ function createTestApp(state, options = {}) {
 }
 
 describe('SmartHint v1 — App Controller Integration (H12, H13, Cancellation, Time-slicing)', { timeout: 15000 }, () => {
+  test('time cutoff marks the best result truncated while retaining its plan', () => {
+    let clock = 0;
+    const state = createGame({ seed: 0, drawCount: 1 });
+    const search = searchSmartHint(state, visibleCards(state));
+    const first = search.next();
+    expect(first.done).toBe(false);
+    expect(first.value.truncated).toBe(false);
+    search.return();
+    const app = createTestApp(state, {
+      performance: { now: () => (clock += 101) },
+    });
+    try {
+      app.requestSmartHint();
+      vi.advanceTimersByTime(10);
+      const hint = app.getState().hint;
+      expect(hint).not.toBeNull();
+      expect(hint.plan.length).toBeGreaterThan(0);
+      expect(hint.plan).toEqual(first.value.plan);
+      expect(hint.truncated).toBe(true);
+      expect(app.getState().isHintLoading).toBe(false);
+    } finally {
+      app.destroy();
+    }
+  });
+
+  test('completed search does not claim truncation even if the final batch exceeds the budget', () => {
+    let clock = 0;
+    const app = createTestApp(createGame({ seed: 42, drawCount: 1 }), {
+      performance: { now: () => (clock += 101) },
+    });
+    try {
+      app.requestSmartHint();
+      vi.advanceTimersByTime(10);
+      expect(app.getState().hint.truncated).toBe(false);
+    } finally {
+      app.destroy();
+    }
+  });
   test('requestSmartHint performs time-sliced search and publishes result to getState()', () => {
     const state = h01();
     const app = createTestApp(state);

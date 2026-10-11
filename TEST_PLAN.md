@@ -132,3 +132,10 @@ limits, invalidation, Undo/Redo and won state. Add boundary masking, nonmutation
 cancellation, accessible visible explanations and unchanged T027 regressions.
 Compare against rankHints on 100 seeds per mode with reproducible quality and
 median/p95 timings. These are future acceptance gates, not executed checks.
+
+
+T028 regression coverage: seeded hidden-stock and buried-waste permutations
+must preserve plans/scores; an actual unfinished controller cutoff must mark
+truncated=true while retaining its plan. A completed search remains untruncated
+when its final batch exceeds the time target. Tests live in smart-hints.test.js
+and smart-hints-app.test.js.

@@ -1,7 +1,7 @@
 # Project status
 
 - State: T000–T015, T017, T024, T025, and T027 are DONE; T028 is REVIEW.
-- Current task: T028 REVIEW, implemented and verified on 2026-10-11. See [tasks/T028.md](tasks/T028.md) and [reports/T028.md](reports/T028.md).
+- Current task: T028 REVIEW, both reported regressions repaired on 2026-10-11. See [tasks/T028.md](tasks/T028.md) and [reports/T028.md](reports/T028.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).
 - Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.
@@ -88,3 +88,19 @@ hidden-stock score dependence and missing truncated=true on time cutoff.
 These remain unresolved; previous completion-readiness claims are superseded.
 See [additional validation](reports/T028-additional-validation.md).
 No product fixes or coordinator acceptance were performed in this verification.
+
+## T028 regression repair assignment (2026-10-11)
+
+Coordinator: “napraw algorytm”. IN_PROGRESS, Codex, master at de791db; clean tree.
+Scope: hidden-information score leak and missing time-cutoff metadata, with
+regression tests. Dependencies remain DONE. No UI redesign or parallel work.
+
+## T028 regression repair delivered (2026-10-11)
+
+REVIEW: hidden unknown waste values excluded from mobility scoring; unfinished
+results correctly marked truncated without discarding the best plan. Permanent
+regressions cover 300 hidden permutations and completed/unfinished time budgets.
+202 unit tests, 39 targeted Chromium E2E tests, build and 40-deal assertion
+simulation (793 calls/791 moves) passed. See reports/T028.md for exact evidence
+and the correction to the original seed-42 timing reproduction. No push or
+physical-device checks. Await coordinator acceptance; no successor assigned.

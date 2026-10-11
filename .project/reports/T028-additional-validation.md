@@ -76,3 +76,14 @@ Nie przywracano go nad cudzą zmianą; nie znajduje się w tym commicie.
 Przy wznowieniu odtworzyć reprodukcje z powyższych parametrów, naprawić wspólną
 przyczynę i uruchomić je ponownie. Nie wykonywano napraw, pełnego benchmarku
 100 rozdań/tryb ani fizycznych testów iPhone/Android/Safari; nie wykonano push.
+
+
+## Follow-up resolution (2026-10-11)
+
+Both issues repaired in the subsequent coordinator-assigned T028 revision;
+see the regression repair delivery in T028.md. Correction: the seed-42 clock
+fixture completed immediately and was not evidence of an unfinished cutoff.
+The replacement seed-0 test first verifies generator.next().done=false, then
+reproduces the missing flag on the old controller and passes with the repair.
+Seed 42 is retained as the completed-search control. This supersedes the
+unresolved status above, not the historical execution records.

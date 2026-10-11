@@ -176,7 +176,9 @@ function evaluateSequence(endState, rootState, rootFoundationSet, rootStockWaste
       }
       return col;
     });
-    evalEndState = { ...endState, tableau: maskedTableau };
+    // An unknown waste top cannot contribute moves; do not expose cards below it.
+    const waste = knownSet.has(endState.waste.at(-1)) ? endState.waste : [];
+    evalEndState = { ...endState, tableau: maskedTableau, waste };
   }
 
   const rootPoss = computePossibilities(rootState, rootFoundationSet);
