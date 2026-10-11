@@ -1,10 +1,12 @@
 import { describe, expect, test } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { searchProgress, progressStateKey } from '../../src/engine/progress.js';
 import { visibleCards } from '../../src/engine/knowledge.js';
 import { getLegalMoves, assertInvariants } from '../../src/engine/game.js';
 import { rankHints } from '../../src/engine/hints.js';
 import { progressFixture, step, foundationPreparation } from '../fixtures/progress.js';
 import { card } from '../fixtures/boards.js';
+import { restoreSession } from '../../src/persistence.js';
 
 function analyze(state, known = visibleCards(state), maxStates = 10000) {
   const iterator = searchProgress(state, known, { maxStates });
@@ -26,6 +28,23 @@ function withStock(cards, drawCount) {
 }
 
 describe('T027 reachable progress', () => {
+  test('T028: saved seed 2284836135 exhausts preparation without false waste progress', () => {
+    const diagnostic = JSON.parse(readFileSync(new URL('../fixtures/solitaire-stan-2284836135-draw1-114.json', import.meta.url), 'utf8'));
+    const restored = restoreSession(JSON.stringify(diagnostic.save));
+    expect(restored.ok).toBe(true);
+    expect(restored.session.cursor).toBe(114);
+    expect(new Set([
+      ...restored.session.state.stock, ...restored.session.state.waste,
+      ...restored.session.state.tableau.flatMap((column) => column.cards),
+      ...restored.session.state.foundations.flat(),
+    ]).size).toBe(52);
+    const actions = getLegalMoves(restored.session.state);
+    expect(actions).toHaveLength(5);
+    expect(analyze(restored.session.state, restored.session.knownCards)).toMatchObject({
+      status: 'NO_PROGRESS', noLegalMoves: false,
+    });
+  });
+
   test.each([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])('FX%s is a complete valid deck', (id) => {
     expect(() => assertInvariants(progressFixture(id))).not.toThrow();
   });
@@ -33,7 +52,9 @@ describe('T027 reachable progress', () => {
     for (const [id, status] of [[1, 'NO_PROGRESS'], [2, 'NO_PROGRESS'], [3, 'PROGRESS_FOUND'], [4, 'PROGRESS_FOUND'], [5, 'PROGRESS_FOUND'], [6, 'PROGRESS_FOUND'], [7, 'NO_PROGRESS'], [10, 'WON']]) {
       const state = progressFixture(id, drawCount);
       const known = id === 7 ? [...visibleCards(state), ...state.stock] : visibleCards(state);
-      expect(analyze(state, known).status, `FX${id}`).toBe(status);
+      const result = analyze(state, known);
+      expect(result.status, `FX${id}`).toBe(status);
+      if (id === 4) expect(result.goal).toBe('FOUNDATION_ADVANCE');
     }
     expect(getLegalMoves(progressFixture(1))).toEqual([]);
     expect(getLegalMoves(progressFixture(2)).length).toBeGreaterThan(0);
@@ -44,7 +65,7 @@ describe('T027 reachable progress', () => {
     const intermediate = step(state, foundationPreparation);
     const back = { type: 'move', from: { pile: 'tableau', index: 2, cardIndex: intermediate.tableau[2].cards.length - 1 }, to: { pile: 'foundation', index: 0 } };
     expect(step(intermediate, back)).toEqual(state);
-    expect(analyze(state).status).toBe('PROGRESS_FOUND');
+    expect(analyze(state)).toMatchObject({ status: 'PROGRESS_FOUND', goal: 'REVEAL' });
   });
   test('UT15/16 hidden permutations do not affect result or hint order', () => {
     const state = progressFixture(6);
@@ -65,7 +86,7 @@ describe('T027 reachable progress', () => {
     expect(JSON.stringify(state)).toBe(before);
   });
   test('UT24 missing stock knowledge cannot prove no progress', () => {
-    expect(analyze(progressFixture(7), undefined).status).toBe('PROGRESS_FOUND');
+    expect(analyze(progressFixture(7), undefined)).toMatchObject({ status: 'PROGRESS_FOUND', goal: 'INFORMATION' });
   });
   test('UT13 keys distinguish stock/waste order, mode and knowledge', () => {
     const state = progressFixture(5);
@@ -86,10 +107,11 @@ describe('T027 reachable progress', () => {
     const known = [...visibleCards(state), ...state.stock];
     expect(analyze(state, known).status).toBe('NO_PROGRESS');
     const regrouped = { ...state, stock: [card(0, 7), card(1, 12), card(0, 12)] };
-    expect(analyze(regrouped, known).status).toBe('PROGRESS_FOUND');
+    expect(analyze(regrouped, known)).toMatchObject({ status: 'PROGRESS_FOUND', goal: 'FOUNDATION_ADVANCE' });
     const waste = step(state, { type: 'draw' });
     expect(analyze(waste, known).status).toBe('NO_PROGRESS');
-    expect(analyze({ ...waste, waste: [card(0, 12), card(1, 12), card(0, 7)] }, known).status).toBe('PROGRESS_FOUND');
+    expect(analyze({ ...waste, waste: [card(0, 12), card(1, 12), card(0, 7)] }, known))
+      .toMatchObject({ status: 'PROGRESS_FOUND', goal: 'FOUNDATION_ADVANCE' });
     // Removing a waste card changes the next recycled draw group.
     const fx5 = progressFixture(5, 3);
     const removed = step(fx5, { type: 'move', from: { pile: 'waste' }, to: { pile: 'tableau', index: 0 } });
@@ -97,11 +119,21 @@ describe('T027 reachable progress', () => {
     expect(step(recycled, { type: 'draw' }).waste).toEqual([card(0, 7)]);
     expect(analyze(recycled, visibleCards(fx5)).status).toBe('PROGRESS_FOUND');
   });
+  test('T028 waste removal is progress when it exposes an unknown fan card', () => {
+    const state = progressFixture(5, 1);
+    const known = visibleCards(state);
+    const wasteMove = getLegalMoves(state).find((move) => move.from?.pile === 'waste');
+    expect(wasteMove).toBeDefined();
+    const applied = step(state, wasteMove);
+    expect(visibleCards(applied).some((id) => !known.includes(id))).toBe(true);
+    expect(analyze(state, known)).toMatchObject({ status: 'PROGRESS_FOUND', goal: 'INFORMATION' });
+  });
   test('UT14 progress requires three neutral draws, with no depth cutoff', () => {
     const state = withStock([card(0, 7), card(1, 12), card(0, 12)], 1);
     const known = [...visibleCards(state), ...state.stock];
     expect(analyze(state, known, 3).status).toBe('UNKNOWN');
-    expect(analyze(state, known, 4).status).toBe('PROGRESS_FOUND');
+    expect(analyze(state, known, 4).status).toBe('UNKNOWN');
+    expect(analyze(state, known, 8)).toMatchObject({ status: 'PROGRESS_FOUND', goal: 'FOUNDATION_ADVANCE' });
   });
   test('UT09 a foundation round trip alone never becomes P2', () => {
     const state = structuredClone(progressFixture(1));

@@ -7,6 +7,19 @@ async function load(page, id, suffix = '') {
 }
 const notice = (page) => page.locator('#progress-notice');
 
+test('T028 F04 replay finds no strategic progress in seed 2284836135 at cursor 114', async ({ page }) => {
+  await load(page, 1, '&replay=seed-2284836135');
+  await page.waitForFunction(() => window.fixtureApp.getState().progress.status !== 'UNKNOWN');
+  const result = await page.evaluate(() => ({
+    progress: window.fixtureApp.getState().progress,
+    cursor: window.fixtureApp.getState().session.cursor,
+  }));
+  expect(result.cursor).toBe(114);
+  expect(result.progress).toMatchObject({ status: 'NO_PROGRESS', noLegalMoves: false });
+  await page.evaluate(() => window.fixtureApp.resume());
+  await expect(notice(page)).toContainText('Brak ruchów prowadzących do dalszego postępu.');
+});
+
 test('E2E01 no legal actions has a specific accessible notice', async ({ page }) => {
   await load(page, 1);
   await expect(notice(page)).toHaveText('Brak dostępnych ruchów. Możesz rozpocząć nową grę.');

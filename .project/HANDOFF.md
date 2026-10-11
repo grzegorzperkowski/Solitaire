@@ -1,5 +1,16 @@
 # Fresh-session handoff
 
+## Latest T028 F04 delivery — 2026-10-11
+
+F04 now recognizes post-action REVEAL, net FOUNDATION_ADVANCE and newly visible
+INFORMATION; waste transfer, known draw and foundation round trips remain BFS
+preparation. User save seed2284836135/Draw1/cursor114 now returns NO_PROGRESS,
+visitedStates256, noLegalMoves=false (baseline export PROGRESS_FOUND/76). Unit
+suite 212/212, progress E2E 14/14, production build and diff-check pass. Benchmark
+still skipped per coordinator instruction; T028 remains BLOCKED. See top of
+reports/T028.md for exact reproduction and five available actions. No push.
+
+
 ## Strategic-goal implementation checkpoint — 2026-10-11
 
 T028 BLOCKED: primary goals, score components, end verification and graph-based

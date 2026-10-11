@@ -632,3 +632,17 @@ Specyfikacja nie wymaga:
 Wymaga natomiast konsekwentnego rozdzielenia legalności, postępu, wiedzy o kartach i wyczerpania przestrzeni stanów.
 
 **Warunek końcowy:** system może powiedzieć, że nie ma drogi do dalszego postępu w przyjętym znaczeniu, tylko gdy faktycznie sprawdził wszystkie osiągalne drogi przygotowawcze. Jeżeli nie sprawdził wszystkich, musi pozostawić wynik nierozstrzygnięty.
+
+
+## Superseded progress goal definition — T028 follow-up (2026-10-11)
+
+The shipped P3 definition above (waste transfer alone) and card-identity P2
+interpretation are historical T027 behavior. T028 redefines F04 progress at the
+post-action state: REVEAL uses `applyMove().revealed != null`, FOUNDATION_ADVANCE
+requires total foundation count above the initial analysis count, and INFORMATION
+means a previously unknown card is visible according to `visibleCards()`.
+Waste→tableau, draw of known cards and foundation returns are preparation and
+remain in the no-depth-limit BFS. Waste removal can itself reach INFORMATION
+when another waste fan card becomes visible. T028's updated F04 definition is
+authoritative for current behavior; status API remains compatible, with optional
+goal on PROGRESS_FOUND.

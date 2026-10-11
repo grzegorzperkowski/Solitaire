@@ -260,3 +260,17 @@ alternatywy/cykle, utrata miejsca, limity, ukryte permutacje. Wymagany benchmark
 i przy porównywalnym budżecie, oprócz historycznego rankHints.
 Koordynator następnie polecił "no tests" i wybrał "Pomiń testy i benchmark".
 Nie wykonano tych bramek ani kalibracji; wagi i ograniczenia produkcyjne zachowane.
+
+
+## F04 reachable-progress follow-up — 2026-10-11
+
+`searchProgress` keeps its BFS, cycle key, state budget and four statuses.
+Classify each `applyMove` result against fixed analysis-root data: REVEAL when
+`revealed != null`, FOUNDATION_ADVANCE when total foundation cards exceed the
+initial count, and INFORMATION when `visibleCards(after)` includes an ID outside
+`rememberVisible(initial, knownCards)`. Everything else remains in the BFS,
+including waste→tableau, known draws and foundation returns. Stop at the first
+goal without expanding revealed values. `PROGRESS_FOUND` gains optional `goal`;
+all callers continue to use status. `UNKNOWN` remains mandatory if the state
+budget prevents exhaustive neutral-state search. No depth limit. SmartHint's
+sequence quality and scoring are independent from this reachability contract.

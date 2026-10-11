@@ -141,11 +141,14 @@ Reference `rankHints` uses `getLegalMoves`, with a stable order: hidden-card rev
 
 `searchProgress(state, knownCards, {maxStates})` is a deterministic generator over
 existing `getLegalMoves` / `applyMove`; it yields between expanded states and
-returns `{status, visitedStates, noLegalMoves}`. Status is PROGRESS_FOUND,
-NO_PROGRESS, UNKNOWN, or WON (checked first). P1–P4 follow
-[the specification](.project/tasks/T027-spec.md). Boundaries are checked before
-simulating further states, so revealed hidden values never guide a continuation.
-Foundation progress compares card identities with the initial foundation set.
+returns `{status, visitedStates, noLegalMoves}` with optional `goal` on
+PROGRESS_FOUND. Status is PROGRESS_FOUND, NO_PROGRESS, UNKNOWN, or WON (checked
+first). After each legal transition, REVEAL uses `applied.revealed != null`,
+FOUNDATION_ADVANCE means the total foundation count exceeds the analysis root,
+and INFORMATION means `visibleCards(after)` contains a card outside the initial
+remembered set. Waste transfers, known draws and foundation returns are neutral
+BFS preparation. A newly revealed or newly visible card ends that branch before
+its value can guide another simulated move.
 
 The visited key includes rules, draw mode, tableau ordering/orientation,
 foundations, exact stock/waste order and knowledge. Hidden tableau identities

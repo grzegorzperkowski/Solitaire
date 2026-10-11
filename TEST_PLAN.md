@@ -168,3 +168,11 @@ paired identical positions and budgets: goals, idle suggestions, reveals, repeat
 wins, median/p95 time/states, truncated percentage. Coordinator explicitly
 requested skipping tests and benchmark in this revision; these gates remain
 unexecuted, not recorded as passed. Existing H05 assertion reflects new contract.
+
+
+T028 F04 reachability follow-up: waste transfer alone is preparation; net
+foundation count and actual newly visible cards classify post-action progress.
+Check Draw 1/3 and waste fan exposure, known draws, foundation round trips and
+removals, UNKNOWN at retained-state limit, exhaustive NO_PROGRESS with legal
+moves, and saved seed 2284836135 at cursor 114. Verify `noLegalMoves=false` and
+optional goal while keeping the UI status contract. Benchmark remains separate.
