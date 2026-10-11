@@ -1,7 +1,7 @@
 # Project status
 
 - State: T000–T015, T017, T024, T025, and T027 are DONE; T028 is REVIEW.
-- Current task: T028 REVIEW, both reported regressions repaired on 2026-10-11. See [tasks/T028.md](tasks/T028.md) and [reports/T028.md](reports/T028.md).
+- Current task: T028 REVIEW, hint gesture follow-up delivered on 2026-10-11. See [tasks/T028.md](tasks/T028.md) and [reports/T028.md](reports/T028.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).
 - Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.
@@ -104,3 +104,18 @@ regressions cover 300 hidden permutations and completed/unfinished time budgets.
 simulation (793 calls/791 moves) passed. See reports/T028.md for exact evidence
 and the correction to the original seed-42 timing reproduction. No push or
 physical-device checks. Await coordinator acceptance; no successor assigned.
+
+
+## T028 hint gesture assignment (2026-10-11)
+
+Coordinator requests double-click/double-tap on the recommended source card
+to execute the recommended destination. IN_PROGRESS, Codex, master 842941b,
+clean tree. Reuse validation/execution and preserve other-card touch shortcuts.
+
+
+## T028 hint gesture delivered (2026-10-11)
+
+REVIEW: double-click/double-tap of a displayed hint source executes its exact
+validated first move once. Other-card/default behavior preserved; Undo clears
+recommendation. Build, 202 unit tests and 60 targeted Chromium E2E tests passed.
+See reports/T028.md. No physical-device check or push; await acceptance.

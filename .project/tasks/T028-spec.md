@@ -198,3 +198,11 @@ dowodem do oceny koordynatora, nie z góry założonym wynikiem. Mobilny cel 100
 wymaga pomiaru na fizycznym urządzeniu; bez niego podać brak dowodu.
 Szersza kalibracja wag na dużym, oddzielnym zbiorze rozdań jest drugim etapem,
 do osobnego przypisania; nie tworzyć automatycznie następnego zadania.
+
+
+## Follow-up koordynatora — gest wykonania podpowiedzi (2026-10-11)
+
+Dwuklik myszą albo podwójne tapnięcie źródłowej karty aktualnie wyświetlanej
+podpowiedzi wykonuje dokładnie jej pierwszy ruch przez zwykłą walidację silnika.
+To świadoma akcja gracza, nie automatyczne wykonanie planu. Pozostałe karty
+zachowują dotychczasowe skróty. Cofnięcie lub zmiana planszy unieważnia zalecenie.

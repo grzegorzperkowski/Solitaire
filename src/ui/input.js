@@ -208,6 +208,14 @@ export function createInputController(app, rootElement) {
     return false;
   }
 
+  function recommendedDestination(state, source) {
+    if (hintBoard !== state || currentHint?.type !== 'move'
+      || app.getState().hint?.plan?.[0] !== currentHint
+      || !isSameSource(currentHint.from, source)
+      || !validateMove(state, currentHint).ok) return null;
+    return currentHint.to;
+  }
+
   function getDraggableSource(targetEl) {
     if (!targetEl) return null;
     const appState = app.getState();
@@ -1140,7 +1148,8 @@ export function createInputController(app, rootElement) {
     activeGesture = null;
 
     if (isDoubleTap) {
-      const destination = computeLegalDestinations(state, source)[0];
+      const destination = recommendedDestination(state, source)
+        ?? computeLegalDestinations(state, source)[0];
       if (destination) {
         suppressNextClick = true;
         setTimeout(() => { suppressNextClick = false; }, 200);
@@ -1219,6 +1228,15 @@ export function createInputController(app, rootElement) {
       const appState = app.getState();
       if (appState.activeDialog || appState.isPaused) {
         return;
+      }
+
+      if (e.detail === 2) {
+        const source = getDraggableSource(e.target)?.source;
+        const destination = recommendedDestination(appState.state, source);
+        if (destination) {
+          executeMove(source, destination);
+          return;
+        }
       }
 
       if (e.target.closest('#btn-hint')) {

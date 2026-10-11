@@ -139,3 +139,11 @@ must preserve plans/scores; an actual unfinished controller cutoff must mark
 truncated=true while retaining its plan. A completed search remains untruncated
 when its final batch exceeds the time target. Tests live in smart-hints.test.js
 and smart-hints-app.test.js.
+
+
+T028 hinted gesture regression (T15/T20): seed 22 Draw 1 has a legal tableau
+and foundation destination for the same source. After requesting a hint,
+mouse double-click and touch double-tap must execute its foundation destination
+once, clear highlights/notice, and allow Undo. After Undo, no stale hint may
+execute: touch returns to its ordinary tableau destination, mouse to selection.
+Covered in tests/e2e/smart-hints.spec.js alongside existing touch/drag regressions.

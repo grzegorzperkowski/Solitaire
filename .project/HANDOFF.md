@@ -191,3 +191,18 @@ regressions cover 300 hidden permutations and completed/unfinished time budgets.
 simulation (793 calls/791 moves) passed. See reports/T028.md for exact evidence
 and the correction to the original seed-42 timing reproduction. No push or
 physical-device checks. Await coordinator acceptance; no successor assigned.
+
+
+## T028 hint gesture assignment (2026-10-11)
+
+Coordinator requests double-click/double-tap on the recommended source card
+to execute the recommended destination. IN_PROGRESS, Codex, master 842941b,
+clean tree. Reuse validation/execution and preserve other-card touch shortcuts.
+
+
+## T028 hint gesture delivered (2026-10-11)
+
+REVIEW: double-click/double-tap of a displayed hint source executes its exact
+validated first move once. Other-card/default behavior preserved; Undo clears
+recommendation. Build, 202 unit tests and 60 targeted Chromium E2E tests passed.
+See reports/T028.md. No physical-device check or push; await acceptance.

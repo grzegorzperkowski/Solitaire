@@ -1,5 +1,48 @@
 import { test, expect } from '@playwright/test';
 
+for (const touch of [false, true]) {
+  test(`recommended destination wins over the default shortcut (${touch ? 'double tap' : 'double click'})`, async ({ browser }) => {
+    const context = await browser.newContext({ hasTouch: touch, viewport: { width: 390, height: 844 } });
+    const page = await context.newPage();
+    try {
+      await page.goto('http://localhost:5186/');
+      await page.waitForFunction(() => window.__SOLITAIRE_APP__);
+      await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 22, drawCount: 1 }));
+      await page.locator('#btn-hint').click();
+      await expect(page.locator('#hint-notice')).toBeVisible();
+      const move = await page.evaluate(() => window.__SOLITAIRE_INPUT__.getHint());
+      expect(move).toEqual({ type: 'move', from: { pile: 'tableau', index: 3, cardIndex: 3 }, to: { pile: 'foundation', index: 2 } });
+      const card = page.locator('#column-3 .card-node').nth(3);
+      const cardId = await card.getAttribute('data-card-id');
+      if (touch) {
+        await card.tap();
+        await card.tap();
+      } else {
+        await card.dblclick();
+      }
+      await expect(page.locator('#moves-display')).toHaveText('1');
+      await expect(page.locator(`#foundation-2 [data-card-id="${cardId}"]`)).toHaveCount(1);
+      await expect(page.locator('#hint-notice')).toBeHidden();
+      await expect(page.locator('.is-hint')).toHaveCount(0);
+      await page.locator('#btn-undo').click();
+      await expect(page.locator('#moves-display')).toHaveText('0');
+      await expect(page.locator(`#column-3 [data-card-id="${cardId}"]`)).toHaveCount(1);
+      // Undo invalidates the recommendation: the ordinary shortcut applies again.
+      if (touch) {
+        await card.tap();
+        await card.tap();
+        await expect(page.locator('#moves-display')).toHaveText('1');
+        await expect(page.locator(`#column-5 [data-card-id="${cardId}"]`)).toHaveCount(1);
+      } else {
+        await card.dblclick();
+        await expect(page.locator('#moves-display')).toHaveText('0');
+      }
+    } finally {
+      await context.close();
+    }
+  });
+}
+
 test.describe('SmartHint v1 — E2E Acceptance', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:5186/');
