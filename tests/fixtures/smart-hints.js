@@ -111,7 +111,7 @@ export function h04() {
   return state;
 }
 
-// H05: Waste→tableau recognized as goal WASTE
+// H05: Waste→tableau is preparation; it requires a subsequent strategic goal.
 export function h05() {
   // Waste has 7♥. col1 has 8♠ face-up.
   // Foundations capped so tableau cards cannot move to foundations.

@@ -17,14 +17,12 @@ const POLISH_NUMERAL_GENITIVE = {
 function formatGoalSuffix(goal, planLength) {
   const goalPhrase =
     goal === 'REVEAL' ? 'pozwolą odsłonić kartę' :
-    goal === 'WASTE' ? 'pozwolą wyprowadzić kartę ze skrawka' :
-    goal === 'FOUNDATION' ? 'pozwolą przenieść kartę do bazy' :
+    goal === 'FOUNDATION_ADVANCE' ? 'pozwolą przenieść kartę do bazy' :
     'pozwolą osiągnąć postęp';
 
   if (planLength === 1) {
     if (goal === 'REVEAL') return 'Ten ruch pozwala odsłonić kartę.';
-    if (goal === 'WASTE') return 'Ten ruch wyprowadza kartę ze skrawka.';
-    if (goal === 'FOUNDATION') return 'Ten ruch przenosi kartę do bazy.';
+    if (goal === 'FOUNDATION_ADVANCE') return 'Ten ruch przenosi kartę do bazy.';
     return 'Ten ruch pozwala osiągnąć postęp.';
   }
 

@@ -29,11 +29,8 @@ test('H05 does not rescan unchanged root mobility for every successor', () => {
   } finally {
     spy.mockRestore();
   }
-  expect(result.status).toBe('FOUND');
-  expect(result.goal).toBe('WASTE');
-  expect(result.plan[0]).toEqual({
-    type: 'move', from: { pile: 'waste' }, to: { pile: 'tableau', index: 1 },
-  });
+  expect(['FOUND', 'EXPLORATION', 'INCONCLUSIVE']).toContain(result.status);
+  expect(result.goal).not.toBe('WASTE');
   expect(rootScans).toBeLessThanOrEqual(2);
 });
 
@@ -185,17 +182,14 @@ describe('SmartHint v1 — Engine & Acceptance H01–H15', { timeout: 15000 }, (
     expect(res.plan[0].from.pile).toBe('foundation');
   }, 15000);
 
-  test('H05: Waste to tableau recognized as WASTE goal', () => {
+  test('H05: Waste alone is preparation, not a strategic goal', () => {
     const state = h05();
-    const res = runSearch(state);
-    expect(res.status).toBe('FOUND');
-    expect(res.goal).toBe('WASTE');
-    expect(res.plan[0]).toEqual({
-      type: 'move',
-      from: { pile: 'waste' },
-      to: { pile: 'tableau', index: 1 },
-    });
-  }, 15000);
+    const known = [...state.stock, ...state.waste, ...state.tableau.flatMap(c => c.cards), ...state.foundations.flat()];
+    const res = runSearch(state, known, { maxDepth: 1 });
+    expect(res.status).toBe('INCONCLUSIVE');
+    expect(res.plan).toEqual([]);
+    expect(res.truncated).toBe(true);
+  });
 
   test('H07: King between empty columns does not yield idle suggestion', () => {
     const state = h07();

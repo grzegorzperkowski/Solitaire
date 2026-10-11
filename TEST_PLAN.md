@@ -153,3 +153,18 @@ mouse double-click and touch double-tap must execute its foundation destination
 once, clear highlights/notice, and allow Undo. After Undo, no stale hint may
 execute: touch returns to its ordinary tableau destination, mouse to selection.
 Covered in tests/e2e/smart-hints.spec.js alongside existing touch/drag regressions.
+
+## T028 strategic-goal regression gates (2026-10-11)
+
+Restore fixture solitaire-stan-2284836135-draw1-114.json through save section;
+verify 52-card integrity, cursor 114, legal actions and independent F04 outcome.
+Waste 2♦ preparation must not be FOUND. Record all H/F/I/W/M/B/L and terminal
+board; preserve uncertainty at depth/time/state cutoffs and no unwinnability claim.
+Add waste enabling reveal, idle waste, foundation round trip, negative preparation
+ending in reveal, alternatives, draw/recycle cycles, sole destination loss,
+budget cuts, hidden permutations and end-state verification cases to H01–H15.
+Compare previous/new SmartHint on seeds 0–99 Draw 1/3 (up to 100 actions), plus
+paired identical positions and budgets: goals, idle suggestions, reveals, repeats,
+wins, median/p95 time/states, truncated percentage. Coordinator explicitly
+requested skipping tests and benchmark in this revision; these gates remain
+unexecuted, not recorded as passed. Existing H05 assertion reflects new contract.

@@ -1,10 +1,10 @@
 import { applyMove, getLegalMoves, isWon } from './game.js';
-import { rank, suitIndex } from './cards.js';
+import { suitIndex } from './cards.js';
 import { visibleCards } from './knowledge.js';
 import { progressStateKey } from './progress.js';
 
 /**
- * SmartHint v1 — goal-directed hint planner (T028-spec §2–§5).
+ * SmartHint — goal-directed hint planner (T028-spec §2–§5).
  *
  * DOM-free generator: searchSmartHint(state, knownCards, options).
  * Each yield exposes the best-so-far result for cancellation safety.
@@ -20,19 +20,16 @@ function possibilityKey(cardId, benefit) {
 // Benefit type constants
 const BENEFIT_REVEAL = 0;
 const BENEFIT_FOUNDATION = 1;
-const BENEFIT_WASTE = 2;
 
 // ── Compute the set of useful possibilities for a state ──
 // A useful possibility = an available legal transfer that directly:
 //   - reveals a hidden tableau card (REVEAL)
-//   - moves a waste card to tableau/foundation (WASTE)
 //   - increases foundation count (FOUNDATION)
 // Identified by (starting card of transferred run, benefit type).
 // Equivalent destinations not multiplied.
 
-function computePossibilities(state, rootFoundationSet) {
+function computePossibilities(state, rootFoundationSet, moves = getLegalMoves(state)) {
   const possibilities = new Set();
-  const moves = getLegalMoves(state);
 
   for (const move of moves) {
     if (move.type !== 'move') continue;
@@ -53,9 +50,9 @@ function computePossibilities(state, rootFoundationSet) {
       if (to.pile === 'foundation' && !rootFoundationSet.has(cardId)) {
         possibilities.add(possibilityKey(cardId, BENEFIT_FOUNDATION));
       }
-    } else if (from.pile === 'waste') {
-      const cardId = state.waste[state.waste.length - 1];
-      possibilities.add(possibilityKey(cardId, BENEFIT_WASTE));
+    } else if (from.pile === 'waste' && to.pile === 'foundation') {
+      const cardId = state.waste.at(-1);
+      if (!rootFoundationSet.has(cardId)) possibilities.add(possibilityKey(cardId, BENEFIT_FOUNDATION));
     }
     // Foundation returns are not "useful possibilities" themselves.
     // King-between-empty-columns yields no benefit.
@@ -89,11 +86,6 @@ function isBenefitRealized(pKey, rootState, endState, rootFoundationSet) {
   if (benefit === BENEFIT_FOUNDATION) {
     const si = suitIndex(cardId);
     return endState.foundations[si].includes(cardId) && !rootFoundationSet.has(cardId);
-  }
-
-  if (benefit === BENEFIT_WASTE) {
-    // Card left waste/stock = benefit realized
-    return !endState.waste.includes(cardId) && !endState.stock.includes(cardId);
   }
 
   return false;
@@ -151,14 +143,8 @@ function evaluateSequence(endState, rootState, rootFoundationSet, rootStockWaste
   }
   const F = endFoundCount - rootFoundCount;
 
-  // I: 1 if terminal boundary is an unknown draw, else 0
-  let I = 0;
-  if (atBoundary && path.length > 0) {
-    const lastMove = path[path.length - 1];
-    if (lastMove.type === 'draw') {
-      I = 1;
-    }
-  }
+  // Information includes a newly exposed waste fan card, not only a draw.
+  const I = atBoundary && visibleCards(endState).some((id) => !knownSet.has(id)) ? 1 : 0;
 
   // L: all commands in path
   const L = path.length;
@@ -183,7 +169,8 @@ function evaluateSequence(endState, rootState, rootFoundationSet, rootStockWaste
     evalEndState = { ...endState, tableau: maskedTableau, waste };
   }
 
-  const endPoss = computePossibilities(evalEndState, rootFoundationSet);
+  const endMoves = getLegalMoves(evalEndState);
+  const endPoss = computePossibilities(evalEndState, rootFoundationSet, endMoves);
 
   let M = 0;
   for (const p of endPoss) {
@@ -201,51 +188,70 @@ function evaluateSequence(endState, rootState, rootFoundationSet, rootStockWaste
   }
 
   const score = 120 * H + 65 * W + 40 * F + 20 * I + 10 * M - 4 * L - 50 * B;
-  return { score, B };
+  return { score, components: { H, F, I, W, M, B, L }, endPoss, endMoves };
 }
 
-// ── Determine the primary goal type (§2) ──
-// Preference: REVEAL > WASTE > FOUNDATION > INFORMATION
-
-function determineGoal(endState, rootState, rootFoundationSet, rootStockWasteSet, atBoundary) {
-  // H > 0 → REVEAL
-  for (let col = 0; col < 7; col++) {
-    const rootCol = rootState.tableau[col];
-    const endCol = endState.tableau[col];
-    if (rootCol.faceUpStart > 0) {
-      if (endCol.cards.length < rootCol.cards.length) {
-        const endHidden = endCol.cards.length > 0 ? endCol.faceUpStart : 0;
-        if (rootCol.faceUpStart > endHidden) return 'REVEAL';
-      } else if (endCol.faceUpStart < rootCol.faceUpStart) {
-        return 'REVEAL';
-      }
-    }
-  }
-
-  // W > 0 → WASTE
-  for (let col = 0; col < 7; col++) {
-    for (const id of endState.tableau[col].cards) {
-      if (rootStockWasteSet.has(id)) return 'WASTE';
-    }
-  }
-  for (let fi = 0; fi < 4; fi++) {
-    for (const id of endState.foundations[fi]) {
-      if (rootStockWasteSet.has(id) && !rootFoundationSet.has(id)) return 'WASTE';
-    }
-  }
-
-  // F > 0 → FOUNDATION
-  let rootFC = 0, endFC = 0;
-  for (let fi = 0; fi < 4; fi++) {
-    rootFC += rootState.foundations[fi].length;
-    endFC += endState.foundations[fi].length;
-  }
-  if (endFC > rootFC) return 'FOUNDATION';
-
-  // I → INFORMATION (terminal draw of new info)
-  if (atBoundary) return 'INFORMATION';
-
+// Preparation is never a goal, even when W or mobility gives it a high score.
+function determineGoal({ H, F, I }) {
+  if (H > 0) return 'REVEAL';
+  if (F > 0) return 'FOUNDATION_ADVANCE';
+  if (I > 0) return 'INFORMATION';
   return null;
+}
+
+// One-ply terminal verification reuses legal transitions; it is not a safety proof.
+function verifyEndState(endState, rootState, knownSet, evaluation, atBoundary) {
+  const { H, F, I, M, B } = evaluation.components;
+  const goalReached = H > 0 || F > 0 || I > 0;
+  const won = isWon(endState);
+  const moves = atBoundary ? [] : evaluation.endMoves;
+  const rootKey = progressStateKey(rootState, [...knownSet]);
+  let nonReturningActions = 0;
+  let immediateGoals = 0;
+  for (const move of moves) {
+    const next = applyMove(endState, move);
+    if (!next.ok) continue;
+    if (progressStateKey(next.state, [...knownSet]) !== rootKey) nonReturningActions++;
+    const column = move.from?.pile === 'tableau' ? endState.tableau[move.from.index] : null;
+    const reveal = column && column.faceUpStart > 0 && move.from.cardIndex === column.faceUpStart;
+    const advance = next.state.foundations.flat().length > endState.foundations.flat().length;
+    const information = checkBoundary(move, endState, knownSet);
+    if (reveal || advance || information) immediateGoals++;
+  }
+  const deadEnd = !atBoundary && !won && nonReturningActions === 0;
+  return {
+    goalReached, lostMorePossibilities: B > M,
+    usefulPossibilities: evaluation.endPoss.size,
+    legalActions: atBoundary ? null : moves.length,
+    nonReturningActions: atBoundary ? null : nonReturningActions,
+    immediateGoals: atBoundary ? null : immediateGoals,
+    continuation: atBoundary ? 'INFORMATION_BOUNDARY' : won ? 'WON' : deadEnd ? 'DEAD_END' : 'UNPROVEN',
+    horizon: atBoundary ? 0 : 1,
+    accepted: goalReached && evaluation.score > 0 && !deadEnd,
+  };
+}
+
+// Diagnostic replay uses exactly the same evaluator as the planner.
+export function analyzeHintPlan(state, knownCards, plan) {
+  const knownSet = new Set([...knownCards, ...visibleCards(state)]);
+  const foundations = new Set(state.foundations.flat());
+  const stockWaste = new Set([...state.stock, ...state.waste]);
+  const possibilities = computePossibilities(state, foundations);
+  let endState = state;
+  let atBoundary = false;
+  for (const [index, move] of plan.entries()) {
+    if (atBoundary) return { ok: false, reason: 'information-boundary', index };
+    const next = applyMove(endState, move);
+    if (!next.ok) return { ok: false, reason: next.reason, index };
+    atBoundary = checkBoundary(move, endState, knownSet);
+    endState = next.state;
+  }
+  const evaluation = evaluateSequence(endState, state, foundations, stockWaste, possibilities, knownSet, plan, atBoundary);
+  return {
+    ok: true, state: endState, goal: determineGoal(evaluation.components),
+    score: evaluation.score, components: evaluation.components,
+    verification: verifyEndState(endState, state, knownSet, evaluation, atBoundary),
+  };
 }
 
 // ── Check information boundaries (§4) ──
@@ -299,7 +305,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     return { status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false };
   }
 
-  const knownSet = new Set(knownCards);
+  const knownSet = new Set([...knownCards, ...visibleCards(state)]);
   const rootFoundationSet = new Set(state.foundations.flat());
   const rootStockWasteSet = new Set([...state.stock, ...state.waste]);
   const rootPoss = computePossibilities(state, rootFoundationSet);
@@ -308,11 +314,15 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const visited = new Map(); // key -> best cost
   visited.set(rootKey, 0);
 
+  const graph = new Map([[rootKey, { children: new Set(), H: 0, F: 0, I: 0, complete: false }]]);
+  const candidates = new Map();
   let bestResult = null;
   let bestScore = -Infinity;
   let bestLen = Infinity;
+  let bestB = Infinity;
   let stateCount = 0;
   let truncated = false;
+  const diagnostics = { strategicCandidates: 0, explorationCandidates: 0, preparatoryStates: 0, rejectedEndStates: 0 };
 
   // Priority queue: binary heap by (score DESC, pathLen ASC, B ASC, insertion order ASC)
   class PriorityQueue {
@@ -381,10 +391,14 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       break;
     }
 
+    const currentKey = progressStateKey(current.state, knownCards);
+    const node = graph.get(currentKey);
+    node.complete = true;
     const moves = getLegalMoves(current.state);
 
     for (const move of moves) {
       if (current.path.length >= maxDepth) {
+        node.complete = false;
         truncated = true;
         continue;
       }
@@ -402,40 +416,56 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       // Deduplication: reject if visited at equal or lower cost
       const key = progressStateKey(nextState, knownCards);
       const existingCost = visited.get(key);
+      if (existingCost !== undefined) node.children.add(key);
       if (existingCost !== undefined && existingCost <= nextCost) continue;
       const canRetain = existingCost !== undefined || visited.size < maxStates;
-      if (canRetain) visited.set(key, nextCost);
-      else truncated = true;
+      if (canRetain) { visited.set(key, nextCost); node.children.add(key); }
+      else { truncated = true; node.complete = false; }
 
       // Evaluate the sequence
-      const { score, B } = evaluateSequence(nextState, state, rootFoundationSet, rootStockWasteSet, rootPoss, knownSet, nextPath, atBoundary);
-      const goal = determineGoal(nextState, state, rootFoundationSet, rootStockWasteSet, atBoundary);
-
-      // Update best result if this is a confirmed goal (H>0, W>0, or F>0) or exploration (I>0)
-      // T028-spec §5: Cel potwierdzony wymaga H>0, W>0 albo F>0; sama mobilność nie wystarcza.
-      // Wybierać dodatnio oceniony cel strategiczny; jeśli go nie znaleziono, dodatnią
-      // eksplorację I>0; inaczej INCONCLUSIVE.
-      const isConfirmedGoal = goal === 'REVEAL' || goal === 'WASTE' || goal === 'FOUNDATION';
+      const evaluation = evaluateSequence(nextState, state, rootFoundationSet, rootStockWasteSet, rootPoss, knownSet, nextPath, atBoundary);
+      const { score, components } = evaluation;
+      const { B } = components;
+      if (canRetain && !graph.has(key)) {
+        graph.set(key, { children: new Set(), H: components.H, F: components.F, I: components.I, complete: atBoundary });
+      }
+      const goal = determineGoal(components);
+      const isConfirmedGoal = goal === 'REVEAL' || goal === 'FOUNDATION_ADVANCE';
       const isExploration = goal === 'INFORMATION';
+      if (isConfirmedGoal) diagnostics.strategicCandidates++;
+      else if (isExploration) diagnostics.explorationCandidates++;
+      else diagnostics.preparatoryStates++;
 
       if (score > 0 && (isConfirmedGoal || isExploration)) {
-        // Confirmed goal always beats exploration, regardless of score (§5)
-        const currentIsExploration = bestResult && bestResult.status === 'EXPLORATION';
-        const shouldReplace = !bestResult ||
-          (isConfirmedGoal && currentIsExploration) ||
-          ((!isExploration || currentIsExploration) && (score > bestScore || (score === bestScore && nextPath.length < bestLen)));
-
+        const candidate = {
+          status: isConfirmedGoal ? 'FOUND' : 'EXPLORATION',
+          plan: nextPath, goal, score, components, key: canRetain ? key : null, order: insertCounter,
+          visitedStates: stateCount, truncated,
+        };
+        // Retain goal alternatives so a proven dead end can be replaced at completion.
+        if (canRetain) candidates.set(key, {
+          ...candidate,
+          verification: { goalReached: true, lostMorePossibilities: components.B > components.M,
+            usefulPossibilities: evaluation.endPoss.size, continuation: atBoundary ? 'INFORMATION_BOUNDARY' : 'UNPROVEN',
+            horizon: atBoundary ? 0 : 1, accepted: true },
+        });
+        const currentIsExploration = bestResult?.status === 'EXPLORATION';
+        const sameCategory = !bestResult || isExploration === currentIsExploration;
+        const betterQuality = score > bestScore || (score === bestScore &&
+          (nextPath.length < bestLen || (nextPath.length === bestLen && B < bestB)));
+        const shouldReplace = !bestResult || (isConfirmedGoal && currentIsExploration) ||
+          (sameCategory && betterQuality);
         if (shouldReplace) {
-          bestScore = score;
-          bestLen = nextPath.length;
-          bestResult = {
-            status: isConfirmedGoal ? 'FOUND' : 'EXPLORATION',
-            plan: nextPath,
-            goal: isExploration ? 'INFORMATION' : goal,
-            score,
-            visitedStates: stateCount,
-            truncated,
-          };
+          const verification = verifyEndState(nextState, state, knownSet, evaluation, atBoundary);
+          candidate.verification = verification;
+          if (canRetain) candidates.set(key, candidate);
+          if (!verification.accepted) diagnostics.rejectedEndStates++;
+          if (verification.accepted) {
+            bestScore = score;
+            bestLen = nextPath.length;
+            bestB = B;
+            bestResult = candidate;
+          }
         }
       }
 
@@ -454,8 +484,10 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
 
     // Yield between expanded states for controller cancellation
     if (queue.length > 0 || stateCount > 1) {
-      yield bestResult || {
+      const { key: unusedKey, order: unusedOrder, ...publicBest } = bestResult || {};
+      yield bestResult ? { ...publicBest, visitedStates: stateCount, truncated, diagnostics: { ...diagnostics, retainedStates: visited.size } } : {
         status: 'INCONCLUSIVE',
+        diagnostics: { ...diagnostics, retainedStates: visited.size },
         plan: [],
         goal: null,
         score: null,
@@ -465,14 +497,64 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     }
   }
 
+  // Read the already explored graph; no new moves or hidden-card lookahead.
+  let verificationReads = 0;
+  const ordered = [...candidates.values()];
+  if (bestResult && !candidates.has(bestResult.key)) ordered.push(bestResult);
+  ordered.sort((a, b) => (a.status === b.status ? 0 : a.status === 'FOUND' ? -1 : 1) ||
+    b.score - a.score || a.plan.length - b.plan.length || a.components.B - b.components.B || a.order - b.order);
+  bestResult = null;
+  for (const [candidateIndex, candidate] of ordered.entries()) {
+    if (candidateIndex > 0) yield {
+      status: 'INCONCLUSIVE', plan: [], goal: null, score: null,
+      visitedStates: stateCount, truncated,
+      diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads },
+    };
+    if (!candidate.verification.accepted) continue;
+    if (candidate.verification.legalActions === undefined) {
+      const replay = analyzeHintPlan(state, knownCards, candidate.plan);
+      candidate.verification = replay.verification;
+      if (!candidate.verification.accepted) { diagnostics.rejectedEndStates++; continue; }
+    }
+    if (candidate.verification.continuation === 'UNPROVEN') {
+      const pending = [candidate.key];
+      const checked = new Set();
+      let uncertain = false;
+      let futureGoal = false;
+      while (pending.length && verificationReads < maxStates) {
+        const key = pending.pop();
+        if (checked.has(key)) continue;
+        checked.add(key);
+        verificationReads++;
+        if (verificationReads % 64 === 0) {
+          const { key: unusedKey, order: unusedOrder, ...publicCandidate } = candidate;
+          yield { ...publicCandidate, visitedStates: stateCount, truncated,
+            diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
+        }
+        const node = graph.get(key);
+        if (!node) { uncertain = true; continue; }
+        if (node.H > 0 || node.I > 0 || node.F > candidate.components.F) { futureGoal = true; break; }
+        if (!node.complete) uncertain = true;
+        for (const child of node.children) if (!checked.has(child)) pending.push(child);
+      }
+      if (pending.length && !futureGoal) { uncertain = true; truncated = true; }
+      candidate.verification.continuation = futureGoal ? 'FUTURE_GOAL_REACHABLE' : uncertain ? 'UNPROVEN' : 'KNOWN_DEAD_END';
+      candidate.verification.graphStates = checked.size;
+      if (!futureGoal && !uncertain) { diagnostics.rejectedEndStates++; continue; }
+    }
+    bestResult = candidate;
+    break;
+  }
   if (bestResult) {
-    bestResult.visitedStates = stateCount;
-    bestResult.truncated = truncated;
-    return bestResult;
+    const { key, order, ...result } = bestResult;
+    return { ...result, visitedStates: stateCount, truncated,
+      diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
   }
 
   return {
     status: 'INCONCLUSIVE',
+    diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads },
+    reason: truncated ? 'LIMIT_REACHED' : 'NO_STRATEGIC_RECOMMENDATION',
     plan: [],
     goal: null,
     score: null,

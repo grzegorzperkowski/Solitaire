@@ -21,11 +21,11 @@ for (let run = 0; run < 3; run++) {
   } while (!step.done);
   const ms = performance.now() - start;
   const result = step.value;
-  assert.equal(result.status, 'FOUND');
-  assert.equal(result.goal, 'WASTE');
-  assert.deepEqual(result.plan[0], {
-    type: 'move', from: { pile: 'waste' }, to: { pile: 'tableau', index: 1 },
-  });
+  assert.notEqual(result.goal, 'WASTE');
+  if (result.status === 'FOUND') {
+    assert.ok(result.components.H > 0 || result.components.F > 0);
+    assert.equal(result.verification.accepted, true);
+  }
   assert.equal(JSON.stringify(state), before);
   if (expected) assert.deepEqual(result, expected);
   else expected = result;

@@ -1,5 +1,29 @@
 # Fresh-session handoff
 
+## Strategic-goal implementation checkpoint — 2026-10-11
+
+T028 BLOCKED: primary goals, score components, end verification and graph-based
+rejection of known dead continuations implemented on master. No other task.
+Independent baseline: fixture seed2284836135/cursor114 has 52 cards, five legal
+actions, F04 PROGRESS_FOUND and 256 known states without strategic goal.
+See reports/T028-strategic-analysis.md for components, board and reproduction.
+Coordinator explicitly skipped tests and benchmark; no post-change search run,
+new regression matrix or quality/performance claim. Production build succeeded.
+Updated H05/profile assertions are unrun. Rules/F04/save schema unchanged.
+Resume only when assigned: new regressions and paired previous/new measurements.
+Checkpoint: `T028: separate strategic goals from waste preparation`; no push.
+
+## Strategic-goal revision assignment — 2026-10-11
+
+Coordinator explicitly resumed T028: distinguish primary strategic goals from
+preparation, verify terminal states, preserve F04/hidden-information contracts,
+add replay regression and compare seeds 0–99 in both draw modes. Base `90fba4f`,
+master, initially clean; T014/T027 approved DONE. No other task assigned.
+Sequential plan: independent replay/exhaustive known-state check; RED goal and
+verification regressions; planner/UI diagnostics; GREEN/full checks; paired
+old/new benchmark and report; inspect explicit staging, commit, REVIEW.
+
+
 ## T028 diagnostic export delivery — 2026-10-11
 
 Menu → "Zapisz stan do analizy" downloads JSON; reproduce using

@@ -135,7 +135,7 @@ Clock belongs to app/session: accumulate `performance.now()` deltas only while a
 
 First legal action marks started and increments the matching mode's attempts. First transition into won marks winRecorded and increments wins/updates best values. A single persisted envelope includes those flags, aggregates and history, so reloading a saved win cannot award it again. A save failure leaves that envelope entirely unchanged on disk, while the in-memory attempt continues with a warning. Restore validates `wins ≤ attempts`, nonnegative counters and logical flag relationships. Derived snapshots do not apply statistics during replay.
 
-Hints use `getLegalMoves`, with a stable order: hidden-card reveal, foundation advance, other transfer, draw/recycle; ties use source pile/index/cardIndex then destination order. Never inspect hidden card identities for prioritization. The list may contain strategically poor or reversible moves; Help states it is assistance, not a solver. Optional completion uses a copied board and only foundation moves, at most 52 transfers; offer only if that simulation wins under F12.
+Reference `rankHints` uses `getLegalMoves`, with a stable order: hidden-card reveal, foundation advance, other transfer, draw/recycle; ties use source pile/index/cardIndex then destination order. Never inspect hidden card identities for prioritization. The list may contain strategically poor or reversible moves; Help states it is assistance, not a solver. Optional completion uses a copied board and only foundation moves, at most 52 transfers; offer only if that simulation wins under F12.
 
 ### Reachable progress (T027)
 
@@ -161,14 +161,14 @@ replacement and destruction, ignores stale results, and does not restart on
 timer-only changes. Analysis neither changes nor saves a session. Subscribers receive an optional second `progressOnly` argument on analysis completion; the renderer then updates only the notice, preserving board nodes, focus and move animations. UI uses a
 nonmodal polite status notice, hides it during pause/dialogs and wins, and keeps
 normal play/Undo available. A proven negative result takes precedence over
-cycling preparatory hints. UNKNOWN preserves ordinary legal hints. Both automatic notices and Hint share next-step text: new game, plus Undo only when the session cursor is positive, without promising that Undo will resolve the position.
+cycling preparatory hints. UNKNOWN does not warn; bounded SmartHint may independently return uncertainty. Both automatic notices and Hint share next-step text: new game, plus Undo only when the session cursor is positive, without promising that Undo will resolve the position.
 
 Session knowledge is a frozen unique array, accumulated from all exposed tableau
 cards, foundations, and the last one/three waste cards, matching the renderer.
 It survives Undo, Redo, discarded branches and reload; new/restarted attempts
 reset it. Knowledge stays outside board state and never affects hint ranking.
 
-### Planned SmartHint service (T028; not implemented)
+### SmartHint service (T028; strategic revision validation pending)
 
 [T028-spec](.project/tasks/T028-spec.md) defines a separate pure
 `searchSmartHint(state, knownCards, options)` generator using existing legal
@@ -177,8 +177,22 @@ UI shows the first command and goal without executing it. Recompute after board
 or knowledge changes. Plans/scores never enter board, history or persistence.
 Reuse progress keys/knowledge only where their semantics match; heuristic
 ranking and depth limits must not weaken `searchProgress` exhaustion rules.
-This will supersede hint cycling and the ordinary-legal-hint fallback above;
+SmartHint supersedes hint cycling and the ordinary-legal-hint fallback above;
 knowledge will identify information boundaries, never rank concealed values.
+
+SmartHint strategic revision keeps Best-First Search and shared getLegalMoves /
+applyMove. Waste/tableau transfers and foundation returns are intermediate;
+only H>0 or net F>0 confirms FOUND. A new-information boundary permits
+EXPLORATION and stops expansion. U weights remain unchanged; M/B count direct
+reveal/foundation opportunities, excluding standalone waste transfers.
+
+The result carries H/F/I/W/M/B/L and terminal verification. Retained nodes and
+edges share the main state budget; goal alternatives reference those nodes.
+Final verification reads the already explored graph (bounded by maxStates,
+yield every 64 reads) to discard proven dead continuations, preserving UNKNOWN
+scope as UNPROVEN. A one-ply check reports terminal actions and lost mobility;
+it is not a safety proof. No hidden-value continuation, new game rules or
+heuristic NO_PROGRESS. Existing diagnostic export includes these observations.
 
 ## 7. Persistence and ownership
 

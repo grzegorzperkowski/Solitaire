@@ -1,6 +1,6 @@
-# SmartHint v1 — specyfikacja T028
+# SmartHint — specyfikacja T028
 
-Status: przygotowane do przyszłej implementacji, 2026-10-11. Źródło: opis
+Status: strategic-goal revision assigned 2026-10-11; validation deferred at coordinator request. Źródło: opis
 koordynatora „Inteligentna pomoc do pasjansa Klondike”. To specyfikacja produktu,
 nie potwierdzenie wyników badań ani skuteczności proponowanych wag.
 
@@ -24,10 +24,11 @@ Oddaje sterowanie pomiędzy porcjami pracy; czas mierzy kontroler, nie silnik.
 Każdy yield i wynik końcowy udostępniają najlepszy dotąd wynik, aby przerwanie
 czasowe nie gubiło znalezionej, legalnej sugestii.
 
-Wynik: `{status, plan, goal, score, visitedStates, truncated}`.
+Wynik: `{status, plan, goal, score, visitedStates, truncated}`; rekomendacja
+zawiera także `components: {H,F,I,W,M,B,L}`, `verification` i `diagnostics`.
 
 - `FOUND`: potwierdzony cel strategiczny; `plan` to legalne komendy,
-  `goal` to `REVEAL`, `WASTE` lub `FOUNDATION`.
+  `goal` to `REVEAL` lub `FOUNDATION_ADVANCE`.
 - `EXPLORATION`: plan kończy się zdobyciem nowej informacji; `goal: INFORMATION`.
 - `INCONCLUSIVE`: brak wiarygodnej dodatnio ocenionej sekwencji; pusty plan,
   `goal: null`, `score: null`. Nie jest dowodem braku postępu.
@@ -35,8 +36,8 @@ Wynik: `{status, plan, goal, score, visitedStates, truncated}`.
 
 `truncated` oznacza odcięcie przez głębokość, stany lub czas, także przy FOUND.
 Nie dodawać tutaj statusu NO_PROGRESS. Wynik nigdy nie obiecuje optymalności.
-Główny cel opisuje rzeczywisty efekt planu (preferencja reveal, waste,
-foundation), a nie tylko typ pierwszej komendy.
+Główny cel opisuje rzeczywisty efekt całej sekwencji: odsłonięcie tableau
+albo dodatni przyrost baz. Waste→tableau jest przygotowaniem, nie celem.
 
 ## 3. Przeszukiwanie i budżety
 
@@ -97,13 +98,13 @@ Nie są kalibracją naukową. Wszystkie różnice liczyć względem korzenia S0.
   Nie sumować zdarzeń przeniesienia; recycle ani powrót bazy nie generuje W.
 - F: liczba kart w bazach na końcu minus liczba w bazach S0 (ze znakiem).
   Powrót tej samej karty do bazy daje zero dodatkowego zysku.
-- I: 1 za terminalne dobranie nowej informacji ze stock, inaczej 0;
+- I: 1 za rzeczywiście nową informację na granicy (tableau, draw lub waste fan), inaczej 0;
   nie mnożyć przez liczbę kart w Draw 3 ani przez powtarzane dobrania.
 - L: wszystkie komendy, także draw/recycle; automatyczne odkrycie nie dodaje L.
 - M/B: mierzyć zmianę zbioru użytecznych możliwości opisanych poniżej.
 
 Użyteczna możliwość to dostępny legalny transfer bezpośrednio odkrywający
-tableau, wyprowadzający waste albo zwiększający bazy; ponadto transfer króla
+tableau albo zwiększający bazy (także waste→foundation); ponadto transfer króla
 uwalniający zakrytą kartę jest już przypadkiem odkrycia. Identyfikować ją przez
 kartę początkową przenoszonego ciągu i typ korzyści, bez mnożenia równoważnych
 miejsc docelowych. Wykluczyć karty wracające tylko do swojej bazy z S0.
@@ -113,7 +114,9 @@ kart, które nadal potrzebują tego ruchu; zrealizowanie korzyści nie jest stra
 Przeniesienie jedynego miejsca odkładania do bazy może zatem dostać karę B.
 To lokalne przybliżenie mobilności, nie dowód strategicznego bezpieczeństwa.
 
-Cel potwierdzony wymaga H>0, W>0 albo F>0; sama mobilność nie wystarcza.
+Cel potwierdzony wymaga H>0 albo F>0. W i M są miarami pomocniczymi;
+same nie tworzą FOUND. Porównanie F względem S0 wyklucza zysk z powrotu
+karty baza→tableau→ta sama baza.
 Wybierać dodatnio oceniony cel strategiczny; jeśli go nie znaleziono, dodatnią
 eksplorację I>0; inaczej INCONCLUSIVE. Dzięki temu draw nie wypiera znanej
 konkretnej drogi do celu. W remisie użyć kolejności z §3. Nie wprowadzać
@@ -122,6 +125,35 @@ nieokreślonego progu „podobnych” wyników.
 Testy arytmetyki przy innych składnikach równych zero: odkrycie w 2 ruchach
 112, baza w 1 ruchu 36, nowa informacja w 1 ruchu 16. Fixture całych plansz
 muszą uwzględniać także M/B, nie zakładać tych sum automatycznie.
+
+### Weryfikacja końca i diagnostyka (rewizja 2026-10-11)
+
+Przed publikacją lepszego kandydata sprawdzić jego osiągnięty cel, dodatni
+wynik, M/B i bezpośrednie legalne akcje końca. Odrzucić koniec bez dalszych
+akcji albo z samym bezpośrednim powrotem do S0, chyba że to wygrana lub granica
+informacji. Nie utożsamiać dodatniego wyniku z bezpieczeństwem strategicznym.
+
+Kontynuować tę samą kolejkę po transferach waste i po ruchach do baz. Po
+zakończeniu głównego wyszukiwania porównywać dodatnio ocenionych kandydatów:
+FOUND przed EXPLORATION, następnie wyższe U, krótszy plan, mniejsze B, stabilna
+kolejność enumeracji. Odczyt istniejących krawędzi grafu sprawdza, czy z końca
+kandydata można osiągnąć odsłonięcie, nową informację lub dalszy przyrost baz.
+Nie symuluje nowych stanów i nie przekracza granic informacji.
+
+KNOWN_DEAD_END oznacza wyłącznie wyczerpaną część znanego grafu względem
+końca kandydata; odrzucić taką rekomendację i rozważyć następną. Brak pełnego
+grafu daje UNPROVEN, nie dowód impasu. Łączny limit odczytów weryfikacji to
+maxStates, z yield co 64 odczyty oraz między alternatywnymi kandydatami;
+wyczerpanie limitu ustawia truncated. To nie solver wygrywalności ani NO_PROGRESS.
+Wynik po granicy informacji ma INFORMATION_BOUNDARY, bez analizy odsłoniętej
+wartości. `verification` opisuje zakres sprawdzenia, nie obiecuje bezpieczeństwa.
+
+`analyzeHintPlan(state, knownCards, plan)` odtwarza komendy tym samym silnikiem,
+odrzuca nielegalną akcję lub kontynuację po granicy informacji i zwraca stan
+końcowy oraz wspólne składniki oceny. Służy diagnostyce; UI nie wykonuje planów.
+Eksport istniejącego hint zawiera nowe składniki automatycznie, bez zmiany save
+schema. Diagnostyka INCONCLUSIVE podaje kandydatów, stany przygotowawcze,
+odrzucenia końców i LIMIT_REACHED/NO_STRATEGIC_RECOMMENDATION.
 
 ## 6. Integracja i komunikaty
 
@@ -160,7 +192,7 @@ pustej listy legalnych akcji i dowodu braku osiągalnego postępu.
 | H02 | Drugi ruch odkrywa: wskazać pierwszy i cel sekwencji długości 2. |
 | H03 | Baza kontra odkrycie: porównać pełne wyniki, nie kolejność enumeracji. |
 | H04 | Powrót z bazy umożliwia odkrycie: znaleźć go jako pierwszy ruch. |
-| H05 | Waste→tableau: rozpoznać cel W i legalny ruch. |
+| H05 | Waste→tableau bez dalszego celu: przygotowanie nie tworzy FOUND. |
 | H06 | Draw 3 po zabraniu waste/recycle: zachować dokładną kolejność, resztki 1/2 kart. |
 | H07 | Król między pustymi kolumnami: brak jałowej sugestii i punktów za cykl. |
 | H08 | Jedyna opcja to nieznany stock: EXPLORATION, bez obietnicy strategii. |
@@ -217,3 +249,14 @@ Eksport nie zmienia planszy, historii, statystyk ani localStorage. Błąd pobran
 ma polski komunikat i pozwala ponowić próbę. Nie dodawać importu do UI; analizę
 odtwarzać przez istniejące restoreSession na sekcji save pliku, bez nadpisywania
 zapisu gracza. Test obejmuje odtworzenie po Undo i faktyczne pobranie w 320 px.
+
+## Wznowienie i ograniczenie dowodów — 2026-10-11
+
+Przypadek z tests/fixtures/solitaire-stan-2284836135-draw1-114.json ma być
+odtwarzany przez restoreSession(save). Wymagane rozszerzenia H01–H15:
+waste bez celu i z odsłonięciem, powroty z baz, ujemne przygotowanie,
+alternatywy/cykle, utrata miejsca, limity, ukryte permutacje. Wymagany benchmark
+0–99 obu trybów porównuje poprzedni SmartHint z rewizją na tych samych pozycjach
+i przy porównywalnym budżecie, oprócz historycznego rankHints.
+Koordynator następnie polecił "no tests" i wybrał "Pomiń testy i benchmark".
+Nie wykonano tych bramek ani kalibracji; wagi i ograniczenia produkcyjne zachowane.
