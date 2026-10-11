@@ -3,11 +3,12 @@
  * Follows ARCHITECTURE §9, REQUIREMENTS F01/F03/F06/N01/N02 and TEST_PLAN T15/T18.
  */
 
-import { validateMove } from '../engine/game.js';
+import { validateMove, getLegalMoves } from '../engine/game.js';
 import { rankHints } from '../engine/hints.js';
 import { noProgressMessage } from './progress.js';
 import { getCardDetails, SUIT_NAMES, createCardElement } from './cards.js';
 import { calculateBoardDimensions } from './layout.js';
+import { formatSmartHintMessage } from './smart-hints.js';
 
 export function createInputController(app, rootElement) {
   let selection = null; // { pile: 'waste' | 'tableau' | 'foundation', index?, cardIndex? }
@@ -23,13 +24,30 @@ export function createInputController(app, rootElement) {
   let hintIndex = 0;
   let currentHint = null;
   let hintBoard = app.getState().state;
-  const unsubscribeFromApp = app.subscribe(({ state }) => {
+  let waitingForHint = false;
+  const unsubscribeFromApp = app.subscribe(({ state, hint }) => {
     if (state !== hintBoard) {
       hintBoard = state;
       hintMoves = null;
       hintIndex = 0;
       currentHint = null;
       lastTouchTap = null;
+      waitingForHint = false;
+    } else if (waitingForHint && hint) {
+      waitingForHint = false;
+      if (hint.status === 'WON') {
+        currentHint = null;
+      } else if (hint.status === 'INCONCLUSIVE') {
+        currentHint = null;
+        announce(formatSmartHintMessage(state, hint));
+      } else if (hint.plan && hint.plan.length > 0) {
+        currentHint = hint.plan[0];
+        const message = formatSmartHintMessage(state, hint);
+        announce(message);
+      } else {
+        currentHint = null;
+      }
+      onStateChangeCallback?.();
     }
   });
   const debugDrag = new URLSearchParams(window.location.search).has('debug-drag');
@@ -59,29 +77,58 @@ export function createInputController(app, rootElement) {
   function handleHint() {
     const appState = app.getState();
     if (appState.isWon) return;
+
+    // F04 NO_PROGRESS has precedence over all hints (§6)
     if (appState.progress?.status === 'NO_PROGRESS') {
       currentHint = null;
       announce(noProgressMessage(appState.progress.noLegalMoves, appState.session));
       onStateChangeCallback?.();
       return;
     }
-    if (!hintMoves) hintMoves = rankHints(app.getState().state);
-    if (!hintMoves.length) {
+
+    if (appState.state && getLegalMoves(appState.state).length === 0) {
       currentHint = null;
       announce(noProgressMessage(true, appState.session));
-    } else {
-      currentHint = hintMoves[hintIndex];
-      hintIndex = (hintIndex + 1) % hintMoves.length;
-      const move = currentHint;
-      if (move.type === 'draw') announce('Podpowiedź: dobierz kartę ze stosu.');
-      else if (move.type === 'recycle') announce('Podpowiedź: przetasuj skrawek.');
-      else {
-        const from = move.from.pile === 'tableau' ? `kolumny ${move.from.index + 1}`
-          : move.from.pile === 'waste' ? 'skrawka' : `bazy ${SUIT_NAMES[move.from.index]}`;
-        const to = move.to.pile === 'tableau' ? `kolumny ${move.to.index + 1}` : `bazy ${SUIT_NAMES[move.to.index]}`;
-        announce(`Podpowiedź: przenieś kartę z ${from} na ${to}.`);
-      }
+      onStateChangeCallback?.();
+      return;
     }
+
+    // Trigger or re-fetch SmartHint (§6)
+    app.requestSmartHint();
+    const updatedState = app.getState();
+    const smartHint = updatedState.hint;
+
+    if (!smartHint) {
+      // In flight or starting: wait for subscription update
+      waitingForHint = true;
+      currentHint = null;
+      onStateChangeCallback?.();
+      return;
+    }
+
+    waitingForHint = false;
+
+    if (smartHint.status === 'WON') {
+      currentHint = null;
+      onStateChangeCallback?.();
+      return;
+    }
+
+    if (smartHint.status === 'INCONCLUSIVE') {
+      currentHint = null;
+      announce(formatSmartHintMessage(appState.state, smartHint));
+      onStateChangeCallback?.();
+      return;
+    }
+
+    if (smartHint.plan && smartHint.plan.length > 0) {
+      currentHint = smartHint.plan[0];
+      const message = formatSmartHintMessage(appState.state, smartHint);
+      announce(message);
+    } else {
+      currentHint = null;
+    }
+
     onStateChangeCallback?.();
   }
 

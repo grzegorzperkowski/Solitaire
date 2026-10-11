@@ -2,6 +2,7 @@ import { createSession, execute, undo, redo, restartSession, addElapsedMs } from
 import { loadSession, saveSession, STORAGE_KEY, SCHEMA_VERSION } from './persistence.js';
 import { isWon } from './engine/game.js';
 import { searchProgress } from './engine/progress.js';
+import { searchSmartHint } from './engine/smart-hints.js';
 
 export const LOCK_NAME = 'pl.solitaire.writer';
 
@@ -9,6 +10,8 @@ export function createApp({
   storage,
   load = loadSession,
   progressMaxStates = 10000,
+  hintMaxStates = 10000,
+  hintMaxDepth = 12,
   lockManager = globalThis?.navigator?.locks,
   performance = globalThis?.performance,
   document = globalThis?.document,
@@ -36,7 +39,110 @@ export function createApp({
   let analyzedBoard = null;
   let analyzedKnowledge = null;
   let analysisTimer = null;
+
+  // SmartHint v1 state (T028-spec §2, §6)
+  let hint = null;
+  let hintRequestId = 0;
+  let hintBoard = null;
+  let hintKnowledge = null;
+  let hintTimer = null;
+  let isHintLoading = false;
+
   const listeners = new Set();
+
+  function cancelHint() {
+    clearTimeout(hintTimer);
+    hintTimer = null;
+    isHintLoading = false;
+    hintRequestId++;
+  }
+
+  function invalidateHint() {
+    cancelHint();
+    hint = null;
+    hintBoard = null;
+    hintKnowledge = null;
+  }
+
+  function requestSmartHint() {
+    if (!session || isDestroyed) return;
+    const board = session.state;
+    const knowledge = session.knownCards.join(',');
+
+    // If game is won, no hint
+    if (isWon(board)) {
+      invalidateHint();
+      hint = Object.freeze({ status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false });
+      notifyListeners();
+      return;
+    }
+
+    // Repeated click on same board/knowledge re-exposes current result if available (§6)
+    if (hint && hintBoard === board && hintKnowledge === knowledge && !isHintLoading) {
+      notifyListeners();
+      return;
+    }
+
+    // Cancel existing search
+    cancelHint();
+    const reqId = ++hintRequestId;
+    hintBoard = board;
+    hintKnowledge = knowledge;
+    isHintLoading = true;
+    hint = null;
+
+    const generator = searchSmartHint(board, session.knownCards, {
+      maxStates: hintMaxStates,
+      maxDepth: hintMaxDepth,
+    });
+
+    const now = () => performance ? performance.now() : Date.now();
+    let activeMs = 0;
+    let latestValue = null;
+
+    function hintBatch() {
+      if (isDestroyed || reqId !== hintRequestId || session?.state !== board || session?.knownCards.join(',') !== knowledge) {
+        return;
+      }
+      // Cancel on pause, activeDialog, or hidden document (§6)
+      if (isPaused || activeDialog || isDocumentHidden()) {
+        isHintLoading = false;
+        return;
+      }
+
+      const start = now();
+      let next;
+      do {
+        next = generator.next();
+        if (next.value) latestValue = next.value;
+        if (next.done) break;
+      } while (now() - start < 4 && activeMs + now() - start < 100);
+
+      activeMs += now() - start;
+
+      if (next.done || activeMs >= 100) {
+        if (!next.done) {
+          try { generator.return(); } catch {}
+        }
+        isHintLoading = false;
+        const result = next.done ? next.value : (latestValue || {
+          status: 'INCONCLUSIVE',
+          plan: [],
+          goal: null,
+          score: null,
+          visitedStates: 0,
+          truncated: true,
+        });
+        hint = Object.freeze(result);
+        notifyListeners();
+      } else {
+        hintTimer = setTimeout(hintBatch, 0);
+      }
+    }
+
+    hintTimer = setTimeout(hintBatch, 0);
+    notifyListeners();
+  }
 
   function updateProgress() {
     if (!session) return;
@@ -46,6 +152,8 @@ export function createApp({
     clearTimeout(analysisTimer);
     analyzedBoard = board;
     analyzedKnowledge = knowledge;
+    // Invalidate hint whenever board or knowledge changes (§6)
+    invalidateHint();
     progress = Object.freeze({ status: isWon(board) ? 'WON' : 'UNKNOWN', noLegalMoves: false });
     if (progress.status === 'WON') return;
     const search = searchProgress(board, session.knownCards, { maxStates: progressMaxStates });
@@ -419,6 +527,8 @@ export function createApp({
     return Object.freeze({
       session,
       progress,
+      hint,
+      isHintLoading,
       state: session ? session.state : null,
       moveCount: session ? session.moveCount : 0,
       elapsedMs: session ? session.elapsedMs : 0,
@@ -445,6 +555,7 @@ export function createApp({
   function destroy() {
     isDestroyed = true;
     clearTimeout(analysisTimer);
+    clearTimeout(hintTimer);
     settleElapsed();
     if (timerIntervalId) clearInterval(timerIntervalId);
     if (checkpointIntervalId) clearInterval(checkpointIntervalId);
@@ -475,6 +586,7 @@ export function createApp({
     closeDialog,
     setDrawPreference,
     markTouchHelpSeen,
+    requestSmartHint,
     save,
     getState,
     subscribe,

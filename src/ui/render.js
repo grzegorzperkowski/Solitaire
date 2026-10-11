@@ -7,6 +7,7 @@ import { createCardElement, createEmptySlotElement } from './cards.js';
 import { calculateBoardDimensions, applyLayoutVariables } from './layout.js';
 import { renderDialogs } from './dialogs.js';
 import { noProgressMessage } from './progress.js';
+import { formatSmartHintMessage } from './smart-hints.js';
 
 export function formatTime(ms) {
   const totalSec = Math.floor(Math.max(0, ms) / 1000);
@@ -37,6 +38,7 @@ export function createBoardStructure(rootElement) {
 
       <div id="notice-banner" class="notice-banner hidden" role="status" aria-live="polite"></div>
       <div id="progress-notice" class="notice-banner hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+      <div id="hint-notice" class="notice-banner hidden" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="practice-status" class="notice-banner hidden">Tryb ćwiczeniowy — wygrana tej partii jest już zaliczona.</div>
       <div id="live-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
@@ -175,6 +177,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   rootElement.querySelector('#practice-status')?.classList.toggle('hidden', !state.winRecorded || state.activeDialog === 'win');
 
   renderProgressNotice(rootElement, state);
+  renderHintNotice(rootElement, state);
 
   const gameState = state.state;
   if (!gameState) return;
@@ -212,6 +215,17 @@ export function renderProgressNotice(rootElement, state) {
   const progressText = blocked ? noProgressMessage(state.progress.noLegalMoves, state.session) : '';
   if (progressNotice.textContent !== progressText) progressNotice.textContent = progressText;
   progressNotice.classList.toggle('hidden', !blocked);
+}
+
+export function renderHintNotice(rootElement, state) {
+  const hintNotice = rootElement.querySelector('#hint-notice');
+  if (!hintNotice) return;
+  // If progress notice is showing NO_PROGRESS, hint notice is hidden (§6)
+  const isNoProgress = !state.isWon && !state.isPaused && !state.activeDialog && state.progress?.status === 'NO_PROGRESS';
+  const showHint = !isNoProgress && !state.isWon && !state.isPaused && !state.activeDialog && state.hint && state.hint.status !== 'WON';
+  const hintText = showHint ? formatSmartHintMessage(state.state, state.hint) : '';
+  if (hintNotice.textContent !== hintText) hintNotice.textContent = hintText;
+  hintNotice.classList.toggle('hidden', !showHint || !hintText);
 }
 
 function renderDealAnimation(container) {

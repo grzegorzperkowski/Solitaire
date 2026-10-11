@@ -1,7 +1,7 @@
 # Project status
 
-- State: T000–T015, T017, T024 and T025 are DONE; T025 accepted by the human coordinator on 2026-10-11 at `3a50ba8`.
-- Current task: none in implementation. T028 TODO: task/specification prepared at coordinator request; implementation explicitly deferred. See [tasks/T028.md](tasks/T028.md).
+- State: T000–T015, T017, T024, T025, and T027 are DONE; T028 is REVIEW.
+- Current task: T028 REVIEW, implemented and verified on 2026-10-11. See [tasks/T028.md](tasks/T028.md) and [reports/T028.md](reports/T028.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).
 - Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.

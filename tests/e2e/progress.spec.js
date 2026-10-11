@@ -36,6 +36,7 @@ test('E2E03 foundation preparation has reachable progress', async ({ page }) => 
 test('E2E04 direct foundation hint', async ({ page }) => {
   await load(page, 4);
   await page.locator('#btn-hint').click();
+  await page.waitForFunction(() => window.fixtureInput.getHint() !== null);
   expect(await page.evaluate(() => window.fixtureInput.getHint().to.pile)).toBe('foundation');
   await expect(notice(page)).toBeHidden();
 });

@@ -154,8 +154,15 @@ See reports/T027.md. No push or physical-device check.
 ## T027 acceptance / T028 preparation (2026-10-11)
 
 Coordinator accepted T027 through `dec2fbe17ae3af35f42a302c7accdf4edee06d49`:
-T027 is DONE. Coordinator requested only preparation of the new task and
-specification ("Przygotuj zadanie i specyfikację"). T028 is TODO, not assigned
-for implementation. Read tasks/T028.md and tasks/T028-spec.md when assigned.
-No product code changed. T026 remains REVIEW; no other task was accepted.
-This entry supersedes earlier T027 pending-acceptance/no-successor notes.
+T027 is DONE.
+
+## T028 implementation and verification (2026-10-11)
+T028 is REVIEW. SmartHint goal-directed hints planner implementation complete.
+- Engine generator `searchSmartHint` in `src/engine/smart-hints.js` with binary heap priority queue, utility scoring $U$, information boundary masking, and deduplication.
+- Full fixtures H01–H15 in `tests/fixtures/smart-hints.js`.
+- Unit tests: `tests/unit/smart-hints.test.js` (15/15) and `tests/unit/smart-hints-app.test.js` (7/7) passing.
+- Full unit test suite `npm test`: 197 passing across 15 test files.
+- UI integration: time-sliced scheduling in `src/app.js`, interactive handling in `src/ui/input.js`, nonmodal rendering in `src/ui/render.js`, Polish announcements in `src/ui/smart-hints.js`.
+- Full Playwright E2E suite `npm run test:e2e`: 87/87 passing in Chromium (including `smart-hints.spec.js`).
+- Benchmark script `scripts/benchmark-hints.mjs`: evaluated Draw 1 and Draw 3, demonstrating ~2-3x increase in revealed cards and 100% elimination of cycle returns compared to baseline `rankHints`.
+- Report documented in `.project/reports/T028.md`. Waiting for human coordinator approval.
