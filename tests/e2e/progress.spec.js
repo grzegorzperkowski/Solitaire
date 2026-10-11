@@ -33,11 +33,14 @@ test('E2E03 foundation preparation has reachable progress', async ({ page }) => 
   await page.evaluate((move) => window.fixtureApp.executeCommand(move), revealAfterPreparation);
   expect(await page.evaluate(() => window.fixtureApp.getState().state.tableau[1].faceUpStart)).toBe(0);
 });
-test('E2E04 direct foundation hint', async ({ page }) => {
+test('E2E04 foundation progress can still have no strategic hint', async ({ page }) => {
   await load(page, 4);
+  await page.waitForFunction(() => window.fixtureApp.getState().progress.status === 'PROGRESS_FOUND');
+  await expect(notice(page)).toBeHidden();
   await page.locator('#btn-hint').click();
-  await page.waitForFunction(() => window.fixtureInput.getHint() !== null);
-  expect(await page.evaluate(() => window.fixtureInput.getHint().to.pile)).toBe('foundation');
+  await expect(page.locator('#hint-notice')).toHaveText('Nie udało się znaleźć ruchu prowadzącego do postępu.');
+  expect(await page.evaluate(() => window.fixtureInput.getHint())).toBeNull();
+  await expect(page.locator('.is-hint')).toHaveCount(0);
   await expect(notice(page)).toBeHidden();
 });
 test('E2E05 waste-to-tableau is progress', async ({ page }) => {

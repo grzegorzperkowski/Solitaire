@@ -46,8 +46,8 @@ test.describe('T014 deterministic legal hints (T20)', () => {
 
     await page.evaluate(() => window.__SOLITAIRE_APP__.executeCommand({ type: 'draw' }));
     await page.locator('#btn-hint').click();
-    const afterHint = await page.evaluate(() => window.__SOLITAIRE_INPUT__.getHint());
-    expect(afterHint).not.toBe(null);
+    // The planner finishes on a later turn. Wait for that result before reading it.
+    await expect.poll(() => page.evaluate(() => window.__SOLITAIRE_INPUT__.getHint())).not.toBeNull();
   });
 
   test('announces the exact empty-action message without a loss claim', async ({ page }) => {
