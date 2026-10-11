@@ -1,5 +1,25 @@
 # Fresh-session handoff
 
+## T028 H05 profiling delivery — 2026-10-11
+
+Root possibilities computed once per search instead of once per successor.
+Regression RED (93 scans) → GREEN (at most two). Native CPU profiles and
+reproduction in reports/T028-h05-profile.md; unprofiled median 6856.99→4735.99 ms,
+same full H05 result and 200 initial-board results. 207 unit tests/build PASS.
+60 targeted Chromium checks PASS; delivery is the `T028: reuse root mobility
+after H05 CPU profiling` commit. Working/staged diff checks and self-review done.
+No lowered budgets, increased timeout, rule/save change, push or publication.
+BLOCKED for missing full §8 strategy benchmark; no successor assigned.
+
+## T028 H05 profiling assignment — 2026-10-11
+
+IN_PROGRESS, Codex, master at `7ad80f2`, clean initial tree. Coordinator requests
+profiling H05 to identify and remove a measured bottleneck. Preserve planner
+results, budgets, rules, information boundaries and existing timeouts. Capture
+baseline CPU profile and timings, add a failing regression for avoidable work,
+optimize minimally, compare and run checks. Full §8 quality benchmark remains
+outside this follow-up; no parallel agents, branches, worktrees or publication.
+
 ## T028 review regression delivery — 2026-10-11
 
 Coordinator resumed T028 for test-first repair of hidden-tableau scoring and

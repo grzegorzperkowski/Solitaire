@@ -3,6 +3,7 @@ import { searchSmartHint } from '../../src/engine/smart-hints.js';
 import { visibleCards } from '../../src/engine/knowledge.js';
 import { createGame } from '../../src/engine/cards.js';
 import { assertInvariants, applyMove } from '../../src/engine/game.js';
+import * as game from '../../src/engine/game.js';
 import { progressStateKey } from '../../src/engine/progress.js';
 import {
   h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, h11, h15
@@ -16,6 +17,25 @@ function runSearch(state, known = visibleCards(state), options = {}) {
   } while (!res.done);
   return res.value;
 }
+
+test('H05 does not rescan unchanged root mobility for every successor', () => {
+  const state = h05();
+  const spy = vi.spyOn(game, 'getLegalMoves');
+  let rootScans;
+  let result;
+  try {
+    result = runSearch(state, visibleCards(state), { maxStates: 16, maxDepth: 4 });
+    rootScans = spy.mock.calls.filter(([board]) => board === state).length;
+  } finally {
+    spy.mockRestore();
+  }
+  expect(result.status).toBe('FOUND');
+  expect(result.goal).toBe('WASTE');
+  expect(result.plan[0]).toEqual({
+    type: 'move', from: { pile: 'waste' }, to: { pile: 'tableau', index: 1 },
+  });
+  expect(rootScans).toBeLessThanOrEqual(2);
+});
 
 test.each([0, 44])('hidden tableau destinations cannot affect the hint (seed %i)', (seed) => {
   const state = createGame({ seed, drawCount: 1 });

@@ -1,7 +1,7 @@
 # Project status
 
 - State: T000–T015, T017, T024, T025, and T027 are DONE; T028 is BLOCKED.
-- Current task: T028 BLOCKED: test-first repairs for hidden-tableau scoring and retained-state limits delivered 2026-10-11; required full benchmark evidence remains missing. See [tasks/T028.md](tasks/T028.md) and [reports/T028.md](reports/T028.md).
+- Current task: T028 BLOCKED: H05 profiling and optimization delivered 2026-10-11 (30.9% lower unprofiled median, unchanged result); full quality benchmark remains outstanding. See [tasks/T028.md](tasks/T028.md), [reports/T028.md](reports/T028.md) and [CPU profile report](reports/T028-h05-profile.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).
 - Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.

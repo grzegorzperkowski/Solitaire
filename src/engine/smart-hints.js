@@ -103,7 +103,7 @@ function isBenefitRealized(pKey, rootState, endState, rootFoundationSet) {
 // U = 120H + 65W + 40F + 20I + 10M - 4L - 50B
 // All differences relative to root S0.
 
-function evaluateSequence(endState, rootState, rootFoundationSet, rootStockWasteSet, knownSet, path, atBoundary) {
+function evaluateSequence(endState, rootState, rootFoundationSet, rootStockWasteSet, rootPoss, knownSet, path, atBoundary) {
   // H: hidden tableau cards revealed
   let H = 0;
   for (let col = 0; col < 7; col++) {
@@ -183,7 +183,6 @@ function evaluateSequence(endState, rootState, rootFoundationSet, rootStockWaste
     evalEndState = { ...endState, tableau: maskedTableau, waste };
   }
 
-  const rootPoss = computePossibilities(rootState, rootFoundationSet);
   const endPoss = computePossibilities(evalEndState, rootFoundationSet);
 
   let M = 0;
@@ -303,6 +302,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const knownSet = new Set(knownCards);
   const rootFoundationSet = new Set(state.foundations.flat());
   const rootStockWasteSet = new Set([...state.stock, ...state.waste]);
+  const rootPoss = computePossibilities(state, rootFoundationSet);
 
   const rootKey = progressStateKey(state, knownCards);
   const visited = new Map(); // key -> best cost
@@ -408,7 +408,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       else truncated = true;
 
       // Evaluate the sequence
-      const { score, B } = evaluateSequence(nextState, state, rootFoundationSet, rootStockWasteSet, knownSet, nextPath, atBoundary);
+      const { score, B } = evaluateSequence(nextState, state, rootFoundationSet, rootStockWasteSet, rootPoss, knownSet, nextPath, atBoundary);
       const goal = determineGoal(nextState, state, rootFoundationSet, rootStockWasteSet, atBoundary);
 
       // Update best result if this is a confirmed goal (H>0, W>0, or F>0) or exploration (I>0)
