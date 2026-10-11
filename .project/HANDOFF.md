@@ -124,7 +124,7 @@ The human coordinator assigned a fix for delayed J/Q/K court artwork as T025, a 
 
 ## T026 added (2026-10-11)
 
-The human coordinator requested Solitaire's integration with `C:\Sources\MyProjets\mygame` as T026 and explicitly assigned implementation on 2026-10-11. It is IN_PROGRESS. T021 is not a dependency: it concerns the separate Solitaire Pages workflow, while this task uses the existing Playground assembler. See [tasks/T026.md](tasks/T026.md). No push or publication is authorized.
+The human coordinator assigned integration with `C:\Sources\MyProjets\mygame` as T026 on 2026-10-11. Implementation commits are `mygame` `005c25e` and Solitaire `6e7db44`; the shared PWA, offline shell, save restore and standalone route passed local browser checks. T026 is REVIEW pending coordinator acceptance; evidence and limitations are in [reports/T026.md](reports/T026.md). T021 is not a dependency because it concerns Solitaire's separate Pages workflow. No push or publication was performed.
 
 
 ## T015 coordinator acceptance (2026-10-10)
