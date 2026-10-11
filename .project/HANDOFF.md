@@ -120,7 +120,11 @@ The human coordinator assigned the touch double-tap shortcut as T024, a follow-u
 
 ## T025 assignment (2026-10-11)
 
-The human coordinator assigned a fix for delayed J/Q/K court artwork as T025, a P8 follow-up dependent on DONE T017. All twelve SVGs were optimized with SVGO, the gzip budget regression test and required unit, build, and E2E checks pass, and a 320px DPR 3 gallery screenshot was inspected. See [reports/T025.md](reports/T025.md). T025 is REVIEW pending coordinator acceptance; Codex did not perform a physical iPhone check.
+The human coordinator assigned a fix for delayed J/Q/K court artwork as T025, a P8 follow-up dependent on DONE T017. All twelve SVGs were optimized with SVGO, the gzip budget regression test and required unit, build, and E2E checks pass, and a 320px DPR 3 gallery screenshot was inspected. The coordinator accepted it on 2026-10-11 at `3a50ba8`; see [reports/T025.md](reports/T025.md). Codex did not perform a physical iPhone check.
+
+## T026 added (2026-10-11)
+
+The human coordinator requested Solitaire's integration with `C:\Sources\MyProjets\mygame` as T026 and explicitly assigned implementation on 2026-10-11. It is IN_PROGRESS. T021 is not a dependency: it concerns the separate Solitaire Pages workflow, while this task uses the existing Playground assembler. See [tasks/T026.md](tasks/T026.md). No push or publication is authorized.
 
 
 ## T015 coordinator acceptance (2026-10-10)

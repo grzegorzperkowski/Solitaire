@@ -1,9 +1,9 @@
 # Project status
 
-- State: T000–T015, T017 and T024 are DONE; T024 accepted by the human coordinator on 2026-10-11 at `ba7865e`.
-- Current task: T025 REVIEW, assigned by the human coordinator on 2026-10-11; implementation and required checks are complete; awaiting coordinator acceptance. T017 dependency is DONE.
+- State: T000–T015, T017, T024 and T025 are DONE; T025 accepted by the human coordinator on 2026-10-11 at `3a50ba8`.
+- Current task: T026 IN_PROGRESS, assigned by the human coordinator on 2026-10-11. It integrates the Vite production build into the shared `mygame` PWA. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T015.md](reports/T015.md).
+- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T026.md](reports/T026.md).
 
 ## Completed deliverables / milestones
 
@@ -26,6 +26,8 @@
 
 ## Known problems and blockers
 
+- T026 implementation is underway; no push or publication is authorized.
+
 - GitHub Actions workflow is committed but has not run on a runner. No push was made.
 - `filelist.txt` is absent and was not recreated.
 - Hints now rank legal actions using visible information and the F04 order. Empty legal-action feedback does not imply a loss or solvability result.
@@ -33,7 +35,7 @@
 
 ## Next recommendation
 
-- T009 and T010 follow-ups are accepted; see their reports. T015 is accepted; wait for an explicit assignment before starting T016 or T017.
+- Complete T026, deliver it at REVIEW, and wait for coordinator acceptance. T016–T023 remain TODO; T016 is optional.
 
 - T015 validation: 131 unit tests, 68 production-preview Chromium E2E tests and build passed. Seed/copy, per-mode statistics, win/reload/practice and safe preference/recovery flows implemented. No new physical-device evidence or push.
 

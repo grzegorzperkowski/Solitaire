@@ -2,6 +2,7 @@ import { defineConfig } from 'vitest/config';
 import { execSync } from 'node:child_process';
 
 function getBuildInfo() {
+  if (process.env.PLAYGROUND_BUILD === 'true') return 'Build provided by Playground';
   const d = new Date();
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'Europe/Warsaw',
