@@ -1,10 +1,12 @@
 import { describe, expect, test, vi } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { searchSmartHint } from '../../src/engine/smart-hints.js';
 import { visibleCards } from '../../src/engine/knowledge.js';
 import { createGame } from '../../src/engine/cards.js';
 import { assertInvariants, applyMove } from '../../src/engine/game.js';
 import * as game from '../../src/engine/game.js';
 import { progressStateKey } from '../../src/engine/progress.js';
+import { restoreSession } from '../../src/persistence.js';
 import {
   h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, h11, h15
 } from '../fixtures/smart-hints.js';
@@ -32,6 +34,27 @@ test('H05 does not rescan unchanged root mobility for every successor', () => {
   expect(['FOUND', 'EXPLORATION', 'INCONCLUSIVE']).toContain(result.status);
   expect(result.goal).not.toBe('WASTE');
   expect(rootScans).toBeLessThanOrEqual(2);
+});
+
+test('T028 cursor-114 save does not present a waste transfer as strategic progress', () => {
+  const diagnostic = JSON.parse(readFileSync(
+    new URL('../fixtures/solitaire-stan-2284836135-draw1-114.json', import.meta.url), 'utf8',
+  ));
+  const restored = restoreSession(JSON.stringify(diagnostic.save));
+  expect(restored.ok).toBe(true);
+  expect(restored.session.cursor).toBe(114);
+
+  const result = runSearch(restored.session.state, restored.session.knownCards);
+
+  expect(result).toMatchObject({
+    status: 'INCONCLUSIVE',
+    reason: 'LIMIT_REACHED',
+    plan: [],
+    goal: null,
+    truncated: true,
+  });
+  expect(result.diagnostics.strategicCandidates).toBe(0);
+  expect(result.diagnostics.preparatoryStates).toBeGreaterThan(0);
 });
 
 test.each([0, 44])('hidden tableau destinations cannot affect the hint (seed %i)', (seed) => {

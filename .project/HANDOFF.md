@@ -1,5 +1,14 @@
 # Fresh-session handoff
 
+## T028 cursor-114 SmartHint regression — 2026-10-11
+
+The exported save fixture now has a SmartHint regression: default-budget search
+returns INCONCLUSIVE/LIMIT_REACHED with an empty plan and `truncated:true`,
+without promoting waste preparation to progress. Focused unit command passed
+24 tests. This is distinct from the completed F04 result (NO_PROGRESS after
+256 known states); the SmartHint result remains uncertain. Benchmark still
+outstanding and T028 remains BLOCKED. No E2E/build or benchmark run.
+
 ## Latest T028 F04 delivery — 2026-10-11
 
 F04 now recognizes post-action REVEAL, net FOUNDATION_ADVANCE and newly visible
