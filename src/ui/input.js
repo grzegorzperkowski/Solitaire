@@ -37,12 +37,12 @@ export function createInputController(app, rootElement) {
       waitingForHint = false;
       if (hint.status === 'WON') {
         currentHint = null;
-      } else if (hint.status === 'INCONCLUSIVE') {
+      } else if (hint.status === 'INCONCLUSIVE' || hint.status === 'NO_STRATEGIC_PROGRESS') {
         currentHint = null;
-        announce(formatSmartHintMessage(state, hint));
+        announce(formatSmartHintMessage(state, hint, app.getState().session));
       } else if (hint.plan && hint.plan.length > 0) {
         currentHint = hint.plan[0];
-        const message = formatSmartHintMessage(state, hint);
+        const message = formatSmartHintMessage(state, hint, app.getState().session);
         announce(message);
       } else {
         currentHint = null;
@@ -114,16 +114,16 @@ export function createInputController(app, rootElement) {
       return;
     }
 
-    if (smartHint.status === 'INCONCLUSIVE') {
+    if (smartHint.status === 'INCONCLUSIVE' || smartHint.status === 'NO_STRATEGIC_PROGRESS') {
       currentHint = null;
-      announce(formatSmartHintMessage(appState.state, smartHint));
+      announce(formatSmartHintMessage(appState.state, smartHint, appState.session));
       onStateChangeCallback?.();
       return;
     }
 
     if (smartHint.plan && smartHint.plan.length > 0) {
       currentHint = smartHint.plan[0];
-      const message = formatSmartHintMessage(appState.state, smartHint);
+      const message = formatSmartHintMessage(appState.state, smartHint, appState.session);
       announce(message);
     } else {
       currentHint = null;

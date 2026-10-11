@@ -7,6 +7,7 @@ import { assertInvariants, applyMove } from '../../src/engine/game.js';
 import * as game from '../../src/engine/game.js';
 import { progressStateKey } from '../../src/engine/progress.js';
 import { restoreSession } from '../../src/persistence.js';
+import { formatSmartHintMessage } from '../../src/ui/smart-hints.js';
 import {
   h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, h11, h15
 } from '../fixtures/smart-hints.js';
@@ -36,7 +37,7 @@ test('H05 does not rescan unchanged root mobility for every successor', () => {
   expect(rootScans).toBeLessThanOrEqual(2);
 });
 
-test('T028 cursor-114 save does not present a waste transfer as strategic progress', () => {
+test('T028 cursor-114 save preserves uncertainty when the default depth is cut off', () => {
   const diagnostic = JSON.parse(readFileSync(
     new URL('../fixtures/solitaire-stan-2284836135-draw1-114.json', import.meta.url), 'utf8',
   ));
@@ -55,6 +56,32 @@ test('T028 cursor-114 save does not present a waste transfer as strategic progre
   });
   expect(result.diagnostics.strategicCandidates).toBe(0);
   expect(result.diagnostics.preparatoryStates).toBeGreaterThan(0);
+});
+
+test('T028 cursor-114 save reports no strategic progress after exhausting the search', () => {
+  const diagnostic = JSON.parse(readFileSync(
+    new URL('../fixtures/solitaire-stan-2284836135-draw1-114.json', import.meta.url), 'utf8',
+  ));
+  const restored = restoreSession(JSON.stringify(diagnostic.save));
+  expect(restored.ok).toBe(true);
+
+  const result = runSearch(restored.session.state, restored.session.knownCards, { maxStates: 10000, maxDepth: 16 });
+
+  expect(result).toMatchObject({
+    status: 'NO_STRATEGIC_PROGRESS',
+    recommendedMove: null,
+    plan: [],
+    goal: null,
+    truncated: false,
+    reason: 'SEARCH_EXHAUSTED',
+    visitedStates: 256,
+  });
+  expect(result.diagnostics.strategicCandidates).toBe(0);
+  expect(result.diagnostics.explorationCandidates).toBe(0);
+  expect(formatSmartHintMessage(restored.session.state, result, restored.session))
+    .toBe('Nie znaleziono posunięcia, które przybliża do rozwiązania. Możesz cofnąć kilka ostatnich ruchów i spróbować innej drogi albo rozpocząć grę od początku.');
+  expect(formatSmartHintMessage(restored.session.state, result, { cursor: 0 }))
+    .toBe('Nie znaleziono posunięcia, które przybliża do rozwiązania. Możesz rozpocząć grę od początku.');
 });
 
 test.each([0, 44])('hidden tableau destinations cannot affect the hint (seed %i)', (seed) => {
@@ -217,7 +244,8 @@ describe('SmartHint v1 — Engine & Acceptance H01–H15', { timeout: 15000 }, (
   test('H07: King between empty columns does not yield idle suggestion', () => {
     const state = h07();
     const res = runSearch(state);
-    expect(res.status).toBe('INCONCLUSIVE');
+    expect(res.status).toBe('NO_STRATEGIC_PROGRESS');
+    expect(res.truncated).toBe(false);
     expect(res.plan).toEqual([]);
   });
 

@@ -105,3 +105,6 @@ Verify terminal effects and available actions; reject a dead continuation only
 when the explored known graph proves it. Incomplete verification remains
 uncertain; never infer unwinnability. F04 searchProgress P1–P4 semantics are
 unchanged, so PROGRESS_FOUND can coexist with SmartHint INCONCLUSIVE.
+SmartHint may report NO_STRATEGIC_PROGRESS only after its configured search
+finishes without truncation and finds no strategic or information goal. This is
+not F04 NO_PROGRESS and does not claim the deal is unwinnable.

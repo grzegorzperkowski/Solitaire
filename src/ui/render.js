@@ -227,7 +227,7 @@ export function renderHintNotice(rootElement, state) {
   // If progress notice is showing NO_PROGRESS, hint notice is hidden (§6)
   const isNoProgress = !state.isWon && !state.isPaused && !state.activeDialog && state.progress?.status === 'NO_PROGRESS';
   const showHint = !isNoProgress && !state.isWon && !state.isPaused && !state.activeDialog && state.hint && state.hint.status !== 'WON';
-  const hintText = showHint ? formatSmartHintMessage(state.state, state.hint) : '';
+  const hintText = showHint ? formatSmartHintMessage(state.state, state.hint, state.session) : '';
   if (hintNotice.textContent !== hintText) hintNotice.textContent = hintText;
   hintNotice.classList.toggle('hidden', !showHint || !hintText);
 }

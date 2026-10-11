@@ -2,6 +2,7 @@
 
 - State: T000–T015, T017, T024, T025, and T027 are DONE; T028 is BLOCKED.
 - Current task: T028 BLOCKED: F04 strategic reachability corrected and verified; SmartHint benchmark remains outstanding. See [tasks/T028.md](tasks/T028.md) and [reports/T028.md](reports/T028.md).
+- T028 follow-up (2026-10-11): complete untruncated SmartHint search with no goal returns `NO_STRATEGIC_PROGRESS`; limited search stays `INCONCLUSIVE`. Cursor-114 at depth 16 exhausts 256 states; default depth 12 truncates at 250. Focused tests and build pass; benchmark remains outstanding. See [reports/T028.md](reports/T028.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).
 - Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.

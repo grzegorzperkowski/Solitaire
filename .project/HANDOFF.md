@@ -1,5 +1,16 @@
 # Fresh-session handoff
 
+## T028 completed SmartHint search status — 2026-10-11
+
+When configured search finishes with `truncated:false` and no strategic or
+information candidate, SmartHint returns NO_STRATEGIC_PROGRESS with null
+recommendedMove and empty plan; depth/state/time cutoffs remain
+INCONCLUSIVE/truncated. Cursor-114 default depth12 visits250 and is truncated;
+depth16/maxStates10000 exhausts 256 and returns NO_STRATEGIC_PROGRESS. UI
+message suggests Undo/alternate route if history exists, otherwise new game.
+Focused unit suite 34/34 and production build pass. Benchmark remains pending;
+T028 remains BLOCKED. See `.project/reports/T028.md`.
+
 ## T028 cursor-114 SmartHint regression — 2026-10-11
 
 The exported save fixture now has a SmartHint regression: default-budget search

@@ -551,10 +551,14 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
   }
 
+  const status = !truncated && diagnostics.strategicCandidates === 0 && diagnostics.explorationCandidates === 0
+    ? 'NO_STRATEGIC_PROGRESS'
+    : 'INCONCLUSIVE';
   return {
-    status: 'INCONCLUSIVE',
+    status,
+    ...(status === 'NO_STRATEGIC_PROGRESS' ? { recommendedMove: null } : {}),
     diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads },
-    reason: truncated ? 'LIMIT_REACHED' : 'NO_STRATEGIC_RECOMMENDATION',
+    reason: truncated ? 'LIMIT_REACHED' : status === 'NO_STRATEGIC_PROGRESS' ? 'SEARCH_EXHAUSTED' : 'NO_STRATEGIC_RECOMMENDATION',
     plan: [],
     goal: null,
     score: null,

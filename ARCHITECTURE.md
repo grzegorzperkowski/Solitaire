@@ -189,13 +189,18 @@ only H>0 or net F>0 confirms FOUND. A new-information boundary permits
 EXPLORATION and stops expansion. U weights remain unchanged; M/B count direct
 reveal/foundation opportunities, excluding standalone waste transfers.
 
+If a SmartHint search ends without truncation and encountered no strategic or
+information goal, it returns NO_STRATEGIC_PROGRESS with no recommendation.
+Any cutoff without a recommendation remains INCONCLUSIVE/truncated. This status
+describes only the configured SmartHint search and is not the formal F04 result.
+
 The result carries H/F/I/W/M/B/L and terminal verification. Retained nodes and
 edges share the main state budget; goal alternatives reference those nodes.
 Final verification reads the already explored graph (bounded by maxStates,
 yield every 64 reads) to discard proven dead continuations, preserving UNKNOWN
 scope as UNPROVEN. A one-ply check reports terminal actions and lost mobility;
 it is not a safety proof. No hidden-value continuation, new game rules or
-heuristic NO_PROGRESS. Existing diagnostic export includes these observations.
+heuristic F04 NO_PROGRESS. Existing diagnostic export includes these observations.
 
 ## 7. Persistence and ownership
 

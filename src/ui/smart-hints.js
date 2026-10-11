@@ -83,7 +83,7 @@ function formatInitialMove(state, move) {
 /**
  * Format human-readable Polish explanation and announcement for SmartHint result.
  */
-export function formatSmartHintMessage(state, hint) {
+export function formatSmartHintMessage(state, hint, session = null) {
   if (!hint) return '';
   if (hint.status === 'WON') return '';
 
@@ -104,6 +104,13 @@ export function formatSmartHintMessage(state, hint) {
 
   if (hint.status === 'INCONCLUSIVE') {
     return 'Nie udało się znaleźć ruchu prowadzącego do postępu.';
+  }
+
+  if (hint.status === 'NO_STRATEGIC_PROGRESS') {
+    const suggestion = session?.cursor > 0
+      ? 'Możesz cofnąć kilka ostatnich ruchów i spróbować innej drogi albo rozpocząć grę od początku.'
+      : 'Możesz rozpocząć grę od początku.';
+    return `Nie znaleziono posunięcia, które przybliża do rozwiązania. ${suggestion}`;
   }
 
   return '';

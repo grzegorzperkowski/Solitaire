@@ -160,6 +160,10 @@ Restore fixture solitaire-stan-2284836135-draw1-114.json through save section;
 verify 52-card integrity, cursor 114, legal actions and independent F04 outcome.
 Waste 2♦ preparation must not be FOUND. Record all H/F/I/W/M/B/L and terminal
 board; preserve uncertainty at depth/time/state cutoffs and no unwinnability claim.
+For cursor 114, the default depth-limited search stays INCONCLUSIVE/truncated;
+with maxDepth 16 and maxStates 10000, the 256-state search returns
+NO_STRATEGIC_PROGRESS, null recommendation and empty plan. This status is not
+F04 NO_PROGRESS and is permitted only after an untruncated complete search.
 Add waste enabling reveal, idle waste, foundation round trip, negative preparation
 ending in reveal, alternatives, draw/recycle cycles, sole destination loss,
 budget cuts, hidden permutations and end-state verification cases to H01–H15.

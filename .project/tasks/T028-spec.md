@@ -32,10 +32,16 @@ zawiera także `components: {H,F,I,W,M,B,L}`, `verification` i `diagnostics`.
 - `EXPLORATION`: plan kończy się zdobyciem nowej informacji; `goal: INFORMATION`.
 - `INCONCLUSIVE`: brak wiarygodnej dodatnio ocenionej sekwencji; pusty plan,
   `goal: null`, `score: null`. Nie jest dowodem braku postępu.
+- `NO_STRATEGIC_PROGRESS`: pełne przeszukanie zakończyło się bez osiągalnego
+  celu REVEAL, FOUNDATION_ADVANCE ani INFORMATION; `recommendedMove: null`,
+  pusty `plan`, `goal: null`. Nie oznacza niewygrywalności rozdania i nie jest
+  formalnym wynikiem F04.
 - `WON`: pusty plan, bez sugestii, sprawdzane przed wyszukiwaniem.
 
 `truncated` oznacza odcięcie przez głębokość, stany lub czas, także przy FOUND.
-Nie dodawać tutaj statusu NO_PROGRESS. Wynik nigdy nie obiecuje optymalności.
+`NO_STRATEGIC_PROGRESS` wolno zwrócić wyłącznie przy `truncated: false` oraz
+braku strategicznych i eksploracyjnych kandydatów. Każde odcięcie przy braku
+rekomendacji pozostaje `INCONCLUSIVE`. Wynik nigdy nie obiecuje optymalności.
 Główny cel opisuje rzeczywisty efekt całej sekwencji: odsłonięcie tableau
 albo dodatni przyrost baz. Waste→tableau jest przygotowaniem, nie celem.
 
@@ -176,6 +182,10 @@ niemodalny, poprawny przy 320 px; nie usuwać fokusu ani DOM kart.
 - Eksploracja: „Dobierz kartę, aby poznać kolejną możliwość.” Dla przygotowania
   recycle/znanym draw opisać faktyczny pierwszy ruch i docelowe nowe dobranie.
 - INCONCLUSIVE: „Nie udało się znaleźć ruchu prowadzącego do postępu.”
+- NO_STRATEGIC_PROGRESS: „Nie znaleziono posunięcia, które przybliża do
+  rozwiązania.” Gdy historia pozwala na Undo, zasugerować cofnięcie kilku
+  ostatnich ruchów lub rozpoczęcie gry od początku; bez historii sugerować
+  rozpoczęcie nowej gry. Status nie zastępuje wyniku F04.
 - Tylko aktualne F04 NO_PROGRESS pozwala na „Brak ruchów prowadzących do
   dalszego postępu” i istniejącą sugestię nowej gry/warunkowo Undo.
 - WON ma pierwszeństwo nad wszystkimi wynikami; bez podpowiedzi.
