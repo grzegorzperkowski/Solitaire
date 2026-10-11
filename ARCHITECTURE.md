@@ -168,6 +168,18 @@ cards, foundations, and the last one/three waste cards, matching the renderer.
 It survives Undo, Redo, discarded branches and reload; new/restarted attempts
 reset it. Knowledge stays outside board state and never affects hint ranking.
 
+### Planned SmartHint service (T028; not implemented)
+
+[T028-spec](.project/tasks/T028-spec.md) defines a separate pure
+`searchSmartHint(state, knownCards, options)` generator using existing legal
+commands and immutable simulations. The controller schedules cancellable work;
+UI shows the first command and goal without executing it. Recompute after board
+or knowledge changes. Plans/scores never enter board, history or persistence.
+Reuse progress keys/knowledge only where their semantics match; heuristic
+ranking and depth limits must not weaken `searchProgress` exhaustion rules.
+This will supersede hint cycling and the ordinary-legal-hint fallback above;
+knowledge will identify information boundaries, never rank concealed values.
+
 ## 7. Persistence and ownership
 
 One namespaced localStorage key, `pl.solitaire.save`, holds an envelope with `schemaVersion:2`, integer revision, savedAt (diagnostic wall-clock ISO time), preferences, aggregate stats and session. An origin can host other GitHub Pages apps; prefix all keys and cache names. This game has one active save slot.

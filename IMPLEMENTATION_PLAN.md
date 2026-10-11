@@ -166,6 +166,14 @@ migration to v2, cancellable UI analysis and Polish notices according to
 FX/UT/E2E evidence live in [T027](.project/tasks/T027.md) and its report.
 This extends F04/T20; it does not select optional automatic completion.
 
+### T028 — planned SmartHint follow-up
+
+Task/specification preparation only; implementation is not assigned.
+[T028](.project/tasks/T028.md) depends on accepted T014/T027 and adds bounded
+best-first goal planning, cancellation, Polish explanation and H01–H15 plus
+baseline measurements. Broader weight calibration requires a separate assignment.
+No change to formal NO_PROGRESS, persistence, or optional completion scope.
+
 ## P7a — optional safe completion
 
 **Depends on:** P7; deliberately excluded from mandatory release scope unless selected.

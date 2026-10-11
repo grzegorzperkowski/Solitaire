@@ -81,3 +81,13 @@ The rules above deliberately choose unlimited recycling, reversible foundations,
 The largest usability risk is the conflict between seven narrow columns, readable overlapped cards and native touch scrolling. The selected-card drag model and minimum overlap must be validated before polishing artwork. Long columns may scroll vertically: fitting every card into one screen is not a requirement.
 
 Other release risks are Safari pointer cancellation/safe areas, Draw 3 ordering, history compatibility, localStorage failure and competing tabs, offline cache updates, and the licensing/legibility of court artwork. Their mitigations and required evidence are assigned to implementation phases and tests. “Production-quality” is an acceptance target, not a claim made by this design.
+
+## Planned F04 extension — T028 SmartHint (not implemented)
+
+The coordinator requested [T028](.project/tasks/T028.md) and its
+[specification](.project/tasks/T028-spec.md). On implementation, replace cycling
+legal hints with the first move of a scored goal-directed sequence and a Polish
+explanation. Use only permitted information, stop at information boundaries,
+compare alternatives, and return uncertainty when bounded search finds no plan.
+Only the separate complete F04 analysis may report NO_PROGRESS. The existing
+F04 ranking describes the current implementation until T028 is delivered.

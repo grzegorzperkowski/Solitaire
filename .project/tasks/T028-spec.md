@@ -1,0 +1,200 @@
+# SmartHint v1 — specyfikacja T028
+
+Status: przygotowane do przyszłej implementacji, 2026-10-11. Źródło: opis
+koordynatora „Inteligentna pomoc do pasjansa Klondike”. To specyfikacja produktu,
+nie potwierdzenie wyników badań ani skuteczności proponowanych wag.
+
+## 1. Zakres
+
+Zastąpić cykliczne podpowiedzi ograniczonym Best-First Search porównującym
+legalne sekwencje prowadzące do celu. W aktualnym UI przycisk gry nazywa się
+„Podpowiedź” (`btn-hint`); to jego dotyczy użyte w opisie słowo „Pomoc”.
+Dialog zasad pozostaje dialogiem zasad. Nie dodawać drugiego przycisku.
+
+Użyć `getLegalMoves`, niemutującego `applyMove`, `isWon` i istniejącej wiedzy
+`session.knownCards`. Zachować zasady Draw 1/3, kolejność stock/waste, Undo/Redo,
+historię, statystyki i schema v2. Bez backendu, modelu AI, pełnego solvera,
+autogry, nowych zależności lub zmiany F04 dowodzącego braku postępu.
+
+## 2. Kontrakt planera
+
+Nowy DOM-free generator:
+`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 12} = {})`.
+Oddaje sterowanie pomiędzy porcjami pracy; czas mierzy kontroler, nie silnik.
+Każdy yield i wynik końcowy udostępniają najlepszy dotąd wynik, aby przerwanie
+czasowe nie gubiło znalezionej, legalnej sugestii.
+
+Wynik: `{status, plan, goal, score, visitedStates, truncated}`.
+
+- `FOUND`: potwierdzony cel strategiczny; `plan` to legalne komendy,
+  `goal` to `REVEAL`, `WASTE` lub `FOUNDATION`.
+- `EXPLORATION`: plan kończy się zdobyciem nowej informacji; `goal: INFORMATION`.
+- `INCONCLUSIVE`: brak wiarygodnej dodatnio ocenionej sekwencji; pusty plan,
+  `goal: null`, `score: null`. Nie jest dowodem braku postępu.
+- `WON`: pusty plan, bez sugestii, sprawdzane przed wyszukiwaniem.
+
+`truncated` oznacza odcięcie przez głębokość, stany lub czas, także przy FOUND.
+Nie dodawać tutaj statusu NO_PROGRESS. Wynik nigdy nie obiecuje optymalności.
+Główny cel opisuje rzeczywisty efekt planu (preferencja reveal, waste,
+foundation), a nie tylko typ pierwszej komendy.
+
+## 3. Przeszukiwanie i budżety
+
+1. Odczytać aktualną planszę i wiedzę, sprawdzić WON. Rozważyć wszystkie legalne
+   akcje korzenia, zanim wybrać końcową sugestię; przy przerwaniu wcześniej
+   oznaczyć wynik jako ograniczony, nie udawać pełnego porównania.
+2. Kolejka best-first przechowuje stan, ścieżkę, jej koszt i ocenę. Kolejność
+   stabilna: wyższa ocena, krótsza droga, mniejsze B, kolejność enumeracji.
+3. Każdą komendę bierze się z silnika i symuluje niemutująco. Powroty z baz,
+   draw i recycle są dozwolone. Undo/Redo nie należą do grafu.
+4. Oceniać wszystkie znalezione cele, nie kończyć po pierwszej korzyści.
+   Rozwijać także stany neutralne i przejściowo ujemne, jeśli mieszczą się
+   w budżecie. Nie odrzucać całych gałęzi jak w Beam Search.
+5. Odrzucać powtórzenia już osiągnięte nie droższą ścieżką. Klucz zawiera
+   reguły, tryb, orientację i kolejność tableau, bazy, dokładny stock/waste
+   oraz wiedzę. Można wykorzystać `progressStateKey`; nie scalać kolumn
+   przez sortowanie bez dowodu zachowania komend i podświetleń.
+6. Limit obejmuje maksymalnie 10 000 zachowanych różnych stanów (łącznie
+   z korzeniem); maksymalna długość 12 komend. Preferencja 1–8 wynika z kosztu
+   L, nie z osobnego odcięcia. Zachować najlepszą ścieżkę do powtórzonego stanu.
+7. Kontroler wykonuje krótkie porcje, początkowo około 4 ms, z celem 100 ms
+   łącznego aktywnego czasu. Umożliwia anulowanie i normalne granie; nie wymaga
+   workera, jeśli porcjowanie spełnia pomiary. Pojedyncze kosztowne rozwinięcie
+   również należy zmierzyć. Czas oczekiwania na scheduler raportować oddzielnie.
+
+Stały budżet stanów bez limitu zegara daje deterministyczny wynik. Limit czasu
+może dawać różne jakościowo wyniki na różnych urządzeniach; nie ukrywać tego.
+Nie ma obowiązku znajdowania planów dłuższych niż 12 ruchów.
+
+## 4. Granice informacji
+
+Do oceny legalnych ruchów służą karty widoczne w danym węźle. Nie punktować
+ukrytych rang/kolorów, przyszłych ruchów nowo odsłoniętej karty ani rozkładu
+nieznanego stock. Identyfikatory zakrytych kart mogą być jedynie tokenami
+do zachowania kolejności, wykrycia powtórzeń i sprawdzenia przynależności do
+knownCards; ich wartości nie rozstrzygają priorytetu ani remisów.
+
+Każde odsłonięcie tableau kończy gałąź, nawet gdy gracz pamiętał tę kartę.
+Przy draw zakończyć gałąź, gdy którekolwiek nowo widoczne karty nie były znane.
+Także zabranie karty waste może ujawnić nieznaną kartę niżej w wachlarzu:
+zakończyć gałąź, bez dalszej oceny jej wartości. Do tego wykrycia użyć
+`visibleCards`, zgodnie z rzeczywistym renderowaniem Draw 1/3.
+
+Znane dobrania mogą być krokami przygotowawczymi; po ich symulowanym ukazaniu
+wolno analizować widoczne karty. knownCards nie daje prawa do oceniania
+aktualnie zakrytych rang w heurystyce. Na granicy informacji liczyć wyłącznie
+strukturalny efekt komendy i mobilność wcześniej dostępnych kart, maskując
+nowo ujawnione wartości. Planowanie nie aktualizuje wiedzy rzeczywistej sesji.
+
+## 5. Ocena sekwencji
+
+Początkowe wagi: `U = 120H + 65W + 40F + 20I + 10M - 4L - 50B`.
+Nie są kalibracją naukową. Wszystkie różnice liczyć względem korzenia S0.
+
+- H: liczba odkrytych zakrytych kart tableau; terminalna granica zwykle daje 1.
+- W: liczba różnych kart ze stock/waste w S0, które na końcu są w tableau/bazach
+  po legalnym wyprowadzeniu ze skrawka. Obejmuje później dobrane znane karty.
+  Nie sumować zdarzeń przeniesienia; recycle ani powrót bazy nie generuje W.
+- F: liczba kart w bazach na końcu minus liczba w bazach S0 (ze znakiem).
+  Powrót tej samej karty do bazy daje zero dodatkowego zysku.
+- I: 1 za terminalne dobranie nowej informacji ze stock, inaczej 0;
+  nie mnożyć przez liczbę kart w Draw 3 ani przez powtarzane dobrania.
+- L: wszystkie komendy, także draw/recycle; automatyczne odkrycie nie dodaje L.
+- M/B: mierzyć zmianę zbioru użytecznych możliwości opisanych poniżej.
+
+Użyteczna możliwość to dostępny legalny transfer bezpośrednio odkrywający
+tableau, wyprowadzający waste albo zwiększający bazy; ponadto transfer króla
+uwalniający zakrytą kartę jest już przypadkiem odkrycia. Identyfikować ją przez
+kartę początkową przenoszonego ciągu i typ korzyści, bez mnożenia równoważnych
+miejsc docelowych. Wykluczyć karty wracające tylko do swojej bazy z S0.
+Samo puste miejsce lub przesunięcie króla między pustymi kolumnami nie punktuje.
+M = liczba nowych możliwości, B = liczba utraconych możliwości dotyczących
+kart, które nadal potrzebują tego ruchu; zrealizowanie korzyści nie jest stratą.
+Przeniesienie jedynego miejsca odkładania do bazy może zatem dostać karę B.
+To lokalne przybliżenie mobilności, nie dowód strategicznego bezpieczeństwa.
+
+Cel potwierdzony wymaga H>0, W>0 albo F>0; sama mobilność nie wystarcza.
+Wybierać dodatnio oceniony cel strategiczny; jeśli go nie znaleziono, dodatnią
+eksplorację I>0; inaczej INCONCLUSIVE. Dzięki temu draw nie wypiera znanej
+konkretnej drogi do celu. W remisie użyć kolejności z §3. Nie wprowadzać
+nieokreślonego progu „podobnych” wyników.
+
+Testy arytmetyki przy innych składnikach równych zero: odkrycie w 2 ruchach
+112, baza w 1 ruchu 36, nowa informacja w 1 ruchu 16. Fixture całych plansz
+muszą uwzględniać także M/B, nie zakładać tych sum automatycznie.
+
+## 6. Integracja i komunikaty
+
+Uruchamiać na żądanie przycisku. Kolejne kliknięcie tej samej planszy może
+ponownie pokazać aktualny wynik, bez cyklicznego oferowania jałowych ruchów.
+Najprostsza v1 przelicza po każdej zmianie planszy zamiast przechowywać plan
+między ruchami. Wykonanie podpowiedzi jest zawsze zwykłą akcją gracza.
+
+Unieważniać wynik przy ruchu, Undo/Redo, nowej/restartowanej partii, zmianie
+wiedzy lub trybu i restore. Anulować przy ukryciu/pauzie/dialogu i zniszczeniu
+kontrolera. Wynik musi pasować do rewizji planszy/wiedzy i żądania; stary wynik
+nie może nadpisać nowego. Tykanie zegara nie restartuje analizy.
+
+Pokazać i ogłosić pierwszy ruch oraz cel i długość, np. „Przenieś 9♣ z bazy
+na 10♥. To pierwszy z dwóch ruchów, które pozwolą odsłonić kartę.” Użyć
+istniejących polskich nazw dostępnych dla czytnika i podświetleń źródła/celu.
+Nie ujawniać wartości zakrytej karty. Opis widoczny również bez czytnika,
+niemodalny, poprawny przy 320 px; nie usuwać fokusu ani DOM kart.
+
+- Eksploracja: „Dobierz kartę, aby poznać kolejną możliwość.” Dla przygotowania
+  recycle/znanym draw opisać faktyczny pierwszy ruch i docelowe nowe dobranie.
+- INCONCLUSIVE: „Nie udało się znaleźć ruchu prowadzącego do postępu.”
+- Tylko aktualne F04 NO_PROGRESS pozwala na „Brak ruchów prowadzących do
+  dalszego postępu” i istniejącą sugestię nowej gry/warunkowo Undo.
+- WON ma pierwszeństwo nad wszystkimi wynikami; bez podpowiedzi.
+
+F04 PROGRESS_FOUND nie oznacza, że SmartHint znalazł plan w swoim budżecie.
+F04 UNKNOWN nie oznacza braku postępu. Zachować istniejące rozróżnienie
+pustej listy legalnych akcji i dowodu braku osiągalnego postępu.
+
+## 7. Akceptacja H01–H15
+
+| ID | Fixture / oczekiwanie |
+| --- | --- |
+| H01 | Bezpośrednie odkrycie: wybrać je w kontrolowanej planszy. |
+| H02 | Drugi ruch odkrywa: wskazać pierwszy i cel sekwencji długości 2. |
+| H03 | Baza kontra odkrycie: porównać pełne wyniki, nie kolejność enumeracji. |
+| H04 | Powrót z bazy umożliwia odkrycie: znaleźć go jako pierwszy ruch. |
+| H05 | Waste→tableau: rozpoznać cel W i legalny ruch. |
+| H06 | Draw 3 po zabraniu waste/recycle: zachować dokładną kolejność, resztki 1/2 kart. |
+| H07 | Król między pustymi kolumnami: brak jałowej sugestii i punktów za cykl. |
+| H08 | Jedyna opcja to nieznany stock: EXPLORATION, bez obietnicy strategii. |
+| H09 | Dwie ścieżki: zgodny z U wybór; remis preferuje krótszą, potem mniejsze B. |
+| H10 | Permutacje nieznanych tableau/stock, ta sama obserwacja i wiedza: identyczny wynik. |
+| H11 | Limit stanów/czasu/głębokości (także cel za 15 ruchami): nigdy NO_PROGRESS. |
+| H12 | Inny ruch gracza i wynik starego żądania: stary plan odrzucony. |
+| H13 | Undo/Redo, rozgałęzienie i reload: wynik dotyczy bieżącej planszy. |
+| H14 | Ta sama plansza/wiedza i budżet stanów: identyczny plan, ocena i kolejność. |
+| H15 | Wygrana: WON, pusty plan i brak sugestii. |
+
+Dodatkowo: niemutowanie zamrożonych wejść; każda komenda planu legalna;
+brak zmian session/save; cykl baza→kolumna→baza; kara za utratę jedynego
+miejsca odkładania; maskowanie nowej karty w M/B; granica nowej karty w waste;
+anulowanie, wielokrotne kliknięcia, klawiatura, live region i 320 px.
+Dotychczasowe testy T027 muszą przejść bez osłabienia kryterium NO_PROGRESS.
+
+## 8. Pomiary i kalibracja
+
+Pierwszy etap T028 dostarcza planer i porównanie z dotychczasowym `rankHints`.
+Użyć seedów 0–99 dla Draw 1 i Draw 3, maksymalnie 100 sugestii na rozdanie,
+tego samego silnika i aktualizacji wiedzy po wykonanych akcjach. Baseline
+wybiera pierwszy element `rankHints` po każdej zmianie planszy. SmartHint
+wykonuje pierwszy ruch FOUND/EXPLORATION, kończy na INCONCLUSIVE/WON.
+
+Raportować liczbę odkrytych kart tableau, liczbę powrotów do wcześniej
+odwiedzonego stanu, liczbę kroków, zatrzymań, ukończeń, medianę/p95 czasu,
+liczbę odwiedzonych stanów i odsetek odcięć. Ujawnić różne długości przebiegów;
+nie interpretować samej liczby wygranych jako gwarancji przewagi. Osobno
+porównać czas na tych samych zapisanych pozycjach obu algorytmów. Zapisać
+seed, tryb, budżet, wersję środowiska i komendę reprodukcji.
+
+Brak regresji w H01–H15 jest bramką; porównanie jakości jest obowiązkowym
+dowodem do oceny koordynatora, nie z góry założonym wynikiem. Mobilny cel 100 ms
+wymaga pomiaru na fizycznym urządzeniu; bez niego podać brak dowodu.
+Szersza kalibracja wag na dużym, oddzielnym zbiorze rozdań jest drugim etapem,
+do osobnego przypisania; nie tworzyć automatycznie następnego zadania.

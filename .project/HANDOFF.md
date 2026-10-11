@@ -150,3 +150,12 @@ promise that undoing will enable progress. Existing detection rules unchanged.
 T027 guidance follow-up delivered (2026-10-11), REVIEW: notices suggest a new
 game and conditionally Undo/another route. Build and 14 targeted E2E checks passed.
 See reports/T027.md. No push or physical-device check.
+
+## T027 acceptance / T028 preparation (2026-10-11)
+
+Coordinator accepted T027 through `dec2fbe17ae3af35f42a302c7accdf4edee06d49`:
+T027 is DONE. Coordinator requested only preparation of the new task and
+specification ("Przygotuj zadanie i specyfikację"). T028 is TODO, not assigned
+for implementation. Read tasks/T028.md and tasks/T028-spec.md when assigned.
+No product code changed. T026 remains REVIEW; no other task was accepted.
+This entry supersedes earlier T027 pending-acceptance/no-successor notes.

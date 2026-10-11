@@ -1,10 +1,11 @@
 # Project status
 
 - State: T000–T015, T017, T024 and T025 are DONE; T025 accepted by the human coordinator on 2026-10-11 at `3a50ba8`.
-- Current task: T027 REVIEW; reachable progress detection implemented, awaiting coordinator acceptance. See [reports/T027.md](reports/T027.md).
+- Current task: none in implementation. T028 TODO: task/specification prepared at coordinator request; implementation explicitly deferred. See [tasks/T028.md](tasks/T028.md).
+- T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).
 - Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.
-- Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T026.md](reports/T026.md).
+- Canonical task states: [TASKS.md](TASKS.md). Latest preparation: [reports/T028.md](reports/T028.md). Historical entries below retain their original dates; the current summary supersedes them.
 
 ## Completed deliverables / milestones
 
@@ -69,3 +70,12 @@ No successor assigned; T026 still awaits its independent acceptance.
 T027 guidance follow-up delivered (2026-10-11), REVIEW: notices suggest a new
 game and conditionally Undo/another route. Build and 14 targeted E2E checks passed.
 See reports/T027.md. No push or physical-device check.
+
+## T027 acceptance / T028 preparation (2026-10-11)
+
+Coordinator accepted T027 through `dec2fbe17ae3af35f42a302c7accdf4edee06d49`:
+T027 is DONE. Coordinator requested only preparation of the new task and
+specification ("Przygotuj zadanie i specyfikację"). T028 is TODO, not assigned
+for implementation. Read tasks/T028.md and tasks/T028-spec.md when assigned.
+No product code changed. T026 remains REVIEW; no other task was accepted.
+This entry supersedes earlier T027 pending-acceptance/no-successor notes.

@@ -123,3 +123,12 @@ Release is complete only when all mandatory T01–T20/T22/T23 pass, optional T21
   actual reload. Other existing E2E tests continue against production preview.
 - Run `npm test`, `npm run build`, `npm run test:e2e`, plus diff checks.
   Physical Safari/touch measurements remain separate release evidence.
+
+## Planned T20 extension — T028 SmartHint
+
+[T028-spec §7–8](.project/tasks/T028-spec.md) adds H01–H15: multi-step goals,
+foundation returns, waste/Draw 3 order, cycles, hidden-information equivalence,
+limits, invalidation, Undo/Redo and won state. Add boundary masking, nonmutation,
+cancellation, accessible visible explanations and unchanged T027 regressions.
+Compare against rankHints on 100 seeds per mode with reproducible quality and
+median/p95 timings. These are future acceptance gates, not executed checks.
