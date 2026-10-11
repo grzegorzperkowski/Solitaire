@@ -56,10 +56,18 @@ export function createInputController(app, rootElement) {
   }
 
   function handleHint() {
+    const appState = app.getState();
+    if (appState.isWon) return;
+    if (appState.progress?.status === 'NO_PROGRESS') {
+      currentHint = null;
+      announce(appState.progress.noLegalMoves ? 'Brak dostępnych ruchów.' : 'Brak ruchów prowadzących do dalszego postępu.');
+      onStateChangeCallback?.();
+      return;
+    }
     if (!hintMoves) hintMoves = rankHints(app.getState().state);
     if (!hintMoves.length) {
       currentHint = null;
-      announce('Brak dostępnego ruchu');
+      announce('Brak dostępnych ruchów.');
     } else {
       currentHint = hintMoves[hintIndex];
       hintIndex = (hintIndex + 1) % hintMoves.length;

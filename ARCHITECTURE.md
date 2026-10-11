@@ -127,7 +127,7 @@ Draw pops up to drawCount cards and pushes them to waste one at a time. Example:
 
 Session holds an attempt ID (browser-generated UUID), initial game options, a `commands` timeline, cursor, derived in-memory board snapshots for fast Undo/Redo, elapsed active milliseconds, `started` and `winRecorded` flags, and per-mode aggregate statistics. Snapshot index 0 is the deal; cursor selects the current board. Persist commands and cursor, not redundant snapshots. Execute a legal action by truncating the future, appending its command/state and incrementing cursor. Undo/Redo choose existing snapshots. Rejected actions never truncate redo.
 
-Persist session fields explicitly as `{attemptId, options, commands, cursor, elapsedMs, started, winRecorded}`; options contain seed/drawCount/rulesVersion/shuffleVersion. Statistics have keys `draw1` and `draw3`, each `{attempts, wins, bestTimeMs, fewestMoves}`; best fields are null until a recorded win. Preferences contain `drawCount` and `touchHelpSeen`. Envelope metadata contains schemaVersion/revision/savedAt. Derived percentages and snapshots are not serialized. started remains true after Undo to cursor zero, and winRecorded remains true after branching away from a win; these flags describe lifetime events of the attempt, not just the current timeline.
+Persist session fields explicitly as `{attemptId, options, commands, cursor, elapsedMs, started, winRecorded, knownCards}`; options contain seed/drawCount/rulesVersion/shuffleVersion. Statistics have keys `draw1` and `draw3`, each `{attempts, wins, bestTimeMs, fewestMoves}`; best fields are null until a recorded win. Preferences contain `drawCount` and `touchHelpSeen`. Envelope metadata contains schemaVersion/revision/savedAt. Derived percentages and snapshots are not serialized. started remains true after Undo to cursor zero, and winRecorded remains true after branching away from a win; these flags describe lifetime events of the attempt, not just the current timeline.
 
 Do not serialize the transient selection, gesture, DOM, monotonic timestamp, hint index or open menu. Full timeline including the redo tail is replayed and validated on load, then the cursor selects the board. Runtime snapshots are disposable caches of that timeline. New attempt/restart clears history and elapsed time but keeps statistics.
 
@@ -137,13 +137,44 @@ First legal action marks started and increments the matching mode's attempts. Fi
 
 Hints use `getLegalMoves`, with a stable order: hidden-card reveal, foundation advance, other transfer, draw/recycle; ties use source pile/index/cardIndex then destination order. Never inspect hidden card identities for prioritization. The list may contain strategically poor or reversible moves; Help states it is assistance, not a solver. Optional completion uses a copied board and only foundation moves, at most 52 transfers; offer only if that simulation wins under F12.
 
+### Reachable progress (T027)
+
+`searchProgress(state, knownCards, {maxStates})` is a deterministic generator over
+existing `getLegalMoves` / `applyMove`; it yields between expanded states and
+returns `{status, visitedStates, noLegalMoves}`. Status is PROGRESS_FOUND,
+NO_PROGRESS, UNKNOWN, or WON (checked first). P1–P4 follow
+[the specification](.project/tasks/T027-spec.md). Boundaries are checked before
+simulating further states, so revealed hidden values never guide a continuation.
+Foundation progress compares card identities with the initial foundation set.
+
+The visited key includes rules, draw mode, tableau ordering/orientation,
+foundations, exact stock/waste order and knowledge. Hidden tableau identities
+are omitted because every revealing edge ends at P1; stock identities are opaque
+order tokens, never hidden-rank heuristics. No history, clocks or UI state enter
+the key. All neutral branches, including foundation returns, are explored;
+cycles alone prove nothing. Limit: 10,000 discovered states, no depth cutoff.
+A nonempty frontier at the limit produces UNKNOWN, never NO_PROGRESS.
+
+The controller uses roughly 4 ms batches and a 100 ms active-computation budget,
+with state boundaries as cancellation points. It cancels on board/knowledge
+replacement and destruction, ignores stale results, and does not restart on
+timer-only changes. Analysis neither changes nor saves a session. Subscribers receive an optional second `progressOnly` argument on analysis completion; the renderer then updates only the notice, preserving board nodes, focus and move animations. UI uses a
+nonmodal polite status notice, hides it during pause/dialogs and wins, and keeps
+normal play/Undo available. A proven negative result takes precedence over
+cycling preparatory hints. UNKNOWN preserves ordinary legal hints.
+
+Session knowledge is a frozen unique array, accumulated from all exposed tableau
+cards, foundations, and the last one/three waste cards, matching the renderer.
+It survives Undo, Redo, discarded branches and reload; new/restarted attempts
+reset it. Knowledge stays outside board state and never affects hint ranking.
+
 ## 7. Persistence and ownership
 
-One namespaced localStorage key, `pl.solitaire.save`, holds an envelope with `schemaVersion:1`, integer revision, savedAt (diagnostic wall-clock ISO time), preferences, aggregate stats and session. An origin can host other GitHub Pages apps; prefix all keys and cache names. This game has one active save slot.
+One namespaced localStorage key, `pl.solitaire.save`, holds an envelope with `schemaVersion:2`, integer revision, savedAt (diagnostic wall-clock ISO time), preferences, aggregate stats and session. An origin can host other GitHub Pages apps; prefix all keys and cache names. This game has one active save slot.
 
 `serializeSession(session, metadata) → string`; `restoreSession(text) → {ok:true, session, metadata} | {ok:false, reason}`. Explicitly construct allowed fields. Before JSON parsing, reject more than 1 MiB UTF-8, and after parsing reject more than 10,000 history commands, malformed arrays, unsupported versions or nonfinite/negative numbers. Cursor must be an integer in 0..commands.length. Replay every command, including future commands, through the engine. Validate settings, flags and stats; do not trust a supplied board snapshot. These are defensive persistence limits, not a cap on in-memory play or Undo: if reached, stop saving, retain the previous save and tell the player that further progress is temporary. Never silently truncate history.
 
-Only schema v1 is supported initially. Add a tested pure migration for each known old schema when a real change occurs; unknown newer versions are left untouched. Invalid data is not automatically deleted. Clear/replace only through an explicit player action.
+Schema v2 adds a bounded, unique array of CardIds `knownCards` (0–51), including every currently visible card. Schema v1 is replayed unchanged and migrated in memory with only currently visible knowledge; never infer past stock knowledge from hidden values or discarded history. Subsequent saves write v2. Unknown newer versions are left untouched. Invalid data is not automatically deleted. Clear/replace only through an explicit player action.
 
 Save synchronously after committed user actions and on the lifecycle schedule in F08; never during pointermove. Catch reads and writes, including unavailable storage and quota exceptions. Setting a single key avoids partially saved game/statistics records. A successfully saved envelope is the recovery boundary; sudden process termination before a write cannot be made durable by JavaScript.
 

@@ -51,7 +51,7 @@ function createMockStorage(initialData = {}) {
 describe('T007 persistence: serialization, restore and storage handling', () => {
   test('constants and Polish error messages are defined correctly', () => {
     expect(STORAGE_KEY).toBe('pl.solitaire.save');
-    expect(SCHEMA_VERSION).toBe(1);
+    expect(SCHEMA_VERSION).toBe(2);
     expect(MAX_SERIALIZED_BYTES).toBe(1024 * 1024);
     expect(MAX_COMMANDS).toBe(10000);
 
@@ -92,7 +92,7 @@ describe('T007 persistence: serialization, restore and storage handling', () => 
     expect(canUndo(restored)).toBe(false);
     expect(canRedo(restored)).toBe(false);
 
-    expect(restoredMeta.schemaVersion).toBe(1);
+    expect(restoredMeta.schemaVersion).toBe(2);
     expect(restoredMeta.revision).toBe(3);
     expect(restoredMeta.savedAt).toBe('2026-10-10T12:30:00.000Z');
     expect(restoredMeta.preferences).toEqual({ drawCount: 1, touchHelpSeen: true });
@@ -238,7 +238,7 @@ describe('T007 persistence: serialization, restore and storage handling', () => 
     expect(restoreSession(UNSUPPORTED_VERSION_SAVE)).toEqual({
       ok: false,
       reason: 'unsupported-schema-version',
-      detail: expect.stringContaining('Expected schema version 1'),
+      detail: expect.stringContaining('Expected schema version 2'),
     });
 
     const envBadRev = createTestEnvelope({ revision: -1 });

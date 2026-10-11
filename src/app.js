@@ -1,11 +1,14 @@
 import { createSession, execute, undo, redo, restartSession, addElapsedMs } from './session.js';
-import { loadSession, saveSession, STORAGE_KEY } from './persistence.js';
+import { loadSession, saveSession, STORAGE_KEY, SCHEMA_VERSION } from './persistence.js';
 import { isWon } from './engine/game.js';
+import { searchProgress } from './engine/progress.js';
 
 export const LOCK_NAME = 'pl.solitaire.writer';
 
 export function createApp({
   storage,
+  load = loadSession,
+  progressMaxStates = 10000,
   lockManager = globalThis?.navigator?.locks,
   performance = globalThis?.performance,
   document = globalThis?.document,
@@ -14,7 +17,7 @@ export function createApp({
 } = {}) {
   let session = null;
   let preferences = { drawCount: initialOptions.drawCount ?? 1, touchHelpSeen: false };
-  let metadata = { schemaVersion: 1, revision: 1, savedAt: new Date().toISOString() };
+  let metadata = { schemaVersion: SCHEMA_VERSION, revision: 1, savedAt: new Date().toISOString() };
   let isPaused = false;
   let activeDialog = null;
   let isWriter = false;
@@ -29,18 +32,56 @@ export function createApp({
   let releaseLockFn = null;
   let isDestroyed = false;
 
+  let progress = Object.freeze({ status: 'UNKNOWN', noLegalMoves: false });
+  let analyzedBoard = null;
+  let analyzedKnowledge = null;
+  let analysisTimer = null;
   const listeners = new Set();
+
+  function updateProgress() {
+    if (!session) return;
+    const board = session.state;
+    const knowledge = session.knownCards.join(',');
+    if (board === analyzedBoard && knowledge === analyzedKnowledge) return;
+    clearTimeout(analysisTimer);
+    analyzedBoard = board;
+    analyzedKnowledge = knowledge;
+    progress = Object.freeze({ status: isWon(board) ? 'WON' : 'UNKNOWN', noLegalMoves: false });
+    if (progress.status === 'WON') return;
+    const search = searchProgress(board, session.knownCards, { maxStates: progressMaxStates });
+    const now = () => performance ? performance.now() : Date.now();
+    let activeMs = 0;
+    function batch() {
+      if (isDestroyed || session.state !== board || session.knownCards.join(',') !== knowledge) return;
+      const start = now();
+      let next;
+      do {
+        next = search.next();
+        if (next.done) break;
+      } while (now() - start < 4 && activeMs + now() - start < 100);
+      activeMs += now() - start;
+      if (next.done || activeMs >= 100) {
+        search.return();
+        progress = Object.freeze(next.done ? next.value : { status: 'UNKNOWN', noLegalMoves: false });
+        notifyListeners(true);
+      } else {
+        analysisTimer = setTimeout(batch, 0);
+      }
+    }
+    analysisTimer = setTimeout(batch, 0);
+  }
 
   function isDocumentHidden() {
     return document ? Boolean(document.hidden) : false;
   }
 
-  function notifyListeners() {
+  function notifyListeners(progressOnly = false) {
     if (isDestroyed) return;
+    updateProgress();
     const currentState = getState();
     for (const listener of listeners) {
       try {
-        listener(currentState);
+        listener(currentState, progressOnly);
       } catch (err) {
         console.error('Error in app state listener:', err);
       }
@@ -204,7 +245,7 @@ export function createApp({
     if (storage === undefined) {
       try { storage = globalThis.localStorage; } catch { storage = null; }
     }
-    const loadResult = loadSession(storage);
+    const loadResult = load(storage);
     if (loadResult.ok && !loadResult.empty) {
       session = loadResult.session;
       metadata = {
@@ -377,6 +418,7 @@ export function createApp({
   function getState() {
     return Object.freeze({
       session,
+      progress,
       state: session ? session.state : null,
       moveCount: session ? session.moveCount : 0,
       elapsedMs: session ? session.elapsedMs : 0,
@@ -402,6 +444,7 @@ export function createApp({
 
   function destroy() {
     isDestroyed = true;
+    clearTimeout(analysisTimer);
     settleElapsed();
     if (timerIntervalId) clearInterval(timerIntervalId);
     if (checkpointIntervalId) clearInterval(checkpointIntervalId);

@@ -1,9 +1,10 @@
 import { createGame } from './engine/cards.js';
 import { applyMove, assertInvariants, isWon } from './engine/game.js';
 import { restoreSessionState } from './session.js';
+import { visibleCards } from './engine/knowledge.js';
 
 export const STORAGE_KEY = 'pl.solitaire.save';
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const MAX_SERIALIZED_BYTES = 1024 * 1024; // 1 MiB
 export const MAX_COMMANDS = 10000;
 
@@ -144,6 +145,7 @@ export function serializeSession(session, metadata = {}) {
       elapsedMs: session.elapsedMs,
       started: session.started,
       winRecorded: session.winRecorded,
+      knownCards: [...session.knownCards],
     },
   };
 
@@ -183,7 +185,7 @@ export function restoreSession(text) {
     return { ok: false, reason: 'invalid-shape' };
   }
 
-  if (envelope.schemaVersion !== SCHEMA_VERSION) {
+  if (envelope.schemaVersion !== 1 && envelope.schemaVersion !== SCHEMA_VERSION) {
     return {
       ok: false,
       reason: 'unsupported-schema-version',
@@ -361,6 +363,15 @@ export function restoreSession(text) {
     };
   }
 
+  // V1 cannot document knowledge retained after Undo/abandoned branches.
+  const knownCards = envelope.schemaVersion === 1 ? undefined : sess.knownCards;
+  if (envelope.schemaVersion === 2 && (
+    !Array.isArray(knownCards) || knownCards.length > 52
+    || knownCards.some((id) => !Number.isInteger(id) || id < 0 || id > 51)
+    || new Set(knownCards).size !== knownCards.length
+    || visibleCards(snapshots[sess.cursor]).some((id) => !knownCards.includes(id))
+  )) return { ok: false, reason: 'invalid-session' };
+
   const restoredSession = restoreSessionState({
     attemptId: sess.attemptId,
     options: {
@@ -376,6 +387,7 @@ export function restoreSession(text) {
     started: sess.started,
     winRecorded: sess.winRecorded,
     statistics: stats,
+    knownCards,
   });
 
   const metadata = Object.freeze({

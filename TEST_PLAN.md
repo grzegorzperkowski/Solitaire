@@ -43,7 +43,7 @@ Malformed command fuzz cases must include null, strings, arrays, negative/fracti
 | T17 | Seven columns stay in bounds at every viewport; no horizontal overflow (`scrollWidth ≤ clientWidth + 1px`); cards have expected aspect ratio and ≥14 px ranks; visible bands ≥24 px; fan stays inside waste area. Long-column fixture, 6 hidden + 13 alternating face-up cards, is reachable without clipped bottom card. Scroll handle/buttons appear only on overflow. Selection survives manual scroll. | U01–U06/U09 |
 | T18 | Complete legal play path with keyboard only; arrow focus across empty/occupied piles; stock via Space; Escape; Ctrl/Cmd Undo/Redo except in seed input; dialogs focus/restore; controls labelled in Polish. Screen-reader sample includes reveal and rejects without timer spam. Hidden identities absent from DOM/accessibility markup. | N01/N02 |
 | T19 | Normal/reduced motion, 200% text and browser zoom, contrast and focus visibility; safe areas and toolbar changes on device; landscape resize mid-gesture; DPI 1/2/3 screenshots. No required action relies on hover, color or animation. Inspect all four suits' A/10/J/Q/K at 320 px. | U07–U09, N02–N04 |
-| T20 | Hint set is legal and stable; reveal outranks foundation, then transfers, then stock action. Repeated hints cycle; board change resets cycle. Swap identities of hidden cards while preserving visible state: hint order is unchanged. Empty action list gives the exact Polish message without declaring a loss. | F04 |
+| T20 | Legal hints retain their stable visible-only ordering. Reachable-progress analysis covers FX01–FX10, UT01–UT24 and E2E01–E2E13 from [.project/tasks/T027-spec.md](.project/tasks/T027-spec.md): multi-step preparation, foundation returns, stock knowledge, Draw 1/3 ordering, neutral cycles, resource exhaustion, hidden permutations, nonmutation, Undo/Redo/reload and stale-result rejection. NO_PROGRESS requires full exhaustion; UNKNOWN never warns; WON wins precedence. | F04 |
 | T21 | Optional only: no completion with hidden tableau/stock/waste; preflight result consists solely of legal single-card foundation moves and ends won. Cancel/Undo/pause/hide stops execution; individual moves undo; award occurs once; reduced motion does not alter command sequence. | F12 |
 | T22 | Measure initial route, bundles, interaction latency and drag frame times with the fixed profile below. Start-up/restore of a near-limit history remains responsive; no per-frame synchronous storage or forced-layout loop. No console errors/unhandled promise rejections during full game flow. | N05/N06/N11 |
 | T23 | At root and repository base: asset/manifest/worker URLs are correct; after readiness, disable network and reload/play/restart/save/restore. First-ever offline visit is not claimed supported. Partial install keeps old worker usable. v1→v2 waits during play, updates only after accepted saved safe reload, retains history/stats, does not clear sibling app cache or older live tab assets. Offline update failure leaves a playable version. | N09/N10 |
@@ -106,3 +106,20 @@ Require ≥95% statements and ≥90% branches for src/engine, src/session.js and
 CI installs locked dependencies, runs unit/coverage/CI simulations, builds production output and runs the browser matrix against it. PR CI does not publish. Deployment uses the tested commit/artifact and is followed by a production URL smoke test. Retain failing traces/screenshots and seed histories; retry-only passes require investigation, not silent acceptance.
 
 Release is complete only when all mandatory T01–T20/T22/T23 pass, optional T21 passes if shipped, required real-device checks have evidence, performance/assets meet budgets, all player-facing text is Polish, licenses are resolved, and no known defect can lose cards, silently lose saves, duplicate wins, block an input method or make a supported viewport unusable. Store the evidence in implementation-era docs/release-check.md. This document records criteria, not current test results.
+
+## T027 verification mapping
+
+- `tests/unit/progress.test.js`: FX01–FX10 deck invariants; UT01–16 and
+  UT19–24, including three preparatory draws, foundation-only round trips,
+  grouping/order discrimination, deduplication and deterministic state budgets.
+- `tests/unit/knowledge.test.js`: visible-card lifetime, Draw 1/3, persistence,
+  conservative v1 migration and rejection of malformed v2 knowledge.
+- `tests/unit/progress-app.test.js`: UT17/18, cancellation, stale-result rejection
+  and app result integration. Resource budget tests use deterministic limits.
+- `tests/e2e/progress.spec.js`: E2E01–13; deterministic full-deck fixtures use
+  `tests/harness/progress.html` on a separate Vite dev server at port 5186.
+  It mounts the ordinary controller/session/renderer with an injected loader;
+  it is excluded from the production build. E2E11 uses the production save and
+  actual reload. Other existing E2E tests continue against production preview.
+- Run `npm test`, `npm run build`, `npm run test:e2e`, plus diff checks.
+  Physical Safari/touch measurements remain separate release evidence.

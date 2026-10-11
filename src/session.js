@@ -1,5 +1,6 @@
 import { createGame } from './engine/cards.js';
 import { applyMove, isWon } from './engine/game.js';
+import { rememberVisible } from './engine/knowledge.js';
 
 function generateAttemptId() {
   return crypto.randomUUID();
@@ -49,6 +50,7 @@ function createSessionObject({
   started,
   winRecorded,
   statistics,
+  knownCards,
 }) {
   const currentBoard = snapshots[cursor];
   return Object.freeze({
@@ -58,6 +60,7 @@ function createSessionObject({
     cursor,
     snapshots: Object.freeze([...snapshots]),
     elapsedMs,
+    knownCards: Object.freeze([...rememberVisible(currentBoard, knownCards)]),
     started,
     winRecorded,
     statistics: Object.freeze({
@@ -107,6 +110,7 @@ export function restoreSessionState({
   started,
   winRecorded,
   statistics,
+  knownCards,
 }) {
   return createSessionObject({
     attemptId,
@@ -118,6 +122,7 @@ export function restoreSessionState({
     started,
     winRecorded,
     statistics: cloneStatistics(statistics),
+    knownCards,
   });
 }
 
@@ -141,6 +146,7 @@ export function undo(session) {
     started: session.started,
     winRecorded: session.winRecorded,
     statistics: session.statistics,
+    knownCards: session.knownCards,
   });
 }
 
@@ -156,6 +162,7 @@ export function redo(session) {
     started: session.started,
     winRecorded: session.winRecorded,
     statistics: session.statistics,
+    knownCards: session.knownCards,
   });
 }
 
@@ -204,6 +211,7 @@ export function execute(session, command) {
     started,
     winRecorded,
     statistics: stats,
+    knownCards: session.knownCards,
   });
 
   return { ok: true, session: newSession, revealed: result.revealed };
@@ -241,6 +249,7 @@ export function setElapsedMs(session, elapsedMs) {
     started: session.started,
     winRecorded: session.winRecorded,
     statistics: session.statistics,
+    knownCards: session.knownCards,
   });
 }
 

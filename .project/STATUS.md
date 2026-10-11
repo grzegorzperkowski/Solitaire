@@ -1,7 +1,8 @@
 # Project status
 
 - State: T000–T015, T017, T024 and T025 are DONE; T025 accepted by the human coordinator on 2026-10-11 at `3a50ba8`.
-- Current task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
+- Current task: T027 REVIEW; reachable progress detection implemented, awaiting coordinator acceptance. See [reports/T027.md](reports/T027.md).
+- Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.
 - Canonical task states: [TASKS.md](TASKS.md). Current delivery/evidence: [reports/T026.md](reports/T026.md).
 
@@ -54,3 +55,13 @@
 - T017 variant distribution fix: shuffled queue guarantees all three shuffle effects appear within every three new games, with no repeat across queue boundaries. Build passed; see reports/T017.md.
 - T017 visual distinction fix: expanded the riffle, split the second variant into two moving groups, and changed the third to a vertical cascade. Build and diff check passed; see reports/T017.md.
 - T017 animation pacing/placement refinement: each shuffle pass is faster and repeats twice; overlay lasts 2.2 s and is centered over the tableau columns. Build passed; see reports/T017.md.
+
+## T027 assignment (2026-10-11)
+T027 IN_PROGRESS, explicitly assigned by the human coordinator. Implement the reachable-progress specification in tasks/T027-spec.md. T026 remains REVIEW. See reports/T027.md.
+
+## T027 delivery (2026-10-11)
+T027 is REVIEW. Bounded complete neutral-state search, lifetime visible-card
+knowledge, schema v2 with conservative v1 migration, cancellable batches and
+Polish progress notices are implemented. Unit suite: 175 passed; Chromium E2E:
+83 passed; production build passed. Exact evidence and limits: reports/T027.md.
+No successor assigned; T026 still awaits its independent acceptance.

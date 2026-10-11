@@ -35,7 +35,7 @@ export function createTestEnvelope({
 export const CORRUPT_JSON = '{"schemaVersion": 1, "revision": 1, "savedAt": "broken...';
 
 export const UNSUPPORTED_VERSION_SAVE = JSON.stringify(
-  createTestEnvelope({ schemaVersion: 2 })
+  createTestEnvelope({ schemaVersion: 99 })
 );
 
 export const INVALID_REPLAY_SAVE = JSON.stringify(

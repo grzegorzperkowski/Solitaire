@@ -89,7 +89,7 @@ test.describe('T015 safe preferences and recovery', () => {
       await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
       const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.save')));
       expect(saved.session.options.seed).toBe(0);
-      expect(saved.schemaVersion).toBe(1);
+      expect(saved.schemaVersion).toBe(2);
     });
   }
 

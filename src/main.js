@@ -1,6 +1,6 @@
 import './styles.css';
 import { createApp } from './app.js';
-import { renderGame } from './ui/render.js';
+import { renderGame, renderProgressNotice } from './ui/render.js';
 import { setupResponsiveLayout } from './ui/layout.js';
 import { createInputController } from './ui/input.js';
 
@@ -34,7 +34,11 @@ if (typeof document !== 'undefined') {
 
     renderGame(root, app.getState(), currentDims, inputCtrl, app);
 
-    app.subscribe((state) => {
+    app.subscribe((state, progressOnly) => {
+      if (progressOnly) {
+        renderProgressNotice(root, state);
+        return;
+      }
       renderGame(root, state, currentDims, inputCtrl, app);
     });
   }

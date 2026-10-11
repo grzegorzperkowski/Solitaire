@@ -130,3 +130,14 @@ The human coordinator assigned integration with `C:\Sources\MyProjets\mygame` as
 ## T015 coordinator acceptance (2026-10-10)
 
 The human coordinator accepted T015: “commit it - it seems to works fine!” Accepted delivery: `b01fb4912aa5bcf179678150beb5336cc3b74ff7`. T015 is DONE. T017 is assigned and IN_PROGRESS. T016 automatic completion remains optional and unselected.
+
+## T027 assignment (2026-10-11)
+Human coordinator assigned implementation of no-move.md as T027. IN_PROGRESS on master; initial tree clean at f35766b. Sequential plan: tasks/T027.md. T026 acceptance is independent and pending.
+
+## T027 delivery (2026-10-11)
+T027 is REVIEW pending explicit coordinator acceptance. Implementation uses the
+existing engine for all neutral transitions, stops at P1–P4, and never warns on
+UNKNOWN. Knowledge survives Undo/Redo/branching/reload; old saves migrate safely.
+Progress-only notifications update only the notice, preserving board animation
+and input DOM. See reports/T027.md for tests and resume instructions. No push,
+deployment, new task or T026 acceptance is implied.

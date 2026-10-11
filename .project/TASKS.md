@@ -45,6 +45,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T024](tasks/T024.md) | P5 follow-up | Double-tap card shortcut | T010 | DONE | [Criteria](tasks/T024.md#acceptance-criteria); coordinator accepted 2026-10-11 at `ba7865e`; [report](reports/T024.md) |
 | [T025](tasks/T025.md) | P8 follow-up | Eliminate delayed court artwork rendering | T017 | DONE | [Criteria](tasks/T025.md#acceptance-criteria); coordinator accepted 2026-10-11 at `3a50ba8`; [report](reports/T025.md) |
 | [T026](tasks/T026.md) | P9 follow-up | Integrate Solitaire with the Playground PWA | None | REVIEW | [Criteria](tasks/T026.md#acceptance-criteria); implementation commits `005c25e` and `6e7db44`; [report](reports/T026.md) |
+| [T027](tasks/T027.md) | P7 follow-up | Reachable progress detection | T014, T007, T008, T015 | REVIEW | [Report](reports/T027.md); [spec](tasks/T027-spec.md) |
 
 ## Selection and model suitability
 

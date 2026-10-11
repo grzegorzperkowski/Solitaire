@@ -12,11 +12,15 @@ export default defineConfig({
     baseURL: 'http://localhost:5173',
     trace: 'on-first-retry',
   },
-  webServer: {
+  webServer: [{
     command: 'npm run preview -- --port 5173',
     port: 5173,
     reuseExistingServer: !process.env.CI,
-  },
+  }, {
+    command: 'npm run dev -- --port 5186 --strictPort',
+    port: 5186,
+    reuseExistingServer: !process.env.CI,
+  }],
   projects: [
     {
       name: 'chromium',

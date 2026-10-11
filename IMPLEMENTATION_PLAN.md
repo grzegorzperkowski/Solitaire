@@ -158,6 +158,14 @@ T000 records workflow preparation, outside the implementation milestones. T023 i
 
 **Exit:** all mandatory F01–F11/F13 flows exist and pass their fixtures; hints never issue illegal moves or claim a guaranteed result; statistics and timing match the chosen rules.
 
+### T027 — assigned P7 follow-up
+
+Implement reachable-progress search, lifetime card knowledge with schema-v1
+migration to v2, cancellable UI analysis and Polish notices according to
+[the approved specification](.project/tasks/T027-spec.md). Task gates and exact
+FX/UT/E2E evidence live in [T027](.project/tasks/T027.md) and its report.
+This extends F04/T20; it does not select optional automatic completion.
+
 ## P7a — optional safe completion
 
 **Depends on:** P7; deliberately excluded from mandatory release scope unless selected.

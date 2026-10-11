@@ -67,7 +67,7 @@ test.describe('T014 deterministic legal hints (T20)', () => {
       }
     }, blockedBoard());
 
-    expect(message).toBe('Brak dostępnego ruchu');
+    expect(message).toBe('Brak dostępnych ruchów.');
     expect(message).not.toMatch(/przegran|niewygrywaln/i);
   });
 });

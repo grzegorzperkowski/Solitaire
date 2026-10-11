@@ -35,6 +35,7 @@ export function createBoardStructure(rootElement) {
       </header>
 
       <div id="notice-banner" class="notice-banner hidden" role="status" aria-live="polite"></div>
+      <div id="progress-notice" class="notice-banner hidden" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="practice-status" class="notice-banner hidden">Tryb ćwiczeniowy — wygrana tej partii jest już zaliczona.</div>
       <div id="live-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
@@ -172,6 +173,8 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
 
   rootElement.querySelector('#practice-status')?.classList.toggle('hidden', !state.winRecorded || state.activeDialog === 'win');
 
+  renderProgressNotice(rootElement, state);
+
   const gameState = state.state;
   if (!gameState) return;
 
@@ -199,6 +202,16 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
     renderDialogs(rootElement, state, appInstance);
   }
   if (animateDeal) renderDealAnimation(container);
+}
+
+export function renderProgressNotice(rootElement, state) {
+  const progressNotice = rootElement.querySelector('#progress-notice');
+  if (!progressNotice) return;
+  const blocked = !state.isWon && !state.isPaused && !state.activeDialog && state.progress?.status === 'NO_PROGRESS';
+  const progressText = blocked ? (state.progress.noLegalMoves
+    ? 'Brak dostępnych ruchów.' : 'Brak ruchów prowadzących do dalszego postępu.') : '';
+  if (progressNotice.textContent !== progressText) progressNotice.textContent = progressText;
+  progressNotice.classList.toggle('hidden', !blocked);
 }
 
 function renderDealAnimation(container) {
