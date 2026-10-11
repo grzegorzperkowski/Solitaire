@@ -3,7 +3,7 @@
  * Follows REQUIREMENTS F05/F07/U06/N01/N02, ARCHITECTURE §§6,9 and TEST_PLAN T13/T15/T18/T19.
  */
 
-import { formatTime } from './render.js';
+import { formatTime, BUILD_INFO } from './render.js';
 import { getWinPercentage } from '../session.js';
 
 let lastFocusedElement = null;
@@ -119,6 +119,8 @@ function renderMenuHtml() {
         <button id="btn-menu-restart" class="menu-action-btn">Rozdaj ponownie</button>
         <button id="btn-menu-statistics" class="menu-action-btn">Statystyki</button>
         <button id="btn-menu-help" class="menu-action-btn">Zasady i pomoc</button>
+        <button id="btn-menu-export" class="menu-action-btn">Zapisz stan do analizy</button>
+        <p id="diagnostic-export-status" role="status" aria-live="polite"></p>
       </div>
       <footer class="dialog-footer">
         <button id="btn-menu-resume" class="btn-primary w-full">Wróć do gry</button>
@@ -373,6 +375,32 @@ function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame
     }
 
     // Menu actions
+    if (e.target.closest('#btn-menu-export')) {
+      const status = dialogEl.querySelector('#diagnostic-export-status');
+      const result = app.exportDiagnostic(BUILD_INFO);
+      if (!result.ok) {
+        status.textContent = result.message;
+        return;
+      }
+      const link = document.createElement('a');
+      let url;
+      try {
+        url = URL.createObjectURL(new Blob([result.text], { type: 'application/json;charset=utf-8' }));
+        link.href = url;
+        link.download = result.filename;
+        document.body.appendChild(link);
+        link.click();
+        status.textContent = 'Rozpoczęto pobieranie stanu gry do analizy.';
+      } catch {
+        status.textContent = 'Nie udało się pobrać stanu gry. Spróbuj ponownie.';
+      } finally {
+        link.remove();
+        // Allow the browser to consume the download before releasing its URL.
+        if (url) setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+      return;
+    }
+
     if (e.target.closest('#btn-menu-help')) {
       app.openDialog('help');
       return;

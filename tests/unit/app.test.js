@@ -1,6 +1,6 @@
 import { describe, expect, test, vi, beforeEach } from 'vitest';
 import { createApp, LOCK_NAME } from '../../src/app.js';
-import { STORAGE_KEY } from '../../src/persistence.js';
+import { STORAGE_KEY, restoreSession } from '../../src/persistence.js';
 import { nearWin } from '../fixtures/wins.js';
 
 function createMockStorage(initial = {}) {
@@ -22,6 +22,52 @@ describe('T008 app controller: clock, lifecycle and ownership', () => {
   beforeEach(() => {
     fakeNow = 1000;
     vi.useFakeTimers();
+  });
+
+  test.each([1, 3])('diagnostic export replays the current board and redo tail in Draw %i', (drawCount) => {
+    const storage = createMockStorage();
+    const app = createApp({ storage, performance: mockPerformance,
+      initialOptions: { seed: 0, drawCount }, hintMaxStates: 16, hintMaxDepth: 0 }).init();
+    try {
+      app.executeCommand({ type: 'draw' });
+      app.executeCommand({ type: 'draw' });
+      app.undo();
+      app.requestSmartHint();
+      vi.advanceTimersByTime(10);
+      const before = app.getState();
+      expect(before.hint.status).toBe('INCONCLUSIVE');
+      const stored = storage.getItem(STORAGE_KEY);
+      const writes = storage.setItem.mock.calls.length;
+      const result = app.exportDiagnostic('Build test');
+      expect(result.ok).toBe(true);
+      const diagnostic = JSON.parse(result.text);
+      expect(diagnostic).toMatchObject({
+        format: 'pl.solitaire.hint-diagnostic', formatVersion: 1, build: 'Build test',
+        hint: before.hint, progress: before.progress, isHintLoading: false,
+        budgets: { maxStates: 16, maxDepth: 0, activeMs: 100, batchMs: 4 },
+      });
+      const restored = restoreSession(JSON.stringify(diagnostic.save));
+      expect(restored.ok).toBe(true);
+      expect(restored.session.state).toEqual(before.state);
+      expect(restored.session.knownCards).toEqual(before.session.knownCards);
+      expect(restored.session.commands).toEqual(before.session.commands);
+      expect(restored.session.cursor).toBe(1);
+      expect(restored.session.commands).toHaveLength(2);
+      expect(restored.session.statistics).toEqual(before.session.statistics);
+      expect(app.getState().session).toBe(before.session);
+      expect(storage.getItem(STORAGE_KEY)).toBe(stored);
+      expect(storage.setItem.mock.calls).toHaveLength(writes);
+    } finally { app.destroy(); }
+  });
+
+  test('diagnostic export reports unavailable session in Polish without writing storage', () => {
+    const storage = createMockStorage({ [STORAGE_KEY]: 'keep this save' });
+    const app = createApp({ storage, performance: mockPerformance });
+    expect(app.exportDiagnostic('Build test')).toEqual({
+      ok: false, message: 'Nie udało się przygotować stanu gry do analizy.',
+    });
+    expect(storage.setItem).not.toHaveBeenCalled();
+    expect(storage.getItem(STORAGE_KEY)).toBe('keep this save');
   });
 
   test.each([1, 3])('T015 first win, reload and practice preserve one award in Draw %s', (drawCount) => {

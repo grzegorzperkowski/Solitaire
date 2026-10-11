@@ -206,3 +206,14 @@ Dwuklik myszą albo podwójne tapnięcie źródłowej karty aktualnie wyświetla
 podpowiedzi wykonuje dokładnie jej pierwszy ruch przez zwykłą walidację silnika.
 To świadoma akcja gracza, nie automatyczne wykonanie planu. Pozostałe karty
 zachowują dotychczasowe skróty. Cofnięcie lub zmiana planszy unieważnia zalecenie.
+
+## Follow-up — zapis do analizy (zatwierdzony 2026-10-11)
+
+Menu udostępnia "Zapisz stan do analizy" pobierający plik JSON. Odtwarzalna
+sesja używa istniejącego schema v2: seed/wersje/tryb, historia wraz z przyszłymi
+ruchami, cursor, knownCards, czas i statystyki. Osobna otoczka diagnostyczna
+zawiera wersję aplikacji, bieżący wynik podpowiedzi/F04 oraz budżety wyszukiwania.
+Eksport nie zmienia planszy, historii, statystyk ani localStorage. Błąd pobrania
+ma polski komunikat i pozwala ponowić próbę. Nie dodawać importu do UI; analizę
+odtwarzać przez istniejące restoreSession na sekcji save pliku, bez nadpisywania
+zapisu gracza. Test obejmuje odtworzenie po Undo i faktyczne pobranie w 320 px.

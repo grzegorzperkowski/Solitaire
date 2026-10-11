@@ -1,5 +1,26 @@
 # Fresh-session handoff
 
+## T028 diagnostic export delivery — 2026-10-11
+
+Menu → "Zapisz stan do analizy" downloads JSON; reproduce using
+`restoreSession(JSON.stringify(diagnostic.save))`. Includes history/Undo cursor,
+knowledge, mode, hint/progress, budgets and build. Local save remains intact.
+Focused tests: 3 unit and 2 browser PASS; already-running full unit suite:
+210 PASS / 15 files. Coordinator requested commit without further tests;
+production build, broader E2E and real-device checks not rerun. See report.
+T028 BLOCKED on full §8 benchmark; no next task assigned, no push/publication.
+Delivery commit: `T028: export replayable game state for hint diagnostics`.
+
+## T028 diagnostic export assignment — 2026-10-11
+
+Coordinator approved the bounded design: menu action "Zapisz stan do analizy"
+downloads JSON with replayable session/history/cursor/knownCards/draw mode,
+current hint and application build. IN_PROGRESS, master `276714c`, clean tree.
+Reuse schema-v2 serializeSession/restoreSession; diagnostic wrapper is separate.
+Test round-trip and real browser download before implementation, preserve local
+save/history/statistics, report Polish failures. No in-game import, rule changes,
+parallel agents or publication. Full quality benchmark remains outstanding.
+
 ## T028 H05 profiling delivery — 2026-10-11
 
 Root possibilities computed once per search instead of once per successor.

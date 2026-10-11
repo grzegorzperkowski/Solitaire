@@ -182,6 +182,15 @@ knowledge will identify information boundaries, never rank concealed values.
 
 ## 7. Persistence and ownership
 
+T028 diagnostic export is a separate JSON wrapper (`format:pl.solitaire.hint-diagnostic`,
+`formatVersion:1`): `save` is the unchanged schema-v2 serialized envelope, with
+build/export time, current hint/progress and effective hint budgets alongside it.
+It reads the current in-memory session without writing localStorage or modifying
+history/statistics. Replay only `save` through `restoreSession`; diagnostic fields
+are observations and never authoritative board data. The menu downloads via a
+temporary Blob URL, reports preparation/download errors in Polish, and releases
+the URL after dispatch. There is no in-game import or automatic save replacement.
+
 One namespaced localStorage key, `pl.solitaire.save`, holds an envelope with `schemaVersion:2`, integer revision, savedAt (diagnostic wall-clock ISO time), preferences, aggregate stats and session. An origin can host other GitHub Pages apps; prefix all keys and cache names. This game has one active save slot.
 
 `serializeSession(session, metadata) → string`; `restoreSession(text) → {ok:true, session, metadata} | {ok:false, reason}`. Explicitly construct allowed fields. Before JSON parsing, reject more than 1 MiB UTF-8, and after parsing reject more than 10,000 history commands, malformed arrays, unsupported versions or nonfinite/negative numbers. Cursor must be an integer in 0..commands.length. Replay every command, including future commands, through the engine. Validate settings, flags and stats; do not trust a supplied board snapshot. These are defensive persistence limits, not a cap on in-memory play or Undo: if reached, stop saving, retain the previous save and tell the player that further progress is temporary. Never silently truncate history.

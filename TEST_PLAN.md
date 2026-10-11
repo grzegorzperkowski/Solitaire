@@ -1,5 +1,11 @@
 # Klondike Solitaire — test strategy and acceptance
 
+T028 diagnostic export follow-up: round-trip schema-v2 `save` after Undo in both
+draw modes, preserving current board, remembered cards and redo tail; include an
+INCONCLUSIVE hint and effective budgets. Export must not write storage or change
+the session. Chromium download at 320 px must match the current session/build;
+preparation/download failures must show Polish feedback and preserve the save.
+
 Status: planned tests, none executed against an application yet. [REQUIREMENTS.md](REQUIREMENTS.md) is the acceptance contract; [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) assigns implementation ownership.
 
 ## 1. Layers and test discipline

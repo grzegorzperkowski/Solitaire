@@ -84,6 +84,11 @@ Other release risks are Safari pointer cancellation/safe areas, Draw 3 ordering,
 
 ## Planned F04 extension — T028 SmartHint (not implemented)
 
+Approved diagnostic follow-up (2026-10-11): menu action "Zapisz stan do analizy"
+downloads a replayable JSON session with hint/progress/build/budget observations.
+Preserve knowledge and the full Undo/Redo timeline. Export must leave the board,
+history, statistics and local save intact; download failures use Polish feedback.
+
 The coordinator requested [T028](.project/tasks/T028.md) and its
 [specification](.project/tasks/T028-spec.md). On implementation, replace cycling
 legal hints with the first move of a scored goal-directed sequence and a Polish

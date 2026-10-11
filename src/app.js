@@ -1,10 +1,12 @@
 import { createSession, execute, undo, redo, restartSession, addElapsedMs } from './session.js';
-import { loadSession, saveSession, STORAGE_KEY, SCHEMA_VERSION } from './persistence.js';
+import { loadSession, saveSession, serializeSession, STORAGE_KEY, SCHEMA_VERSION } from './persistence.js';
 import { isWon } from './engine/game.js';
 import { searchProgress } from './engine/progress.js';
 import { searchSmartHint } from './engine/smart-hints.js';
 
 export const LOCK_NAME = 'pl.solitaire.writer';
+const HINT_BATCH_MS = 4;
+const HINT_ACTIVE_MS = 100;
 
 export function createApp({
   storage,
@@ -116,11 +118,11 @@ export function createApp({
         next = generator.next();
         if (next.value) latestValue = next.value;
         if (next.done) break;
-      } while (now() - start < 4 && activeMs + now() - start < 100);
+      } while (now() - start < HINT_BATCH_MS && activeMs + now() - start < HINT_ACTIVE_MS);
 
       activeMs += now() - start;
 
-      if (next.done || activeMs >= 100) {
+      if (next.done || activeMs >= HINT_ACTIVE_MS) {
         if (!next.done) {
           try { generator.return(); } catch {}
         }
@@ -523,6 +525,24 @@ export function createApp({
     notifyListeners();
   }
 
+  function exportDiagnostic(build) {
+    try {
+      const exportedAt = new Date().toISOString();
+      const save = JSON.parse(serializeSession(session, { ...metadata, preferences, savedAt: exportedAt }));
+      return {
+        ok: true,
+        filename: `solitaire-stan-${session.options.seed}-draw${session.options.drawCount}-${session.cursor}.json`,
+        text: JSON.stringify({
+          format: 'pl.solitaire.hint-diagnostic', formatVersion: 1, exportedAt, build,
+          save, hint, progress, isHintLoading,
+          budgets: { maxStates: hintMaxStates, maxDepth: hintMaxDepth, activeMs: HINT_ACTIVE_MS, batchMs: HINT_BATCH_MS },
+        }, null, 2),
+      };
+    } catch {
+      return { ok: false, message: 'Nie udało się przygotować stanu gry do analizy.' };
+    }
+  }
+
   function getState() {
     return Object.freeze({
       session,
@@ -587,6 +607,7 @@ export function createApp({
     setDrawPreference,
     markTouchHelpSeen,
     requestSmartHint,
+    exportDiagnostic,
     save,
     getState,
     subscribe,
