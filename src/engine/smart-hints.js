@@ -172,7 +172,9 @@ function evaluateSequence(endState, rootState, rootFoundationSet, rootStockWaste
       const rootCol = rootState.tableau[cIdx];
       if (rootCol.faceUpStart > 0) {
         const faceUpStart = Math.max(col.faceUpStart, Math.min(col.cards.length, rootCol.faceUpStart));
-        return { cards: col.cards, faceUpStart };
+        // Unknown values must not become legal destinations either.
+        const cards = col.cards.map((id, index) => index < faceUpStart ? undefined : id);
+        return { cards, faceUpStart };
       }
       return col;
     });
@@ -401,9 +403,9 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       const key = progressStateKey(nextState, knownCards);
       const existingCost = visited.get(key);
       if (existingCost !== undefined && existingCost <= nextCost) continue;
-      visited.set(key, nextCost);
-
-      if (visited.size >= maxStates) truncated = true;
+      const canRetain = existingCost !== undefined || visited.size < maxStates;
+      if (canRetain) visited.set(key, nextCost);
+      else truncated = true;
 
       // Evaluate the sequence
       const { score, B } = evaluateSequence(nextState, state, rootFoundationSet, rootStockWasteSet, knownSet, nextPath, atBoundary);
@@ -438,7 +440,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       }
 
       // Don't expand past boundaries; but do continue adding other branches
-      if (!atBoundary && visited.size < maxStates) {
+      if (!atBoundary && canRetain) {
         queue.push({
           state: nextState,
           path: nextPath,

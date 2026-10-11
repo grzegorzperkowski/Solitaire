@@ -1,5 +1,16 @@
 # Fresh-session handoff
 
+## T028 review regression delivery — 2026-10-11
+
+Coordinator resumed T028 for test-first repair of hidden-tableau scoring and
+retained-state limits. Both fixed: four regressions failed first, two passed
+after masking, all four passed after the cap fix. Final 206 unit tests, 60
+targeted Chromium checks and build passed. Initial H05 timeout is recorded;
+isolated H05 and final full unit rerun passed with unchanged timeouts.
+BLOCKED only for missing full §8 benchmark evidence (100 seeds per mode and
+same-position timing). Repairs are ready for review; not coordinator accepted.
+Resume only on assignment; see reports/T028.md. No successor or publication.
+
 ## Resume protocol
 
 1. Read [AGENTS.md](../AGENTS.md), [STATUS.md](STATUS.md) and this file.

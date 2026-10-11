@@ -1,8 +1,9 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { searchSmartHint } from '../../src/engine/smart-hints.js';
 import { visibleCards } from '../../src/engine/knowledge.js';
 import { createGame } from '../../src/engine/cards.js';
 import { assertInvariants, applyMove } from '../../src/engine/game.js';
+import { progressStateKey } from '../../src/engine/progress.js';
 import {
   h01, h02, h03, h04, h05, h06, h07, h08, h09, h10, h11, h15
 } from '../fixtures/smart-hints.js';
@@ -15,6 +16,48 @@ function runSearch(state, known = visibleCards(state), options = {}) {
   } while (!res.done);
   return res.value;
 }
+
+test.each([0, 44])('hidden tableau destinations cannot affect the hint (seed %i)', (seed) => {
+  const state = createGame({ seed, drawCount: 1 });
+  const changed = structuredClone(state);
+  const column = changed.tableau[seed === 0 ? 5 : 4];
+  const hiddenIndex = column.faceUpStart - 1;
+  [changed.stock[0], column.cards[hiddenIndex]] = [column.cards[hiddenIndex], changed.stock[0]];
+  assertInvariants(changed);
+  expect(visibleCards(changed)).toEqual(visibleCards(state));
+  const options = { maxDepth: 1, maxStates: 100 };
+  expect(runSearch(changed, visibleCards(state), options))
+    .toEqual(runSearch(state, visibleCards(state), options));
+});
+
+test.each([1, 2])('retained search states never exceed a budget of %i', (maxStates) => {
+  const state = createGame({ seed: 0, drawCount: 1 });
+  const known = visibleCards(state);
+  const rootKey = progressStateKey(state, known);
+  const set = Map.prototype.set;
+  let searchMap;
+  let peakStates = 0;
+  // Observe actual storage use without changing Map behavior or the planner API.
+  const spy = vi.spyOn(Map.prototype, 'set').mockImplementation(function (key, value) {
+    const result = set.call(this, key, value);
+    if (key === rootKey && value === 0) searchMap = this;
+    if (this === searchMap) peakStates = Math.max(peakStates, this.size);
+    return result;
+  });
+  let result;
+  try {
+    result = runSearch(state, known, { maxStates, maxDepth: 3 });
+  } finally {
+    spy.mockRestore();
+  }
+  expect(peakStates).toBeGreaterThan(0);
+  expect(peakStates).toBeLessThanOrEqual(maxStates);
+  expect(result.truncated).toBe(true);
+  expect(result.plan).toEqual([{
+    type: 'move', from: { pile: 'tableau', index: 5, cardIndex: 5 },
+    to: { pile: 'foundation', index: 3 },
+  }]);
+});
 
 test.each([1, 3])('unknown stock values cannot affect scores in Draw %i', (drawCount) => {
   for (let seed = 0; seed < 100; seed++) {
