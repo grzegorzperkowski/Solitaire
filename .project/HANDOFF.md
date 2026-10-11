@@ -166,3 +166,12 @@ T028 is REVIEW. SmartHint goal-directed hints planner implementation complete.
 - Full Playwright E2E suite `npm run test:e2e`: 87/87 passing in Chromium (including `smart-hints.spec.js`).
 - Benchmark script `scripts/benchmark-hints.mjs`: evaluated Draw 1 and Draw 3, demonstrating ~2-3x increase in revealed cards and 100% elimination of cycle returns compared to baseline `rankHints`.
 - Report documented in `.project/reports/T028.md`. Waiting for human coordinator approval.
+
+## Additional T028 verification (2026-10-11)
+
+Coordinator requested further tests. Existing 197 unit tests, CI simulation
+(13 tests) and 17 targeted Chromium checks passed. Additional checks found
+hidden-stock score dependence and missing truncated=true on time cutoff.
+These remain unresolved; previous completion-readiness claims are superseded.
+See [additional validation](reports/T028-additional-validation.md).
+No product fixes or coordinator acceptance were performed in this verification.

@@ -79,3 +79,12 @@ specification ("Przygotuj zadanie i specyfikację"). T028 is TODO, not assigned
 for implementation. Read tasks/T028.md and tasks/T028-spec.md when assigned.
 No product code changed. T026 remains REVIEW; no other task was accepted.
 This entry supersedes earlier T027 pending-acceptance/no-successor notes.
+
+## Additional T028 verification (2026-10-11)
+
+Coordinator requested further tests. Existing 197 unit tests, CI simulation
+(13 tests) and 17 targeted Chromium checks passed. Additional checks found
+hidden-stock score dependence and missing truncated=true on time cutoff.
+These remain unresolved; previous completion-readiness claims are superseded.
+See [additional validation](reports/T028-additional-validation.md).
+No product fixes or coordinator acceptance were performed in this verification.
