@@ -37,8 +37,6 @@ export function createBoardStructure(rootElement) {
       </header>
 
       <div id="notice-banner" class="notice-banner hidden" role="status" aria-live="polite"></div>
-      <div id="progress-notice" class="notice-banner hidden" role="status" aria-live="polite" aria-atomic="true"></div>
-      <div id="hint-notice" class="notice-banner hidden" role="status" aria-live="polite" aria-atomic="true"></div>
       <div id="practice-status" class="notice-banner hidden">Tryb ćwiczeniowy — wygrana tej partii jest już zaliczona.</div>
       <div id="live-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
@@ -84,6 +82,12 @@ export function createBoardStructure(rootElement) {
             </div>
           </div>
         </section>
+      </div>
+
+      <!-- Bottom notices (Hint explanation & Progress guidance above controls) -->
+      <div class="bottom-notice-container" id="bottom-notice-container">
+        <div id="progress-notice" class="notice-banner bottom-notice hidden" role="status" aria-live="polite" aria-atomic="true"></div>
+        <div id="hint-notice" class="notice-banner bottom-notice hidden" role="status" aria-live="polite" aria-atomic="true"></div>
       </div>
 
       <!-- Bottom controls bar (U06: 44x44 targets) -->
