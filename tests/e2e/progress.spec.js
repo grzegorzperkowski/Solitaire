@@ -9,17 +9,20 @@ const notice = (page) => page.locator('#progress-notice');
 
 test('E2E01 no legal actions has a specific accessible notice', async ({ page }) => {
   await load(page, 1);
-  await expect(notice(page)).toHaveText('Brak dostępnych ruchów.');
+  await expect(notice(page)).toHaveText('Brak dostępnych ruchów. Możesz rozpocząć nową grę.');
   await expect(notice(page)).toHaveAttribute('role', 'status');
 });
 test('E2E02 neutral king transfer keeps the no-progress notice and remains playable at 320px', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 700 });
   await load(page, 2);
-  await expect(notice(page)).toHaveText('Brak ruchów prowadzących do dalszego postępu.');
+  await expect(notice(page)).toHaveText('Brak ruchów prowadzących do dalszego postępu. Możesz rozpocząć nową grę.');
   await page.locator('#column-0 .card-face-up').click();
   await page.locator('#column-1').click();
   await expect(page.locator('#moves-display')).toHaveText('1');
   await expect(notice(page)).toBeVisible();
+  await expect(notice(page)).toContainText('Możesz cofnąć wcześniejsze ruchy i spróbować innej drogi lub rozpocząć nową grę.');
+  await page.locator('#btn-hint').click();
+  await expect(page.locator('#live-announcer')).toHaveText(await notice(page).textContent());
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 test('E2E03 foundation preparation has reachable progress', async ({ page }) => {
@@ -57,7 +60,7 @@ for (const draw of [1, 3]) {
     await expect(notice(page)).toBeVisible();
     for (let i = 0; i < 6; i++) {
       await page.locator('#stock-container').click();
-      await expect(notice(page)).toHaveText('Brak ruchów prowadzących do dalszego postępu.');
+      await expect(notice(page)).toContainText('Brak ruchów prowadzących do dalszego postępu.');
     }
   });
 }

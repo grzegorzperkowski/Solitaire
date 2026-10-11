@@ -5,6 +5,7 @@
 
 import { validateMove } from '../engine/game.js';
 import { rankHints } from '../engine/hints.js';
+import { noProgressMessage } from './progress.js';
 import { getCardDetails, SUIT_NAMES, createCardElement } from './cards.js';
 import { calculateBoardDimensions } from './layout.js';
 
@@ -60,14 +61,14 @@ export function createInputController(app, rootElement) {
     if (appState.isWon) return;
     if (appState.progress?.status === 'NO_PROGRESS') {
       currentHint = null;
-      announce(appState.progress.noLegalMoves ? 'Brak dostępnych ruchów.' : 'Brak ruchów prowadzących do dalszego postępu.');
+      announce(noProgressMessage(appState.progress.noLegalMoves, appState.session));
       onStateChangeCallback?.();
       return;
     }
     if (!hintMoves) hintMoves = rankHints(app.getState().state);
     if (!hintMoves.length) {
       currentHint = null;
-      announce('Brak dostępnych ruchów.');
+      announce(noProgressMessage(true, appState.session));
     } else {
       currentHint = hintMoves[hintIndex];
       hintIndex = (hintIndex + 1) % hintMoves.length;

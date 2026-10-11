@@ -6,6 +6,7 @@
 import { createCardElement, createEmptySlotElement } from './cards.js';
 import { calculateBoardDimensions, applyLayoutVariables } from './layout.js';
 import { renderDialogs } from './dialogs.js';
+import { noProgressMessage } from './progress.js';
 
 export function formatTime(ms) {
   const totalSec = Math.floor(Math.max(0, ms) / 1000);
@@ -208,8 +209,7 @@ export function renderProgressNotice(rootElement, state) {
   const progressNotice = rootElement.querySelector('#progress-notice');
   if (!progressNotice) return;
   const blocked = !state.isWon && !state.isPaused && !state.activeDialog && state.progress?.status === 'NO_PROGRESS';
-  const progressText = blocked ? (state.progress.noLegalMoves
-    ? 'Brak dostępnych ruchów.' : 'Brak ruchów prowadzących do dalszego postępu.') : '';
+  const progressText = blocked ? noProgressMessage(state.progress.noLegalMoves, state.session) : '';
   if (progressNotice.textContent !== progressText) progressNotice.textContent = progressText;
   progressNotice.classList.toggle('hidden', !blocked);
 }

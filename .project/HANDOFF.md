@@ -141,3 +141,12 @@ UNKNOWN. Knowledge survives Undo/Redo/branching/reload; old saves migrate safely
 Progress-only notifications update only the notice, preserving board animation
 and input DOM. See reports/T027.md for tests and resume instructions. No push,
 deployment, new task or T026 acceptance is implied.
+
+## T027 follow-up assignment (2026-10-11)
+Coordinator reviewed the feature as looking OK and requested next-step guidance.
+IN_PROGRESS: add a new-game suggestion and conditional Undo guidance, with no
+promise that undoing will enable progress. Existing detection rules unchanged.
+
+T027 guidance follow-up delivered (2026-10-11), REVIEW: notices suggest a new
+game and conditionally Undo/another route. Build and 14 targeted E2E checks passed.
+See reports/T027.md. No push or physical-device check.

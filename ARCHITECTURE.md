@@ -161,7 +161,7 @@ replacement and destruction, ignores stale results, and does not restart on
 timer-only changes. Analysis neither changes nor saves a session. Subscribers receive an optional second `progressOnly` argument on analysis completion; the renderer then updates only the notice, preserving board nodes, focus and move animations. UI uses a
 nonmodal polite status notice, hides it during pause/dialogs and wins, and keeps
 normal play/Undo available. A proven negative result takes precedence over
-cycling preparatory hints. UNKNOWN preserves ordinary legal hints.
+cycling preparatory hints. UNKNOWN preserves ordinary legal hints. Both automatic notices and Hint share next-step text: new game, plus Undo only when the session cursor is positive, without promising that Undo will resolve the position.
 
 Session knowledge is a frozen unique array, accumulated from all exposed tableau
 cards, foundations, and the last one/three waste cards, matching the renderer.

@@ -65,3 +65,7 @@ knowledge, schema v2 with conservative v1 migration, cancellable batches and
 Polish progress notices are implemented. Unit suite: 175 passed; Chromium E2E:
 83 passed; production build passed. Exact evidence and limits: reports/T027.md.
 No successor assigned; T026 still awaits its independent acceptance.
+
+T027 guidance follow-up delivered (2026-10-11), REVIEW: notices suggest a new
+game and conditionally Undo/another route. Build and 14 targeted E2E checks passed.
+See reports/T027.md. No push or physical-device check.
