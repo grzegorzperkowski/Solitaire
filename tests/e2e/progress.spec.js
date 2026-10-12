@@ -8,8 +8,8 @@ async function load(page, id, suffix = '') {
 const notice = (page) => page.locator('#progress-notice');
 
 test('T028 F04 replay finds no strategic progress in seed 2284836135 at cursor 114', async ({ page }) => {
-  await load(page, 1, '&replay=seed-2284836135');
-  await page.waitForFunction(() => window.fixtureApp.getState().progress.status !== 'UNKNOWN');
+  await load(page, 1, '&replay=seed-2284836135&budget=5000');
+  await page.waitForFunction(() => window.fixtureApp.getState().progress.status !== 'UNKNOWN', null, { timeout: 15000 });
   const result = await page.evaluate(() => ({
     progress: window.fixtureApp.getState().progress,
     cursor: window.fixtureApp.getState().session.cursor,

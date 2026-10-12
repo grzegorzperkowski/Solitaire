@@ -66,6 +66,14 @@ test('active time budget gives UNKNOWN with work remaining', () => {
   app.destroy();
 });
 
+test('progress analysis accepts an explicit active-time budget', () => {
+  let clock = 0;
+  const app = fixtureApp(2, { progressActiveMs: 1000, performance: { now: () => (clock += 60) } });
+  vi.advanceTimersByTime(1000);
+  expect(app.getState().progress.status).toBe('NO_PROGRESS');
+  app.destroy();
+});
+
 test('cancels between batches and time ticks do not restart completed search', () => {
   let clock = 0;
   const app = fixtureApp(2, { performance: { now: () => (clock += 5) } });

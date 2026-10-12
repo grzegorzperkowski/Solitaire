@@ -13,6 +13,7 @@ export function createApp({
   storage,
   load = loadSession,
   progressMaxStates = 10000,
+  progressActiveMs = 100,
   hintMaxStates = 10000,
   hintMaxDepth = 12,
   lockManager = globalThis?.navigator?.locks,
@@ -172,9 +173,9 @@ export function createApp({
       do {
         next = search.next();
         if (next.done) break;
-      } while (now() - start < 4 && activeMs + now() - start < 100);
+      } while (now() - start < 4 && activeMs + now() - start < progressActiveMs);
       activeMs += now() - start;
-      if (next.done || activeMs >= 100) {
+      if (next.done || activeMs >= progressActiveMs) {
         search.return();
         progress = Object.freeze(next.done ? next.value : { status: 'UNKNOWN', noLegalMoves: false });
         notifyListeners(true);

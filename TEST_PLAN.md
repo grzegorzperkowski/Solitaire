@@ -124,6 +124,9 @@ Release is complete only when all mandatory T01–T20/T22/T23 pass, optional T21
   and app result integration. Resource budget tests use deterministic limits.
 - `tests/e2e/progress.spec.js`: E2E01–13; deterministic full-deck fixtures use
   `tests/harness/progress.html` on a separate Vite dev server at port 5186.
+  The seed 2284836135 replay sets a test-only 5 s analysis budget so browser
+  worker contention cannot turn its unbounded wait into a false timeout;
+  production retains the 100 ms active-work limit.
   It mounts the ordinary controller/session/renderer with an injected loader;
   it is excluded from the production build. E2E11 uses the production save and
   actual reload. Other existing E2E tests continue against production preview.

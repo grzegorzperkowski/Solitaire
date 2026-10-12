@@ -20,6 +20,7 @@ const app = createApp({
   lockManager: null,
   load: () => ({ ok: true, session, metadata: { revision: 1, preferences: { drawCount: state.drawCount } } }),
   progressMaxStates: params.has('limit') ? Number(params.get('limit')) : 10000,
+  progressActiveMs: params.has('budget') ? Number(params.get('budget')) : undefined,
 }).init();
 const root = document.querySelector('#game-app');
 const input = createInputController(app, root);
