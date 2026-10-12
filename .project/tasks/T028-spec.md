@@ -151,12 +151,25 @@ FOUND przed EXPLORATION, następnie wyższe U, krótszy plan, mniejsze B, stabil
 kolejność enumeracji. Odczyt istniejących krawędzi grafu sprawdza, czy z końca
 kandydata można osiągnąć odsłonięcie, nową informację lub dalszy przyrost baz.
 Nie symuluje nowych stanów i nie przekracza granic informacji.
+Nie przechodzi ponownie przez S0: dojście do celu inną gałęzią z korzenia
+nie potwierdza korzystnej kontynuacji wybranego kandydata.
 
 KNOWN_DEAD_END oznacza wyłącznie wyczerpaną część znanego grafu względem
 końca kandydata; odrzucić taką rekomendację i rozważyć następną. Brak pełnego
 grafu daje UNPROVEN, nie dowód impasu. Łączny limit odczytów weryfikacji to
 maxStates, z yield co 64 odczyty oraz między alternatywnymi kandydatami;
 wyczerpanie limitu ustawia truncated. To nie solver wygrywalności ani NO_PROGRESS.
+Limit odczytów liczy wyłącznie nowe, niewykluczone węzły danej weryfikacji;
+pozostały na stosie duplikat lub S0 nie oznacza obcięcia. `children` zachowuje
+także klucze następców odciętych limitem; przed końcową weryfikacją przeliczyć
+kompletność po późniejszych krótszych ścieżkach. `unresolvedCutoffs` liczy
+krawędzie do nadal brakujących węzłów, a `unexpandedStates` zapamiętane stany
+z nierozwiniętą najlepszą ścieżką. Historyczne trafienia limitów nie przesądzają
+końcowego `truncated`. Brakujący węzeł lub nierozwinięty stan pozostaje niepewny.
+Kandydatury celu zachować niezależnie od możliwości zapamiętania ich planszy;
+nie rozwijać dodatkowych stanów poza budżetem. Anulowanie zachowuje kandydaturę
+sprawdzoną co najmniej lokalnie, która nie została odrzucona przez weryfikację;
+zawsze ustawia `truncated`, także między kandydatami i po yield grafu.
 Wynik po granicy informacji ma INFORMATION_BOUNDARY, bez analizy odsłoniętej
 wartości. `verification` opisuje zakres sprawdzenia, nie obiecuje bezpieczeństwa.
 

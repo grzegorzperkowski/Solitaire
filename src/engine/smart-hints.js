@@ -36,7 +36,10 @@ import { progressStateKey } from './progress.js';
  *   Cancellation marks the result truncated; it preserves a verified partial
  *   suggestion when available. Scheduling and time budgets belong to callers.
  * - Focused regressions are in `tests/unit/smart-hints.test.js` and
- *   `tests/unit/smart-hints-app.test.js`; compare seeded quality/cost with
+ *   `tests/unit/smart-hints-app.test.js`. Graph regressions and independent BFS
+ *   are in `smart-hints-graph.test.js` / `smart-hints-bfs.test.js`; reproduce the
+ *   saved-position audit with `node scripts/audit-smart-hints.mjs <diagnostic>`.
+ *   Compare seeded quality/cost with
  *   `node scripts/benchmark-hints.mjs`. Benchmarks are measurements, not proof
  *   of deal solvability or optimality.
  */
@@ -345,8 +348,10 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const visited = new Map(); // key -> best cost
   visited.set(rootKey, 0);
 
-  const graph = new Map([[rootKey, { children: new Set(), H: 0, F: 0, I: 0, complete: false }]]);
+  const graph = new Map([[rootKey, { children: new Set(), H: 0, F: 0, I: 0,
+    boundary: false, expandedCost: Infinity, complete: false }]]);
   const candidates = new Map();
+  const verifiedCandidates = new Map();
   let bestResult = null;
   let bestScore = -Infinity;
   let bestLen = Infinity;
@@ -357,12 +362,12 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const diagnostics = {
     strategicCandidates: 0, explorationCandidates: 0, preparatoryStates: 0,
     rejectedEndStates: 0, staleQueueEntries: 0, duplicateStatesRejected: 0,
-    depthLimitedBranches: 0, stateLimitedBranches: 0,
+    depthLimitedBranches: 0, stateLimitedBranches: 0, unresolvedCutoffs: 0, unexpandedStates: 0,
   };
 
   function cancelledResult(candidate = bestResult) {
-    const safeCandidate = candidate?.verification?.accepted && candidate.verification.legalActions !== undefined
-      ? candidate : null;
+    const safeCandidate = [candidate, ...Array.from(verifiedCandidates.values()).reverse()].find(result =>
+      result?.verification?.accepted && result.verification.legalActions !== undefined);
     const { key, order, ...partial } = safeCandidate || {};
     return safeCandidate
       ? { ...partial, visitedStates: stateCount, truncated: true, cancelled: true, reason: 'CANCELLED',
@@ -440,13 +445,14 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       continue;
     }
 
-    stateCount++;
-    if (stateCount > maxStates) {
+    if (stateCount >= maxStates) {
       truncated = true;
       break;
     }
+    stateCount++;
 
     const node = graph.get(currentKey);
+    node.expandedCost = current.cost;
     node.complete = true;
     const moves = current.moves;
 
@@ -464,7 +470,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       // Deduplication: reject if visited at equal or lower cost
       const key = progressStateKey(nextState, knownCards);
       const existingCost = visited.get(key);
-      if (existingCost !== undefined) node.children.add(key);
+      // Keep even missing successors: a later shorter path can resolve this cut.
+      node.children.add(key);
       if (current.path.length >= maxDepth) {
         if (existingCost !== undefined && existingCost <= nextCost) diagnostics.duplicateStatesRejected++;
         else {
@@ -479,7 +486,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
         continue;
       }
       const canRetain = existingCost !== undefined || visited.size < maxStates;
-      if (canRetain) { visited.set(key, nextCost); node.children.add(key); }
+      if (canRetain) visited.set(key, nextCost);
       else {
         diagnostics.stateLimitedBranches++;
         truncated = true;
@@ -491,7 +498,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       const { score, components } = evaluation;
       const { B } = components;
       if (canRetain && !graph.has(key)) {
-        graph.set(key, { children: new Set(), H: components.H, F: components.F, I: components.I, complete: atBoundary });
+        graph.set(key, { children: new Set(), H: components.H, F: components.F, I: components.I,
+          boundary: atBoundary, expandedCost: Infinity, complete: atBoundary });
       }
       const goal = determineGoal(components);
       const isConfirmedGoal = goal === 'REVEAL' || goal === 'FOUNDATION_ADVANCE';
@@ -503,11 +511,12 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       if (score > 0 && (isConfirmedGoal || isExploration)) {
         const candidate = {
           status: isConfirmedGoal ? 'FOUND' : 'EXPLORATION',
-          plan: nextPath, goal, score, components, key: canRetain ? key : null, order: insertCounter,
+          plan: nextPath, goal, score, components, key, order: insertCounter,
           visitedStates: stateCount, truncated,
         };
-        // Retain goal alternatives so a proven dead end can be replaced at completion.
-        if (canRetain) candidates.set(key, {
+        // Keep goal metadata even when its board cannot fit the retained-state budget.
+        const previousCandidate = candidates.get(key);
+        if (!previousCandidate || score > previousCandidate.score) candidates.set(key, {
           ...candidate,
           verification: { goalReached: true, lostMorePossibilities: components.B > components.M,
             usefulPossibilities: evaluation.endPoss.size, continuation: atBoundary ? 'INFORMATION_BOUNDARY' : 'UNPROVEN',
@@ -522,9 +531,11 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
         if (shouldReplace) {
           const verification = verifyEndState(nextState, state, knownSet, evaluation, atBoundary);
           candidate.verification = verification;
-          if (canRetain) candidates.set(key, candidate);
+          candidates.set(key, candidate);
           if (!verification.accepted) diagnostics.rejectedEndStates++;
           if (verification.accepted) {
+            verifiedCandidates.delete(key);
+            verifiedCandidates.set(key, candidate);
             bestScore = score;
             bestLen = nextPath.length;
             bestB = B;
@@ -564,6 +575,15 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
 
   if (signal?.aborted) return cancelledResult();
 
+  // Historical limit hits are not unresolved cuts once another path fills the graph.
+  for (const [key, node] of graph) {
+    const missingChildren = [...node.children].filter(child => !graph.has(child)).length;
+    diagnostics.unresolvedCutoffs += missingChildren;
+    if (!node.boundary && node.expandedCost > visited.get(key)) diagnostics.unexpandedStates++;
+    node.complete = node.boundary || (node.expandedCost < Infinity && missingChildren === 0);
+  }
+  truncated = diagnostics.unresolvedCutoffs > 0 || diagnostics.unexpandedStates > 0;
+
   // Read the already explored graph; no new moves or hidden-card lookahead.
   const ordered = [...candidates.values()];
   if (bestResult && !candidates.has(bestResult.key)) ordered.push(bestResult);
@@ -578,12 +598,21 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       visitedStates: stateCount, truncated,
       diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads },
     };
+    if (signal?.aborted) return cancelledResult();
     if (!candidate.verification.accepted) continue;
     if (candidate.verification.legalActions === undefined) {
       const replay = analyzeHintPlan(state, knownCards, candidate.plan);
+      if (!replay.ok) {
+        candidate.verification.accepted = false;
+        verifiedCandidates.delete(candidate.key);
+        diagnostics.rejectedEndStates++;
+        continue;
+      }
       candidate.verification = replay.verification;
       if (!candidate.verification.accepted) { diagnostics.rejectedEndStates++; continue; }
     }
+    verifiedCandidates.delete(candidate.key);
+    verifiedCandidates.set(candidate.key, candidate);
     bestResult = candidate;
     if (signal?.aborted) return cancelledResult(bestResult);
     if (candidate.verification.continuation === 'UNPROVEN') {
@@ -591,16 +620,18 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       const checked = new Set();
       let uncertain = false;
       let futureGoal = false;
-      while (pending.length && verificationReads < maxStates) {
+      while (pending.length) {
         if (signal?.aborted) return cancelledResult(bestResult);
         const key = pending.pop();
-        if (checked.has(key)) continue;
+        if (key === rootKey || checked.has(key)) continue;
+        if (verificationReads >= maxStates) { uncertain = true; truncated = true; break; }
         checked.add(key);
         verificationReads++;
         if (verificationReads % 64 === 0) {
           const { key: unusedKey, order: unusedOrder, ...publicCandidate } = candidate;
           yield { ...publicCandidate, visitedStates: stateCount, truncated,
             diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
+          if (signal?.aborted) return cancelledResult();
         }
         const node = graph.get(key);
         if (!node) { uncertain = true; continue; }
@@ -608,10 +639,15 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
         if (!node.complete) uncertain = true;
         for (const child of node.children) if (!checked.has(child)) pending.push(child);
       }
-      if (pending.length && !futureGoal) { uncertain = true; truncated = true; }
       candidate.verification.continuation = futureGoal ? 'FUTURE_GOAL_REACHABLE' : uncertain ? 'UNPROVEN' : 'KNOWN_DEAD_END';
       candidate.verification.graphStates = checked.size;
-      if (!futureGoal && !uncertain) { diagnostics.rejectedEndStates++; bestResult = null; continue; }
+      if (!futureGoal && !uncertain) {
+        candidate.verification.accepted = false;
+        verifiedCandidates.delete(candidate.key);
+        diagnostics.rejectedEndStates++;
+        bestResult = null;
+        continue;
+      }
     }
     bestResult = candidate;
     break;

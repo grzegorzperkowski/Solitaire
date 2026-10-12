@@ -1,6 +1,6 @@
 # Project status
 
-- T028 resumed by the coordinator on 2026-10-12 to investigate external model findings. This follow-up fixed false depth-limit truncation and stale queue expansion, with regressions; task is REVIEW pending coordinator acceptance. See [reports/T028.md](reports/T028.md). Preserve unrelated dirty files and the diagnostic JSON.
+- T028 REVIEW: accepted `c677cad` preserved; graph/truncation/cancellation repairs and independent BFS comparison delivered. Cursor 73: all three searches exhaust 88,896 states with zero goals. See [audit](reports/T028-graph-audit.md). Preserve unrelated dirty files and diagnostic JSON; awaiting acceptance.
 
 - State: T000–T015, T017, T024, T025, T027 and T029 are DONE; T026 and T028 are REVIEW.
 - Latest task: T029 random victory animations and replay E2E timeout fix, accepted by the coordinator on 2026-10-12 at `2ea1a1e`. Preview: `http://localhost:5186/tests/harness/victory.html`. See [tasks/T029.md](tasks/T029.md) and [reports/T029.md](reports/T029.md).
@@ -31,11 +31,12 @@
 
 ## Known problems and blockers
 
-- T028 follow-up fixes false depth-cutoff reporting and stale queue expansion.
-  Current evidence: 225 unit tests, 22 relevant Chromium E2E checks, build and
-  a 10-seed-per-mode smoke benchmark pass. Cursor 73 still exhausts 88,896
-  states without candidates in 31 seconds. Full §8 comparison predates this
-  follow-up and was not repeated; physical-device latency is unmeasured.
+- T028 graph audit fixes resolved cutoffs, root-detour verification, candidate
+  retention/cancellation, expansion counting and failed replay handling.
+  Evidence: 265 full unit tests, final 41 focused graph/BFS tests, 45 Chromium
+  E2E checks and build pass. 28 small real boards agree with independent BFS;
+  cursor 73 agrees on 88,896 states / zero goals, untruncated. Full §8 quality
+  benchmark was not repeated; physical-device latency remains unmeasured.
 
 - T026 is awaiting coordinator acceptance. No push or publication was performed.
 

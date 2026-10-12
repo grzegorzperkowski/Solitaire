@@ -1,5 +1,20 @@
 # Fresh-session handoff
 
+## T028 graph audit delivery — 2026-10-12
+
+Coordinator accepted `c677cad` (stale queue/H07) and explicitly resumed T028:
+regressions for resolved depth cutoffs, root-return cycles in final verification,
+candidate/cancellation retention, expansion counting and failed replay;
+independent full-mechanics-key BFS and before/after cursor-73 comparison.
+Delivered with regressions: resolved cuts, root-detour rejection, retained goal
+metadata, cancellation fallback, exact expansions and replay guard. Full unit
+265 passed, final focused graph/BFS 41 passed, Chromium E2E 45 passed, build
+passed. 28 small real graphs and cursor 73 agree with full-key FIFO BFS.
+Cursor 73: before/after/BFS 88,896 states, zero goals, no truncation.
+See `.project/reports/T028-graph-audit.md` and the JSONL evidence. REVIEW on
+master, awaiting acceptance; do not start another task. Keep limits/weights;
+preserve unrelated CSS/accessibility edits and the untracked cursor-114 JSON.
+
 ## T028 SmartHint findings — 2026-10-12
 
 Coordinator resumed T028 with “do roboty” after providing external findings.

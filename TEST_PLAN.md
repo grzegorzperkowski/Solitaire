@@ -186,6 +186,30 @@ removals, UNKNOWN at retained-state limit, exhaustive NO_PROGRESS with legal
 moves, and saved seed 2284836135 at cursor 114. Verify `noLegalMoves=false` and
 optional goal while keeping the UI status contract. Benchmark remains separate.
 
+## T028 graph audit regressions (2026-10-12)
+
+`tests/unit/smart-hints-graph.test.js` uses controlled abstract transitions to
+force a depth cut later resolved by a shorter path, an actually missing leaf,
+root-return detours, genuine continuation to an information boundary, repeated
+expansions at maxStates, failed replay, unretained exploration after rejected
+foundation goals, cancellation after every yield and at the 64-read graph yield.
+Check updated parent completeness/children and never return a rejected plan.
+Root/duplicate pending entries alone must not exhaust verification reads.
+
+`tests/unit/smart-hints-bfs.test.js` compares all goal components and retained
+states on 28 full-deck fixtures (1–7, Draw 1/3, visible-only/all remembered).
+The independent FIFO oracle in `tests/helpers/smart-hint-bfs.js` uses full
+mechanics keys, no score or SmartHint helpers, and stops at every reveal/new
+information. Completed SmartHint NO_STRATEGIC_PROGRESS must agree with zero
+BFS goals. Verify boundary nodes have no children and completed graphs have
+all successor nodes. Remembered tableau reveals remain terminal.
+
+Replay cursor 73 with `node scripts/audit-smart-hints.mjs
+tests/fixtures/solitaire-stan-2560240634-draw1-73.json`: accepted c677cad baseline,
+current planner and independent BFS, unchanged 250000-state / 100-depth debug
+budget. Record status, truncation, expanded/unique/stale states, unresolved
+cuts and goal counts. Evidence lives in `.project/reports/T028-graph-audit.md`.
+
 ## T029 victory animation extension (T19/T22)
 
 Use the development preview to run each effect at desktop and 320px mobile sizes. Verify an intermediate frame, no horizontal scroll, Escape and “Pomiń”, replay replacement, reduced-motion bypass, and final overlay/RAF cleanup. On a near-win fixture, a genuine first win must select one effect while awarding statistics once; the existing result dialog follows skip/completion. Undo/reload/re-win is practice and must not select again. New Game, destroy, page hide, resize and an animation exception must clean up or reach the existing result. Confirm the shuffle bag validates persisted values, cycles all four with no boundary repeat, and maintains this behavior if storage is denied.
