@@ -182,3 +182,7 @@ Check Draw 1/3 and waste fan exposure, known draws, foundation round trips and
 removals, UNKNOWN at retained-state limit, exhaustive NO_PROGRESS with legal
 moves, and saved seed 2284836135 at cursor 114. Verify `noLegalMoves=false` and
 optional goal while keeping the UI status contract. Benchmark remains separate.
+
+## T029 victory animation extension (T19/T22)
+
+Use the development preview to run each effect at desktop and 320px mobile sizes. Verify an intermediate frame, no horizontal scroll, Escape and “Pomiń”, replay replacement, reduced-motion bypass, and final overlay/RAF cleanup. On a near-win fixture, a genuine first win must select one effect while awarding statistics once; the existing result dialog follows skip/completion. Undo/reload/re-win is practice and must not select again. New Game, destroy, page hide, resize and an animation exception must clean up or reach the existing result. Confirm the shuffle bag validates persisted values, cycles all four with no boundary repeat, and maintains this behavior if storage is denied.

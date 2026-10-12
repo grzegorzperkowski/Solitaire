@@ -574,7 +574,11 @@ test.describe('T015 seed, statistics and results', () => {
       const source = move.from.pile === 'waste' ? '#waste-pile .is-playable' : `#column-${move.from.index} .card-node:last-child`;
       await page.locator(source).click();
       await page.locator(`#foundation-${move.to.index}`).click();
+      await expect(page.locator('.victory-animation')).toBeVisible();
+      await expect(page.locator('#game-container')).toHaveJSProperty('inert', true);
+      await page.getByRole('button', { name: 'Pomiń' }).click();
       await expect(page.getByRole('dialog', { name: 'Wygrana!' })).toBeVisible();
+      await expect(page.locator('#game-container')).toHaveJSProperty('inert', false);
       await expect(page.locator('#win-dialog')).toHaveCSS('animation-name', 'win-arrival');
       await expect(page.locator('#win-dialog')).toContainText(`Liczba ruchów: ${fixture.session.cursor + 1}`);
       const stats = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session.statistics);
@@ -606,6 +610,21 @@ test.describe('T015 seed, statistics and results', () => {
       await expect(otherStats).toContainText('Wygrane procentowo0%');
     });
   }
+});
+
+test('T029 reduced motion opens the result without starting a victory effect', async ({ page }) => {
+  const fixture = nearWin(1);
+  await page.addInitScript((save) => localStorage.setItem('pl.solitaire.save', save), fixture.save);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Wznów grę' }).click();
+  const move = fixture.command;
+  const source = move.from.pile === 'waste' ? '#waste-pile .is-playable' : `#column-${move.from.index} .card-node:last-child`;
+  await page.locator(source).click();
+  await page.locator(`#foundation-${move.to.index}`).click();
+  await expect(page.getByRole('dialog', { name: 'Wygrana!' })).toBeVisible();
+  await expect(page.locator('.victory-animation')).toHaveCount(0);
+  expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session.statistics.draw1.wins)).toBe(1);
 });
 
 test('T015 seed form keeps keyboard focus and blocks game shortcuts while open', async ({ page }) => {

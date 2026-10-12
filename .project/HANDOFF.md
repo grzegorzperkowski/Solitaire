@@ -1,15 +1,22 @@
 # Fresh-session handoff
 
-## T028 mobile Help/Hint double-tap follow-up delivered — 2026-10-12
+## T029 random victory animations — 2026-10-12
 
-T028 is REVIEW pending coordinator acceptance. Help and Hint buttons use
+T029 is REVIEW on `master`, delivery commit is recorded in the task report. Four native effects, persisted shuffle bag, one-time win integration, skip/reduced-motion/cleanup, preview and automated coverage are ready. Preview: `http://localhost:5186/tests/harness/victory.html` (Vite dev server running). Preserve unrelated root file `solitaire-stan-2284836135-draw1-114.json`. Scope/evidence: `.project/tasks/T029.md` and `.project/reports/T029.md`.
+
+T028 was accepted by the coordinator (“close T028”) on 2026-10-12 at `4a7a6fdb0a9065de753d23b9d71bcb3e8c661390`.
+
+## T028 accepted — 2026-10-12
+
+T028 is DONE, accepted by the human coordinator at
+`4a7a6fdb0a9065de753d23b9d71bcb3e8c661390`. Help and Hint buttons use
 `touch-action: manipulation` to suppress double-tap zoom while retaining pinch
 zoom. Build and the 11-test accessibility E2E suite passed. No physical-device
 Safari/Android check. Preserve the untracked root diagnostic JSON.
 
 ## T028 benchmark and speed follow-up delivered — 2026-10-12
 
-T028 is REVIEW pending coordinator acceptance. The §8 benchmark ran seeds 0–99
+The §8 benchmark ran seeds 0–99
 for Draw 1 and Draw 3 against `rankHints`, with the app's 100 ms active search
 budget. Paired revision timing covers the same 200 initial boards, baseline
 planner from `276714c`, and current worktree. SmartHint reused generated legal

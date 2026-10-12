@@ -8,6 +8,7 @@ import { calculateBoardDimensions, applyLayoutVariables } from './layout.js';
 import { renderDialogs } from './dialogs.js';
 import { noProgressMessage } from './progress.js';
 import { formatSmartHintMessage } from './smart-hints.js';
+import { syncVictoryAnimation } from './victory-animation.js';
 
 export function formatTime(ms) {
   const totalSec = Math.floor(Math.max(0, ms) / 1000);
@@ -132,6 +133,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
     createBoardStructure(rootElement);
     container = rootElement.querySelector('#game-container');
   }
+  container.inert = Boolean(state.victoryAnimation);
 
   // Calculate layout if not provided
   const dims = layoutDims || calculateBoardDimensions(container.clientWidth || window.innerWidth);
@@ -208,6 +210,8 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   const appInstance = app || inputController?.app || (typeof window !== 'undefined' ? window.__SOLITAIRE_APP__ : null);
   if (appInstance) {
     renderDialogs(rootElement, state, appInstance);
+    try { syncVictoryAnimation(rootElement, state, appInstance); }
+    catch { appInstance.finishVictoryAnimation(); }
   }
   if (animateDeal) renderDealAnimation(container);
 }

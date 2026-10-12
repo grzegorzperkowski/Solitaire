@@ -78,12 +78,14 @@ describe('T008 app controller: clock, lifecycle and ownership', () => {
     app.resume();
     fakeNow += 2000;
     expect(app.executeCommand(fixture.command).ok).toBe(true);
-    expect(app.getState().activeDialog).toBe('win');
+    expect(app.getState().activeDialog).toBe(null);
+    expect(app.getState().victoryAnimation).toBeTruthy();
     expect(app.getState().elapsedMs).toBe(14000);
     const stats = app.getState().session.statistics;
     expect(stats[`draw${drawCount}`]).toEqual({ attempts: 1, wins: 1, bestTimeMs: 14000, fewestMoves: fixture.session.cursor + 1 });
     fakeNow += 10000;
-    app.closeDialog();
+    app.finishVictoryAnimation();
+    expect(app.getState().activeDialog).toBe('win');
     app.settleElapsed();
     expect(app.getState().elapsedMs).toBe(14000);
     app.destroy();
@@ -110,6 +112,28 @@ describe('T008 app controller: clock, lifecycle and ownership', () => {
     expect(app.getState().isWon).toBe(true);
     expect(app.getState().activeDialog).toBe(null);
     expect(app.getState().session.statistics).toEqual(stats);
+    app.destroy();
+  });
+
+  test('T029 genuine win starts one effect, skip shows result, and new game cancels', () => {
+    const fixture = nearWin(1);
+    const storage = createMockStorage({ [STORAGE_KEY]: fixture.save });
+    const app = createApp({ storage, performance: mockPerformance, random: () => 0 }).init();
+    app.executeCommand(fixture.command);
+    const selected = app.getState().victoryAnimation;
+    expect(selected).toBeTruthy();
+    expect(app.getState().session.statistics.draw1.wins).toBe(1);
+    app.finishVictoryAnimation();
+    expect(app.getState()).toMatchObject({ victoryAnimation: null, activeDialog: 'win', winRecorded: true });
+    app.undo();
+    app.redo();
+    expect(app.getState().victoryAnimation).toBe(null);
+    const cleanup = vi.fn();
+    app.setVictoryAnimationCleanup(cleanup);
+    app.newGame({ seed: 7, drawCount: 1 });
+    expect(cleanup).toHaveBeenCalledOnce();
+    expect(app.getState().activeDialog).toBe(null);
+    expect(app.getState().session.statistics.draw1.wins).toBe(1);
     app.destroy();
   });
 

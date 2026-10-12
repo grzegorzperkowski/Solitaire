@@ -745,6 +745,65 @@ body {
   animation: win-arrival 180ms ease-out;
 }
 
+.victory-animation {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  overflow: hidden;
+  pointer-events: auto;
+  background: rgba(7, 26, 20, .08);
+}
+
+.victory-animation canvas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.victory-fan-card {
+  position: fixed;
+  z-index: 1;
+  transform-origin: center;
+  will-change: transform;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, .45);
+}
+
+.victory-animation-title {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  margin: 0;
+  color: #ffe7a0;
+  font-size: clamp(1.5rem, 7vw, 3rem);
+  font-weight: 800;
+  text-shadow: 0 3px 14px #00140e, 0 0 24px #d4af37;
+  transform: translate(-50%, -50%);
+  animation: win-arrival 500ms ease-out both;
+  pointer-events: none;
+}
+
+.victory-skip {
+  position: absolute;
+  z-index: 1;
+  top: max(10px, env(safe-area-inset-top));
+  right: max(10px, env(safe-area-inset-right));
+  min-width: 64px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 2px solid #f1d98f;
+  border-radius: 8px;
+  background: #0c2b22;
+  color: #fff8e4;
+  font: inherit;
+  font-weight: 700;
+  pointer-events: auto;
+}
+
+.victory-skip:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
 .shake-animation {
   animation: shake 150ms ease-in-out;
 }

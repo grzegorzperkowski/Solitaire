@@ -913,6 +913,11 @@ export function createInputController(app, rootElement) {
         return;
       }
       const state = app.getState();
+      if (state.victoryAnimation) {
+        e.preventDefault();
+        app.finishVictoryAnimation();
+        return;
+      }
       if (state.activeDialog) {
         e.preventDefault();
         app.closeDialog();

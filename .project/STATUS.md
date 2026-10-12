@@ -1,7 +1,7 @@
 # Project status
 
-- State: T000–T015, T017, T024, T025, and T027 are DONE; T028 is REVIEW.
-- Current task: T028 mobile Help/Hint double-tap zoom revision delivered 2026-10-12; coordinator acceptance pending. Prior benchmark/speed work remains recorded. See [tasks/T028.md](tasks/T028.md) and [reports/T028.md](reports/T028.md).
+- State: T000–T015, T017, T024, T025, T027, and T028 are DONE; T029 is REVIEW.
+- Current task: T029 random victory animations, delivered 2026-10-12; coordinator acceptance pending. Preview: `http://localhost:5186/tests/harness/victory.html`. See [tasks/T029.md](tasks/T029.md) and [reports/T029.md](reports/T029.md).
 - T028 follow-up (2026-10-12): §8 benchmark and legal-move reuse speed improvement delivered; see [reports/T028.md](reports/T028.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).
 - Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.

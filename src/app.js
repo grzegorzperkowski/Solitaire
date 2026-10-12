@@ -3,6 +3,7 @@ import { loadSession, saveSession, serializeSession, STORAGE_KEY, SCHEMA_VERSION
 import { isWon } from './engine/game.js';
 import { searchProgress } from './engine/progress.js';
 import { searchSmartHint } from './engine/smart-hints.js';
+import { getNextVictoryAnimation } from './ui/victory-bag.js';
 
 export const LOCK_NAME = 'pl.solitaire.writer';
 const HINT_BATCH_MS = 4;
@@ -19,6 +20,7 @@ export function createApp({
   document = globalThis?.document,
   window = globalThis?.window,
   initialOptions = { seed: 42, drawCount: 1 },
+  random = Math.random,
 } = {}) {
   let session = null;
   let preferences = { drawCount: initialOptions.drawCount ?? 1, touchHelpSeen: false };
@@ -36,6 +38,8 @@ export function createApp({
   let checkpointIntervalId = null;
   let releaseLockFn = null;
   let isDestroyed = false;
+  let victoryAnimation = null;
+  let victoryAnimationCleanup = null;
 
   let progress = Object.freeze({ status: 'UNKNOWN', noLegalMoves: false });
   let analyzedBoard = null;
@@ -299,6 +303,7 @@ export function createApp({
 
   function handleVisibilityChange() {
     if (isDocumentHidden()) {
+      finishVictoryAnimation();
       if (session && session.started && !isPaused && !activeDialog && !isWon(session.state)) {
         settleElapsed(true);
       }
@@ -311,7 +316,12 @@ export function createApp({
     notifyListeners();
   }
 
+  function handleViewportResize() {
+    finishVictoryAnimation();
+  }
+
   function handlePageHide() {
+    finishVictoryAnimation();
     if (session && session.started && !isPaused && !activeDialog && !isWon(session.state)) {
       settleElapsed(true);
     }
@@ -384,6 +394,7 @@ export function createApp({
     if (window && typeof window.addEventListener === 'function') {
       window.addEventListener('storage', handleStorageEvent);
       window.addEventListener('pagehide', handlePageHide);
+      window.addEventListener('resize', handleViewportResize);
     }
     if (document && typeof document.addEventListener === 'function') {
       document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -419,7 +430,10 @@ export function createApp({
 
     if (result.ok) {
       session = result.session;
-      if (!hadWin && session.winRecorded) activeDialog = 'win';
+      if (!hadWin && session.winRecorded) {
+        victoryAnimation = getNextVictoryAnimation(storage, random);
+        activeDialog = null;
+      }
       if (!wasStarted && session.started) {
         lastTickTime = performance ? performance.now() : Date.now();
       }
@@ -457,6 +471,8 @@ export function createApp({
   }
 
   function newGame(options = {}) {
+    clearVictoryAnimation();
+    victoryAnimation = null;
     settleElapsed();
     const drawCount = options.drawCount ?? preferences.drawCount ?? 1;
     const seed =
@@ -476,6 +492,8 @@ export function createApp({
 
   function restart() {
     if (!session) return null;
+    clearVictoryAnimation();
+    victoryAnimation = null;
     settleElapsed();
     session = restartSession(session);
     isPaused = false;
@@ -509,6 +527,25 @@ export function createApp({
     lastTickTime = performance ? performance.now() : Date.now();
     activeDialog = null;
     notifyListeners();
+  }
+
+  function finishVictoryAnimation() {
+    if (!victoryAnimation) return;
+    clearVictoryAnimation();
+    victoryAnimation = null;
+    activeDialog = 'win';
+    document?.activeElement?.blur?.();
+    notifyListeners();
+  }
+
+  function clearVictoryAnimation() {
+    const cleanup = victoryAnimationCleanup;
+    victoryAnimationCleanup = null;
+    cleanup?.();
+  }
+
+  function setVictoryAnimationCleanup(cleanup) {
+    victoryAnimationCleanup = cleanup;
   }
 
   function setDrawPreference(drawCount) {
@@ -555,6 +592,7 @@ export function createApp({
       started: session ? session.started : false,
       winRecorded: session ? session.winRecorded : false,
       isWon: session ? isWon(session.state) : false,
+      victoryAnimation,
       isPaused,
       activeDialog,
       isWriter,
@@ -574,6 +612,8 @@ export function createApp({
 
   function destroy() {
     isDestroyed = true;
+    clearVictoryAnimation();
+    victoryAnimation = null;
     clearTimeout(analysisTimer);
     clearTimeout(hintTimer);
     settleElapsed();
@@ -586,6 +626,7 @@ export function createApp({
     if (window && typeof window.removeEventListener === 'function') {
       window.removeEventListener('storage', handleStorageEvent);
       window.removeEventListener('pagehide', handlePageHide);
+      window.removeEventListener('resize', handleViewportResize);
     }
     if (document && typeof document.removeEventListener === 'function') {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -604,6 +645,8 @@ export function createApp({
     resume,
     openDialog,
     closeDialog,
+    finishVictoryAnimation,
+    setVictoryAnimationCleanup,
     setDrawPreference,
     markTouchHelpSeen,
     requestSmartHint,
