@@ -2,7 +2,7 @@
 
 ## T029 random victory animations — 2026-10-12
 
-T029 is IN_PROGRESS on `master`, resuming for the coordinator-assigned replay E2E timeout fix and task closure. The stress repro exposed the progress analyzer's expected 100 ms `UNKNOWN` cutoff racing the test's unbounded `status !== UNKNOWN` wait. Preserve unrelated root file `solitaire-stan-2284836135-draw1-114.json`. Scope/evidence: `.project/tasks/T029.md` and `.project/reports/T029.md`.
+T029 is DONE, accepted by the human coordinator on 2026-10-12 at `2ea1a1e`. The progress replay E2E uses an explicit fixture-only analysis budget, while production keeps its 100 ms active-work cutoff. Unit tests (220), full Chromium E2E (98, default eight workers), stress replay (8/8) and production build pass. Preview: `http://localhost:5186/tests/harness/victory.html`. Preserve unrelated root file `solitaire-stan-2284836135-draw1-114.json`. Scope/evidence: `.project/tasks/T029.md` and `.project/reports/T029.md`.
 
 T028 was accepted by the coordinator (“close T028”) on 2026-10-12 at `4a7a6fdb0a9065de753d23b9d71bcb3e8c661390`.
 
