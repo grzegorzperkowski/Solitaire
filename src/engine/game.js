@@ -296,13 +296,16 @@ export function applyMove(state, command) {
 }
 
 function addDestinations(state, from, moves) {
+  // Enumeration needs validation only; materialize a successor when applying the command.
+  const source = readSource(state, from);
+  if (!source.ok) return;
   for (let index = 0; index < 7; index += 1) {
     const command = { type: 'move', from, to: { pile: 'tableau', index } };
-    if (validateMove(state, command).ok) moves.push(command);
+    if (readDestination(state, source, command.to).ok) moves.push(command);
   }
   for (let index = 0; index < 4; index += 1) {
     const command = { type: 'move', from, to: { pile: 'foundation', index } };
-    if (validateMove(state, command).ok) moves.push(command);
+    if (readDestination(state, source, command.to).ok) moves.push(command);
   }
 }
 

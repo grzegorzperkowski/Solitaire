@@ -210,6 +210,7 @@ describe('SmartHint v1 — Engine & Acceptance H01–H15', { timeout: 15000 }, (
     const state = h15();
     const res = runSearch(state);
     expect(res).toEqual({
+      phase: 'FINAL',
       status: 'WON',
       plan: [],
       goal: null,

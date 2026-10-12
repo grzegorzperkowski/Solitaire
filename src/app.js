@@ -81,7 +81,7 @@ export function createApp({
     // If game is won, no hint
     if (isWon(board)) {
       invalidateHint();
-      hint = Object.freeze({ status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false });
+      hint = Object.freeze({ phase: 'FINAL', status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false });
       notifyListeners();
       return;
     }
@@ -100,14 +100,15 @@ export function createApp({
     isHintLoading = true;
     hint = null;
 
+    const cancellation = new AbortController();
     const generator = searchSmartHint(board, session.knownCards, {
+      signal: cancellation.signal,
       maxStates: hintMaxStates,
       maxDepth: hintMaxDepth,
     });
 
     const now = () => performance ? performance.now() : Date.now();
     let activeMs = 0;
-    let latestValue = null;
 
     function hintBatch() {
       if (isDestroyed || reqId !== hintRequestId || session?.state !== board || session?.knownCards.join(',') !== knowledge) {
@@ -123,7 +124,6 @@ export function createApp({
       let next;
       do {
         next = generator.next();
-        if (next.value) latestValue = next.value;
         if (next.done) break;
       } while (now() - start < hintBatchMs && activeMs + now() - start < hintActiveMs);
 
@@ -131,18 +131,11 @@ export function createApp({
 
       if (next.done || activeMs >= hintActiveMs) {
         if (!next.done) {
-          try { generator.return(); } catch {}
+          cancellation.abort();
+          next = generator.next();
         }
         isHintLoading = false;
-        const result = next.done ? next.value : (latestValue || {
-          status: 'INCONCLUSIVE',
-          plan: [],
-          goal: null,
-          score: null,
-          visitedStates: 0,
-          truncated: true,
-        });
-        hint = Object.freeze(next.done ? result : { ...result, truncated: true });
+        hint = Object.freeze(next.value);
         notifyListeners();
       } else {
         hintTimer = setTimeout(hintBatch, 0);

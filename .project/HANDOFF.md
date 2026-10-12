@@ -1,5 +1,16 @@
 # Fresh-session handoff
 
+## T028 v3 checkpoint — 2026-10-12
+
+Coordinator resumed the six-item final audit and measured optimization. Preserve
+fc7b658, existing limits/weights and unrelated CSS/accessibility edits/JSON.
+IN_PROGRESS, sequentially on master. Coordinator then requested skipping full
+tests and commit/push only. Checkpoint repairs ancestor cycles, cutoff publication
+and repeated dead-proof verification; legal-move enumeration improved measured
+cursor-73 median from 29.535 s to 11.922 s with identical counts/status. 81 focused
+tests passed. Broader property coverage, full checks and contract documentation
+remain; resume only on explicit assignment. See reports/T028-v3-audit.md.
+
 ## T028 graph audit delivery — 2026-10-12
 
 Coordinator accepted `c677cad` (stale queue/H07) and explicitly resumed T028:

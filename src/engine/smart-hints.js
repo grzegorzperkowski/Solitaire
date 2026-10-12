@@ -265,20 +265,29 @@ function verifyEndState(endState, rootState, knownSet, evaluation, atBoundary) {
 }
 
 // Diagnostic replay uses exactly the same evaluator as the planner.
-export function analyzeHintPlan(state, knownCards, plan) {
-  const knownSet = new Set([...knownCards, ...visibleCards(state)]);
-  const foundations = new Set(state.foundations.flat());
-  const stockWaste = new Set([...state.stock, ...state.waste]);
-  const possibilities = computePossibilities(state, foundations);
+function replayPlan(state, knownCards, plan, knownSet) {
   let endState = state;
   let atBoundary = false;
+  const ancestors = new Set();
   for (const [index, move] of plan.entries()) {
     if (atBoundary) return { ok: false, reason: 'information-boundary', index };
+    ancestors.add(progressStateKey(endState, knownCards));
     const next = applyMove(endState, move);
     if (!next.ok) return { ok: false, reason: next.reason, index };
     atBoundary = checkBoundary(move, endState, knownSet);
     endState = next.state;
   }
+  return { ok: true, state: endState, atBoundary, ancestors };
+}
+
+export function analyzeHintPlan(state, knownCards, plan) {
+  const knownSet = new Set([...knownCards, ...visibleCards(state)]);
+  const foundations = new Set(state.foundations.flat());
+  const stockWaste = new Set([...state.stock, ...state.waste]);
+  const possibilities = computePossibilities(state, foundations);
+  const replay = replayPlan(state, knownCards, plan, knownSet);
+  if (!replay.ok) return replay;
+  const { state: endState, atBoundary } = replay;
   const evaluation = evaluateSequence(endState, state, foundations, stockWaste, possibilities, knownSet, plan, atBoundary);
   return {
     ok: true, state: endState, goal: determineGoal(evaluation.components),
@@ -335,7 +344,7 @@ function checkBoundary(move, state, knownSet) {
 export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 12, signal } = {}) {
   // Pre-check WON
   if (isWon(state)) {
-    return { status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false };
+    return { phase: 'FINAL', status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false };
   }
 
   const knownSet = new Set([...knownCards, ...visibleCards(state)]);
@@ -352,6 +361,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     boundary: false, expandedCost: Infinity, complete: false }]]);
   const candidates = new Map();
   const verifiedCandidates = new Map();
+  const deadContinuations = new Map();
   let bestResult = null;
   let bestScore = -Infinity;
   let bestLen = Infinity;
@@ -363,6 +373,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     strategicCandidates: 0, explorationCandidates: 0, preparatoryStates: 0,
     rejectedEndStates: 0, staleQueueEntries: 0, duplicateStatesRejected: 0,
     depthLimitedBranches: 0, stateLimitedBranches: 0, unresolvedCutoffs: 0, unexpandedStates: 0,
+    cachedDeadEnds: 0,
   };
 
   function cancelledResult(candidate = bestResult) {
@@ -370,9 +381,9 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       result?.verification?.accepted && result.verification.legalActions !== undefined);
     const { key, order, ...partial } = safeCandidate || {};
     return safeCandidate
-      ? { ...partial, visitedStates: stateCount, truncated: true, cancelled: true, reason: 'CANCELLED',
+      ? { ...partial, phase: 'CANCELLED', visitedStates: stateCount, truncated: true, cancelled: true, reason: 'CANCELLED',
         diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } }
-      : { status: 'INCONCLUSIVE', plan: [], goal: null, score: null, visitedStates: stateCount,
+      : { phase: 'CANCELLED', status: 'INCONCLUSIVE', plan: [], goal: null, score: null, visitedStates: stateCount,
         truncated: true, cancelled: true, reason: 'CANCELLED',
         diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
   }
@@ -561,7 +572,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     // Yield between expanded states for controller cancellation
     if (queue.length > 0 || stateCount > 1) {
       const { key: unusedKey, order: unusedOrder, ...publicBest } = bestResult || {};
-      yield bestResult ? { ...publicBest, visitedStates: stateCount, truncated, diagnostics: { ...diagnostics, retainedStates: visited.size } } : {
+      yield bestResult ? { ...publicBest, phase: 'TEMPORARY', visitedStates: stateCount, truncated, diagnostics: { ...diagnostics, retainedStates: visited.size } } : {
+        phase: 'TEMPORARY',
         status: 'INCONCLUSIVE',
         diagnostics: { ...diagnostics, retainedStates: visited.size },
         plan: [],
@@ -594,6 +606,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     bestResult = null;
     if (signal?.aborted) return cancelledResult(bestResult);
     if (candidateIndex > 0) yield {
+      phase: 'TEMPORARY',
       status: 'INCONCLUSIVE', plan: [], goal: null, score: null,
       visitedStates: stateCount, truncated,
       diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads },
@@ -616,20 +629,34 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     bestResult = candidate;
     if (signal?.aborted) return cancelledResult(bestResult);
     if (candidate.verification.continuation === 'UNPROVEN') {
-      const pending = [candidate.key];
+      const replay = replayPlan(state, knownCards, candidate.plan, knownSet);
+      if (!replay.ok) {
+        candidate.verification.accepted = false;
+        verifiedCandidates.delete(candidate.key);
+        diagnostics.rejectedEndStates++;
+        bestResult = null;
+        continue;
+      }
+      const excluded = replay.ancestors;
+      const proof = deadContinuations.get(candidate.key);
+      // A closed-graph proof survives a higher F threshold and additional exclusions.
+      const cachedDeadEnd = proof && candidate.components.F >= proof.F &&
+        [...proof.excluded].every(key => excluded.has(key));
+      if (cachedDeadEnd) diagnostics.cachedDeadEnds++;
+      const pending = cachedDeadEnd ? [] : [candidate.key];
       const checked = new Set();
       let uncertain = false;
       let futureGoal = false;
       while (pending.length) {
         if (signal?.aborted) return cancelledResult(bestResult);
         const key = pending.pop();
-        if (key === rootKey || checked.has(key)) continue;
+        if (excluded.has(key) || checked.has(key)) continue;
         if (verificationReads >= maxStates) { uncertain = true; truncated = true; break; }
         checked.add(key);
         verificationReads++;
         if (verificationReads % 64 === 0) {
           const { key: unusedKey, order: unusedOrder, ...publicCandidate } = candidate;
-          yield { ...publicCandidate, visitedStates: stateCount, truncated,
+          yield { ...publicCandidate, phase: 'TEMPORARY', visitedStates: stateCount, truncated,
             diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
           if (signal?.aborted) return cancelledResult();
         }
@@ -642,6 +669,9 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       candidate.verification.continuation = futureGoal ? 'FUTURE_GOAL_REACHABLE' : uncertain ? 'UNPROVEN' : 'KNOWN_DEAD_END';
       candidate.verification.graphStates = checked.size;
       if (!futureGoal && !uncertain) {
+        if (!cachedDeadEnd) for (const key of checked) {
+          if (!deadContinuations.has(key)) deadContinuations.set(key, { F: candidate.components.F, excluded });
+        }
         candidate.verification.accepted = false;
         verifiedCandidates.delete(candidate.key);
         diagnostics.rejectedEndStates++;
@@ -654,7 +684,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   }
   if (bestResult) {
     const { key, order, ...result } = bestResult;
-    return { ...result, visitedStates: stateCount, truncated,
+    return { ...result, phase: 'FINAL', visitedStates: stateCount, truncated,
       diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
   }
 
@@ -662,6 +692,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     ? 'NO_STRATEGIC_PROGRESS'
     : 'INCONCLUSIVE';
   return {
+    phase: 'FINAL',
     status,
     ...(status === 'NO_STRATEGIC_PROGRESS' ? { recommendedMove: null } : {}),
     diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads },

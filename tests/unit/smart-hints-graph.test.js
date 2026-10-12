@@ -29,6 +29,71 @@ function finish(iterator) {
   return step.value;
 }
 
+test('a return to a plan ancestor cannot prove continuation after undoing the goal', () => {
+  const { states } = graph({ S: [], A: [], C: [[0]], D: [[], [13, 14]] }, {
+    S: ['A'], A: ['C', 'D'], C: ['A'], D: ['S'],
+  }, [0]);
+  const iterator = searchSmartHint(states.S, [0], { maxStates: 100, maxDepth: 8 });
+  const yields = [];
+  let step;
+  while (!(step = iterator.next()).done) yields.push(step.value);
+  expect(yields.some(result => result.plan.at(-1)?.target === 'C')).toBe(true);
+  expect(step.value).toMatchObject({ status: 'INCONCLUSIVE', plan: [], truncated: false });
+});
+
+test('a shorter second history updates expandedCost and preserves the complete mechanical graph', () => {
+  const { states } = graph({ S: [], A: [[0]], B: [[0]], X: [[0]], Short: [], Y: [[0]] }, {
+    S: ['A', 'Short'], A: ['B'], B: ['X'], X: ['Y'], Short: ['X'], Y: ['S'],
+  });
+  const set = Map.prototype.set;
+  let explored;
+  vi.spyOn(Map.prototype, 'set').mockImplementation(function (key, value) {
+    if (value?.children instanceof Set) explored = this;
+    return set.call(this, key, value);
+  });
+  const result = finish(searchSmartHint(states.S, [], { maxStates: 100, maxDepth: 8 }));
+  expect(result.visitedStates).toBeGreaterThan(result.diagnostics.retainedStates);
+  expect(result.diagnostics.unexpandedStates).toBe(0);
+  expect(explored.get(progressStateKey(states.X, []))).toMatchObject({
+    boundary: false, expandedCost: 2, complete: true,
+  });
+  expect(explored.get(progressStateKey(states.X, [])).children)
+    .toEqual(new Set([progressStateKey(states.Y, [])]));
+  expect(result.truncated).toBe(false);
+});
+
+test('repeated dead components cannot spend verification budget and displace exploration', () => {
+  const { states } = graph({ S: [], Dead: [[0, 1, 2]], Dead2: [[0, 1, 2]],
+    C: [[], [13]], Next: [[], [13]], Info: [] }, {
+    S: ['Dead', 'Dead2', 'C', 'Next', { type: 'draw', target: 'Info' }],
+    Dead: ['Dead2'], Dead2: ['Dead'], C: ['Next'], Next: ['C'],
+  });
+  states.Info.waste = [51];
+  const result = finish(searchSmartHint(states.S, [], { maxStates: 6, maxDepth: 8 }));
+  expect(result).toMatchObject({ status: 'EXPLORATION', truncated: false,
+    verification: { continuation: 'INFORMATION_BOUNDARY' } });
+  expect(result.diagnostics.verificationReads).toBe(4);
+  expect(result.diagnostics.cachedDeadEnds).toBe(2);
+});
+
+test('a cached dead-end proof cannot ignore different ancestors on another path', () => {
+  const { states } = graph({ S: [], A: [], C: [[0, 1, 2]], X: [[], [13, 14, 15]], D: [[], [], [26, 27, 28, 29]] }, {
+    S: ['A', 'X'], A: ['C', 'D'], C: ['X'], X: ['A'], D: ['S'],
+  }, [0]);
+  const result = finish(searchSmartHint(states.S, [0], { maxStates: 100, maxDepth: 8 }));
+  expect(result.plan).toEqual([{ type: 'recycle', target: 'X' }]);
+  expect(result.verification.continuation).toBe('FUTURE_GOAL_REACHABLE');
+});
+
+test('a cached proof for high F cannot reject a lower-F end with reachable advances', () => {
+  const { states } = graph({ S: [], C: [[0, 1, 2]], X: [[], [13]], Y: [[], [], [26, 27]] }, {
+    S: ['X', 'C'], C: ['X'], X: ['Y'], Y: ['C'],
+  });
+  const result = finish(searchSmartHint(states.S, [], { maxStates: 100, maxDepth: 8 }));
+  expect(result.plan).toEqual([{ type: 'recycle', target: 'X' }, { type: 'recycle', target: 'Y' }]);
+  expect(result.verification.continuation).toBe('FUTURE_GOAL_REACHABLE');
+});
+
 test.each([false, true])('resolved depth cuts are cleared, real cuts remain (%s)', (missingBranch) => {
   const { states } = graph({ S: [], A: [[0]], B: [[0]], C: [[0]], Short: [], X: [], Missing: [], Unseen: [] }, {
     S: ['A', 'Short'], A: ['B'], B: ['C'], C: ['X'], Short: ['X'],
@@ -58,7 +123,8 @@ test('excluded root edges do not exhaust the graph verification budget', () => {
   });
   const result = finish(searchSmartHint(states.S, [], { maxDepth: 8, maxStates: 4 }));
   expect(result).toMatchObject({ status: 'INCONCLUSIVE', truncated: false, plan: [] });
-  expect(result.diagnostics.verificationReads).toBe(4);
+  expect(result.diagnostics.verificationReads).toBe(2);
+  expect(result.diagnostics.cachedDeadEnds).toBe(1);
 });
 
 test('a root detour cannot prove future progress for a candidate', () => {
@@ -171,7 +237,9 @@ test('failed candidate replay is rejected without reading absent verification', 
   const iterator = searchSmartHint(states.S, [0], { maxDepth: 2, maxStates: 100 });
   let step;
   do { step = iterator.next(); } while (!step.done && step.value.diagnostics.verificationReads === undefined);
-  apply.mockImplementation(() => ({ ok: false, reason: 'test-replay-failed' }));
+  const originalApply = apply.getMockImplementation();
+  apply.mockImplementation((state, move) => move.target === 'Dead'
+    ? { ok: false, reason: 'test-replay-failed' } : originalApply(state, move));
   const result = finish(iterator);
   expect(result.status).toBe('FOUND');
   expect(result.plan).toEqual([{ type: 'recycle', target: 'Safe' }]);

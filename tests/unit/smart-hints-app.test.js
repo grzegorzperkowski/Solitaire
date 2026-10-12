@@ -5,8 +5,9 @@ import { h01, h02, h07, h15 } from '../fixtures/smart-hints.js';
 import { visibleCards } from '../../src/engine/knowledge.js';
 import { createGame } from '../../src/engine/cards.js';
 import { searchSmartHint } from '../../src/engine/smart-hints.js';
+import * as smartHints from '../../src/engine/smart-hints.js';
 
-afterEach(() => vi.useRealTimers());
+afterEach(() => { vi.restoreAllMocks(); vi.useRealTimers(); });
 
 function createTestApp(state, options = {}) {
   vi.useFakeTimers();
@@ -17,6 +18,59 @@ function createTestApp(state, options = {}) {
     ...options,
   }).init();
 }
+
+test('temporary yields stay private and only the final result is published', () => {
+  vi.spyOn(smartHints, 'searchSmartHint').mockImplementation(function* () {
+    yield { phase: 'TEMPORARY', status: 'FOUND', plan: [{ type: 'draw' }] };
+    return { phase: 'FINAL', status: 'INCONCLUSIVE', plan: [], truncated: false };
+  });
+  let clock = 0;
+  const app = createTestApp(h01(), { hintBatchMs: 0, performance: { now: () => ++clock } });
+  try {
+    app.requestSmartHint();
+    vi.advanceTimersByTime(0);
+    expect(app.getState()).toMatchObject({ isHintLoading: true, hint: null });
+    vi.advanceTimersByTime(10);
+    expect(app.getState().hint).toMatchObject({ phase: 'FINAL', status: 'INCONCLUSIVE', plan: [] });
+  } finally { app.destroy(); }
+});
+
+test('time cutoff asks the generator for a cancelled result instead of publishing its last yield', () => {
+  vi.spyOn(smartHints, 'searchSmartHint').mockImplementation(function* (state, known, { signal }) {
+    yield { phase: 'TEMPORARY', status: 'FOUND', plan: [{ type: 'draw' }], truncated: false };
+    expect(signal.aborted).toBe(true);
+    return { phase: 'CANCELLED', cancelled: true, status: 'INCONCLUSIVE', plan: [], truncated: true };
+  });
+  let clock = 0;
+  const app = createTestApp(h01(), { performance: { now: () => (clock += 101) } });
+  try {
+    app.requestSmartHint();
+    vi.advanceTimersByTime(0);
+    expect(app.getState().hint).toMatchObject({ phase: 'CANCELLED', cancelled: true,
+      status: 'INCONCLUSIVE', plan: [], truncated: true });
+  } finally { app.destroy(); }
+});
+
+test('a cancelled callback cannot publish a result for an old board or request', () => {
+  const app = createTestApp(h01());
+  const timeout = vi.spyOn(globalThis, 'setTimeout');
+  const search = vi.spyOn(smartHints, 'searchSmartHint');
+  try {
+    app.requestSmartHint();
+    const oldBatch = timeout.mock.calls.at(-1)[0];
+    app.newGame({ seed: 123, drawCount: 3 });
+    oldBatch();
+    expect(app.getState().hint).toBeNull();
+    expect(search).toHaveBeenCalledTimes(1);
+    app.requestSmartHint();
+    const newBatch = timeout.mock.calls.at(-1)[0];
+    app.requestSmartHint();
+    oldBatch();
+    newBatch();
+    expect(app.getState()).toMatchObject({ hint: null, isHintLoading: true });
+    expect(search).toHaveBeenCalledTimes(3);
+  } finally { app.destroy(); }
+});
 
 describe('SmartHint v1 — App Controller Integration (H12, H13, Cancellation, Time-slicing)', { timeout: 15000 }, () => {
   test('configurable time budgets control debug searches and appear in diagnostic exports', () => {
@@ -181,6 +235,7 @@ describe('SmartHint v1 — App Controller Integration (H12, H13, Cancellation, T
     const app = createTestApp(state);
     app.requestSmartHint();
     expect(app.getState().hint).toEqual({
+      phase: 'FINAL',
       status: 'WON',
       plan: [],
       goal: null,
