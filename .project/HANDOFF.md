@@ -1,5 +1,21 @@
 # Fresh-session handoff
 
+## T028 benchmark and speed follow-up delivered — 2026-10-12
+
+T028 is REVIEW pending coordinator acceptance. The §8 benchmark ran seeds 0–99
+for Draw 1 and Draw 3 against `rankHints`, with the app's 100 ms active search
+budget. Paired revision timing covers the same 200 initial boards, baseline
+planner from `276714c`, and current worktree. SmartHint reused generated legal
+moves instead of rescanning each expanded state; focused test, all 214 unit
+tests and build pass. Full measurements and limits: `.project/reports/T028.md`.
+No physical-device latency check, push or publication.
+
+## T028 benchmark assignment — 2026-10-12
+
+Coordinator resumed T028: run and report the outstanding SmartHint quality
+benchmark. Preserve the existing root diagnostic JSON untracked and unchanged.
+Task is IN_PROGRESS on master at `3594a20`; no other task or publication.
+
 ## T028 completed SmartHint search status — 2026-10-11
 
 When configured search finishes with `truncated:false` and no strategic or

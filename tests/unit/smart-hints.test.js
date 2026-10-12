@@ -25,16 +25,21 @@ test('H05 does not rescan unchanged root mobility for every successor', () => {
   const state = h05();
   const spy = vi.spyOn(game, 'getLegalMoves');
   let rootScans;
+  let maxScansPerState;
   let result;
   try {
     result = runSearch(state, visibleCards(state), { maxStates: 16, maxDepth: 4 });
-    rootScans = spy.mock.calls.filter(([board]) => board === state).length;
+    const scans = new Map();
+    for (const [board] of spy.mock.calls) scans.set(board, (scans.get(board) || 0) + 1);
+    rootScans = scans.get(state);
+    maxScansPerState = Math.max(...scans.values());
   } finally {
     spy.mockRestore();
   }
   expect(['FOUND', 'EXPLORATION', 'INCONCLUSIVE']).toContain(result.status);
   expect(result.goal).not.toBe('WASTE');
-  expect(rootScans).toBeLessThanOrEqual(2);
+  expect(rootScans).toBe(1);
+  expect(maxScansPerState).toBe(1);
 });
 
 test('T028 cursor-114 save preserves uncertainty when the default depth is cut off', () => {

@@ -308,7 +308,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const knownSet = new Set([...knownCards, ...visibleCards(state)]);
   const rootFoundationSet = new Set(state.foundations.flat());
   const rootStockWasteSet = new Set([...state.stock, ...state.waste]);
-  const rootPoss = computePossibilities(state, rootFoundationSet);
+  const rootMoves = getLegalMoves(state);
+  const rootPoss = computePossibilities(state, rootFoundationSet, rootMoves);
 
   const rootKey = progressStateKey(state, knownCards);
   const visited = new Map(); // key -> best cost
@@ -379,7 +380,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   }
 
   const queue = new PriorityQueue();
-  queue.push({ state, path: [], cost: 0, score: 0, B: 0, insertOrder: 0 });
+  queue.push({ state, moves: rootMoves, path: [], cost: 0, score: 0, B: 0, insertOrder: 0 });
   let insertCounter = 1;
 
   while (queue.length > 0) {
@@ -394,7 +395,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     const currentKey = progressStateKey(current.state, knownCards);
     const node = graph.get(currentKey);
     node.complete = true;
-    const moves = getLegalMoves(current.state);
+    const moves = current.moves;
 
     for (const move of moves) {
       if (current.path.length >= maxDepth) {
@@ -473,6 +474,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       if (!atBoundary && canRetain) {
         queue.push({
           state: nextState,
+          moves: evaluation.endMoves,
           path: nextPath,
           cost: nextCost,
           score,

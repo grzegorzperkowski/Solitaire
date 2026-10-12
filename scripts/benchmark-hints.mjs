@@ -36,9 +36,10 @@ function countHiddenCards(state) {
 
 function runBaselineGame(seed, drawCount, maxSteps = 100) {
   let state = createGame({ seed, drawCount });
+  let known = rememberVisible(state, []);
   const initialHidden = countHiddenCards(state);
   const visited = new Set();
-  visited.add(progressStateKey(state, []));
+  visited.add(progressStateKey(state, known));
 
   let steps = 0;
   let cycleReturns = 0;
@@ -69,9 +70,10 @@ function runBaselineGame(seed, drawCount, maxSteps = 100) {
     }
 
     state = res.state;
+    known = rememberVisible(state, known);
     steps++;
 
-    const key = progressStateKey(state, []);
+    const key = progressStateKey(state, known);
     if (visited.has(key)) {
       cycleReturns++;
     } else {
@@ -121,11 +123,16 @@ function runSmartHintGame(seed, drawCount, maxSteps = 100) {
     const t0 = performance.now();
     const gen = searchSmartHint(state, known, { maxStates: 10000, maxDepth: 12 });
     let stepRes;
+    let latestValue;
     do {
       stepRes = gen.next();
-    } while (!stepRes.done);
+      if (stepRes.value) latestValue = stepRes.value;
+    } while (!stepRes.done && performance.now() - t0 < 100);
     const t1 = performance.now();
-    const result = stepRes.value;
+    const result = stepRes.done ? stepRes.value : {
+      ...(latestValue || { status: 'INCONCLUSIVE', plan: [], goal: null, score: null, visitedStates: 0 }),
+      truncated: true,
+    };
 
     runtimes.push(t1 - t0);
     statesVisited.push(result.visitedStates || 1);
@@ -189,6 +196,9 @@ function evaluateMode(drawCount, seedCount = 100) {
   for (let seed = 0; seed < seedCount; seed++) {
     baselineResults.push(runBaselineGame(seed, drawCount));
     smartResults.push(runSmartHintGame(seed, drawCount));
+    if ((seed + 1) % 10 === 0 || seed + 1 === seedCount) {
+      console.log(`Completed Draw ${drawCount}: ${seed + 1}/${seedCount} seeds`);
+    }
   }
 
   function aggregate(results, name) {
@@ -243,6 +253,7 @@ function evaluateMode(drawCount, seedCount = 100) {
 
 console.log(`Klondike Solitaire — SmartHint v1 Benchmark per T028-spec §8`);
 console.log(`Environment: Node ${process.version} on ${process.platform} (${process.arch})`);
+console.log('SmartHint search budget: max 100 ms active time, 10000 states, depth 12');
 
 const countArg = process.argv.find(a => a.startsWith('--count='));
 const seedCount = countArg ? parseInt(countArg.split('=')[1], 10) : 100;
