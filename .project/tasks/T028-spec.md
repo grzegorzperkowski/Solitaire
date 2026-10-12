@@ -19,10 +19,12 @@ autogry, nowych zależności lub zmiany F04 dowodzącego braku postępu.
 ## 2. Kontrakt planera
 
 Nowy DOM-free generator:
-`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 12} = {})`.
+`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 12, signal} = {})`.
 Oddaje sterowanie pomiędzy porcjami pracy; czas mierzy kontroler, nie silnik.
 Każdy yield i wynik końcowy udostępniają najlepszy dotąd wynik, aby przerwanie
 czasowe nie gubiło znalezionej, legalnej sugestii.
+Anulowanie przez `signal` zwraca bezpieczny wynik cząstkowy z `truncated: true`;
+nie może być raportowane jako wyczerpanie grafu.
 
 Wynik: `{status, plan, goal, score, visitedStates, truncated}`; rekomendacja
 zawiera także `components: {H,F,I,W,M,B,L}`, `verification` i `diagnostics`.

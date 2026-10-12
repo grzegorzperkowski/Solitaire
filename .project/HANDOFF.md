@@ -1,5 +1,14 @@
 # Fresh-session handoff
 
+## T028 external cancellation and long debug run — 2026-10-12
+
+Coordinator resumed T028 to let an external AbortSignal cancel SmartHint while
+retaining a safe best-so-far result. Focused tests/build pass. The cursor-73
+search completed naturally: 88,896 states, untruncated
+NO_STRATEGIC_PROGRESS (no strategic or information candidates). This does not
+prove deal unwinnability. The follow-up is REVIEW; see `.project/reports/T028.md`.
+Preserve unrelated changes and diagnostic JSON.
+
 ## T028 debug search budgets — 2026-10-12
 
 Coordinator resumed T028 to parameterize SmartHint limits for debug analysis.

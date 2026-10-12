@@ -42,6 +42,37 @@ test('H05 does not rescan unchanged root mobility for every successor', () => {
   expect(maxScansPerState).toBe(1);
 });
 
+test('external AbortSignal stops between expansions and retains the verified best result', () => {
+  const controller = new AbortController();
+  const state = h01();
+  const iterator = searchSmartHint(state, visibleCards(state), { signal: controller.signal });
+  const partial = iterator.next();
+  expect(partial.done).toBe(false);
+
+  controller.abort();
+  const stopped = iterator.next();
+
+  expect(stopped.done).toBe(true);
+  expect(stopped.value).toMatchObject({ status: 'FOUND', cancelled: true, truncated: true });
+  expect(stopped.value.plan).toEqual(partial.value.plan);
+});
+
+test('external AbortSignal with no candidate remains inconclusive, never exhausted', () => {
+  const state = h01();
+  const controller = new AbortController();
+  controller.abort();
+  const stopped = searchSmartHint(state, visibleCards(state), { signal: controller.signal }).next();
+
+  expect(stopped.done).toBe(true);
+  expect(stopped.value).toMatchObject({
+    status: 'INCONCLUSIVE',
+    cancelled: true,
+    reason: 'CANCELLED',
+    plan: [],
+    truncated: true,
+  });
+});
+
 test('T028 cursor-114 save preserves uncertainty when the default depth is cut off', () => {
   const diagnostic = JSON.parse(readFileSync(
     new URL('../fixtures/solitaire-stan-2284836135-draw1-114.json', import.meta.url), 'utf8',

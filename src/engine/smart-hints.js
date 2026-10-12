@@ -299,7 +299,7 @@ function checkBoundary(move, state, knownSet) {
 
 // ── Main search generator (§2–§3) ──
 
-export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 12 } = {}) {
+export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 12, signal } = {}) {
   // Pre-check WON
   if (isWon(state)) {
     return { status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false };
@@ -322,8 +322,21 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   let bestLen = Infinity;
   let bestB = Infinity;
   let stateCount = 0;
+  let verificationReads = 0;
   let truncated = false;
   const diagnostics = { strategicCandidates: 0, explorationCandidates: 0, preparatoryStates: 0, rejectedEndStates: 0 };
+
+  function cancelledResult(candidate = bestResult) {
+    const safeCandidate = candidate?.verification?.accepted && candidate.verification.legalActions !== undefined
+      ? candidate : null;
+    const { key, order, ...partial } = safeCandidate || {};
+    return safeCandidate
+      ? { ...partial, visitedStates: stateCount, truncated: true, cancelled: true, reason: 'CANCELLED',
+        diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } }
+      : { status: 'INCONCLUSIVE', plan: [], goal: null, score: null, visitedStates: stateCount,
+        truncated: true, cancelled: true, reason: 'CANCELLED',
+        diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
+  }
 
   // Priority queue: binary heap by (score DESC, pathLen ASC, B ASC, insertion order ASC)
   class PriorityQueue {
@@ -384,6 +397,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   let insertCounter = 1;
 
   while (queue.length > 0) {
+    if (signal?.aborted) return cancelledResult();
     const current = queue.pop();
 
     stateCount++;
@@ -499,14 +513,17 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     }
   }
 
+  if (signal?.aborted) return cancelledResult();
+
   // Read the already explored graph; no new moves or hidden-card lookahead.
-  let verificationReads = 0;
   const ordered = [...candidates.values()];
   if (bestResult && !candidates.has(bestResult.key)) ordered.push(bestResult);
   ordered.sort((a, b) => (a.status === b.status ? 0 : a.status === 'FOUND' ? -1 : 1) ||
     b.score - a.score || a.plan.length - b.plan.length || a.components.B - b.components.B || a.order - b.order);
   bestResult = null;
   for (const [candidateIndex, candidate] of ordered.entries()) {
+    bestResult = null;
+    if (signal?.aborted) return cancelledResult(bestResult);
     if (candidateIndex > 0) yield {
       status: 'INCONCLUSIVE', plan: [], goal: null, score: null,
       visitedStates: stateCount, truncated,
@@ -518,12 +535,15 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       candidate.verification = replay.verification;
       if (!candidate.verification.accepted) { diagnostics.rejectedEndStates++; continue; }
     }
+    bestResult = candidate;
+    if (signal?.aborted) return cancelledResult(bestResult);
     if (candidate.verification.continuation === 'UNPROVEN') {
       const pending = [candidate.key];
       const checked = new Set();
       let uncertain = false;
       let futureGoal = false;
       while (pending.length && verificationReads < maxStates) {
+        if (signal?.aborted) return cancelledResult(bestResult);
         const key = pending.pop();
         if (checked.has(key)) continue;
         checked.add(key);
@@ -542,7 +562,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       if (pending.length && !futureGoal) { uncertain = true; truncated = true; }
       candidate.verification.continuation = futureGoal ? 'FUTURE_GOAL_REACHABLE' : uncertain ? 'UNPROVEN' : 'KNOWN_DEAD_END';
       candidate.verification.graphStates = checked.size;
-      if (!futureGoal && !uncertain) { diagnostics.rejectedEndStates++; continue; }
+      if (!futureGoal && !uncertain) { diagnostics.rejectedEndStates++; bestResult = null; continue; }
     }
     bestResult = candidate;
     break;
