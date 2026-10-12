@@ -1,5 +1,12 @@
 # Fresh-session handoff
 
+## T028 mobile Help/Hint double-tap follow-up delivered — 2026-10-12
+
+T028 is REVIEW pending coordinator acceptance. Help and Hint buttons use
+`touch-action: manipulation` to suppress double-tap zoom while retaining pinch
+zoom. Build and the 11-test accessibility E2E suite passed. No physical-device
+Safari/Android check. Preserve the untracked root diagnostic JSON.
+
 ## T028 benchmark and speed follow-up delivered — 2026-10-12
 
 T028 is REVIEW pending coordinator acceptance. The §8 benchmark ran seeds 0–99

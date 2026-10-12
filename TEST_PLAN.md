@@ -153,6 +153,8 @@ mouse double-click and touch double-tap must execute its foundation destination
 once, clear highlights/notice, and allow Undo. After Undo, no stale hint may
 execute: touch returns to its ordinary tableau destination, mouse to selection.
 Covered in tests/e2e/smart-hints.spec.js alongside existing touch/drag regressions.
+On mobile emulation, Help and Hint buttons use `touch-action: manipulation` to
+avoid double-tap zoom while retaining pinch zoom; covered in accessibility.spec.js.
 
 ## T028 strategic-goal regression gates (2026-10-11)
 

@@ -208,6 +208,22 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
     await expect(helpDialog).toBeHidden();
   });
 
+  test('Help and Hint controls suppress mobile double-tap zoom while allowing pinch zoom', async ({ browser }) => {
+    const context = await browser.newContext({
+      hasTouch: true,
+      isMobile: true,
+      viewport: { width: 390, height: 844 },
+    });
+    const page = await context.newPage();
+    await page.goto('/');
+    await expect(page.locator('#btn-hint')).toHaveCSS('touch-action', 'manipulation');
+    await page.locator('#btn-menu').click();
+
+    await expect(page.locator('#btn-menu-help')).toHaveCSS('touch-action', 'manipulation');
+
+    await context.close();
+  });
+
   test('dialogs are usable at 320px width and landscape 568x320 without overflow (U06 / T19)', async ({ page }) => {
     // Test narrow portrait 320px
     await page.setViewportSize({ width: 320, height: 568 });

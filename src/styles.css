@@ -870,6 +870,11 @@ body {
   box-sizing: border-box;
 }
 
+#btn-menu-help,
+#btn-hint {
+  touch-action: manipulation;
+}
+
 .menu-action-btn:hover {
   background: #1f6350;
 }
