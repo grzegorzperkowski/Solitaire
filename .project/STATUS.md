@@ -1,6 +1,6 @@
 # Project status
 
-- T028 resumed by the coordinator on 2026-10-12 to add external SmartHint cancellation and run a long debug search. Search exhausted 88,896 states without a strategic/information goal; follow-up is REVIEW. See [reports/T028.md](reports/T028.md).
+- T028 resumed by the coordinator on 2026-10-12 to add a model-facing guide to the isolated SmartHint module. Guide is complete; T028 follow-up is REVIEW. See [reports/T028.md](reports/T028.md).
 
 - State: T000–T015, T017, T024, T025, T027 and T029 are DONE; T026 and T028 are REVIEW.
 - Latest task: T029 random victory animations and replay E2E timeout fix, accepted by the coordinator on 2026-10-12 at `2ea1a1e`. Preview: `http://localhost:5186/tests/harness/victory.html`. See [tasks/T029.md](tasks/T029.md) and [reports/T029.md](reports/T029.md).

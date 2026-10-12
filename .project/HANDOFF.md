@@ -1,5 +1,15 @@
 # Fresh-session handoff
 
+## T028 model-facing planner guide — 2026-10-12
+
+Coordinator resumed T028 to document the already-isolated
+`src/engine/smart-hints.js` for external model-assisted analysis. Add a useful
+module comment: plain JavaScript ES modules, no TypeScript/types; entry points,
+state/card conventions, engine/knowledge boundaries, result meanings, and
+relevant tests/spec/benchmark. The comment is complete; syntax and diff checks
+pass. No algorithm behavior changed. Task is REVIEW; preserve unrelated dirty
+files and diagnostic JSON.
+
 ## T028 external cancellation and long debug run — 2026-10-12
 
 Coordinator resumed T028 to let an external AbortSignal cancel SmartHint while

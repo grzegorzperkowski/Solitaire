@@ -4,11 +4,41 @@ import { visibleCards } from './knowledge.js';
 import { progressStateKey } from './progress.js';
 
 /**
- * SmartHint — goal-directed hint planner (T028-spec §2–§5).
+ * SmartHint — isolated, goal-directed planner (T028-spec §2–§5).
  *
- * DOM-free generator: searchSmartHint(state, knownCards, options).
- * Each yield exposes the best-so-far result for cancellation safety.
- * Uses only visible/known information; never inspects hidden card values.
+ * Keep search/scoring here, separate from DOM, UI, session history and storage.
+ * This project is plain JavaScript ES modules: “JS is TS, no types”—do not add
+ * TypeScript syntax, annotations, interfaces or type-only dependencies.
+ *
+ * Model/developer guide:
+ * - Read `.project/tasks/T028-spec.md` before changing goals, scoring or search
+ *   limits. `REQUIREMENTS.md` F04, `ARCHITECTURE.md` §6 and `TEST_PLAN.md` T20
+ *   define the surrounding contracts.
+ * - State and commands belong to `src/engine/game.js`; use `getLegalMoves`,
+ *   immutable `applyMove` and `isWon`. `src/engine/knowledge.js` owns
+ *   `visibleCards` and lifetime `knownCards`; `src/engine/progress.js` owns
+ *   `progressStateKey` for deduplicating search states. F04 reachability in
+ *   `progress.js` is separate from this planner; do not conflate its status.
+ * - CardId is `suitIndex * 13 + rank - 1`; rank is 1–13. Pile arrays are
+ *   bottom-to-top, with the top card last. A tableau column's `faceUpStart`
+ *   marks its first face-up card. These arrays and card IDs are engine data,
+ *   not UI elements.
+ * - Treat hidden card IDs as opaque identity/order tokens only. Score and
+ *   branch decisions may use legal visible moves and recorded knowledge, never
+ *   hidden rank/suit values or future values revealed at an information edge.
+ *   Do not mutate input state or execute commands; this module only plans.
+ * - `FOUND` means a line reaches a reveal/foundation goal; `EXPLORATION` means
+ *   it reaches new information. `INCONCLUSIVE` or any `truncated` result is not
+ *   proof of no progress. `NO_STRATEGIC_PROGRESS` requires exhaustive search
+ *   and says nothing about whether the whole deal is winnable. `WON` is an
+ *   already-complete board. The first plan command is the UI suggestion.
+ * - The caller drives this generator in batches and may pass an `AbortSignal`.
+ *   Cancellation marks the result truncated; it preserves a verified partial
+ *   suggestion when available. Scheduling and time budgets belong to callers.
+ * - Focused regressions are in `tests/unit/smart-hints.test.js` and
+ *   `tests/unit/smart-hints-app.test.js`; compare seeded quality/cost with
+ *   `node scripts/benchmark-hints.mjs`. Benchmarks are measurements, not proof
+ *   of deal solvability or optimality.
  */
 
 // ── Key for uniquely identifying a useful possibility ──
