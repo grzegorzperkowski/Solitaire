@@ -1,5 +1,16 @@
 # Fresh-session handoff
 
+## T028 SmartHint findings — 2026-10-12
+
+Coordinator resumed T028 with “do roboty” after providing external findings.
+Fixed stale priority-queue expansions and false depth truncation of a cycle;
+focused/full unit tests, relevant E2E, build, and a 10-seed post-fix smoke
+benchmark pass. Cursor-73 still exhausts 88,896 states with no goal. Follow-up
+is REVIEW; full 100-seed benchmark was not repeated after this change. Preserve
+unrelated edits in `src/styles.css`, `tests/e2e/accessibility.spec.js` and
+untracked `solitaire-stan-2284836135-draw1-114.json`. See
+`.project/reports/T028.md`.
+
 ## T028 model-facing planner guide — 2026-10-12
 
 Coordinator resumed T028 to document the already-isolated

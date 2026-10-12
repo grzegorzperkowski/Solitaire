@@ -354,7 +354,11 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   let stateCount = 0;
   let verificationReads = 0;
   let truncated = false;
-  const diagnostics = { strategicCandidates: 0, explorationCandidates: 0, preparatoryStates: 0, rejectedEndStates: 0 };
+  const diagnostics = {
+    strategicCandidates: 0, explorationCandidates: 0, preparatoryStates: 0,
+    rejectedEndStates: 0, staleQueueEntries: 0, duplicateStatesRejected: 0,
+    depthLimitedBranches: 0, stateLimitedBranches: 0,
+  };
 
   function cancelledResult(candidate = bestResult) {
     const safeCandidate = candidate?.verification?.accepted && candidate.verification.legalActions !== undefined
@@ -430,24 +434,23 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     if (signal?.aborted) return cancelledResult();
     const current = queue.pop();
 
+    const currentKey = progressStateKey(current.state, knownCards);
+    if (current.cost > visited.get(currentKey)) {
+      diagnostics.staleQueueEntries++;
+      continue;
+    }
+
     stateCount++;
     if (stateCount > maxStates) {
       truncated = true;
       break;
     }
 
-    const currentKey = progressStateKey(current.state, knownCards);
     const node = graph.get(currentKey);
     node.complete = true;
     const moves = current.moves;
 
     for (const move of moves) {
-      if (current.path.length >= maxDepth) {
-        node.complete = false;
-        truncated = true;
-        continue;
-      }
-
       const result = applyMove(current.state, move);
       if (!result.ok) continue;
 
@@ -462,10 +465,26 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       const key = progressStateKey(nextState, knownCards);
       const existingCost = visited.get(key);
       if (existingCost !== undefined) node.children.add(key);
-      if (existingCost !== undefined && existingCost <= nextCost) continue;
+      if (current.path.length >= maxDepth) {
+        if (existingCost !== undefined && existingCost <= nextCost) diagnostics.duplicateStatesRejected++;
+        else {
+          diagnostics.depthLimitedBranches++;
+          node.complete = false;
+          truncated = true;
+        }
+        continue;
+      }
+      if (existingCost !== undefined && existingCost <= nextCost) {
+        diagnostics.duplicateStatesRejected++;
+        continue;
+      }
       const canRetain = existingCost !== undefined || visited.size < maxStates;
       if (canRetain) { visited.set(key, nextCost); node.children.add(key); }
-      else { truncated = true; node.complete = false; }
+      else {
+        diagnostics.stateLimitedBranches++;
+        truncated = true;
+        node.complete = false;
+      }
 
       // Evaluate the sequence
       const evaluation = evaluateSequence(nextState, state, rootFoundationSet, rootStockWasteSet, rootPoss, knownSet, nextPath, atBoundary);

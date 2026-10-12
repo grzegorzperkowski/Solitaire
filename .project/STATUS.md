@@ -1,6 +1,6 @@
 # Project status
 
-- T028 resumed by the coordinator on 2026-10-12 to add a model-facing guide to the isolated SmartHint module. Guide is complete; T028 follow-up is REVIEW. See [reports/T028.md](reports/T028.md).
+- T028 resumed by the coordinator on 2026-10-12 to investigate external model findings. This follow-up fixed false depth-limit truncation and stale queue expansion, with regressions; task is REVIEW pending coordinator acceptance. See [reports/T028.md](reports/T028.md). Preserve unrelated dirty files and the diagnostic JSON.
 
 - State: T000–T015, T017, T024, T025, T027 and T029 are DONE; T026 and T028 are REVIEW.
 - Latest task: T029 random victory animations and replay E2E timeout fix, accepted by the coordinator on 2026-10-12 at `2ea1a1e`. Preview: `http://localhost:5186/tests/harness/victory.html`. See [tasks/T029.md](tasks/T029.md) and [reports/T029.md](reports/T029.md).
@@ -31,12 +31,11 @@
 
 ## Known problems and blockers
 
-- T028 review regressions are repaired (4 RED→GREEN regressions, 206 unit tests,
-  60 targeted Chromium checks and build passing). Full acceptance remains
-  pending coordinator acceptance. The §8 100-seed comparison and paired
-  same-position planner timing now pass; physical-device latency is unmeasured.
-  Initial concurrent unit/E2E run hit H05's 15 s timeout; isolated H05 and the
-  subsequent full unit run passed without relaxing tests.
+- T028 follow-up fixes false depth-cutoff reporting and stale queue expansion.
+  Current evidence: 225 unit tests, 22 relevant Chromium E2E checks, build and
+  a 10-seed-per-mode smoke benchmark pass. Cursor 73 still exhausts 88,896
+  states without candidates in 31 seconds. Full §8 comparison predates this
+  follow-up and was not repeated; physical-device latency is unmeasured.
 
 - T026 is awaiting coordinator acceptance. No push or publication was performed.
 

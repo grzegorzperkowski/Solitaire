@@ -320,6 +320,27 @@ describe('SmartHint v1 — Engine & Acceptance H01–H15', { timeout: 15000 }, (
     expect(res.truncated).toBe(true);
   });
 
+  test('a depth limit does not truncate a branch that only returns to a cheaper visited state', () => {
+    const state = h07();
+    const result = runSearch(state, visibleCards(state), { maxStates: 16, maxDepth: 1 });
+
+    expect(result).toMatchObject({
+      status: 'NO_STRATEGIC_PROGRESS',
+      reason: 'SEARCH_EXHAUSTED',
+      truncated: false,
+    });
+  });
+
+  test('search diagnostics count discarded stale priority-queue entries', () => {
+    const state = h09();
+    const result = runSearch(state, visibleCards(state), { maxStates: 1000, maxDepth: 8 });
+
+    expect(result.diagnostics.staleQueueEntries).toBeGreaterThan(0);
+    expect(result.diagnostics.duplicateStatesRejected).toBeGreaterThan(0);
+    expect(result.diagnostics.depthLimitedBranches).toBeGreaterThan(0);
+    expect(result.diagnostics.stateLimitedBranches).toBeGreaterThan(0);
+  });
+
   test('H14: Deterministic repeatability for same state, knowledge, budget', () => {
     const state = h01();
     const resA = runSearch(state, visibleCards(state), { maxStates: 50 });
