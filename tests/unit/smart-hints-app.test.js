@@ -19,6 +19,25 @@ function createTestApp(state, options = {}) {
 }
 
 describe('SmartHint v1 — App Controller Integration (H12, H13, Cancellation, Time-slicing)', { timeout: 15000 }, () => {
+  test('configurable time budgets control debug searches and appear in diagnostic exports', () => {
+    let clock = 0;
+    const app = createTestApp(createGame({ seed: 0, drawCount: 1 }), {
+      hintActiveMs: 0,
+      hintBatchMs: 0,
+      performance: { now: () => ++clock },
+    });
+    try {
+      app.requestSmartHint();
+      vi.advanceTimersByTime(0);
+      expect(app.getState().hint.truncated).toBe(true);
+      expect(app.getState().isHintLoading).toBe(false);
+      const diagnostic = JSON.parse(app.exportDiagnostic('test').text);
+      expect(diagnostic.budgets).toMatchObject({ activeMs: 0, batchMs: 0 });
+    } finally {
+      app.destroy();
+    }
+  });
+
   test('time cutoff marks the best result truncated while retaining its plan', () => {
     let clock = 0;
     const state = createGame({ seed: 0, drawCount: 1 });

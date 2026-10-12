@@ -1,6 +1,8 @@
 # Project status
 
-- State: T000–T015, T017, T024, T025, T027, T028 and T029 are DONE.
+- T028 resumed by the coordinator on 2026-10-12 to expose SmartHint time budgets for debug runs; implementation and focused checks are complete, current state REVIEW. Prior acceptance remains historical. See [reports/T028.md](reports/T028.md).
+
+- State: T000–T015, T017, T024, T025, T027 and T029 are DONE; T026 and the resumed T028 follow-up are REVIEW.
 - Latest task: T029 random victory animations and replay E2E timeout fix, accepted by the coordinator on 2026-10-12 at `2ea1a1e`. Preview: `http://localhost:5186/tests/harness/victory.html`. See [tasks/T029.md](tasks/T029.md) and [reports/T029.md](reports/T029.md).
 - T028 follow-up (2026-10-12): §8 benchmark and legal-move reuse speed improvement delivered; see [reports/T028.md](reports/T028.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).

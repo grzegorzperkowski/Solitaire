@@ -16,6 +16,8 @@ export function createApp({
   progressActiveMs = 100,
   hintMaxStates = 10000,
   hintMaxDepth = 12,
+  hintActiveMs = HINT_ACTIVE_MS,
+  hintBatchMs = HINT_BATCH_MS,
   lockManager = globalThis?.navigator?.locks,
   performance = globalThis?.performance,
   document = globalThis?.document,
@@ -123,11 +125,11 @@ export function createApp({
         next = generator.next();
         if (next.value) latestValue = next.value;
         if (next.done) break;
-      } while (now() - start < HINT_BATCH_MS && activeMs + now() - start < HINT_ACTIVE_MS);
+      } while (now() - start < hintBatchMs && activeMs + now() - start < hintActiveMs);
 
       activeMs += now() - start;
 
-      if (next.done || activeMs >= HINT_ACTIVE_MS) {
+      if (next.done || activeMs >= hintActiveMs) {
         if (!next.done) {
           try { generator.return(); } catch {}
         }
@@ -573,7 +575,7 @@ export function createApp({
         text: JSON.stringify({
           format: 'pl.solitaire.hint-diagnostic', formatVersion: 1, exportedAt, build,
           save, hint, progress, isHintLoading,
-          budgets: { maxStates: hintMaxStates, maxDepth: hintMaxDepth, activeMs: HINT_ACTIVE_MS, batchMs: HINT_BATCH_MS },
+          budgets: { maxStates: hintMaxStates, maxDepth: hintMaxDepth, activeMs: hintActiveMs, batchMs: hintBatchMs },
         }, null, 2),
       };
     } catch {

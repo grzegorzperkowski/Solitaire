@@ -1,5 +1,14 @@
 # Fresh-session handoff
 
+## T028 debug search budgets — 2026-10-12
+
+Coordinator resumed T028 to parameterize SmartHint limits for debug analysis.
+`createApp` now accepts `hintActiveMs` and `hintBatchMs`, retaining 100 ms / 4 ms
+defaults; diagnostic JSON records the configured values. The focused controller
+suite (10 tests), build and diff check pass. Task is REVIEW pending coordinator
+acceptance. Preserve unrelated dirty files and untracked diagnostic save; see
+the latest section of `.project/reports/T028.md`.
+
 ## T029 random victory animations — 2026-10-12
 
 T029 is DONE, accepted by the human coordinator on 2026-10-12 at `2ea1a1e`. The progress replay E2E uses an explicit fixture-only analysis budget, while production keeps its 100 ms active-work cutoff. Unit tests (220), full Chromium E2E (98, default eight workers), stress replay (8/8) and production build pass. Preview: `http://localhost:5186/tests/harness/victory.html`. Preserve unrelated root file `solitaire-stan-2284836135-draw1-114.json`. Scope/evidence: `.project/tasks/T029.md` and `.project/reports/T029.md`.

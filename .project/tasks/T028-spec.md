@@ -69,6 +69,10 @@ albo dodatni przyrost baz. Waste→tableau jest przygotowaniem, nie celem.
    workera, jeśli porcjowanie spełnia pomiary. Pojedyncze kosztowne rozwinięcie
    również należy zmierzyć. Czas oczekiwania na scheduler raportować oddzielnie.
 
+`createApp` udostępnia te dwa limity przez `hintBatchMs` i `hintActiveMs`;
+domyślne wartości produkcyjne pozostają 4 ms i 100 ms. Eksport diagnostyczny
+zapisuje wartości użyte w danej instancji, aby wyniki dało się odtworzyć.
+
 Stały budżet stanów bez limitu zegara daje deterministyczny wynik. Limit czasu
 może dawać różne jakościowo wyniki na różnych urządzeniach; nie ukrywać tego.
 Nie ma obowiązku znajdowania planów dłuższych niż 12 ruchów.
