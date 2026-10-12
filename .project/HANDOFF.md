@@ -2,7 +2,7 @@
 
 ## T029 random victory animations — 2026-10-12
 
-T029 is REVIEW on `master`, delivery commit is recorded in the task report. Four native effects, persisted shuffle bag, one-time win integration, skip/reduced-motion/cleanup, preview and automated coverage are ready. Preview: `http://localhost:5186/tests/harness/victory.html` (Vite dev server running). Preserve unrelated root file `solitaire-stan-2284836135-draw1-114.json`. Scope/evidence: `.project/tasks/T029.md` and `.project/reports/T029.md`.
+T029 is REVIEW on `master`, implementation commit `a8b2ecd`. Four native effects, persisted shuffle bag, one-time win integration, skip/reduced-motion/cleanup, preview and automated coverage are ready. Preview: `http://localhost:5186/tests/harness/victory.html` (Vite dev server running). Preserve unrelated root file `solitaire-stan-2284836135-draw1-114.json`. Scope/evidence: `.project/tasks/T029.md` and `.project/reports/T029.md`.
 
 T028 was accepted by the coordinator (“close T028”) on 2026-10-12 at `4a7a6fdb0a9065de753d23b9d71bcb3e8c661390`.
 
