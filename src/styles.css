@@ -929,8 +929,7 @@ body {
   box-sizing: border-box;
 }
 
-#btn-menu-help,
-#btn-hint {
+button {
   touch-action: manipulation;
 }
 
