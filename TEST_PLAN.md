@@ -161,6 +161,19 @@ avoid double-tap zoom while retaining pinch zoom; covered in accessibility.spec.
 
 ## T028 strategic-goal regression gates (2026-10-11)
 
+T028 proposal adaptation (2026-10-13): `smart-hints-proposal.test.js` checks
+direct reveal versus higher-W padding, a reveal versus higher-U foundation
+advance, opposite-color placement in the knowledge-complement estimate, an
+equal-length reveal tie, exclusion of remembered newly revealed values,
+diverse legal boundary alternatives, and strict 0/1/2-command limits.
+Keep existing hidden-permutation, graph, BFS, cancellation, continuation,
+seed21 anti-loop and A78 single-goal regressions. Use
+`node scripts/benchmark-hint-proposal.mjs` for a deterministic paired comparison
+against 54d6c7e on seeds 0–99 in both modes, up to 100 commands with remembered
+plans, at an explicitly smaller measurement budget (300 states / depth 30).
+Disclose this budget and unequal trajectory lengths; it is not mobile calibration
+or evidence at the app's 10000-state/100-ms default.
+
 T028 A cursor 78 → B cursor 79 regression: replay
 `tests/fixtures/smart-hint-seed2560240634-draw1-78.json`, cancel at 666 expansions
 to reproduce the exported A search, and verify a single 4♣ foundation command

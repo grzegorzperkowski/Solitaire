@@ -1,5 +1,5 @@
 import { applyMove, getLegalMoves, isWon } from './game.js';
-import { suitIndex } from './cards.js';
+import { suitIndex, rank, color } from './cards.js';
 import { visibleCards } from './knowledge.js';
 import { progressKeyFor, progressStateKey } from './progress.js';
 
@@ -53,6 +53,7 @@ function possibilityKey(cardId, benefit) {
 // Benefit type constants
 const BENEFIT_REVEAL = 0;
 const BENEFIT_FOUNDATION = 1;
+const GOAL_PRIORITY = { REVEAL: 3, FOUNDATION_ADVANCE: 2, INFORMATION: 1 };
 
 // ── Compute the set of useful possibilities for a state ──
 // A useful possibility = an available legal transfer that directly:
@@ -232,6 +233,38 @@ function determineGoal({ H, F, I }) {
   return null;
 }
 
+// Estimate one unknown card from the knowledge complement, never its location.
+function estimatePostRevealUtility(endState, rootState, knownSet, unknownPool) {
+  if (unknownPool.length === 0) return 0;
+  const needed = new Set(endState.foundations.flatMap((pile, index) =>
+    pile.length < 13 ? [index * 13 + pile.length] : []));
+  const tops = endState.tableau.flatMap((column, index) => {
+    const root = rootState.tableau[index];
+    const newlyRevealed = root.faceUpStart > 0 && column.cards.length === root.faceUpStart;
+    const top = column.cards.at(-1);
+    return !newlyRevealed && knownSet.has(top) ? [top] : [];
+  });
+  const hasEmptyColumn = endState.tableau.some(column => column.cards.length === 0);
+  let hits = 0;
+  for (const id of unknownPool) {
+    if (needed.has(id)) hits += 2;
+    else if (rank(id) === 13 && hasEmptyColumn) hits += 1.5;
+    else if (tops.some(top => rank(top) === rank(id) + 1 && color(top) !== color(id))) hits++;
+  }
+  return hits / unknownPool.length;
+}
+
+function compareCandidates(a, b) {
+  if (a.goal !== b.goal) return GOAL_PRIORITY[b.goal] - GOAL_PRIORITY[a.goal];
+  if (a.goal === 'REVEAL') {
+    return b.components.H - a.components.H || a.plan.length - b.plan.length ||
+      b.expectedPostRevealScore - a.expectedPostRevealScore || a.components.B - b.components.B ||
+      b.score - a.score || a.order - b.order;
+  }
+  // Preserve real multiple foundation advances; length still breaks equal-U ties.
+  return b.score - a.score || a.plan.length - b.plan.length || a.components.B - b.components.B || a.order - b.order;
+}
+
 // One-ply terminal verification reuses legal transitions; it is not a safety proof.
 function verifyEndState(endState, rootState, knownSet, evaluation, atBoundary) {
   const { H, F, I, M, B } = evaluation.components;
@@ -371,6 +404,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const rootStockWasteSet = new Set([...state.stock, ...state.waste]);
   const rootMoves = getLegalMoves(state);
   const rootPoss = computePossibilities(state, rootFoundationSet, rootMoves);
+  const unknownPool = Array.from({ length: 52 }, (_, id) => id).filter(id => !knownSet.has(id));
 
   const stateKey = progressKeyFor(knownCards);
   const rootKey = stateKey(state);
@@ -383,9 +417,6 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const verifiedCandidates = new Map();
   const deadContinuations = new Map();
   let bestResult = null;
-  let bestScore = -Infinity;
-  let bestLen = Infinity;
-  let bestB = Infinity;
   let stateCount = 0;
   let verificationReads = 0;
   let truncated = false;
@@ -402,7 +433,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     const { key, order, ...partial } = safeCandidate || {};
     return safeCandidate
       ? { ...partial, phase: 'CANCELLED', visitedStates: stateCount, truncated: true, cancelled: true, reason: 'CANCELLED',
-        diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } }
+        diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads,
+          expectedPostRevealScore: safeCandidate.expectedPostRevealScore } }
       : { phase: 'CANCELLED', status: 'INCONCLUSIVE', plan: [], goal: null, score: null, visitedStates: stateCount,
         truncated: true, cancelled: true, reason: 'CANCELLED',
         diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
@@ -547,21 +579,18 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
           status: isConfirmedGoal ? 'FOUND' : 'EXPLORATION',
           plan: nextPath, goal, score, components, key, order: insertCounter,
           visitedStates: stateCount, truncated,
+          expectedPostRevealScore: atBoundary ? estimatePostRevealUtility(nextState, state, knownSet, unknownPool) : 0,
         };
         // Keep goal metadata even when its board cannot fit the retained-state budget.
         const previousCandidate = candidates.get(key);
-        if (!previousCandidate || score > previousCandidate.score) candidates.set(key, {
+        if (!previousCandidate || compareCandidates(candidate, previousCandidate) < 0) candidates.set(key, {
           ...candidate,
-          verification: { goalReached: true, lostMorePossibilities: components.B > components.M,
-            usefulPossibilities: evaluation.endPoss.size, continuation: atBoundary ? 'INFORMATION_BOUNDARY' : 'UNPROVEN',
-            horizon: atBoundary ? 0 : 1, accepted: true },
+          verification: atBoundary ? verifyEndState(nextState, state, knownSet, evaluation, true) :
+            { goalReached: true, lostMorePossibilities: components.B > components.M,
+            usefulPossibilities: evaluation.endPoss.size, continuation: 'UNPROVEN',
+            horizon: 1, accepted: true },
         });
-        const currentIsExploration = bestResult?.status === 'EXPLORATION';
-        const sameCategory = !bestResult || isExploration === currentIsExploration;
-        const betterQuality = score > bestScore || (score === bestScore &&
-          (nextPath.length < bestLen || (nextPath.length === bestLen && B < bestB)));
-        const shouldReplace = !bestResult || (isConfirmedGoal && currentIsExploration) ||
-          (sameCategory && betterQuality);
+        const shouldReplace = !bestResult || compareCandidates(candidate, bestResult) < 0;
         if (shouldReplace) {
           const verification = verifyEndState(nextState, state, knownSet, evaluation, atBoundary);
           candidate.verification = verification;
@@ -570,9 +599,6 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
           if (verification.accepted) {
             verifiedCandidates.delete(key);
             verifiedCandidates.set(key, candidate);
-            bestScore = score;
-            bestLen = nextPath.length;
-            bestB = B;
             bestResult = candidate;
           }
         }
@@ -596,7 +622,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     // Yield between expanded states for controller cancellation
     if (queue.length > 0 || stateCount > 1) {
       const { key: unusedKey, order: unusedOrder, ...publicBest } = bestResult || {};
-      yield bestResult ? { ...publicBest, phase: 'TEMPORARY', visitedStates: stateCount, truncated, diagnostics: { ...diagnostics, retainedStates: visited.size } } : {
+      yield bestResult ? { ...publicBest, phase: 'TEMPORARY', visitedStates: stateCount, truncated,
+        diagnostics: { ...diagnostics, retainedStates: visited.size, expectedPostRevealScore: bestResult.expectedPostRevealScore } } : {
         phase: 'TEMPORARY',
         status: 'INCONCLUSIVE',
         diagnostics: { ...diagnostics, retainedStates: visited.size },
@@ -623,8 +650,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   // Read the already explored graph; no new moves or hidden-card lookahead.
   const ordered = [...candidates.values()];
   if (bestResult && !candidates.has(bestResult.key)) ordered.push(bestResult);
-  ordered.sort((a, b) => (a.status === b.status ? 0 : a.status === 'FOUND' ? -1 : 1) ||
-    b.score - a.score || a.plan.length - b.plan.length || a.components.B - b.components.B || a.order - b.order);
+  ordered.sort(compareCandidates);
   bestResult = null;
   for (const [candidateIndex, candidate] of ordered.entries()) {
     bestResult = null;
@@ -681,7 +707,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
         if (verificationReads % 64 === 0) {
           const { key: unusedKey, order: unusedOrder, ...publicCandidate } = candidate;
           yield { ...publicCandidate, phase: 'TEMPORARY', visitedStates: stateCount, truncated,
-            diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
+            diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads,
+              expectedPostRevealScore: candidate.expectedPostRevealScore } };
           if (signal?.aborted) return cancelledResult();
         }
         const node = graph.get(key);
@@ -708,8 +735,21 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   }
   if (bestResult) {
     const { key, order, ...result } = bestResult;
+    // Boundary alternatives need no continuation proof or additional graph budget.
+    const diverse = new Map();
+    for (const candidate of [bestResult, ...ordered]) {
+      if (!candidate.verification.accepted || (candidate !== bestResult &&
+        candidate.verification.continuation !== 'INFORMATION_BOUNDARY')) continue;
+      const signature = `${JSON.stringify(candidate.plan[0])}|${candidate.goal}`;
+      if (diverse.has(signature)) continue;
+      const { key: unusedKey, order: unusedOrder, ...alternative } = candidate;
+      diverse.set(signature, { ...alternative, visitedStates: stateCount, truncated });
+      if (diverse.size === 5) break;
+    }
     return { ...result, phase: 'FINAL', visitedStates: stateCount, truncated,
-      diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads } };
+      alternatives: [...diverse.values()],
+      diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads,
+        expectedPostRevealScore: bestResult.expectedPostRevealScore } };
   }
 
   const status = !truncated && diagnostics.strategicCandidates === 0 && diagnostics.explorationCandidates === 0

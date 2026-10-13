@@ -1,0 +1,69 @@
+{
+  "budget": {
+    "maxStates": 10000,
+    "maxDepth": 30
+  },
+  "runs": 5,
+  "rows": [
+    {
+      "name": "H01",
+      "beforeMs": 355.43,
+      "afterMs": 366.26,
+      "before": {
+        "goal": "REVEAL",
+        "length": 1,
+        "states": 2765
+      },
+      "after": {
+        "goal": "REVEAL",
+        "length": 1,
+        "states": 2765
+      }
+    },
+    {
+      "name": "H04",
+      "beforeMs": 695.64,
+      "afterMs": 702.45,
+      "before": {
+        "goal": "REVEAL",
+        "length": 2,
+        "states": 5151
+      },
+      "after": {
+        "goal": "REVEAL",
+        "length": 2,
+        "states": 5151
+      }
+    },
+    {
+      "name": "H05",
+      "beforeMs": 1227.43,
+      "afterMs": 1286.53,
+      "before": {
+        "goal": "INFORMATION",
+        "length": 2,
+        "states": 7545
+      },
+      "after": {
+        "goal": "INFORMATION",
+        "length": 2,
+        "states": 7545
+      }
+    },
+    {
+      "name": "H09",
+      "beforeMs": 63.13,
+      "afterMs": 69.23,
+      "before": {
+        "goal": "REVEAL",
+        "length": 4,
+        "states": 452
+      },
+      "after": {
+        "goal": "REVEAL",
+        "length": 1,
+        "states": 452
+      }
+    }
+  ]
+}

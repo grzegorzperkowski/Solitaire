@@ -1,0 +1,11 @@
+{"baselineCommit":"54d6c7e","candidate":"working tree","node":"v22.22.0","platform":"win32 x64","budget":{"maxStates":300,"maxDepth":30},"seeds":"0–99","drawCounts":[1,3],"maxSteps":100}
+{"progress":{"drawCount":1,"completedSeeds":25}}
+{"progress":{"drawCount":1,"completedSeeds":50}}
+{"progress":{"drawCount":1,"completedSeeds":75}}
+{"progress":{"drawCount":1,"completedSeeds":100}}
+{"drawCount":1,"pairedInitial":{"before":{"games":100,"calls":100,"wins":0,"stops":0,"steps":0,"reveals":0,"repeats":0,"medianMs":0.145,"p95Ms":0.31,"medianVisited":1,"p95Visited":2,"truncatedPercent":0},"after":{"games":100,"calls":100,"wins":0,"stops":0,"steps":0,"reveals":0,"repeats":0,"medianMs":0.167,"p95Ms":0.375,"medianVisited":1,"p95Visited":2,"truncatedPercent":0},"changedFirstPlan":19,"shorterFirstPlan":18},"trajectories":{"before":{"games":100,"calls":8177,"wins":0,"stops":63,"steps":8114,"reveals":1269,"repeats":1,"medianMs":0.169,"p95Ms":34.944,"medianVisited":0,"p95Visited":200,"truncatedPercent":8.13},"after":{"games":100,"calls":7797,"wins":0,"stops":66,"steps":7731,"reveals":1413,"repeats":0,"medianMs":0.182,"p95Ms":57.431,"medianVisited":1,"p95Visited":254,"truncatedPercent":11.29}}}
+{"progress":{"drawCount":3,"completedSeeds":25}}
+{"progress":{"drawCount":3,"completedSeeds":50}}
+{"progress":{"drawCount":3,"completedSeeds":75}}
+{"progress":{"drawCount":3,"completedSeeds":100}}
+{"drawCount":3,"pairedInitial":{"before":{"games":100,"calls":100,"wins":0,"stops":0,"steps":0,"reveals":0,"repeats":0,"medianMs":0.146,"p95Ms":0.316,"medianVisited":1,"p95Visited":2,"truncatedPercent":0},"after":{"games":100,"calls":100,"wins":0,"stops":0,"steps":0,"reveals":0,"repeats":0,"medianMs":0.161,"p95Ms":0.404,"medianVisited":1,"p95Visited":2,"truncatedPercent":0},"changedFirstPlan":19,"shorterFirstPlan":18},"trajectories":{"before":{"games":100,"calls":4829,"wins":0,"stops":92,"steps":4737,"reveals":853,"repeats":0,"medianMs":0.149,"p95Ms":21.675,"medianVisited":0,"p95Visited":184,"truncatedPercent":6.73},"after":{"games":100,"calls":4564,"wins":0,"stops":93,"steps":4471,"reveals":966,"repeats":0,"medianMs":0.156,"p95Ms":40.163,"medianVisited":0,"p95Visited":256,"truncatedPercent":11.42}}}

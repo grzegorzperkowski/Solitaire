@@ -207,6 +207,18 @@ scope as UNPROVEN. A one-ply check reports terminal actions and lost mobility;
 it is not a safety proof. No hidden-value continuation, new game rules or
 heuristic F04 NO_PROGRESS. Existing diagnostic export includes these observations.
 
+T028 supplied-proposal adaptation (2026-10-13) prioritizes positive reveals,
+then foundation advances, then exploration. Reveal candidates prefer more H,
+fewer atomic commands, a hidden-safe estimate, lower B and higher U; foundation
+and information candidates retain U-first ordering. The estimate enumerates the
+knowledge complement, uses only known exposed tableau tops with rank/color and
+foundation lengths, and excludes the newly revealed top even if remembered.
+It is a tie-breaker/diagnostic, not a continuation search or U weight change.
+Final results include up to five alternatives with distinct first-command/goal
+pairs: the selected graph-verified plan plus positive boundary candidates.
+Keep exact column keys, atomic search/strict budgets and graph verification;
+no speculative macro pruning, score clamping or extension of maxDepth.
+
 ## 7. Persistence and ownership
 
 T028 diagnostic export is a separate JSON wrapper (`format:pl.solitaire.hint-diagnostic`,

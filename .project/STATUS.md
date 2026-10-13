@@ -1,5 +1,9 @@
 # Project status
 
+- T028 REVIEW (2026-10-13): supplied proposal adapted with shorter reveals, hidden-safe color-correct tie-breaker and boundary alternatives. 297 unit tests, 98 Chromium E2E and build passed. Paired 200-game comparison: more reveals/fewer steps, higher p95/cut rates, zero wins under the 100-command/300-state measurement limits. See [report](reports/T028-proposal-adaptation.md). Await acceptance; no push or successor.
+
+- T028 IN_PROGRESS (2026-10-13): coordinator assigned adaptation/testing of the supplied SmartHint code. Sequentially on `master` at `54d6c7e`; preserve unrelated untracked cursor-114 JSON. Keep information safety, strict budgets and graph verification while evaluating shorter plans, alternatives and post-reveal estimates.
+
 - T028 REVIEW (2026-10-13): external eight-point analysis checked against code/contracts and fresh evidence. Runtime unchanged; two remembered-reveal guard cases added. 101 focused tests passed; cursor73 SmartHint and BFS exhaust 88,896 states with no goals/cuts. See [report](reports/T028-external-analysis-check.md). Await acceptance; deferred v3 scope and unrelated untracked cursor-114 JSON preserved.
 
 - T028 IN_PROGRESS (2026-10-13): coordinator resumed SmartHint with an external eight-point analysis. Verify the claims and proposed diff against current contracts and fresh tests; repair only reproduced defects. Start: `master` at `86896dc`, with only unrelated untracked cursor-114 JSON. No other task assigned.

@@ -1,6 +1,8 @@
 # SmartHint — specyfikacja T028
 
-Status: strategic-goal revision assigned 2026-10-11; validation deferred at coordinator request. Źródło: opis
+Status: REVIEW — supplied-proposal adaptation implemented and tested 2026-10-13;
+current evidence: [report](../reports/T028-proposal-adaptation.md). Prior v3
+scope/acceptance remain outstanding. Źródło: opis
 koordynatora „Inteligentna pomoc do pasjansa Klondike”. To specyfikacja produktu,
 nie potwierdzenie wyników badań ani skuteczności proponowanych wag.
 
@@ -28,6 +30,15 @@ nie może być raportowane jako wyczerpanie grafu.
 
 Wynik: `{status, plan, goal, score, visitedStates, truncated}`; rekomendacja
 zawiera także `components: {H,F,I,W,M,B,L}`, `verification` i `diagnostics`.
+Adaptacja propozycji koordynatora (2026-10-13): końcowy znaleziony wynik zawiera
+`alternatives` (maksymalnie 5), z wybraną rekomendacją na początku. Pozostałe
+alternatywy kończą się na granicy informacji i mają dodatnie U oraz lokalną
+weryfikację; nie wymagają dodatkowego przeszukiwania grafu. Rozróżniać je po
+pierwszej komendzie i celu. Nie obiecywać wszystkich możliwych pierwszych ruchów:
+deduplikacja stanów nadal zachowuje najlepszą drogę do tego samego końca.
+Każda alternatywa podaje faktyczny zakres `verification`; alternatywy są tylko
+diagnostyką, UI nadal pokazuje pierwszy ruch jednej rekomendacji. Kontynuacja
+zapamiętanego planu i anulowanie nie muszą zawierać listy alternatyw.
 
 - `FOUND`: potwierdzony cel strategiczny; `plan` to legalne komendy,
   `goal` to `REVEAL` lub `FOUNDATION_ADVANCE`.
@@ -134,10 +145,26 @@ Rekomendacja kończy się komendą dodającą H, F lub I względem poprzedniego
 węzła. Nie dopisywać przygotowań po już osiągniętym celu tylko dlatego, że
 zwiększają W/M. Takie węzły nadal rozwijać w poszukiwaniu dalszych celów;
 przyrost samego F nie kończy przeszukiwania gałęzi.
-Wybierać dodatnio oceniony cel strategiczny; jeśli go nie znaleziono, dodatnią
-eksplorację I>0; inaczej INCONCLUSIVE. Dzięki temu draw nie wypiera znanej
-konkretnej drogi do celu. W remisie użyć kolejności z §3. Nie wprowadzać
-nieokreślonego progu „podobnych” wyników.
+Wybierać wyłącznie dodatnio ocenione cele, według priorytetu REVEAL,
+FOUNDATION_ADVANCE, INFORMATION; przy braku rekomendacji INCONCLUSIVE.
+Dla REVEAL porównywać większe H, krótszy plan, wyższą estymację po odkryciu,
+mniejsze B, wyższe U i stabilną kolejność. Dzięki temu zbędny transfer waste
+nie wydłuża bezpośredniego odkrycia tylko dla punktów W. Dla baz i informacji
+zachować wyższe U, krótszy plan, mniejsze B i stabilną kolejność, aby rzeczywisty
+dodatkowy awans baz nadal mógł uzasadniać dłuższy plan. Ten sam komparator
+obowiązuje wynik cząstkowy, zapamiętywanie kandydatów i wynik końcowy.
+
+`expectedPostRevealScore` jest pomocniczą estymacją jednej nieznanej karty,
+nie nowym składnikiem U ani gwarancją ruchu/wygranej. Pula to ID 0–51 poza
+knownCards i kartami widocznymi w korzeniu; nie czytać rozmieszczenia tej puli
+w zakrytym tableau/stock. Dla każdego ID policzyć jedną korzyść: 2 za wejście
+na bazę, inaczej 1,5 za króla przy pustej kolumnie, inaczej 1 za dopasowanie
+do znanego wierzchu kolumny (ranga i przeciwny kolor). Podzielić przez rozmiar
+puli, dla pustej puli zwrócić 0. Pominąć właśnie odsłonięty wierzch tableau,
+także zapamiętany. Estymować tylko na granicy; w pozostałych końcach 0.
+Nie zmieniać wag U ani dodatniego progu przeciw pętlom. Nie gwarantować
+minimalnego planu w ograniczonym grafie; nie dodawać osobnego kosztownego
+usuwania komend z każdego kandydata.
 
 Testy arytmetyki przy innych składnikach równych zero: odkrycie w 2 ruchach
 112, baza w 1 ruchu 36, nowa informacja w 1 ruchu 16. Fixture całych plansz
@@ -152,8 +179,8 @@ informacji. Nie utożsamiać dodatniego wyniku z bezpieczeństwem strategicznym.
 
 Kontynuować tę samą kolejkę po transferach waste i po ruchach do baz. Po
 zakończeniu głównego wyszukiwania porównywać dodatnio ocenionych kandydatów:
-FOUND przed EXPLORATION, następnie wyższe U, krótszy plan, mniejsze B, stabilna
-kolejność enumeracji. Odczyt istniejących krawędzi grafu sprawdza, czy z końca
+według wspólnego porządku z §5 (krótsze REVEAL przed pobocznym W).
+Odczyt istniejących krawędzi grafu sprawdza, czy z końca
 kandydata można osiągnąć odsłonięcie, nową informację lub dalszy przyrost baz.
 Nie symuluje nowych stanów i nie przekracza granic informacji.
 Nie przechodzi ponownie przez S0: dojście do celu inną gałęzią z korzenia

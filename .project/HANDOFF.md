@@ -1,5 +1,28 @@
 # Fresh-session handoff
 
+## T028 supplied proposal — delivery, 2026-10-13
+
+REVIEW: shorter positive reveal ordering, knowledge-complement/color-correct
+estimate and up to five safe diagnostic alternatives. Exact keys, positive U,
+strict atomic budgets and graph checks remain. 297 full unit tests, 98 Chromium
+E2E and build passed. Paired seeds0–99/Draw1+3, max100 commands at 300 states:
+more reveals/fewer steps and zero repeats after adaptation, but higher p95/cut
+rates; no win-rate/speed guarantee. Four paired default-state-budget fixtures
+have matching expansion counts; H09 shortens 4→1 commands. See
+reports/T028-proposal-adaptation.md and raw JSON evidence. Await acceptance;
+no push/successor, physical Safari/mobile latency or production-budget full
+game calibration. Preserve unrelated untracked cursor-114 JSON and prior v3 scope.
+
+## T028 supplied proposal — assignment, 2026-10-13
+
+Coordinator: "możesz go zastosować (dostosuj jeśli trzeba) i zrobić testy na nim",
+with replacement SmartHint code. Resume T028 on master at 54d6c7e; T014/T027
+dependencies are accepted. Adapt useful ideas without removing information
+boundaries, positive-score anti-loop guard, strict command/state limits or graph
+verification. No parallel agents, branch, publication or save/rules change.
+Preserve unrelated untracked solitaire-stan-2284836135-draw1-114.json.
+Evidence/resume notes: reports/T028-proposal-adaptation.md.
+
 ## T028 external analysis checked — delivery, 2026-10-13
 
 No current runtime defect reproduced from the eight-point analysis. Historical
