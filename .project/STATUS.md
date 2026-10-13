@@ -1,5 +1,7 @@
 # Project status
 
+- T028 reproduction-only assignment (2026-10-13): two continuation regressions added; both fail for the expected reasons. No production repairs or full checks. See [report](reports/T028-continuation-reproduction.md). Parent task remains IN_PROGRESS; await repair assignment.
+
 - T028 IN_PROGRESS: v3 checkpoint at coordinator commit/push-only request. 81 focused tests passed; cursor-73 median 29.535 s → 11.922 s, same 88,896 states and zero goals. Full checks and broader property coverage deferred. See [checkpoint report](reports/T028-v3-audit.md). Preserve unrelated dirty files.
 
 - Prior T028 REVIEW delivery: accepted `c677cad` preserved; graph/truncation/cancellation repairs and independent BFS comparison delivered. Cursor 73: all three searches exhaust 88,896 states with zero goals. See [audit](reports/T028-graph-audit.md). Preserve unrelated dirty files and diagnostic JSON; awaiting acceptance.

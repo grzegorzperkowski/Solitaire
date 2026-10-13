@@ -1,5 +1,15 @@
 # Fresh-session handoff
 
+## T028 continuation reproduction — 2026-10-13
+
+Coordinator assigned tests only, with repairs later if confirmed. New
+`tests/unit/smart-hints-continuation.test.js` has two expected RED assertions:
+rejected DEAD_END tail published as FOUND, and pre-aborted signal ignored by
+continuation. Real boards/engine, no mocks. See reports/T028-continuation-reproduction.md.
+No algorithm edits; existing uncommitted implementation/tests/spec/script and
+untracked diagnostic/fixtures preserved. Parent T028 IN_PROGRESS; resume repairs
+only on explicit assignment. Full suite/build/E2E unrun; no new push assigned.
+
 ## T028 v3 checkpoint — 2026-10-12
 
 Coordinator resumed the six-item final audit and measured optimization. Preserve
