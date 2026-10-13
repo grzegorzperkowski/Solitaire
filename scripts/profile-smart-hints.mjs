@@ -31,6 +31,8 @@ for (const match of [...source.matchAll(/from '\.\/(.*?)'/g)]) {
 if (mode === 'profile') {
   source = source.replace('applyMove, getLegalMoves,', 'applyMove as rawApplyMove, getLegalMoves as rawGetLegalMoves,')
     .replace('import { progressStateKey }', 'import { progressStateKey as rawProgressStateKey }')
+    .replace('import { progressKeyFor, progressStateKey }',
+      'import { progressKeyFor as rawProgressKeyFor, progressStateKey as rawProgressStateKey }')
     .replace('function evaluateSequence(', 'function rawEvaluateSequence(')
     .replace('function verifyEndState(', 'function rawVerifyEndState(');
   source += `
@@ -50,6 +52,10 @@ function measured(name, fn, args) {
 const applyMove = (...args) => measured('applyMove', rawApplyMove, args);
 const getLegalMoves = (...args) => measured('getLegalMoves', rawGetLegalMoves, args);
 const progressStateKey = (...args) => measured('progressStateKey', rawProgressStateKey, args);
+const progressKeyFor = (known) => {
+  const key = rawProgressKeyFor(known);
+  return (...args) => measured('progressStateKey', key, args);
+};
 const evaluateSequence = (...args) => measured('evaluateSequence', rawEvaluateSequence, args);
 const verifyEndState = (...args) => measured('verifyEndState', rawVerifyEndState, args);
 `;

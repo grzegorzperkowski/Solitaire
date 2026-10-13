@@ -1,7 +1,7 @@
 import { applyMove, getLegalMoves, isWon } from './game.js';
 import { suitIndex } from './cards.js';
 import { visibleCards } from './knowledge.js';
-import { progressStateKey } from './progress.js';
+import { progressKeyFor, progressStateKey } from './progress.js';
 
 /**
  * SmartHint — isolated, goal-directed planner (T028-spec §2–§5).
@@ -358,12 +358,11 @@ function checkBoundary(move, state, knownSet) {
 
 // ── Main search generator (§2–§3) ──
 
-export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 12, signal, previousHint } = {}) {
+export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 30, signal, previousHint } = {}) {
   // Pre-check WON
   if (isWon(state)) {
     return { phase: 'FINAL', status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false };
   }
-
   const continued = signal?.aborted ? null : continuePlan(state, knownCards, previousHint);
   if (continued) return continued;
 
@@ -373,7 +372,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const rootMoves = getLegalMoves(state);
   const rootPoss = computePossibilities(state, rootFoundationSet, rootMoves);
 
-  const rootKey = progressStateKey(state, knownCards);
+  const stateKey = progressKeyFor(knownCards);
+  const rootKey = stateKey(state);
   const visited = new Map(); // key -> best cost
   visited.set(rootKey, 0);
 
@@ -393,7 +393,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     strategicCandidates: 0, explorationCandidates: 0, preparatoryStates: 0,
     rejectedEndStates: 0, staleQueueEntries: 0, duplicateStatesRejected: 0,
     depthLimitedBranches: 0, stateLimitedBranches: 0, unresolvedCutoffs: 0, unexpandedStates: 0,
-    cachedDeadEnds: 0,
+    cachedDeadEnds: 0, nonPositiveGoals: 0,
   };
 
   function cancelledResult(candidate = bestResult) {
@@ -463,14 +463,14 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   }
 
   const queue = new PriorityQueue();
-  queue.push({ state, moves: rootMoves, path: [], cost: 0, score: 0, B: 0, insertOrder: 0 });
+  queue.push({ state, key: rootKey, moves: rootMoves, path: [], cost: 0, score: 0, B: 0, insertOrder: 0 });
   let insertCounter = 1;
 
   while (queue.length > 0) {
     if (signal?.aborted) return cancelledResult();
     const current = queue.pop();
 
-    const currentKey = progressStateKey(current.state, knownCards);
+    const currentKey = current.key;
     if (current.cost > visited.get(currentKey)) {
       diagnostics.staleQueueEntries++;
       continue;
@@ -499,7 +499,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       const atBoundary = checkBoundary(move, current.state, knownSet);
 
       // Deduplication: reject if visited at equal or lower cost
-      const key = progressStateKey(nextState, knownCards);
+      const key = stateKey(nextState);
       const existingCost = visited.get(key);
       // Keep even missing successors: a later shorter path can resolve this cut.
       node.children.add(key);
@@ -538,6 +538,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       if (isConfirmedGoal) diagnostics.strategicCandidates++;
       else if (isExploration) diagnostics.explorationCandidates++;
       else diagnostics.preparatoryStates++;
+      if (isConfirmedGoal && score <= 0) diagnostics.nonPositiveGoals++;
 
       if (score > 0 && (isConfirmedGoal || isExploration)) {
         const candidate = {
@@ -579,6 +580,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       if (!atBoundary && canRetain) {
         queue.push({
           state: nextState,
+          key,
           moves: evaluation.endMoves,
           path: nextPath,
           cost: nextCost,

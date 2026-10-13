@@ -2,13 +2,20 @@ import { applyMove, getLegalMoves, isWon } from './game.js';
 import { rememberVisible, visibleCards } from './knowledge.js';
 
 export function progressStateKey(state, knownCards) {
+  return progressKeyFor(knownCards)(state);
+}
+
+// A search keeps knowledge fixed: serialize it once, not for every state.
+// The key string is identical to serializing all seven parts together.
+export function progressKeyFor(knownCards) {
+  const knowledge = JSON.stringify([...knownCards].sort((a, b) => a - b));
   // Hidden tableau identities cannot matter before a P1 boundary. Stock/waste
   // IDs are opaque tokens here: keep their order, never inspect hidden ranks.
-  return JSON.stringify([
+  return (state) => `${JSON.stringify([
     state.rulesVersion, state.drawCount,
     state.tableau.map((c) => [c.faceUpStart, c.cards.map((id, i) => i < c.faceUpStart ? null : id)]),
-    state.foundations, state.stock, state.waste, [...knownCards].sort((a, b) => a - b),
-  ]);
+    state.foundations, state.stock, state.waste,
+  ]).slice(0, -1)},${knowledge}]`;
 }
 
 function classifyProgress(applied, initialFoundationCount, known) {
@@ -29,7 +36,8 @@ export function* searchProgress(initial, knownCards = [], { maxStates = 10000 } 
   const known = new Set(knowledge);
   const initialFoundationCount = initial.foundations.reduce((total, foundation) => total + foundation.length, 0);
   const queue = [initial];
-  const visited = new Set([progressStateKey(initial, knowledge)]);
+  const stateKey = progressKeyFor(knowledge);
+  const visited = new Set([stateKey(initial)]);
   let cursor = 0;
   let noLegalMoves = false;
   const result = (status, goal) => ({ status, visitedStates: cursor, noLegalMoves, ...(goal ? { goal } : {}) });
@@ -44,7 +52,7 @@ export function* searchProgress(initial, knownCards = [], { maxStates = 10000 } 
       if (!applied.ok) continue;
       const goal = classifyProgress(applied, initialFoundationCount, known);
       if (goal) return result('PROGRESS_FOUND', goal);
-      const key = progressStateKey(applied.state, knowledge);
+      const key = stateKey(applied.state);
       if (visited.has(key)) continue;
       if (visited.size >= maxStates) return result('UNKNOWN');
       visited.add(key);

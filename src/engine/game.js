@@ -163,26 +163,33 @@ function readSource(state, from) {
 
 function readDestination(state, source, to) {
   if (!exactKeys(to, ['pile', 'index'])) return failure('invalid-command');
-  if (to.pile === 'tableau') {
-    if (!isIndex(to.index, 7)) return failure('invalid-command');
-    const destination = state.tableau[to.index];
-    if (!destination || !Array.isArray(destination.cards)) return failure('invalid-state');
-    if (source.pile === 'tableau' && source.index === to.index) return failure('illegal-destination');
-    if (!fitsTableau(source.suffix[0], destination.cards)) return failure('illegal-destination');
-    return { ok: true, pile: 'tableau', index: to.index };
+  const problem = destinationProblem(state, source, to.pile, to.index);
+  return problem ? failure(problem) : { ok: true, pile: to.pile, index: to.index };
+}
+
+// Returns the rejection reason or null. Move enumeration calls it about 500 times
+// per board, so it must not allocate.
+function destinationProblem(state, source, pile, index) {
+  if (pile === 'tableau') {
+    if (!isIndex(index, 7)) return 'invalid-command';
+    const destination = state.tableau[index];
+    if (!destination || !Array.isArray(destination.cards)) return 'invalid-state';
+    if (source.pile === 'tableau' && source.index === index) return 'illegal-destination';
+    if (!fitsTableau(source.suffix[0], destination.cards)) return 'illegal-destination';
+    return null;
   }
-  if (to.pile === 'foundation') {
-    if (!isIndex(to.index, 4)) return failure('invalid-command');
-    if (!Array.isArray(state.foundations[to.index])) return failure('invalid-state');
-    if (source.pile === 'foundation') return failure('illegal-destination');
-    if (source.suffix.length !== 1) return failure('illegal-sequence');
+  if (pile === 'foundation') {
+    if (!isIndex(index, 4)) return 'invalid-command';
+    if (!Array.isArray(state.foundations[index])) return 'invalid-state';
+    if (source.pile === 'foundation') return 'illegal-destination';
+    if (source.suffix.length !== 1) return 'illegal-sequence';
     const cardId = source.suffix[0];
-    if (suitIndex(cardId) !== to.index || rank(cardId) !== state.foundations[to.index].length + 1) {
-      return failure('illegal-destination');
+    if (suitIndex(cardId) !== index || rank(cardId) !== state.foundations[index].length + 1) {
+      return 'illegal-destination';
     }
-    return { ok: true, pile: 'foundation', index: to.index };
+    return null;
   }
-  return failure('invalid-command');
+  return 'invalid-command';
 }
 
 function transfer(state, source, destination) {
@@ -238,11 +245,18 @@ function canReadBoard(state) {
 // id onto the waste, repeating up to drawCount. Recycle reverses the waste
 // into the stock and does not draw. [D,C,B,A] drawn by 3 becomes waste
 // [A,B,C] and stock [D]. Recycling [A,B,C] becomes stock [C,B,A].
+// Legality only, so move enumeration does not build and freeze a successor board.
+function stockProblem(state, type) {
+  if (state.drawCount !== 1 && state.drawCount !== 3) return 'invalid-state';
+  if (type === 'draw') return state.stock.length === 0 ? 'illegal-source' : null;
+  return state.stock.length !== 0 || state.waste.length === 0 ? 'illegal-source' : null;
+}
+
 function stockAction(state, command) {
   if (!exactKeys(command, ['type'])) return failure('invalid-command');
-  if (state.drawCount !== 1 && state.drawCount !== 3) return failure('invalid-state');
+  const problem = stockProblem(state, command.type);
+  if (problem) return failure(problem);
   if (command.type === 'draw') {
-    if (state.stock.length === 0) return failure('illegal-source');
     const count = Math.min(state.drawCount, state.stock.length);
     const drawn = state.stock.slice(-count).reverse();
     return {
@@ -255,7 +269,6 @@ function stockAction(state, command) {
       }),
     };
   }
-  if (state.stock.length !== 0 || state.waste.length === 0) return failure('illegal-source');
   return {
     ok: true,
     revealed: null,
@@ -300,12 +313,10 @@ function addDestinations(state, from, moves) {
   const source = readSource(state, from);
   if (!source.ok) return;
   for (let index = 0; index < 7; index += 1) {
-    const command = { type: 'move', from, to: { pile: 'tableau', index } };
-    if (readDestination(state, source, command.to).ok) moves.push(command);
+    if (!destinationProblem(state, source, 'tableau', index)) moves.push({ type: 'move', from, to: { pile: 'tableau', index } });
   }
   for (let index = 0; index < 4; index += 1) {
-    const command = { type: 'move', from, to: { pile: 'foundation', index } };
-    if (readDestination(state, source, command.to).ok) moves.push(command);
+    if (!destinationProblem(state, source, 'foundation', index)) moves.push({ type: 'move', from, to: { pile: 'foundation', index } });
   }
 }
 
@@ -315,8 +326,8 @@ function addDestinations(state, from, moves) {
 export function getLegalMoves(state) {
   if (!canReadBoard(state)) return [];
   const moves = [];
-  if (validateMove(state, { type: 'draw' }).ok) moves.push({ type: 'draw' });
-  if (validateMove(state, { type: 'recycle' }).ok) moves.push({ type: 'recycle' });
+  if (!stockProblem(state, 'draw')) moves.push({ type: 'draw' });
+  if (!stockProblem(state, 'recycle')) moves.push({ type: 'recycle' });
   for (let index = 0; index < 7; index += 1) {
     const column = state.tableau[index];
     for (let cardIndex = column.faceUpStart; cardIndex < column.cards.length; cardIndex += 1) {

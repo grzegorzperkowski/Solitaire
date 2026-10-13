@@ -15,7 +15,7 @@ export function createApp({
   progressMaxStates = 10000,
   progressActiveMs = 100,
   hintMaxStates = 10000,
-  hintMaxDepth = 12,
+  hintMaxDepth = 30,
   hintActiveMs = HINT_ACTIVE_MS,
   hintBatchMs = HINT_BATCH_MS,
   lockManager = globalThis?.navigator?.locks,
@@ -56,6 +56,9 @@ export function createApp({
   let hintKnowledge = null;
   let hintTimer = null;
   let isHintLoading = false;
+  // Last published plan and its board. Board changes keep it, so the next hint
+  // can continue the plan when the player made its first move.
+  let shownPlan = null;
 
   const listeners = new Set();
 
@@ -105,6 +108,7 @@ export function createApp({
       signal: cancellation.signal,
       maxStates: hintMaxStates,
       maxDepth: hintMaxDepth,
+      previousHint: shownPlan,
     });
 
     const now = () => performance ? performance.now() : Date.now();
@@ -136,6 +140,7 @@ export function createApp({
         }
         isHintLoading = false;
         hint = Object.freeze(next.value);
+        shownPlan = hint.plan?.length ? { state: board, plan: hint.plan } : null;
         notifyListeners();
       } else {
         hintTimer = setTimeout(hintBatch, 0);

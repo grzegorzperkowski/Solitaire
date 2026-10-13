@@ -1,7 +1,7 @@
 import { describe, expect, test, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { searchSmartHint } from '../../src/engine/smart-hints.js';
-import { visibleCards } from '../../src/engine/knowledge.js';
+import { rememberVisible, visibleCards } from '../../src/engine/knowledge.js';
 import { createGame } from '../../src/engine/cards.js';
 import { assertInvariants, applyMove } from '../../src/engine/game.js';
 import * as game from '../../src/engine/game.js';
@@ -73,7 +73,7 @@ test('external AbortSignal with no candidate remains inconclusive, never exhaust
   });
 });
 
-test('T028 cursor-114 save preserves uncertainty when the default depth is cut off', () => {
+test('T028 cursor-114 save preserves uncertainty when depth 12 cuts the graph off', () => {
   const diagnostic = JSON.parse(readFileSync(
     new URL('../fixtures/solitaire-stan-2284836135-draw1-114.json', import.meta.url), 'utf8',
   ));
@@ -81,7 +81,7 @@ test('T028 cursor-114 save preserves uncertainty when the default depth is cut o
   expect(restored.ok).toBe(true);
   expect(restored.session.cursor).toBe(114);
 
-  const result = runSearch(restored.session.state, restored.session.knownCards);
+  const result = runSearch(restored.session.state, restored.session.knownCards, { maxDepth: 12 });
 
   expect(result).toMatchObject({
     status: 'INCONCLUSIVE',
@@ -118,6 +118,81 @@ test('T028 cursor-114 save reports no strategic progress after exhausting the se
     .toBe('Nie znaleziono posunięcia, które przybliża do rozwiązania. Możesz cofnąć kilka ostatnich ruchów i spróbować innej drogi albo rozpocząć grę od początku.');
   expect(formatSmartHintMessage(restored.session.state, result, { cursor: 0 }))
     .toBe('Nie znaleziono posunięcia, które przybliża do rozwiązania. Możesz rozpocząć grę od początku.');
+});
+
+test('T028 cursor-73 save is a real deadlock, not a missed plan', { timeout: 60000 }, () => {
+  const diagnostic = JSON.parse(readFileSync(
+    new URL('../fixtures/solitaire-stan-2560240634-draw1-73.json', import.meta.url), 'utf8',
+  ));
+  const restored = restoreSession(JSON.stringify(diagnostic.save));
+  expect(restored.ok).toBe(true);
+  const { state, knownCards } = restored.session;
+
+  // The app budget cannot hold all 88896 states, so it must stay uncertain.
+  expect(runSearch(state, knownCards)).toMatchObject({
+    status: 'INCONCLUSIVE', reason: 'LIMIT_REACHED', truncated: true,
+  });
+
+  // 4♦ on 5♠ and 4♥ on 5♣ block each other; hintBfs also finds 88896 states and no goal.
+  const result = runSearch(state, knownCards, { maxStates: 100000, maxDepth: 100 });
+  expect(result).toMatchObject({
+    status: 'NO_STRATEGIC_PROGRESS', reason: 'SEARCH_EXHAUSTED', truncated: false, visitedStates: 88896,
+  });
+  expect(result.diagnostics.nonPositiveGoals).toBe(0);
+});
+
+function replayFixture(file) {
+  const replay = JSON.parse(readFileSync(new URL(`../fixtures/${file}`, import.meta.url), 'utf8'));
+  let state = createGame({ seed: replay.seed, drawCount: replay.drawCount });
+  let known = rememberVisible(state, []);
+  for (const command of replay.commands) {
+    state = applyMove(state, command).state;
+    known = rememberVisible(state, known);
+  }
+  return { state, known };
+}
+
+test('a reveal that costs a foundation card with U <= 0 is not suggested', () => {
+  const { state, known } = replayFixture('smart-hint-seed21-draw1-61.json');
+
+  // Accepting this reveal (U = -40) loops: take the card off the foundation, put it back, repeat.
+  const result = runSearch(state, known);
+  expect(result.diagnostics.nonPositiveGoals).toBeGreaterThan(0);
+  expect(result.score).toBeGreaterThan(0);
+  expect(result.plan[0].from?.pile).not.toBe('foundation');
+});
+
+describe('remembered plan', () => {
+  // A fresh search on this board picks a plan whose first move undoes the previous hint.
+  const options = { maxStates: 2000, maxDepth: 12 };
+
+  test('continues only on the board its first move leads to', () => {
+    const { state, known } = replayFixture('smart-hint-seed1-draw1-76.json');
+    const first = runSearch(state, known, options);
+    const previousHint = { state, plan: first.plan };
+    const next = applyMove(state, first.plan[0]).state;
+
+    expect(runSearch(next, known, { ...options, previousHint })).toMatchObject({
+      phase: 'FINAL', status: 'FOUND', goal: 'REVEAL', plan: first.plan.slice(1), continued: true, truncated: false,
+    });
+    expect(runSearch(state, known, { ...options, previousHint }).continued).toBeUndefined();
+  });
+
+  test('following hints never returns to an earlier board', () => {
+    let { state, known } = replayFixture('smart-hint-seed1-draw1-76.json');
+    const seen = new Set([progressStateKey(state, known)]);
+    let previousHint = null;
+    for (let step = 0; step < 12; step++) {
+      const result = runSearch(state, known, { ...options, previousHint });
+      if (!result.plan.length) break;
+      previousHint = { state, plan: result.plan };
+      state = applyMove(state, result.plan[0]).state;
+      known = rememberVisible(state, known);
+      const key = progressStateKey(state, known);
+      expect(seen.has(key), `step ${step}`).toBe(false);
+      seen.add(key);
+    }
+  });
 });
 
 test.each([0, 44])('hidden tableau destinations cannot affect the hint (seed %i)', (seed) => {

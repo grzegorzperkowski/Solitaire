@@ -180,6 +180,20 @@ describe('SmartHint v1 — App Controller Integration (H12, H13, Cancellation, T
     app.destroy();
   });
 
+  test('after the player follows a hint, the next hint keeps the rest of its plan', () => {
+    const app = createTestApp(h02());
+    app.requestSmartHint();
+    vi.advanceTimersByTime(100);
+    const { plan } = app.getState().hint;
+    expect(plan.length).toBe(2);
+
+    app.executeCommand(plan[0]);
+    app.requestSmartHint();
+    vi.advanceTimersByTime(100);
+    expect(app.getState().hint).toMatchObject({ status: 'FOUND', plan: plan.slice(1), continued: true });
+    app.destroy();
+  });
+
   test('Undo and Redo invalidate hint (H13)', () => {
     const state = h01();
     const app = createTestApp(state);

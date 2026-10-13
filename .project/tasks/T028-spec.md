@@ -19,7 +19,7 @@ autogry, nowych zależności lub zmiany F04 dowodzącego braku postępu.
 ## 2. Kontrakt planera
 
 Nowy DOM-free generator:
-`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 12, signal} = {})`.
+`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 30, signal, previousHint} = {})`.
 Oddaje sterowanie pomiędzy porcjami pracy; czas mierzy kontroler, nie silnik.
 Każdy yield i wynik końcowy udostępniają najlepszy dotąd wynik, aby przerwanie
 czasowe nie gubiło znalezionej, legalnej sugestii.
@@ -64,7 +64,7 @@ albo dodatni przyrost baz. Waste→tableau jest przygotowaniem, nie celem.
    oraz wiedzę. Można wykorzystać `progressStateKey`; nie scalać kolumn
    przez sortowanie bez dowodu zachowania komend i podświetleń.
 6. Limit obejmuje maksymalnie 10 000 zachowanych różnych stanów (łącznie
-   z korzeniem); maksymalna długość 12 komend. Preferencja 1–8 wynika z kosztu
+   z korzeniem); maksymalna długość 30 komend. Preferencja 1–8 wynika z kosztu
    L, nie z osobnego odcięcia. Zachować najlepszą ścieżkę do powtórzonego stanu.
 7. Kontroler wykonuje krótkie porcje, początkowo około 4 ms, z celem 100 ms
    łącznego aktywnego czasu. Umożliwia anulowanie i normalne granie; nie wymaga
@@ -77,7 +77,8 @@ zapisuje wartości użyte w danej instancji, aby wyniki dało się odtworzyć.
 
 Stały budżet stanów bez limitu zegara daje deterministyczny wynik. Limit czasu
 może dawać różne jakościowo wyniki na różnych urządzeniach; nie ukrywać tego.
-Nie ma obowiązku znajdowania planów dłuższych niż 12 ruchów.
+Nie ma obowiązku znajdowania planów dłuższych niż 30 ruchów. Limit podniesiono
+z 12: w 200 grach z pamięcią planu dał 46 wygranych zamiast 40, w tym samym czasie.
 
 ## 4. Granice informacji
 
@@ -179,13 +180,24 @@ końcowy oraz wspólne składniki oceny. Służy diagnostyce; UI nie wykonuje pl
 Eksport istniejącego hint zawiera nowe składniki automatycznie, bez zmiany save
 schema. Diagnostyka INCONCLUSIVE podaje kandydatów, stany przygotowawcze,
 odrzucenia końców i LIMIT_REACHED/NO_STRATEGIC_RECOMMENDATION.
+`nonPositiveGoals` liczy cele REVEAL/FOUNDATION_ADVANCE odrzucone przez U <= 0.
+Próg U > 0 zostaje: bez niego zdjęcie karty z bazy dla odsłonięcia tworzy pętlę
+podpowiedzi (fixture `smart-hint-seed21-draw1-61.json`).
 
 ## 6. Integracja i komunikaty
 
 Uruchamiać na żądanie przycisku. Kolejne kliknięcie tej samej planszy może
 ponownie pokazać aktualny wynik, bez cyklicznego oferowania jałowych ruchów.
-Najprostsza v1 przelicza po każdej zmianie planszy zamiast przechowywać plan
-między ruchami. Wykonanie podpowiedzi jest zawsze zwykłą akcją gracza.
+Kontroler pamięta ostatni pokazany plan i jego planszę (`previousHint`).
+Gdy plansza to wynik pierwszego ruchu planu, następna podpowiedź to reszta planu
+(`continued: true`), bez nowego wyszukiwania. Warunki: ruchy legalne, bez granicy
+informacji, a reszta nadal osiąga cel względem nowej planszy.
+Powód: U liczone względem S0 zmienia się po jednym ruchu. Nowe wyszukiwanie
+potrafi wtedy cofnąć poprzedni ruch i podpowiedzi krążą bez końca
+(fixture `smart-hint-seed1-draw1-76.json`). Każdy ukończony plan odsłania kartę,
+zwiększa bazy albo daje wiedzę, więc idąc za podpowiedziami nie da się zapętlić.
+Inna plansza oznacza zwykłe wyszukiwanie. Wykonanie podpowiedzi jest zawsze
+zwykłą akcją gracza.
 
 Unieważniać wynik przy ruchu, Undo/Redo, nowej/restartowanej partii, zmianie
 wiedzy lub trybu i restore. Anulować przy ukryciu/pauzie/dialogu i zniszczeniu
