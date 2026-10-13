@@ -161,6 +161,14 @@ avoid double-tap zoom while retaining pinch zoom; covered in accessibility.spec.
 
 ## T028 strategic-goal regression gates (2026-10-11)
 
+T028 p95 checkpoint (2026-10-13): basic `smart-hints-optimization.test.js`
+checks one-command information instead of waste padding, equal-F direct
+foundation advancement and exclusion of foundation/placement or foundation/king
+double counting. Full-suite/E2E/200-game and shortener property/performance
+coverage are deferred by the coordinator. Later compare current with 7a36c30
+and original 54d6c7e on paired boards and seeds0–99/Draw1+3; report p50/p95,
+shortened plans, reveals, repeats and cuts, without assuming a speedup.
+
 T028 proposal adaptation (2026-10-13): `smart-hints-proposal.test.js` checks
 direct reveal versus higher-W padding, a reveal versus higher-U foundation
 advance, opposite-color placement in the knowledge-complement estimate, an

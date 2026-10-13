@@ -1,7 +1,8 @@
 # SmartHint — specyfikacja T028
 
-Status: REVIEW — supplied-proposal adaptation implemented and tested 2026-10-13;
-current evidence: [report](../reports/T028-proposal-adaptation.md). Prior v3
+Status: IN_PROGRESS — p95/short-plan follow-up checkpoint with basic checks only,
+2026-10-13; current evidence: [checkpoint](../reports/T028-p95-checkpoint.md).
+Previous evidence: [report](../reports/T028-proposal-adaptation.md). Prior v3
 scope/acceptance remain outstanding. Źródło: opis
 koordynatora „Inteligentna pomoc do pasjansa Klondike”. To specyfikacja produktu,
 nie potwierdzenie wyników badań ani skuteczności proponowanych wag.
@@ -149,9 +150,11 @@ Wybierać wyłącznie dodatnio ocenione cele, według priorytetu REVEAL,
 FOUNDATION_ADVANCE, INFORMATION; przy braku rekomendacji INCONCLUSIVE.
 Dla REVEAL porównywać większe H, krótszy plan, wyższą estymację po odkryciu,
 mniejsze B, wyższe U i stabilną kolejność. Dzięki temu zbędny transfer waste
-nie wydłuża bezpośredniego odkrycia tylko dla punktów W. Dla baz i informacji
-zachować wyższe U, krótszy plan, mniejsze B i stabilną kolejność, aby rzeczywisty
-dodatkowy awans baz nadal mógł uzasadniać dłuższy plan. Ten sam komparator
+nie wydłuża bezpośredniego odkrycia tylko dla punktów W. Dla INFORMATION
+porównywać krótszy plan, wyższą estymację, mniejsze B, wyższe U i kolejność.
+Dla FOUNDATION_ADVANCE porównywać większe F, mniejsze B, krótszy plan, wyższe U
+i kolejność, aby rzeczywisty dodatkowy awans baz uzasadniał dłuższy plan,
+a poboczny W przy tym samym F/B nie dodawał komend. Ten sam komparator
 obowiązuje wynik cząstkowy, zapamiętywanie kandydatów i wynik końcowy.
 
 `expectedPostRevealScore` jest pomocniczą estymacją jednej nieznanej karty,
@@ -163,8 +166,23 @@ do znanego wierzchu kolumny (ranga i przeciwny kolor). Podzielić przez rozmiar
 puli, dla pustej puli zwrócić 0. Pominąć właśnie odsłonięty wierzch tableau,
 także zapamiętany. Estymować tylko na granicy; w pozostałych końcach 0.
 Nie zmieniać wag U ani dodatniego progu przeciw pętlom. Nie gwarantować
-minimalnego planu w ograniczonym grafie; nie dodawać osobnego kosztownego
-usuwania komend z każdego kandydata.
+minimalnego planu w ograniczonym grafie.
+
+W checkpoint p95 (2026-10-13) statystyki nieznanych rang/kolorów obliczyć raz
+w tablicy 28 liczników. Estymacja używa maski miejsc docelowych bez alokowania
+tablic, zbiorów i callbacków przy każdym wywołaniu. Nie liczyć tej samej karty
+ponownie dla baz i kolumn/króla. Weryfikację danego kandydata współdzielić przy
+zapisie i wyborze; klucz alternatyw budować z pól pierwszej komendy i celu.
+
+Na końcu skracać tylko wybranego zwycięzcę: zachłannie usuwać pojedynczą komendę
+przed ostatnią, odtwarzając legalność i tę samą granicę. Zachować co najmniej
+pierwotne H/F/I, ten sam typ celu, dodatnie U i B nie większe od pierwotnego.
+Dla końca bez granicy zachować dokładny klucz końcowego stanu i nie dodawać
+nowych przodków do wykluczeń istniejącego dowodu grafowego. Inne skrócenie
+wymaga ponownej weryfikacji grafu i nie należy do tego checkpointu.
+Oddawać sterowanie po każdej próbie, zachowując sprawdzony plan przy anulowaniu.
+Raportować shorteningAttempts/shortenedPlansCount/savedMovesCount. Nie obiecywać
+globalnej minimalności ani kosztu <0,1 ms; pełne testy i pomiar są odroczone.
 
 Testy arytmetyki przy innych składnikach równych zero: odkrycie w 2 ruchach
 112, baza w 1 ruchu 36, nowa informacja w 1 ruchu 16. Fixture całych plansz

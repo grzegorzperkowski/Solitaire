@@ -46,7 +46,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T025](tasks/T025.md) | P8 follow-up | Eliminate delayed court artwork rendering | T017 | DONE | [Criteria](tasks/T025.md#acceptance-criteria); coordinator accepted 2026-10-11 at `3a50ba8`; [report](reports/T025.md) |
 | [T026](tasks/T026.md) | P9 follow-up | Integrate Solitaire with the Playground PWA | None | REVIEW | [Criteria](tasks/T026.md#acceptance-criteria); implementation commits `005c25e` and `6e7db44`; [report](reports/T026.md) |
 | [T027](tasks/T027.md) | P7 follow-up | Reachable progress detection | T014, T007, T008, T015 | DONE | [Report](reports/T027.md); [spec](tasks/T027-spec.md) |
-| [T028](tasks/T028.md) | P7 follow-up | SmartHint goal-directed hints | T014, T027 | REVIEW | Supplied proposal adapted: shorter reveals, hidden-safe estimate, diagnostic alternatives. 297 unit / 98 Chromium / build passed; paired 200-game evidence with limits in [report](reports/T028-proposal-adaptation.md). Prior acceptance/deferred v3 scope remain. |
+| [T028](tasks/T028.md) | P7 follow-up | SmartHint goal-directed hints | T014, T027 | IN_PROGRESS | p95 / shorter INFORMATION/FOUNDATION follow-up assigned; basic checks only tonight, full tests and measurements deferred. See [checkpoint](reports/T028-p95-checkpoint.md); prior acceptance/deferred v3 scope remain. |
 | [T029](tasks/T029.md) | P8 follow-up | Random victory animations | T015, T017 | DONE | Coordinator accepted 2026-10-12 at `2ea1a1e`; [report](reports/T029.md) |
 
 ## Selection and model suitability

@@ -100,8 +100,11 @@ an automatic fallback when SmartHint has no strategic recommendation.
 T028 proposal adaptation (assigned 2026-10-13): prioritize positively scored
 tableau reveals, preferring shorter reveal plans before incidental waste gains.
 Use a hidden-safe, color-correct estimate only to break equal-length reveal
-ties. Preserve positive U, graph verification and strict budgets. Continue to
-reward real multiple foundation advances using U. Diagnostic alternatives do
+ties. Preserve positive U, graph verification and strict budgets. In the p95
+follow-up, information prefers shorter plans; foundations prefer more net F,
+less B and then shorter plans. Real multiple advances still outrank incidental W.
+Shorten only the final winner while preserving its goal and verification scope.
+Diagnostic alternatives do
 not add UI controls, automatic moves or a solvability guarantee.
 
 T028 strategic-goal revision (2026-10-11): FOUND requires a positively scored

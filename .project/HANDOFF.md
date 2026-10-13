@@ -1,5 +1,26 @@
 # Fresh-session handoff
 
+## T028 p95 / shorter goals — checkpoint, 2026-10-13
+
+Implemented cache/mask estimator with single-benefit precedence, shared
+verification, field-based keys, length-first information and F/B/length-first
+foundation selection. Cooperative final-only shortener preserves goals/boundary
+and graph-proof scope. 36 distinct focused checks plus production build passed.
+Coordinator requested only very basic checks tonight: full unit, E2E, benchmark
+and shortener property/performance coverage remain. Keep IN_PROGRESS; no speed
+or quality claim, no push/successor. Resume only on coordinator assignment.
+See reports/T028-p95-checkpoint.md. Preserve unrelated cursor-114 JSON/prior v3 work.
+
+## T028 p95 / shorter goals — assignment, 2026-10-13
+
+Coordinator supplied step1/step2 optimization instructions and resumed T028.
+Start master at 7a36c30, accepted dependencies T014/T027; only unrelated
+untracked solitaire-stan-2284836135-draw1-114.json. Then: "bez testów na razie",
+revised to "albo jakieś bardzo podstawowe - jest już późno idę spać". Perform
+basic focused checks/build only; defer full suite, E2E and 200-game benchmark.
+Do not claim lower p95 or <0.1ms shortener cost without later measurement.
+Sequential work, no branch/subagents/push/publication. See reports/T028-p95-checkpoint.md.
+
 ## T028 supplied proposal — delivery, 2026-10-13
 
 REVIEW: shorter positive reveal ordering, knowledge-complement/color-correct

@@ -234,24 +234,41 @@ function determineGoal({ H, F, I }) {
 }
 
 // Estimate one unknown card from the knowledge complement, never its location.
-function estimatePostRevealUtility(endState, rootState, knownSet, unknownPool) {
-  if (unknownPool.length === 0) return 0;
-  const needed = new Set(endState.foundations.flatMap((pile, index) =>
-    pile.length < 13 ? [index * 13 + pile.length] : []));
-  const tops = endState.tableau.flatMap((column, index) => {
-    const root = rootState.tableau[index];
-    const newlyRevealed = root.faceUpStart > 0 && column.cards.length === root.faceUpStart;
-    const top = column.cards.at(-1);
-    return !newlyRevealed && knownSet.has(top) ? [top] : [];
-  });
-  const hasEmptyColumn = endState.tableau.some(column => column.cards.length === 0);
+function estimatePostRevealUtility(endState, rootState, knownSet, unknownCount, unknownByRankColor) {
+  if (unknownCount === 0) return 0;
   let hits = 0;
-  for (const id of unknownPool) {
-    if (needed.has(id)) hits += 2;
-    else if (rank(id) === 13 && hasEmptyColumn) hits += 1.5;
-    else if (tops.some(top => rank(top) === rank(id) + 1 && color(top) !== color(id))) hits++;
+  let targets = 0;
+  let hasEmptyColumn = false;
+  for (let index = 0; index < 7; index++) {
+    const column = endState.tableau[index];
+    const length = column.cards.length;
+    if (length === 0) { hasEmptyColumn = true; continue; }
+    const root = rootState.tableau[index];
+    if (root.faceUpStart > 0 && length === root.faceUpStart) continue;
+    const top = column.cards[length - 1];
+    if (!knownSet.has(top) || rank(top) === 1) continue;
+    const slot = ((rank(top) - 1) << 1) | (color(top) === 'red' ? 0 : 1);
+    const bit = 1 << slot;
+    if (!(targets & bit)) hits += unknownByRankColor[slot];
+    targets |= bit;
   }
-  return hits / unknownPool.length;
+  if (hasEmptyColumn) hits += 1.5 * (unknownByRankColor[26] + unknownByRankColor[27]);
+  for (let index = 0; index < 4; index++) {
+    const length = endState.foundations[index].length;
+    if (length === 13) continue;
+    const id = index * 13 + length;
+    if (knownSet.has(id)) continue;
+    const slot = ((length + 1) << 1) | (color(id) === 'red' ? 1 : 0);
+    // Foundation benefit replaces a placement/king benefit for the same card.
+    hits += 2 - (length === 12 && hasEmptyColumn ? 1.5 : targets & (1 << slot) ? 1 : 0);
+  }
+  return hits / unknownCount;
+}
+
+function firstMoveKey(move, goal) {
+  if (!move) return goal;
+  if (move.type !== 'move') return `${move.type}|${goal}`;
+  return `${move.from.pile}:${move.from.index ?? ''}:${move.from.cardIndex ?? ''}->${move.to.pile}:${move.to.index ?? ''}|${goal}`;
 }
 
 function compareCandidates(a, b) {
@@ -261,8 +278,12 @@ function compareCandidates(a, b) {
       b.expectedPostRevealScore - a.expectedPostRevealScore || a.components.B - b.components.B ||
       b.score - a.score || a.order - b.order;
   }
-  // Preserve real multiple foundation advances; length still breaks equal-U ties.
-  return b.score - a.score || a.plan.length - b.plan.length || a.components.B - b.components.B || a.order - b.order;
+  if (a.goal === 'INFORMATION') {
+    return a.plan.length - b.plan.length || b.expectedPostRevealScore - a.expectedPostRevealScore ||
+      a.components.B - b.components.B || b.score - a.score || a.order - b.order;
+  }
+  return b.components.F - a.components.F || a.components.B - b.components.B ||
+    a.plan.length - b.plan.length || b.score - a.score || a.order - b.order;
 }
 
 // One-ply terminal verification reuses legal transitions; it is not a safety proof.
@@ -404,7 +425,13 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   const rootStockWasteSet = new Set([...state.stock, ...state.waste]);
   const rootMoves = getLegalMoves(state);
   const rootPoss = computePossibilities(state, rootFoundationSet, rootMoves);
-  const unknownPool = Array.from({ length: 52 }, (_, id) => id).filter(id => !knownSet.has(id));
+  const unknownByRankColor = new Uint8Array(28);
+  let unknownCount = 0;
+  for (let id = 0; id < 52; id++) {
+    if (knownSet.has(id)) continue;
+    unknownByRankColor[(rank(id) << 1) | (color(id) === 'red' ? 1 : 0)]++;
+    unknownCount++;
+  }
 
   const stateKey = progressKeyFor(knownCards);
   const rootKey = stateKey(state);
@@ -425,7 +452,47 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     rejectedEndStates: 0, staleQueueEntries: 0, duplicateStatesRejected: 0,
     depthLimitedBranches: 0, stateLimitedBranches: 0, unresolvedCutoffs: 0, unexpandedStates: 0,
     cachedDeadEnds: 0, nonPositiveGoals: 0,
+    shorteningAttempts: 0, shortenedPlansCount: 0, savedMovesCount: 0,
   };
+
+  // Shorten only the winner; yield after each attempt to preserve cancellation.
+  function* shortenPlan(candidate) {
+    if (candidate.plan.length < 2) return candidate;
+    const original = replayPlan(state, knownCards, candidate.plan, knownSet);
+    if (!original.ok) return candidate;
+    const target = candidate.components;
+    for (let index = 0; index < candidate.plan.length - 1; index++) {
+      const plan = [...candidate.plan.slice(0, index), ...candidate.plan.slice(index + 1)];
+      const replay = replayPlan(state, knownCards, plan, knownSet);
+      diagnostics.shorteningAttempts++;
+      // A changed end or additional excluded ancestor needs a fresh graph proof.
+      const preservesProof = replay.ok && (original.atBoundary ||
+        (stateKey(replay.state) === candidate.key &&
+          [...replay.ancestors].every(key => original.ancestors.has(key))));
+      if (preservesProof && replay.atBoundary === original.atBoundary) {
+        const evaluation = evaluateSequence(replay.state, state, rootFoundationSet, rootStockWasteSet,
+          rootPoss, knownSet, plan, replay.atBoundary);
+        const components = evaluation.components;
+        const goal = determineGoal(components);
+        if (goal === candidate.goal && components.H >= target.H && components.F >= target.F &&
+          components.I >= target.I && components.B <= target.B && evaluation.score > 0) {
+          const verification = verifyEndState(replay.state, state, knownSet, evaluation, replay.atBoundary);
+          if (verification.accepted) {
+            candidate = { ...candidate, plan, score: evaluation.score, components,
+              key: stateKey(replay.state),
+              verification: replay.atBoundary ? verification : candidate.verification,
+              expectedPostRevealScore: replay.atBoundary
+                ? estimatePostRevealUtility(replay.state, state, knownSet, unknownCount, unknownByRankColor) : 0 };
+            diagnostics.shortenedPlansCount = 1;
+            diagnostics.savedMovesCount++;
+            index = -1;
+          }
+        }
+      }
+      yield candidate;
+    }
+    return candidate;
+  }
 
   function cancelledResult(candidate = bestResult) {
     const safeCandidate = [candidate, ...Array.from(verifiedCandidates.values()).reverse()].find(result =>
@@ -579,27 +646,27 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
           status: isConfirmedGoal ? 'FOUND' : 'EXPLORATION',
           plan: nextPath, goal, score, components, key, order: insertCounter,
           visitedStates: stateCount, truncated,
-          expectedPostRevealScore: atBoundary ? estimatePostRevealUtility(nextState, state, knownSet, unknownPool) : 0,
+          expectedPostRevealScore: atBoundary
+            ? estimatePostRevealUtility(nextState, state, knownSet, unknownCount, unknownByRankColor) : 0,
         };
         // Keep goal metadata even when its board cannot fit the retained-state budget.
         const previousCandidate = candidates.get(key);
-        if (!previousCandidate || compareCandidates(candidate, previousCandidate) < 0) candidates.set(key, {
-          ...candidate,
-          verification: atBoundary ? verifyEndState(nextState, state, knownSet, evaluation, true) :
-            { goalReached: true, lostMorePossibilities: components.B > components.M,
-            usefulPossibilities: evaluation.endPoss.size, continuation: 'UNPROVEN',
-            horizon: 1, accepted: true },
-        });
+        const beatsPrevious = !previousCandidate || compareCandidates(candidate, previousCandidate) < 0;
         const shouldReplace = !bestResult || compareCandidates(candidate, bestResult) < 0;
-        if (shouldReplace) {
-          const verification = verifyEndState(nextState, state, knownSet, evaluation, atBoundary);
+        if (beatsPrevious || shouldReplace) {
+          const verification = atBoundary || shouldReplace
+            ? verifyEndState(nextState, state, knownSet, evaluation, atBoundary)
+            : { goalReached: true, lostMorePossibilities: components.B > components.M,
+              usefulPossibilities: evaluation.endPoss.size, continuation: 'UNPROVEN', horizon: 1, accepted: true };
           candidate.verification = verification;
-          candidates.set(key, candidate);
-          if (!verification.accepted) diagnostics.rejectedEndStates++;
-          if (verification.accepted) {
-            verifiedCandidates.delete(key);
-            verifiedCandidates.set(key, candidate);
-            bestResult = candidate;
+          if (beatsPrevious) candidates.set(key, candidate);
+          if (shouldReplace) {
+            if (!verification.accepted) diagnostics.rejectedEndStates++;
+            else {
+              verifiedCandidates.delete(key);
+              verifiedCandidates.set(key, candidate);
+              bestResult = candidate;
+            }
           }
         }
       }
@@ -734,13 +801,26 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     break;
   }
   if (bestResult) {
+    const shortener = shortenPlan(bestResult);
+    let shortened;
+    do {
+      if (signal?.aborted) return cancelledResult(bestResult);
+      shortened = shortener.next();
+      bestResult = shortened.value;
+      if (!shortened.done) {
+        const { key: unusedKey, order: unusedOrder, ...partial } = bestResult;
+        yield { ...partial, phase: 'TEMPORARY', visitedStates: stateCount, truncated,
+          diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads,
+            expectedPostRevealScore: bestResult.expectedPostRevealScore } };
+      }
+    } while (!shortened.done);
     const { key, order, ...result } = bestResult;
     // Boundary alternatives need no continuation proof or additional graph budget.
     const diverse = new Map();
     for (const candidate of [bestResult, ...ordered]) {
       if (!candidate.verification.accepted || (candidate !== bestResult &&
         candidate.verification.continuation !== 'INFORMATION_BOUNDARY')) continue;
-      const signature = `${JSON.stringify(candidate.plan[0])}|${candidate.goal}`;
+      const signature = firstMoveKey(candidate.plan[0], candidate.goal);
       if (diverse.has(signature)) continue;
       const { key: unusedKey, order: unusedOrder, ...alternative } = candidate;
       diverse.set(signature, { ...alternative, visitedStates: stateCount, truncated });

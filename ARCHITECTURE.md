@@ -210,14 +210,22 @@ heuristic F04 NO_PROGRESS. Existing diagnostic export includes these observation
 T028 supplied-proposal adaptation (2026-10-13) prioritizes positive reveals,
 then foundation advances, then exploration. Reveal candidates prefer more H,
 fewer atomic commands, a hidden-safe estimate, lower B and higher U; foundation
-and information candidates retain U-first ordering. The estimate enumerates the
-knowledge complement, uses only known exposed tableau tops with rank/color and
+and information candidates now use F/B/length and length/estimate/B ordering,
+respectively (p95 checkpoint). The estimate precomputes the knowledge complement's
+rank/color counts once, uses an allocation-free destination mask and only known exposed tableau tops with rank/color and
 foundation lengths, and excludes the newly revealed top even if remembered.
 It is a tie-breaker/diagnostic, not a continuation search or U weight change.
 Final results include up to five alternatives with distinct first-command/goal
 pairs: the selected graph-verified plan plus positive boundary candidates.
 Keep exact column keys, atomic search/strict budgets and graph verification;
 no speculative macro pruning, score clamping or extension of maxDepth.
+
+The p95 checkpoint shares candidate verification and builds alternative keys
+from command fields. A cooperative final-only shortener reuses legal replay and
+root evaluation; non-boundary endpoints/exclusions preserve the original graph
+proof. It never expands a new graph or changes root limits. Cancellation keeps
+the latest locally/graph-verified selected plan. Full validation and p95
+measurement remain deferred at coordinator request.
 
 ## 7. Persistence and ownership
 
