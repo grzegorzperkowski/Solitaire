@@ -243,7 +243,8 @@ test('failed candidate replay is rejected without reading absent verification', 
   const result = finish(iterator);
   expect(result.status).toBe('FOUND');
   expect(result.plan).toEqual([{ type: 'recycle', target: 'Safe' }]);
-  expect(result.diagnostics.rejectedEndStates).toBeGreaterThanOrEqual(3);
+  // Rejected and Dead are goal endpoints; DeadStep only prepares after a goal.
+  expect(result.diagnostics.rejectedEndStates).toBeGreaterThanOrEqual(2);
 });
 
 test('stateCount counts expansions, including repeated shorter visits, without overshoot', () => {

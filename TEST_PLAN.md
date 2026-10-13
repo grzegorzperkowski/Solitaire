@@ -161,6 +161,15 @@ avoid double-tap zoom while retaining pinch zoom; covered in accessibility.spec.
 
 ## T028 strategic-goal regression gates (2026-10-11)
 
+T028 A cursor 78 → B cursor 79 regression: replay
+`tests/fixtures/smart-hint-seed2560240634-draw1-78.json`, cancel at 666 expansions
+to reproduce the exported A search, and verify a single 4♣ foundation command
+with U=36, not the old 17-command U=297 plan. Check a smaller full-deck case
+where a waste transfer after the only goal inflated its score, and a positive
+case retaining two real foundation advances. Controller integration must show
+the single-move explanation before bounded uncertainty on B. Preserve dead-end
+and cancellation repairs. See `tests/unit/smart-hints-goal-endpoint.test.js`.
+
 Restore fixture solitaire-stan-2284836135-draw1-114.json through save section;
 verify 52-card integrity, cursor 114, legal actions and independent F04 outcome.
 Waste 2♦ preparation must not be FOUND. Record all H/F/I/W/M/B/L and terminal

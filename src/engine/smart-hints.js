@@ -540,7 +540,9 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       else diagnostics.preparatoryStates++;
       if (isConfirmedGoal && score <= 0) diagnostics.nonPositiveGoals++;
 
-      if (score > 0 && (isConfirmedGoal || isExploration)) {
+      // Preparation after an earlier goal must not pad the recommended plan.
+      const addsGoalProgress = components.H > node.H || components.F > node.F || components.I > node.I;
+      if (score > 0 && (isConfirmedGoal || isExploration) && addsGoalProgress) {
         const candidate = {
           status: isConfirmedGoal ? 'FOUND' : 'EXPLORATION',
           plan: nextPath, goal, score, components, key, order: insertCounter,

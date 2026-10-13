@@ -1,5 +1,16 @@
 # Fresh-session handoff
 
+## T028 A78→B79 delivery — 2026-10-13
+
+A falsely stretched an already achieved foundation goal into 17 commands
+through W-scored preparations. Recommendations now end on an H/F/I-increasing
+edge; preparation still expands for further goals. Exact A cancellation at 666
+expansions yields one 4♣ foundation move, U=36. B is exactly its successor;
+independent BFS and full SmartHint both exhaust 88,896 states with zero goals.
+88 focused tests passed. See reports/T028-goal-endpoint-fix.md. REVIEW awaiting
+acceptance; full/build/E2E and remaining v3 scope deferred. Preserve the two
+unrelated pre-staged seed fixtures and original untracked diagnostics; no push.
+
 ## T028 continuation repair delivery — 2026-10-13
 
 Coordinator explicitly assigned both confirmed repairs. Rejected continuation

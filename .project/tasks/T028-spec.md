@@ -130,6 +130,10 @@ To lokalne przybliżenie mobilności, nie dowód strategicznego bezpieczeństwa.
 Cel potwierdzony wymaga H>0 albo F>0. W i M są miarami pomocniczymi;
 same nie tworzą FOUND. Porównanie F względem S0 wyklucza zysk z powrotu
 karty baza→tableau→ta sama baza.
+Rekomendacja kończy się komendą dodającą H, F lub I względem poprzedniego
+węzła. Nie dopisywać przygotowań po już osiągniętym celu tylko dlatego, że
+zwiększają W/M. Takie węzły nadal rozwijać w poszukiwaniu dalszych celów;
+przyrost samego F nie kończy przeszukiwania gałęzi.
 Wybierać dodatnio oceniony cel strategiczny; jeśli go nie znaleziono, dodatnią
 eksplorację I>0; inaczej INCONCLUSIVE. Dzięki temu draw nie wypiera znanej
 konkretnej drogi do celu. W remisie użyć kolejności z §3. Nie wprowadzać

@@ -99,7 +99,10 @@ an automatic fallback when SmartHint has no strategic recommendation.
 
 T028 strategic-goal revision (2026-10-11): FOUND requires a positively scored
 sequence revealing hidden tableau or making a net foundation advance relative
-to the analysis root. Waste transfers, known draws/recycle and foundation
+to the analysis root. End a recommendation on a command adding reveal,
+foundation or information progress; do not append preparations after its last
+goal. Continue exploring those preparations for further goals. Waste transfers,
+known draws/recycle and foundation
 returns are preparation. EXPLORATION requires genuinely new information.
 Verify terminal effects and available actions; reject a dead continuation only
 when the explored known graph proves it. Incomplete verification remains

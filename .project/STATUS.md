@@ -1,5 +1,7 @@
 # Project status
 
+- T028 REVIEW (2026-10-13, A78→B79): removed post-goal preparation endpoints; exact A now has one 4♣ foundation command. Full B SmartHint and independent BFS agree: 88,896 states, zero goals, no truncation. 88 focused tests passed. See [report](reports/T028-goal-endpoint-fix.md); await acceptance, preserve unrelated staged work.
+
 - T028 REVIEW (2026-10-13): assigned continuation repairs delivered; rejected tails fall back to search, aborted signals bypass continuation. Both reproductions GREEN; 55 focused tests plus staged-module checks passed. Remaining v3 checks deferred; await acceptance. See [report](reports/T028-continuation-fix.md).
 
 - T028 reproduction-only assignment (2026-10-13): two continuation regressions added; both fail for the expected reasons. No production repairs or full checks. See [report](reports/T028-continuation-reproduction.md). Parent task remains IN_PROGRESS; await repair assignment.

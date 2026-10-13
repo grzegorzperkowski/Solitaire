@@ -190,6 +190,9 @@ applyMove. Waste/tableau transfers and foundation returns are intermediate;
 only H>0 or net F>0 confirms FOUND. A new-information boundary permits
 EXPLORATION and stops expansion. U weights remain unchanged; M/B count direct
 reveal/foundation opportunities, excluding standalone waste transfers.
+Register a recommendation only on an edge adding H/F/I, so later preparation
+cannot pad a goal plan. Keep expanding preparation after earlier goals to find
+later progress; reachability, scoring weights and root-relative goals stay unchanged.
 
 If a SmartHint search ends without truncation and encountered no strategic or
 information goal, it returns NO_STRATEGIC_PROGRESS with no recommendation.
