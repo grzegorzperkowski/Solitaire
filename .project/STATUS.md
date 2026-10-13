@@ -1,12 +1,14 @@
 # Project status
 
+- T028 REVIEW (2026-10-13): assigned continuation repairs delivered; rejected tails fall back to search, aborted signals bypass continuation. Both reproductions GREEN; 55 focused tests plus staged-module checks passed. Remaining v3 checks deferred; await acceptance. See [report](reports/T028-continuation-fix.md).
+
 - T028 reproduction-only assignment (2026-10-13): two continuation regressions added; both fail for the expected reasons. No production repairs or full checks. See [report](reports/T028-continuation-reproduction.md). Parent task remains IN_PROGRESS; await repair assignment.
 
 - T028 IN_PROGRESS: v3 checkpoint at coordinator commit/push-only request. 81 focused tests passed; cursor-73 median 29.535 s → 11.922 s, same 88,896 states and zero goals. Full checks and broader property coverage deferred. See [checkpoint report](reports/T028-v3-audit.md). Preserve unrelated dirty files.
 
 - Prior T028 REVIEW delivery: accepted `c677cad` preserved; graph/truncation/cancellation repairs and independent BFS comparison delivered. Cursor 73: all three searches exhaust 88,896 states with zero goals. See [audit](reports/T028-graph-audit.md). Preserve unrelated dirty files and diagnostic JSON; awaiting acceptance.
 
-- State: T000–T015, T017, T024, T025, T027 and T029 are DONE; T026 is REVIEW; T028 is IN_PROGRESS.
+- State: T000–T015, T017, T024, T025, T027 and T029 are DONE; T026 and T028 are REVIEW.
 - Latest task: T029 random victory animations and replay E2E timeout fix, accepted by the coordinator on 2026-10-12 at `2ea1a1e`. Preview: `http://localhost:5186/tests/harness/victory.html`. See [tasks/T029.md](tasks/T029.md) and [reports/T029.md](reports/T029.md).
 - T028 follow-up (2026-10-12): §8 benchmark and legal-move reuse speed improvement delivered; see [reports/T028.md](reports/T028.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).

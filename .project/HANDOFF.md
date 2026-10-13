@@ -1,5 +1,16 @@
 # Fresh-session handoff
 
+## T028 continuation repair delivery — 2026-10-13
+
+Coordinator explicitly assigned both confirmed repairs. Rejected continuation
+tails now fall back to search; pre-aborted signals skip continuation and return
+the existing CANCELLED result. 33 graph/app/reproduction tests and 22 filtered
+engine tests passed; staged planner with HEAD dependencies also passed both
+scenarios. Only continuation/helper API hunks are committed, leaving pending
+key/depth/controller/spec/script/test/fixture work intact. See
+reports/T028-continuation-fix.md. REVIEW for this limited follow-up, awaiting
+acceptance. Full checks and remaining v3 audit deferred; no push assigned.
+
 ## T028 continuation reproduction — 2026-10-13
 
 Coordinator assigned tests only, with repairs later if confirmed. New

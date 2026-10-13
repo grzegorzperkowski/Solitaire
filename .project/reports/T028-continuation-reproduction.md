@@ -36,3 +36,9 @@ include the uncommitted continuation implementation that reproduces the bugs.
 On coordinator assignment, repair the rejected-tail guard and cancellation
 ordering, rerun these two tests, then agree remaining verification scope.
 Parent T028 stays IN_PROGRESS, not DONE. No push is assigned for this checkpoint.
+
+## Assigned repairs delivered — 2026-10-13
+
+Coordinator subsequently assigned implementation. Both regressions now pass;
+see [repair report](T028-continuation-fix.md) for changes and current checks.
+The RED evidence above is historical, not the current result.

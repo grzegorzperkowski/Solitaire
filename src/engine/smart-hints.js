@@ -296,6 +296,23 @@ export function analyzeHintPlan(state, knownCards, plan) {
   };
 }
 
+// Scores are relative to the current board, so after one move a fresh search can
+// prefer a plan that undoes it, and hints loop. While the player follows the shown
+// plan, keep its rest: every finished plan reveals, advances or learns something.
+function continuePlan(state, knownCards, previousHint) {
+  if (!previousHint?.plan || previousHint.plan.length < 2) return null;
+  const first = applyMove(previousHint.state, previousHint.plan[0]);
+  if (!first.ok || progressStateKey(first.state, knownCards) !== progressStateKey(state, knownCards)) return null;
+  const plan = previousHint.plan.slice(1);
+  const analysis = analyzeHintPlan(state, knownCards, plan);
+  if (!analysis.ok || !analysis.goal || !analysis.verification.accepted) return null;
+  return {
+    phase: 'FINAL', status: analysis.goal === 'INFORMATION' ? 'EXPLORATION' : 'FOUND', plan,
+    goal: analysis.goal, score: analysis.score, components: analysis.components,
+    verification: analysis.verification, visitedStates: 0, truncated: false, continued: true,
+  };
+}
+
 // ── Check information boundaries (§4) ──
 
 function checkBoundary(move, state, knownSet) {
@@ -341,11 +358,14 @@ function checkBoundary(move, state, knownSet) {
 
 // ── Main search generator (§2–§3) ──
 
-export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 12, signal } = {}) {
+export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 12, signal, previousHint } = {}) {
   // Pre-check WON
   if (isWon(state)) {
     return { phase: 'FINAL', status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false };
   }
+
+  const continued = signal?.aborted ? null : continuePlan(state, knownCards, previousHint);
+  if (continued) return continued;
 
   const knownSet = new Set([...knownCards, ...visibleCards(state)]);
   const rootFoundationSet = new Set(state.foundations.flat());
