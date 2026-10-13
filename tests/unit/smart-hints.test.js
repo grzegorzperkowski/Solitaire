@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { searchSmartHint } from '../../src/engine/smart-hints.js';
+import { analyzeHintPlan, searchSmartHint } from '../../src/engine/smart-hints.js';
 import { rememberVisible, visibleCards } from '../../src/engine/knowledge.js';
 import { createGame } from '../../src/engine/cards.js';
 import { assertInvariants, applyMove } from '../../src/engine/game.js';
@@ -206,6 +206,19 @@ test.each([0, 44])('hidden tableau destinations cannot affect the hint (seed %i)
   const options = { maxDepth: 1, maxStates: 100 };
   expect(runSearch(changed, visibleCards(state), options))
     .toEqual(runSearch(state, visibleCards(state), options));
+});
+
+test.each([0, 44])('remembered tableau reveals do not score newly exposed possibilities (seed %i)', (seed) => {
+  const state = createGame({ seed, drawCount: 1 });
+  const index = seed === 0 ? 5 : 4;
+  const move = game.getLegalMoves(state).find(command => command.from?.pile === 'tableau' &&
+    command.from.index === index && command.from.cardIndex === state.tableau[index].faceUpStart);
+  const known = Array.from({ length: 52 }, (_, id) => id);
+  const analysis = analyzeHintPlan(state, known, [move]);
+  expect(analysis).toMatchObject({
+    ok: true, components: { H: 1, I: 0, M: 0, B: 0 },
+    verification: { continuation: 'INFORMATION_BOUNDARY', horizon: 0 },
+  });
 });
 
 test.each([1, 2])('retained search states never exceed a budget of %i', (maxStates) => {

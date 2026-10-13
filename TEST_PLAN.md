@@ -205,6 +205,11 @@ foundation goals, cancellation after every yield and at the 64-read graph yield.
 Check updated parent completeness/children and never return a rejected plan.
 Root/duplicate pending entries alone must not exhaust verification reads.
 
+Remembered tableau boundary scoring: seed0/44 Draw 1 with all card IDs known
+must still ignore newly exposed mobility (M=0), keep I=0 and report
+INFORMATION_BOUNDARY/horizon=0. Covered by smart-hints.test.js; knowledge does
+not permit scoring the revealed card's future moves at that boundary.
+
 `tests/unit/smart-hints-bfs.test.js` compares all goal components and retained
 states on 28 full-deck fixtures (1–7, Draw 1/3, visible-only/all remembered).
 The independent FIFO oracle in `tests/helpers/smart-hint-bfs.js` uses full

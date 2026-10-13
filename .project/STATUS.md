@@ -1,5 +1,9 @@
 # Project status
 
+- T028 REVIEW (2026-10-13): external eight-point analysis checked against code/contracts and fresh evidence. Runtime unchanged; two remembered-reveal guard cases added. 101 focused tests passed; cursor73 SmartHint and BFS exhaust 88,896 states with no goals/cuts. See [report](reports/T028-external-analysis-check.md). Await acceptance; deferred v3 scope and unrelated untracked cursor-114 JSON preserved.
+
+- T028 IN_PROGRESS (2026-10-13): coordinator resumed SmartHint with an external eight-point analysis. Verify the claims and proposed diff against current contracts and fresh tests; repair only reproduced defects. Start: `master` at `86896dc`, with only unrelated untracked cursor-114 JSON. No other task assigned.
+
 - T028 REVIEW (2026-10-13, A78→B79): removed post-goal preparation endpoints; exact A now has one 4♣ foundation command. Full B SmartHint and independent BFS agree: 88,896 states, zero goals, no truncation. 88 focused tests passed. See [report](reports/T028-goal-endpoint-fix.md); await acceptance, preserve unrelated staged work.
 
 - T028 REVIEW (2026-10-13): assigned continuation repairs delivered; rejected tails fall back to search, aborted signals bypass continuation. Both reproductions GREEN; 55 focused tests plus staged-module checks passed. Remaining v3 checks deferred; await acceptance. See [report](reports/T028-continuation-fix.md).

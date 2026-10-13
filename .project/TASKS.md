@@ -46,7 +46,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T025](tasks/T025.md) | P8 follow-up | Eliminate delayed court artwork rendering | T017 | DONE | [Criteria](tasks/T025.md#acceptance-criteria); coordinator accepted 2026-10-11 at `3a50ba8`; [report](reports/T025.md) |
 | [T026](tasks/T026.md) | P9 follow-up | Integrate Solitaire with the Playground PWA | None | REVIEW | [Criteria](tasks/T026.md#acceptance-criteria); implementation commits `005c25e` and `6e7db44`; [report](reports/T026.md) |
 | [T027](tasks/T027.md) | P7 follow-up | Reachable progress detection | T014, T007, T008, T015 | DONE | [Report](reports/T027.md); [spec](tasks/T027-spec.md) |
-| [T028](tasks/T028.md) | P7 follow-up | SmartHint goal-directed hints | T014, T027 | REVIEW | A78→B79 endpoint repair delivered 2026-10-13; 88 focused tests passed, full B BFS/SmartHint agree. Remaining v3/full checks deferred; await acceptance. See [report](reports/T028-goal-endpoint-fix.md) |
+| [T028](tasks/T028.md) | P7 follow-up | SmartHint goal-directed hints | T014, T027 | REVIEW | External analysis checked 2026-10-13; runtime unchanged, two boundary guard cases added, 101 focused tests passed. Cursor73 SmartHint/BFS: 88,896 states, zero goals, no cuts. See [report](reports/T028-external-analysis-check.md); deferred v3 scope/acceptance remain. |
 | [T029](tasks/T029.md) | P8 follow-up | Random victory animations | T015, T017 | DONE | Coordinator accepted 2026-10-12 at `2ea1a1e`; [report](reports/T029.md) |
 
 ## Selection and model suitability

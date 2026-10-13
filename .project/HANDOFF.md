@@ -1,5 +1,26 @@
 # Fresh-session handoff
 
+## T028 external analysis checked — delivery, 2026-10-13
+
+No current runtime defect reproduced from the eight-point analysis. Historical
+cuts can resolve; H/F/I metadata is state-relative; U>0, dead-continuation
+rejection and local UNPROVEN cancellation are explicit existing policies.
+Proposed masking instead scores a remembered newly revealed card (M=1 versus
+required M=0). Added two seed0/44 guard cases; 101 focused tests passed. Fresh
+cursor73 baseline/current/BFS all exhaust 88,896 states, zero goals, no cuts at
+debug 250000/100. See reports/T028-external-analysis-check.md. REVIEW awaiting
+acceptance; runtime unchanged, no push, full/build/E2E/calibration unrun and
+deferred v3 scope preserved. Keep unrelated untracked cursor-114 JSON.
+
+## T028 external eight-point analysis — assignment, 2026-10-13
+
+Coordinator: "musimy trochę poprawić smart hint", with external findings and a
+four-part proposed diff. Resume T028 sequentially on master at 86896dc. Check
+claims against current specification, graph regressions and cursor-73 BFS;
+repair reproduced defects only. Existing contract deliberately permits local
+UNPROVEN partial recommendations and requires U>0. Preserve unrelated untracked
+solitaire-stan-2284836135-draw1-114.json; no push or successor assigned.
+
 ## T028 A78→B79 delivery — 2026-10-13
 
 A falsely stretched an already achieved foundation goal into 17 commands
