@@ -5,11 +5,20 @@ aplikacji Klondike. Pokaż pierwszy ruch krótkiego planu, który prowadzi do
 rzeczywistego postępu. Priorytetem są poprawność i brak podglądania ukrytych
 kart; szybkość można poprawić później.
 
-Pracuj na dostarczonym repozytorium i zachowaj jego strukturę. Jeśli nie masz
-dostępu do kodu, powiedz, których plików potrzebujesz; nie zgaduj API ani nie
-pisz fikcyjnej integracji. Najpierw sprawdź istniejący SmartHint, silnik,
-kontroler, UI i testy. Uzupełnij istniejący kod zamiast budować drugi system.
-Nie dodawaj zależności runtime ani nie zmieniaj zasad gry, zapisu czy shuffle.
+Pracuj na dostarczonym kodzie i zachowaj jego strukturę. Jeśli czat nie widzi
+repozytorium, poproś najpierw tylko o te fragmenty, których brakuje:
+
+1. Moduł SmartHint oraz sygnatury i kształt stanu z silnika gry.
+2. Implementacje widoczności/kart znanych i klucza stanu używanego w wyszukiwaniu.
+3. Fragment kontrolera, który uruchamia hint, oraz formatter komunikatu UI.
+4. Powiązane testy SmartHint i fixture odtwarzające przypadki brzegowe.
+
+Poproś o treść fragmentów, nie o ścieżkę do repozytorium. Nie żądaj całego UI,
+stylów, `package.json` ani pełnego zestawu testów, chyba że konkretna zmiana tego
+wymaga. Jeśli zakres kodu jest duży, poproś o pliki etapami. Nie zgaduj brakującego
+API ani nie pisz fikcyjnej integracji. Uzupełnij istniejący kod zamiast budować
+drugi system. Nie dodawaj zależności runtime ani nie zmieniaj zasad gry, zapisu
+czy shuffle.
 
 ## Kontrakt silnika
 
