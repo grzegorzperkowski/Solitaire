@@ -1,6 +1,7 @@
 # SmartHint — specyfikacja T028
 
-Status: strategic-goal revision assigned 2026-10-11; validation deferred at coordinator request. Źródło: opis
+Status: repair revision delivered 2026-10-14, REVIEW; automated checks and full timed
+development benchmark recorded in ../reports/T028-repair-benchmark.md. Źródło: opis
 koordynatora „Inteligentna pomoc do pasjansa Klondike”. To specyfikacja produktu,
 nie potwierdzenie wyników badań ani skuteczności proponowanych wag.
 

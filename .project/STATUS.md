@@ -1,8 +1,8 @@
 # Project status
 
-- State: T000–T015, T017, T024, T025, and T027 are DONE; T028 is IN_PROGRESS.
-- Current assignment (2026-10-14): coordinator resumed T028 to repair and improve SmartHint using the supplied A/B review and benchmark. Base 02fb845, master, initially clean; sequential implementation and measured comparison, no publication.
-- Prior benchmark: T028 benchmark delivered 2026-10-14: previous/current planners local; quick run ~6 s, full timed run 100 seeds/mode completed. Current revealed fewer cards and repeated positions more often; no wins within100 moves. 223 unit tests/build passed. See [benchmark report](reports/T028-benchmark.md) and [T028 report](reports/T028.md).
+- State: T000–T015, T017, T024, T025, and T027 are DONE; T028 is REVIEW.
+- Current delivery (2026-10-14): SmartHint repair checkpoint `23a6540`; 239 unit tests/build/91 Chromium PASS. Full 200-deal depth 32 comparison: 2417 vs 2047 reveals, 0 vs 247 repeated observations; zero wins within 100 actions. Equal-depth frozen B/repair position probe loses no strategic hit. See [repair measurements](reports/T028-repair-benchmark.md). Await coordinator acceptance; no publication.
+- Prior benchmark: T028 benchmark delivered 2026-10-14: previous/current planners local; quick run ~6 s, full timed run 100 seeds/mode completed. Current revealed fewer cards and repeated positions more often; no wins within 100 moves. 223 unit tests/build passed. See [benchmark report](reports/T028-benchmark.md) and [T028 report](reports/T028.md).
 - T027 DONE: coordinator accepted 2026-10-11 at `dec2fbe17ae3af35f42a302c7accdf4edee06d49`; see [reports/T027.md](reports/T027.md).
 - Prior task: T026 REVIEW, assigned by the human coordinator on 2026-10-11. Implementation commits: `mygame` `005c25e` and Solitaire `6e7db44`. Awaiting coordinator acceptance. T021 was removed as a dependency because it covers Solitaire's independent Pages workflow, not the existing Playground assembler.
 - Branch: `master`; use the existing branch and verify it each session.
@@ -29,13 +29,10 @@
 
 ## Known problems and blockers
 
-- T028 full timed benchmark (2026-10-14) now provides100 seeds per mode and100
-  paired positions. Current reveals1940 vs2073 and repeated observations908 vs200;
-  0 wins for both within100 moves, no clear paired speed advantage. Exact cycle
-  evidence for seeds89/76 Draw1 and35 Draw3 is saved in reports. Extended strategic
-  regressions/acceptance gates remain; algorithm fixes require assignment.
-- Latest Node-tool checks: 223 unit tests/build PASS. Prior same-session91 Chromium
-  tests PASS; E2E not rerun after benchmark tooling only. No production code change.
+- T028 repairs pass 239 unit/91 Chromium checks and build. New full benchmark
+  improves reveals and recorded cycles, but does not prove improved win rate.
+  No physical-device timing, extended games or held-out-deal validation. Earlier
+  depth 12 benchmark and its cycles remain historical evidence, not current results.
 
 - T026 is awaiting coordinator acceptance. No push or publication was performed.
 

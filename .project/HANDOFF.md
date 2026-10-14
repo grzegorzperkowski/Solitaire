@@ -1,5 +1,21 @@
 # Fresh-session handoff
 
+## T028 algorithm repair delivery — 2026-10-14
+
+REVIEW, implementation checkpoint `23a6540` on master. Coordinator resumed T028;
+all 16 new regressions, 239 total unit checks, 91 Chromium tests and build PASS.
+Repaired information scoring, monotonic yields and terminal foundation goals;
+removed graph verifier, cached queue keys/moves and skip stale entries. W rewards
+preparation only; prefer reveals without unrelated foundation padding; default
+depth 32 with cheaper known stock navigation. Rules/F04/save/history unchanged.
+Full paired A/repair comparison (100 seeds/mode, 100 moves, 100 ms, depth 32 both):
+2417 vs 2047 reveals, 0 vs 247 repeated board+knowledge observations; zero wins.
+Original B/repair at equal depth 12: 55→56 hits/100 frozen positions, none lost.
+Read reports/T028-repair-benchmark.md and its JSON summary; tracked corpus/probe
+reproduce pairs without the old ignored full JSON. Raw 30.6 MB full result stays
+in ignored .cache. No phone/held-out/extended-game or win-rate guarantee, no push.
+Await explicit coordinator acceptance; do not resume or start another task unless assigned.
+
 ## T028 algorithm repair assignment — 2026-10-14
 
 Coordinator explicitly resumed T028: improve the algorithm using the A/B review
