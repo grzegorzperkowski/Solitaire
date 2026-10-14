@@ -1,5 +1,15 @@
 # Fresh-session handoff
 
+## T028 validation resumed — 2026-10-14
+
+Coordinator: "do tests". Existing focused/full unit tests, build and Chromium
+E2E ran sequentially on master at bdad66c, initially clean: 32 focused unit,
+210 full unit and 91 Chromium tests PASS; build PASS. npm ci restored missing
+local dependencies without changing the lockfile. No product/test code changes.
+T028 remains BLOCKED: extended strategic regression matrix, full §8 benchmark
+and physical-device timing evidence are absent. See reports/T028.md for exact
+commands/results. No push or acceptance. Resume further work only on assignment.
+
 ## Strategic-goal implementation checkpoint — 2026-10-11
 
 T028 BLOCKED: primary goals, score components, end verification and graph-based
