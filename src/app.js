@@ -13,7 +13,7 @@ export function createApp({
   load = loadSession,
   progressMaxStates = 10000,
   hintMaxStates = 10000,
-  hintMaxDepth = 12,
+  hintMaxDepth = 32,
   lockManager = globalThis?.navigator?.locks,
   performance = globalThis?.performance,
   document = globalThis?.document,

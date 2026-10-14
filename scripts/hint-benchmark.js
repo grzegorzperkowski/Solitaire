@@ -42,7 +42,7 @@ export function parseOptions(args) {
     } else throw Error(`Unknown option or value: ${arg}`);
   }
   const profile = values.profile ?? 'quick';
-  const options = { profile, ...PROFILES[profile], startSeed: 0, maxDepth: 12, budget: 'both',
+  const options = { profile, ...PROFILES[profile], startSeed: 0, maxDepth: 32, budget: 'both',
     output: `.cache/hints-${profile}.json` };
   const names = { 'start-seed': 'startSeed', 'max-steps': 'maxSteps', 'max-states': 'maxStates', 'max-depth': 'maxDepth', 'active-ms': 'activeMs' };
   for (const [name, value] of Object.entries(values)) options[names[name] ?? name] = value;

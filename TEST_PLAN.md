@@ -171,6 +171,19 @@ unexecuted, not recorded as passed. Existing H05 assertion reflects new contract
 
 ## T028 benchmark harness verification (2026-10-14)
 
+Repair regressions (2026-10-14) in `tests/unit/smart-hints-regressions.test.js`:
+remembered hidden-tableau membership must not change components, score or plan;
+masked nonempty columns cannot supply sources/destinations; omitting visible
+knowledge must preserve results. Terminal one/two-card foundation goals survive
+without a further goal, and every yield preserves the accepted recommendation.
+Replay the three tracked cycle boards for eight replanning steps with full-deck
+invariants, exact observation keys and independent plan legality. Preserve necessary
+foundation returns and waste preparation leading to reveal. Known stock navigation
+must reach a goal beyond12 commands under the default32 horizon and respect an
+explicit12 cap. Draw1/3 waste-fan boundaries must be value-independent and stop
+plan replay. Do not delay an available reveal with independent foundation prefixes;
+retain a simultaneous foundation benefit of the revealing command (seed22).
+
 `tests/unit/benchmark-hints.test.js` checks the frozen previous-source identity,
 quick/full defaults and CLI bounds, active-time cutoff with generator cleanup,
 completed-over-budget results, independent goal replay and information boundaries,

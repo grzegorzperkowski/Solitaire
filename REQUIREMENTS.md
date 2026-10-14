@@ -101,7 +101,9 @@ T028 strategic-goal revision (2026-10-11): FOUND requires a positively scored
 sequence revealing hidden tableau or making a net foundation advance relative
 to the analysis root. Waste transfers, known draws/recycle and foundation
 returns are preparation. EXPLORATION requires genuinely new information.
-Verify terminal effects and available actions; reject a dead continuation only
-when the explored known graph proves it. Incomplete verification remains
-uncertain; never infer unwinnability. F04 searchProgress P1–P4 semantics are
+Repair revision 2026-10-14: verify achieved effects and report available actions;
+foundation progress does not require another future goal. Preserve the best
+accepted plan at every yield. Waste rewards guide preparation only; known stock
+navigation is cheaper and the default horizon is 32 commands. Unknown continuation
+remains uncertain; never infer unwinnability. F04 searchProgress P1–P4 semantics are
 unchanged, so PROGRESS_FOUND can coexist with SmartHint INCONCLUSIVE.

@@ -69,7 +69,7 @@ npm run benchmark:hints
 ```
 
 The default quick profile uses seeds 0–2 in Draw 1/3, up to 30 moves, 128 states,
-depth 12, a 20 ms active-time budget and 12 identical sampled positions. It runs
+depth 32, a 20 ms active-time budget and 12 identical sampled positions. It runs
 both fixed-state and fixed-time comparisons. This is a fast regression signal,
 not evidence of a general strategy advantage. The initial local run took about
 6 seconds; actual time depends on hardware and changes to the planner.
@@ -80,7 +80,7 @@ For the 100-seed-per-mode comparison with the game's current budgets:
 npm run benchmark:hints -- --profile=full --budget=time --output=.cache/hints-full-time.json
 ```
 
-Full uses up to 100 moves, 10,000 states, depth 12, 100 ms active computation per
+Full uses up to 100 moves, 10,000 states, depth 32, 100 ms active computation per
 hint and 100 identical sampled positions. `--budget=states` removes the clock
 cutoff for deterministic search results; `--budget=both` runs both experiments.
 Full fixed-state searches can take substantially longer than the time-limited

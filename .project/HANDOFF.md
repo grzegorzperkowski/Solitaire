@@ -1,5 +1,14 @@
 # Fresh-session handoff
 
+## T028 algorithm repair assignment — 2026-10-14
+
+Coordinator explicitly resumed T028: improve the algorithm using the A/B review
+and reports/T028-benchmark.md. IN_PROGRESS, master at 02fb845, initially clean.
+Reproduce hidden-tableau knowledge leaks, nonmonotonic yields, terminal foundation
+rejection and all three saved two-move cycles before fixing. Sequential plan in
+tasks/T028.md; preserve F04, rules, save and visible-information boundaries.
+No other task, parallel agents, worktree, push or publication assigned.
+
 ## T028 benchmark delivery — 2026-10-14
 
 Coordinator approved paired benchmark and requires fast comparisons with both

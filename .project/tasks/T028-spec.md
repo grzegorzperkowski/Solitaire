@@ -19,7 +19,7 @@ autogry, nowych zależności lub zmiany F04 dowodzącego braku postępu.
 ## 2. Kontrakt planera
 
 Nowy DOM-free generator:
-`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 12} = {})`.
+`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 32} = {})`.
 Oddaje sterowanie pomiędzy porcjami pracy; czas mierzy kontroler, nie silnik.
 Każdy yield i wynik końcowy udostępniają najlepszy dotąd wynik, aby przerwanie
 czasowe nie gubiło znalezionej, legalnej sugestii.
@@ -56,7 +56,7 @@ albo dodatni przyrost baz. Waste→tableau jest przygotowaniem, nie celem.
    oraz wiedzę. Można wykorzystać `progressStateKey`; nie scalać kolumn
    przez sortowanie bez dowodu zachowania komend i podświetleń.
 6. Limit obejmuje maksymalnie 10 000 zachowanych różnych stanów (łącznie
-   z korzeniem); maksymalna długość 12 komend. Preferencja 1–8 wynika z kosztu
+   z korzeniem); domyślna maksymalna długość 32 komend. Preferencja krótkich planów wynika z kosztu
    L, nie z osobnego odcięcia. Zachować najlepszą ścieżkę do powtórzonego stanu.
 7. Kontroler wykonuje krótkie porcje, początkowo około 4 ms, z celem 100 ms
    łącznego aktywnego czasu. Umożliwia anulowanie i normalne granie; nie wymaga
@@ -65,7 +65,9 @@ albo dodatni przyrost baz. Waste→tableau jest przygotowaniem, nie celem.
 
 Stały budżet stanów bez limitu zegara daje deterministyczny wynik. Limit czasu
 może dawać różne jakościowo wyniki na różnych urządzeniach; nie ukrywać tego.
-Nie ma obowiązku znajdowania planów dłuższych niż 12 ruchów.
+Nie ma obowiązku znajdowania planów dłuższych niż zadany maxDepth. Domyślne 32
+pozwala przejść przez cały znany stock/waste (początkowo 24 karty) i wykonać
+przygotowanie; jawne maxDepth=12 nadal ogranicza plan do 12 komend.
 
 ## 4. Granice informacji
 
@@ -89,8 +91,15 @@ nowo ujawnione wartości. Planowanie nie aktualizuje wiedzy rzeczywistej sesji.
 
 ## 5. Ocena sekwencji
 
-Początkowe wagi: `U = 120H + 65W + 40F + 20I + 10M - 4L - 50B`.
-Nie są kalibracją naukową. Wszystkie różnice liczyć względem korzenia S0.
+Rewizja naprawcza 2026-10-14: `U = 120H + 40F_goal + 20I + 10M - C - 50B`.
+F_goal = F dla celu baz; dla odkrycia liczyć ujemne F oraz najwyżej jeden dodatni
+przyrost, jeśli właśnie komenda odkrywająca przenosi kartę do bazy. Niezależne
+wcześniejsze ruchy do baz nie podnoszą oceny odkrycia.
+Premia `65W` służy wyłącznie priorytetowi kolejki (`U + 65W`), nie ocenie
+publikowanej rekomendacji. C to koszt komend: 4 za transfer lub nowe dobranie,
+0,5 za znane draw/recycle. Wszystkie różnice liczyć względem korzenia S0.
+To kalibracja na zaobserwowanych cyklach i blokadzie znanej nawigacji, nie
+dowód optymalności ani gwarancja wygranej. Raport naprawy zawiera pomiary.
 
 - H: liczba odkrytych zakrytych kart tableau; terminalna granica zwykle daje 1.
 - W: liczba różnych kart ze stock/waste w S0, które na końcu są w tableau/bazach
@@ -98,8 +107,9 @@ Nie są kalibracją naukową. Wszystkie różnice liczyć względem korzenia S0.
   Nie sumować zdarzeń przeniesienia; recycle ani powrót bazy nie generuje W.
 - F: liczba kart w bazach na końcu minus liczba w bazach S0 (ze znakiem).
   Powrót tej samej karty do bazy daje zero dodatkowego zysku.
-- I: 1 za rzeczywiście nową informację na granicy (tableau, draw lub waste fan), inaczej 0;
+- I: 1 za rzeczywiście nową informację na granicy draw lub waste fan, inaczej 0;
   nie mnożyć przez liczbę kart w Draw 3 ani przez powtarzane dobrania.
+  Odkrycie tableau jest punktowane przez H niezależnie od pamiętania zakrytej karty.
 - L: wszystkie komendy, także draw/recycle; automatyczne odkrycie nie dodaje L.
 - M/B: mierzyć zmianę zbioru użytecznych możliwości opisanych poniżej.
 
@@ -117,7 +127,8 @@ To lokalne przybliżenie mobilności, nie dowód strategicznego bezpieczeństwa.
 Cel potwierdzony wymaga H>0 albo F>0. W i M są miarami pomocniczymi;
 same nie tworzą FOUND. Porównanie F względem S0 wyklucza zysk z powrotu
 karty baza→tableau→ta sama baza.
-Wybierać dodatnio oceniony cel strategiczny; jeśli go nie znaleziono, dodatnią
+Wybierać dodatnio ocenione odkrycie tableau, następnie dodatnio oceniony cel baz;
+jeśli ich nie znaleziono, dodatnią
 eksplorację I>0; inaczej INCONCLUSIVE. Dzięki temu draw nie wypiera znanej
 konkretnej drogi do celu. W remisie użyć kolejności z §3. Nie wprowadzać
 nieokreślonego progu „podobnych” wyników.
@@ -126,25 +137,25 @@ Testy arytmetyki przy innych składnikach równych zero: odkrycie w 2 ruchach
 112, baza w 1 ruchu 36, nowa informacja w 1 ruchu 16. Fixture całych plansz
 muszą uwzględniać także M/B, nie zakładać tych sum automatycznie.
 
-### Weryfikacja końca i diagnostyka (rewizja 2026-10-11)
+### Weryfikacja końca i diagnostyka (naprawa 2026-10-14)
 
 Przed publikacją lepszego kandydata sprawdzić jego osiągnięty cel, dodatni
-wynik, M/B i bezpośrednie legalne akcje końca. Odrzucić koniec bez dalszych
-akcji albo z samym bezpośrednim powrotem do S0, chyba że to wygrana lub granica
-informacji. Nie utożsamiać dodatniego wyniku z bezpieczeństwem strategicznym.
+wynik, M/B i bezpośrednie legalne akcje końca. Sam osiągnięty przyrost baz jest
+celem: nie wymaga następnego celu poza horyzontem i nie jest odrzucany tylko
+dlatego, że brak kontynuacji. Nie utożsamiać dodatniego wyniku z bezpieczeństwem.
 
-Kontynuować tę samą kolejkę po transferach waste i po ruchach do baz. Po
-zakończeniu głównego wyszukiwania porównywać dodatnio ocenionych kandydatów:
-FOUND przed EXPLORATION, następnie wyższe U, krótszy plan, mniejsze B, stabilna
-kolejność enumeracji. Odczyt istniejących krawędzi grafu sprawdza, czy z końca
-kandydata można osiągnąć odsłonięcie, nową informację lub dalszy przyrost baz.
-Nie symuluje nowych stanów i nie przekracza granic informacji.
+Kontynuować tę samą kolejkę po transferach waste i po ruchach do baz.
+Na bieżąco porównywać dodatnio ocenionych kandydatów:
+REVEAL przed FOUNDATION_ADVANCE przed INFORMATION, następnie wyższe U,
+krótszy plan, mniejsze B, stabilna
+kolejność enumeracji. Każdy yield i wynik końcowy zachowują najlepszy zaakceptowany
+plan; nie ma osobnej fazy odrzucającej wcześniej opublikowane wyniki.
 
-KNOWN_DEAD_END oznacza wyłącznie wyczerpaną część znanego grafu względem
-końca kandydata; odrzucić taką rekomendację i rozważyć następną. Brak pełnego
-grafu daje UNPROVEN, nie dowód impasu. Łączny limit odczytów weryfikacji to
-maxStates, z yield co 64 odczyty oraz między alternatywnymi kandydatami;
-wyczerpanie limitu ustawia truncated. To nie solver wygrywalności ani NO_PROGRESS.
+Usunięto końcowe przeszukiwanie grafu: odrzucało prawidłowe końcowe ruchy do
+baz i mogło zgubić plan na przerwaniu. UNPROVEN oznacza nieznaną kontynuację,
+TERMINAL_PROGRESS brak dalszych legalnych akcji po osiągniętym celu, WON wygraną.
+Nie są to dowody wygrywalności ani NO_PROGRESS. Klucze kolejki zawierają tę samą
+znormalizowaną wiedzę; przestarzały wpis o większym koszcie nie jest rozwijany.
 Wynik po granicy informacji ma INFORMATION_BOUNDARY, bez analizy odsłoniętej
 wartości. `verification` opisuje zakres sprawdzenia, nie obiecuje bezpieczeństwa.
 
@@ -268,9 +279,9 @@ comparisons with both SmartHint versions available locally. Freeze the planner
 from 90fba4f under scripts/baselines, importing the same engine as current;
 identify source hashes and environment in every report. Keep rankHints reference.
 
-Quick profile: seeds 0–2 per mode, 30 moves, 128 states, depth 12, 20 ms active
+Quick profile: seeds 0–2 per mode, 30 moves, 128 states, depth 32, 20 ms active
 time, 12 shared positions. Full: seeds 0–99 per mode, 100 moves, 10,000 states,
-depth 12, 100 ms active time, 100 shared positions. Explicit CLI overrides and
+depth 32, 100 ms active time, 100 shared positions. Explicit CLI overrides and
 separate fixed-state/time experiments must be recorded; quick is not acceptance
 evidence for general strategy quality. Full fixed-state runs can be expensive.
 

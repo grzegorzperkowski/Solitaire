@@ -183,16 +183,21 @@ knowledge will identify information boundaries, never rank concealed values.
 SmartHint strategic revision keeps Best-First Search and shared getLegalMoves /
 applyMove. Waste/tableau transfers and foundation returns are intermediate;
 only H>0 or net F>0 confirms FOUND. A new-information boundary permits
-EXPLORATION and stops expansion. U weights remain unchanged; M/B count direct
+EXPLORATION and stops expansion. REVEAL outranks FOUNDATION_ADVANCE, which outranks
+INFORMATION; independent foundation prefixes do not pad reveal scores. The
+revealing command itself can retain its simultaneous foundation benefit.
+W guides only queue priority; M/B count direct
 reveal/foundation opportunities, excluding standalone waste transfers.
 
-The result carries H/F/I/W/M/B/L and terminal verification. Retained nodes and
-edges share the main state budget; goal alternatives reference those nodes.
-Final verification reads the already explored graph (bounded by maxStates,
-yield every 64 reads) to discard proven dead continuations, preserving UNKNOWN
-scope as UNPROVEN. A one-ply check reports terminal actions and lost mobility;
-it is not a safety proof. No hidden-value continuation, new game rules or
-heuristic NO_PROGRESS. Existing diagnostic export includes these observations.
+The result carries H/F/I/W/M/B/L and achieved-goal verification. Repair revision
+2026-10-14 removes the final graph verifier; every yield preserves the best
+accepted recommendation. A terminal foundation goal remains progress even without
+a further goal. Retained queue entries reuse their key and evaluated legal actions;
+obsolete higher-cost entries are skipped. Default depth32 accommodates known stock
+navigation; transfers/new information cost4, known draw/recycle0.5. Tableau reveal
+earns H only, independent of remembered hidden identities. No hidden-value
+continuation, new rules or heuristic NO_PROGRESS. Diagnostics describe uncertainty,
+not strategic safety; board/history/save and controller time/state limits are unchanged.
 
 ## 7. Persistence and ownership
 
