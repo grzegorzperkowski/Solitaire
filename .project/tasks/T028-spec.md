@@ -260,3 +260,30 @@ alternatywy/cykle, utrata miejsca, limity, ukryte permutacje. Wymagany benchmark
 i przy porównywalnym budżecie, oprócz historycznego rankHints.
 Koordynator następnie polecił "no tests" i wybrał "Pomiń testy i benchmark".
 Nie wykonano tych bramek ani kalibracji; wagi i ograniczenia produkcyjne zachowane.
+
+## Benchmark implementation assignment — 2026-10-14
+
+Coordinator approved paired deals/positions and explicitly requires fast routine
+comparisons with both SmartHint versions available locally. Freeze the planner
+from 90fba4f under scripts/baselines, importing the same engine as current;
+identify source hashes and environment in every report. Keep rankHints reference.
+
+Quick profile: seeds 0–2 per mode, 30 moves, 128 states, depth 12, 20 ms active
+time, 12 shared positions. Full: seeds 0–99 per mode, 100 moves, 10,000 states,
+depth 12, 100 ms active time, 100 shared positions. Explicit CLI overrides and
+separate fixed-state/time experiments must be recorded; quick is not acceptance
+evidence for general strategy quality. Full fixed-state runs can be expensive.
+
+Both algorithms see the same deals; execute only the first suggested command,
+remember actual visible cards, and distinguish WON, INCONCLUSIVE and MOVE_LIMIT.
+Use independent legal replay to measure reveal/net-foundation/information effects,
+never compare planners' own utility values to choose a winner. Invalid plans
+fail the benchmark, not masquerade as normal stops. Count repeated board and
+repeated board-plus-knowledge separately. Pair old/new win and reveal outcomes;
+include uncertainty among discordant wins and identical-position timings.
+
+Collect and deduplicate start/middle/end observations from both trajectories;
+always include the replayed seed 2284836135/cursor114 diagnostic. Both versions
+receive each selected position and exactly the same known cards. Store positions,
+histories, per-call observations and configuration in atomic local JSON reports.
+Time results omit browser scheduler waits and do not replace phone/Safari checks.

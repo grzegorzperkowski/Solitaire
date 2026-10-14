@@ -58,3 +58,70 @@ npm run preview -- --base=/Solitaire/
 Open the printed local URL under `/Solitaire/`. Run plain `npm run build` afterwards to restore the default relative-base artifact. During the assigned hosting/PWA tasks select the actual repository path and verify manifest/service-worker scope; no hosting or offline capability is claimed by this bootstrap. See [Vite public base path](https://vite.dev/guide/build.html#public-base-path).
 
 Build output (`dist/`), dependencies (`node_modules/`) and coverage reports (`coverage/`) are already ignored by .gitignore. Keep package-lock.json committed.
+
+## SmartHint comparison
+
+Run a quick comparison of the previous SmartHint, the current production planner
+and the original `rankHints` reference:
+
+```sh
+npm run benchmark:hints
+```
+
+The default quick profile uses seeds 0–2 in Draw 1/3, up to 30 moves, 128 states,
+depth 12, a 20 ms active-time budget and 12 identical sampled positions. It runs
+both fixed-state and fixed-time comparisons. This is a fast regression signal,
+not evidence of a general strategy advantage. The initial local run took about
+6 seconds; actual time depends on hardware and changes to the planner.
+
+For the 100-seed-per-mode comparison with the game's current budgets:
+
+```sh
+npm run benchmark:hints -- --profile=full --budget=time --output=.cache/hints-full-time.json
+```
+
+Full uses up to 100 moves, 10,000 states, depth 12, 100 ms active computation per
+hint and 100 identical sampled positions. `--budget=states` removes the clock
+cutoff for deterministic search results; `--budget=both` runs both experiments.
+Full fixed-state searches can take substantially longer than the time-limited
+run. Use quick for routine changes and full when deciding whether to accept one.
+
+Both versions are available locally: frozen
+[`scripts/baselines/smart-hints-90fba4f.js`](scripts/baselines/smart-hints-90fba4f.js)
+and current [`src/engine/smart-hints.js`](src/engine/smart-hints.js). No checkout,
+branch switching, external service or new dependency is required. Provenance is
+documented in [scripts/baselines/README.md](scripts/baselines/README.md).
+
+The console shows results separately for each draw mode and budget. JSON includes
+source hashes, environment/budgets, per-deal command histories and per-call
+metrics, both versions' results on identical positions, and the positions
+themselves. Start/middle/end positions are sampled from both SmartHint trajectories,
+deduplicated by board and knowledge; the seed 2284836135/cursor 114 diagnostic
+is always included. Reports default to `.cache/hints-quick.json` or
+`.cache/hints-full.json`. They are replaced atomically only after a successful
+run; copy a report or set a different `--output` to keep earlier measurements.
+
+Metrics include wins, reveals, returns to the same board (also counted separately
+when knowledge is unchanged), moves, unresolved stops, median/p95 computation
+time and visited states, truncation, and plans that only prepare without a reveal,
+net foundation advance or new information. Independent legal replay evaluates
+plan effects and stops at information boundaries; illegal plans abort the run.
+Scores from the two planners do not determine the winner. MOVE_LIMIT and
+INCONCLUSIVE are unresolved, never proof of a lost deal. Paired win outcomes and
+a Wilson 95% interval for the current share of discordant wins are reported;
+an absent interval means neither version won a deal that the other did not.
+
+All options use `--name=value`. Supported overrides: `--count`, `--start-seed`,
+`--max-steps`, `--max-states`, `--max-depth`, `--active-ms`, `--positions`,
+`--profile=quick|full`, `--budget=states|time|both`, and `--output`.
+For a separate evaluation set, use e.g. `--start-seed=10000`. Do not tune against
+that set and then call it held-out. The time experiment excludes scheduler waits,
+uses alternating execution order and a small untimed warmup, and does not
+replace physical phone/Safari latency measurements. Timing varies across runs;
+use identical-position timing to assess speed rather than comparing different
+playthrough lengths alone.
+
+`medianPairedSpeedup` is the median of previous/current time ratios on identical
+positions: above 1 means current was faster, below 1 means previous was faster.
+It is a measurement from one run, not a statistical guarantee. Both revisions use
+the current shared move engine; hashes identify those shared modules as well.

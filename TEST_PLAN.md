@@ -168,3 +168,20 @@ paired identical positions and budgets: goals, idle suggestions, reveals, repeat
 wins, median/p95 time/states, truncated percentage. Coordinator explicitly
 requested skipping tests and benchmark in this revision; these gates remain
 unexecuted, not recorded as passed. Existing H05 assertion reflects new contract.
+
+## T028 benchmark harness verification (2026-10-14)
+
+`tests/unit/benchmark-hints.test.js` checks the frozen previous-source identity,
+quick/full defaults and CLI bounds, active-time cutoff with generator cleanup,
+completed-over-budget results, independent goal replay and information boundaries,
+distinct won/inconclusive/move-limit stops, cycle accounting, invalid-plan failure,
+paired win/reveal aggregates and discordant-win uncertainty, real previous/current
+waste-goal disagreement, summary quantiles, corpus deduplication, and CLI JSON
+output preserving an earlier report on invalid arguments.
+
+Run `npm run benchmark:hints` for quick fixed-state/time feedback. Full acceptance
+measurement uses `npm run benchmark:hints -- --profile=full --budget=time` plus
+recorded equal-position results; full fixed-state mode remains separately
+available. Every run records exact options, source hashes, per-deal history,
+observations and the shared position corpus. Quick data and automated Node timing
+do not substitute for extended strategic regression gates or physical devices.

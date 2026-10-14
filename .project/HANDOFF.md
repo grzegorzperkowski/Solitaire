@@ -1,5 +1,20 @@
 # Fresh-session handoff
 
+## T028 benchmark delivery — 2026-10-14
+
+Coordinator approved paired benchmark and requires fast comparisons with both
+SmartHint revisions local. Delivered on master from5fbae47, initially clean.
+`npm run benchmark:hints` quick ~6 s; full timed100 seeds per mode/100 positions
+completed in1254.72 s. Both versions0 wins within100 moves; current reveals1940
+vs2073, repeated observations908 vs200, paired speed ratio0.995 (no clear gain).
+223 unit tests/build PASS; no E2E rerun after Node-only tools. Production unchanged.
+T028 BLOCKED: strategic regressions/extended acceptance gates. Read
+reports/T028-benchmark.md and T028-benchmark-cycles.json. Three exact two-move
+foundation/tableau cycle traces replay with invariant/board/knowledge checks.
+Raw29.6 MB full JSON stays in ignored .cache; summary/source hashes and small
+cycle evidence are tracked. Repair requires assignment; no push/acceptance.
+External-AI comparison prompt requested mid-run: reports/T028-ai-comparison-prompt.md.
+
 ## T028 validation resumed — 2026-10-14
 
 Coordinator: "do tests". Existing focused/full unit tests, build and Chromium
