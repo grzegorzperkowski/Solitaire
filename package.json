@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:simulation": "node scripts/run-simulation.mjs",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "benchmark:hints": "node scripts/benchmark-hints.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.64.0",

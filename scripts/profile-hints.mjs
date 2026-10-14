@@ -33,5 +33,5 @@ for (let run = 0; run < 3; run++) {
 }
 console.log(JSON.stringify({
   fixture: 'H05', node: process.version, platform: process.platform,
-  maxStates: 10000, maxDepth: 12, runs, result: expected,
+  maxStates: 10000, maxDepth: 32, runs, result: expected,
 }, null, 2));

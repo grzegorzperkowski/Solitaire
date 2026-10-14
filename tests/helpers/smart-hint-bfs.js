@@ -26,7 +26,8 @@ export function hintBfs(root, knownCards = [], maxStates = 250000) {
       const end = next.state;
       const reveal = end.tableau.reduce((sum, column) => sum + column.faceUpStart, 0) < hiddenCount;
       const advance = end.foundations.flat().length > foundationCount;
-      const information = visibleCards(end).some(id => !known.has(id));
+      // A tableau reveal already counts as H, independently of hidden memory.
+      const information = !reveal && visibleCards(end).some(id => !known.has(id));
       const key = fullStateKey(end);
       if (reveal || advance || information) goals.set(key, { H: reveal, F: advance, I: information });
       if (visited.has(key)) continue;

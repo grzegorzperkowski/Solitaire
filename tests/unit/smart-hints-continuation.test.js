@@ -11,7 +11,7 @@ function finish(iterator) {
   return step.value;
 }
 
-test('remembered continuation must reject a tail whose only action undoes its goal', () => {
+test('remembered continuation retains a real foundation advance without promising another goal', () => {
   const exposed = [
     [card(3, 2), card(2, 1)], [card(1, 3)], [card(3, 10)],
     [card(2, 10)], [card(1, 10)], [card(0, 10)], [card(3, 8)],
@@ -35,12 +35,13 @@ test('remembered continuation must reject a tail whose only action undoes its go
   expect(moved.ok).toBe(true);
   assertInvariants(moved.state);
   expect(analyzeHintPlan(moved.state, known, plan.slice(1))).toMatchObject({
-    ok: true, verification: { accepted: false, continuation: 'DEAD_END', nonReturningActions: 0 },
+    ok: true, verification: { accepted: true, continuation: 'UNPROVEN', horizon: 0 },
   });
 
   const result = finish(searchSmartHint(moved.state, known, { previousHint: { state, plan } }));
 
-  expect(result).toMatchObject({ status: 'INCONCLUSIVE', plan: [] });
+  expect(result).toMatchObject({ status: 'FOUND', goal: 'FOUNDATION_ADVANCE', continued: true });
+  expect(result.plan).toEqual(plan.slice(1));
 });
 
 test('remembered continuation must respect an already aborted signal', () => {
@@ -64,4 +65,17 @@ test('remembered continuation must respect an already aborted signal', () => {
   expect(result.value).toMatchObject({
     phase: 'CANCELLED', cancelled: true, reason: 'CANCELLED', truncated: true,
   });
+});
+
+test('remembered continuation respects an explicit zero-command depth', () => {
+  const state = h02();
+  const plan = [
+    { type: 'move', from: { pile: 'foundation', index: 1 }, to: { pile: 'tableau', index: 1 } },
+    { type: 'move', from: { pile: 'tableau', index: 0, cardIndex: 1 }, to: { pile: 'tableau', index: 1 } },
+  ];
+  const moved = applyMove(state, plan[0]);
+  const result = finish(searchSmartHint(moved.state, visibleCards(moved.state), {
+    previousHint: { state, plan }, maxDepth: 0,
+  }));
+  expect(result).toMatchObject({ status: 'INCONCLUSIVE', plan: [], truncated: true });
 });

@@ -1,0 +1,695 @@
+{
+  "format": "pl.solitaire.hint-repair-benchmark-summary",
+  "formatVersion": 1,
+  "implementationCommit": "23a6540",
+  "options": {
+    "profile": "full",
+    "count": 100,
+    "maxSteps": 100,
+    "maxStates": 10000,
+    "activeMs": 100,
+    "positions": 100,
+    "startSeed": 0,
+    "maxDepth": 32,
+    "budget": "time",
+    "output": ".cache/hints-repair-full-time.json"
+  },
+  "environment": {
+    "node": "v22.22.0",
+    "platform": "win32",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) W-10885M CPU @ 2.40GHz",
+    "revision": "02fb845c5b0973c51f01928209ca0086bce512b1",
+    "dirty": true
+  },
+  "sources": {
+    "previousCommit": "90fba4f336081367a8d28e25cde1b13d9923f227",
+    "files": {
+      "scripts/baselines/smart-hints-90fba4f.js": "f1e95041904e334f9a0b6a78265db05dd7e9801824138114e98abc6e8478dc65",
+      "src/engine/smart-hints.js": "4245d032e7903f799c55c08815de92dc1d98fb547401c564da8fd8a054237bae",
+      "src/engine/hints.js": "c4ddf144bbe127141b9a368bd54888f0d5171cae45a7549bd46f655e8a024584",
+      "src/engine/game.js": "e0867ed91987e8e8942758afd1e1d275b9da70b019ec1beca69f22ab05db3ed2",
+      "src/engine/cards.js": "b0e857adc0fe79b04a2f338e2a9a90ddd0cbd4107e98edcefb25e7ea51a64eed",
+      "src/engine/knowledge.js": "f048b17b88ca256bd6b6b55c5ce558d6e6acc02fbe812653c3c6cf9be75a145a",
+      "src/engine/progress.js": "15674e0145df8a1c991bcacaa8f521f51731cddc206de3b48a4bbcd687cc9834",
+      "scripts/hint-benchmark.js": "c1643cb3c7e90397028dd1ea452e3c387338fdd5ac012fdb6c54dcb652fffcab",
+      "scripts/benchmark-hints.mjs": "0069845a88d136445071d90bf2c341d07e81ca8e9142d3bec02fedbbcc3630a7"
+    }
+  },
+  "artifacts": {
+    ".cache/hints-repair-full-time.json": {
+      "bytes": 30560339,
+      "sha256": "4378a7a570508a5bd913ae879a61a617cb30b8b950bba55f59568f7ee0c926a9"
+    },
+    ".cache/hints-repair-before-after-positions.json": {
+      "bytes": 1250276,
+      "sha256": "508c0f6ca1af514d1413eafbad15b9eda9c96d4a666c50ea46bed02350ff4f62"
+    },
+    ".cache/hints-repair-final-quick.json": {
+      "bytes": 785923,
+      "sha256": "b9e06787b3d45f3e8dc78c515956180e6dc194edea7cc0a89312b38c99bd76e5"
+    },
+    ".project/reports/T028-repair-positions.json": {
+      "bytes": 66611,
+      "sha256": "18639cf8e426771f994cdd9a71052d50be14081bf178202f73ddcddda3ab0df1"
+    },
+    ".project/reports/T028-repair-position-probe.mjs": {
+      "bytes": 4861,
+      "sha256": "058097453db70d3676e1b11004217a4a9e8f6633a0c2d3bc9d9bb14c84d72e18"
+    }
+  },
+  "full": {
+    "elapsedMs": 1631876.0813999998,
+    "modes": [
+      {
+        "drawCount": 1,
+        "summaries": {
+          "rank": {
+            "deals": 100,
+            "wins": 0,
+            "inconclusive": 0,
+            "moveLimit": 100,
+            "revealed": 424,
+            "steps": 10000,
+            "cycles": 8661,
+            "boardReturns": 8661,
+            "calls": 10000,
+            "medianMs": 0.07629999998607673,
+            "p95Ms": 0.20400000002700835,
+            "medianStates": 1,
+            "p95States": 1,
+            "truncated": 0,
+            "timeCutoffs": 0,
+            "recommendations": 10000,
+            "preparationOnly": 7529
+          },
+          "previous": {
+            "deals": 100,
+            "wins": 0,
+            "inconclusive": 62,
+            "moveLimit": 38,
+            "revealed": 1232,
+            "steps": 8342,
+            "cycles": 102,
+            "boardReturns": 102,
+            "calls": 8404,
+            "medianMs": 45.04489999997895,
+            "p95Ms": 101.6942000000272,
+            "medianStates": 7,
+            "p95States": 76,
+            "truncated": 3847,
+            "timeCutoffs": 3823,
+            "recommendations": 8342,
+            "preparationOnly": 252
+          },
+          "current": {
+            "deals": 100,
+            "wins": 0,
+            "inconclusive": 43,
+            "moveLimit": 57,
+            "revealed": 1346,
+            "steps": 8700,
+            "cycles": 0,
+            "boardReturns": 14,
+            "calls": 8743,
+            "medianMs": 100.06589999998687,
+            "p95Ms": 101.5453999999445,
+            "medianStates": 50,
+            "p95States": 316,
+            "truncated": 4941,
+            "timeCutoffs": 4874,
+            "recommendations": 8700,
+            "preparationOnly": 0
+          }
+        },
+        "comparison": {
+          "bothWon": 0,
+          "previousOnlyWon": 0,
+          "currentOnlyWon": 0,
+          "neitherWon": 100,
+          "revealBetter": 48,
+          "revealWorse": 25,
+          "revealEqual": 27,
+          "meanRevealDelta": 1.14,
+          "discordantCurrentWinShare95": null
+        }
+      },
+      {
+        "drawCount": 3,
+        "summaries": {
+          "rank": {
+            "deals": 100,
+            "wins": 0,
+            "inconclusive": 0,
+            "moveLimit": 100,
+            "revealed": 421,
+            "steps": 10000,
+            "cycles": 8749,
+            "boardReturns": 8766,
+            "calls": 10000,
+            "medianMs": 0.07250000000931323,
+            "p95Ms": 0.19740000017918646,
+            "medianStates": 1,
+            "p95States": 1,
+            "truncated": 0,
+            "timeCutoffs": 0,
+            "recommendations": 10000,
+            "preparationOnly": 8076
+          },
+          "previous": {
+            "deals": 100,
+            "wins": 0,
+            "inconclusive": 92,
+            "moveLimit": 8,
+            "revealed": 815,
+            "steps": 5021,
+            "cycles": 145,
+            "boardReturns": 145,
+            "calls": 5113,
+            "medianMs": 80.69739999994636,
+            "p95Ms": 101.23010000004433,
+            "medianStates": 12,
+            "p95States": 130,
+            "truncated": 2484,
+            "timeCutoffs": 2469,
+            "recommendations": 5021,
+            "preparationOnly": 165
+          },
+          "current": {
+            "deals": 100,
+            "wins": 0,
+            "inconclusive": 87,
+            "moveLimit": 13,
+            "revealed": 1071,
+            "steps": 5650,
+            "cycles": 0,
+            "boardReturns": 54,
+            "calls": 5737,
+            "medianMs": 100.09429999999702,
+            "p95Ms": 101.3066000000108,
+            "medianStates": 85,
+            "p95States": 353,
+            "truncated": 3508,
+            "timeCutoffs": 3462,
+            "recommendations": 5650,
+            "preparationOnly": 0
+          }
+        },
+        "comparison": {
+          "bothWon": 0,
+          "previousOnlyWon": 0,
+          "currentOnlyWon": 0,
+          "neitherWon": 100,
+          "revealBetter": 55,
+          "revealWorse": 13,
+          "revealEqual": 32,
+          "meanRevealDelta": 2.56,
+          "discordantCurrentWinShare95": null
+        }
+      }
+    ],
+    "positionComparison": {
+      "sameFirstMove": 78,
+      "currentOnlyStrategic": 0,
+      "previousOnlyStrategic": 0,
+      "bothStrategic": 65,
+      "neitherStrategic": 35,
+      "medianPairedSpeedup": 1.0127012091292558
+    },
+    "positionSummaries": {
+      "previous": {
+        "medianMs": 100.06309999991208,
+        "p95Ms": 101.4527999998536,
+        "truncated": 54,
+        "preparationOnly": 6
+      },
+      "current": {
+        "medianMs": 82.78380000009201,
+        "p95Ms": 101.22600000002421,
+        "truncated": 50,
+        "preparationOnly": 0
+      }
+    }
+  },
+  "beforeAfter": [
+    {
+      "options": {
+        "budget": "states",
+        "maxStates": 128,
+        "maxDepth": 12
+      },
+      "summaries": {
+        "before": {
+          "found": 55,
+          "exploration": 8,
+          "inconclusive": 37,
+          "revealPlans": 51,
+          "foundationPlans": 33,
+          "medianMs": 28.452600000000075,
+          "p95Ms": 250.72220000000016,
+          "medianStates": 48,
+          "truncated": 50
+        },
+        "after": {
+          "found": 56,
+          "exploration": 8,
+          "inconclusive": 36,
+          "revealPlans": 53,
+          "foundationPlans": 30,
+          "medianMs": 14.820799999999508,
+          "p95Ms": 186.4295000000002,
+          "medianStates": 48,
+          "truncated": 50
+        }
+      },
+      "comparison": {
+        "beforeOnlyStrategic": 0,
+        "afterOnlyStrategic": 1,
+        "bothStrategic": 55,
+        "neitherStrategic": 44,
+        "sameFirstMove": 89
+      },
+      "medianPairedSpeedup": 1.2899351246172357
+    },
+    {
+      "options": {
+        "budget": "time",
+        "maxStates": 10000,
+        "maxDepth": 12,
+        "activeMs": 100
+      },
+      "summaries": {
+        "before": {
+          "found": 55,
+          "exploration": 8,
+          "inconclusive": 37,
+          "revealPlans": 52,
+          "foundationPlans": 31,
+          "medianMs": 23.162399999999252,
+          "p95Ms": 101.56340000000091,
+          "medianStates": 42,
+          "truncated": 49
+        },
+        "after": {
+          "found": 56,
+          "exploration": 8,
+          "inconclusive": 36,
+          "revealPlans": 53,
+          "foundationPlans": 30,
+          "medianMs": 13.122199999997974,
+          "p95Ms": 101.51550000000134,
+          "medianStates": 48,
+          "truncated": 46
+        }
+      },
+      "comparison": {
+        "beforeOnlyStrategic": 0,
+        "afterOnlyStrategic": 1,
+        "bothStrategic": 55,
+        "neitherStrategic": 44,
+        "sameFirstMove": 89
+      },
+      "medianPairedSpeedup": 1.2335800185080577
+    },
+    {
+      "options": {
+        "budget": "time",
+        "maxStates": 10000,
+        "maxDepth": 32,
+        "activeMs": 100
+      },
+      "summaries": {
+        "before": {
+          "found": 59,
+          "exploration": 8,
+          "inconclusive": 33,
+          "revealPlans": 56,
+          "foundationPlans": 36,
+          "medianMs": 29.52939999999944,
+          "p95Ms": 101.40799999999945,
+          "medianStates": 45,
+          "truncated": 46
+        },
+        "after": {
+          "found": 60,
+          "exploration": 8,
+          "inconclusive": 32,
+          "revealPlans": 57,
+          "foundationPlans": 32,
+          "medianMs": 15.90230000000156,
+          "p95Ms": 101.48319999999876,
+          "medianStates": 46,
+          "truncated": 40
+        }
+      },
+      "comparison": {
+        "beforeOnlyStrategic": 0,
+        "afterOnlyStrategic": 1,
+        "bothStrategic": 59,
+        "neitherStrategic": 40,
+        "sameFirstMove": 89
+      },
+      "medianPairedSpeedup": 1.0667398731096476
+    }
+  ],
+  "quick": {
+    "elapsedMs": 6471.6897,
+    "runs": [
+      {
+        "budget": "states",
+        "modes": [
+          {
+            "drawCount": 1,
+            "summaries": {
+              "rank": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 14,
+                "steps": 90,
+                "cycles": 31,
+                "boardReturns": 31,
+                "calls": 90,
+                "medianMs": 0.06649999999999068,
+                "p95Ms": 0.12819999999999254,
+                "medianStates": 1,
+                "p95States": 1,
+                "truncated": 0,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 42
+              },
+              "previous": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 14,
+                "steps": 90,
+                "cycles": 0,
+                "boardReturns": 0,
+                "calls": 90,
+                "medianMs": 0.46450000000004366,
+                "p95Ms": 3.477600000000052,
+                "medianStates": 2,
+                "p95States": 11,
+                "truncated": 0,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 0
+              },
+              "current": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 11,
+                "steps": 90,
+                "cycles": 0,
+                "boardReturns": 0,
+                "calls": 90,
+                "medianMs": 0.2856000000000023,
+                "p95Ms": 1.9713999999999885,
+                "medianStates": 1,
+                "p95States": 5,
+                "truncated": 2,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 0
+              }
+            },
+            "comparison": {
+              "bothWon": 0,
+              "previousOnlyWon": 0,
+              "currentOnlyWon": 0,
+              "neitherWon": 3,
+              "revealBetter": 0,
+              "revealWorse": 2,
+              "revealEqual": 1,
+              "meanRevealDelta": -1,
+              "discordantCurrentWinShare95": null
+            }
+          },
+          {
+            "drawCount": 3,
+            "summaries": {
+              "rank": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 14,
+                "steps": 90,
+                "cycles": 35,
+                "boardReturns": 35,
+                "calls": 90,
+                "medianMs": 0.08920000000011896,
+                "p95Ms": 0.1789000000003398,
+                "medianStates": 1,
+                "p95States": 1,
+                "truncated": 0,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 49
+              },
+              "previous": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 9,
+                "steps": 90,
+                "cycles": 0,
+                "boardReturns": 0,
+                "calls": 90,
+                "medianMs": 24.99980000000005,
+                "p95Ms": 47.22420000000011,
+                "medianStates": 76,
+                "p95States": 113,
+                "truncated": 49,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 0
+              },
+              "current": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 15,
+                "steps": 90,
+                "cycles": 0,
+                "boardReturns": 11,
+                "calls": 90,
+                "medianMs": 19.603000000000065,
+                "p95Ms": 30.571399999999983,
+                "medianStates": 52,
+                "p95States": 125,
+                "truncated": 55,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 0
+              }
+            },
+            "comparison": {
+              "bothWon": 0,
+              "previousOnlyWon": 0,
+              "currentOnlyWon": 0,
+              "neitherWon": 3,
+              "revealBetter": 2,
+              "revealWorse": 0,
+              "revealEqual": 1,
+              "meanRevealDelta": 2,
+              "discordantCurrentWinShare95": null
+            }
+          }
+        ],
+        "positionComparison": {
+          "sameFirstMove": 8,
+          "currentOnlyStrategic": 0,
+          "previousOnlyStrategic": 0,
+          "bothStrategic": 9,
+          "neitherStrategic": 3,
+          "medianPairedSpeedup": 1.4032518787682475
+        }
+      },
+      {
+        "budget": "time",
+        "modes": [
+          {
+            "drawCount": 1,
+            "summaries": {
+              "rank": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 14,
+                "steps": 90,
+                "cycles": 31,
+                "boardReturns": 31,
+                "calls": 90,
+                "medianMs": 0.06590000000005602,
+                "p95Ms": 0.14449999999987995,
+                "medianStates": 1,
+                "p95States": 1,
+                "truncated": 0,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 42
+              },
+              "previous": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 14,
+                "steps": 90,
+                "cycles": 0,
+                "boardReturns": 0,
+                "calls": 90,
+                "medianMs": 0.4153999999998632,
+                "p95Ms": 3.190599999999904,
+                "medianStates": 2,
+                "p95States": 11,
+                "truncated": 0,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 0
+              },
+              "current": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 11,
+                "steps": 90,
+                "cycles": 0,
+                "boardReturns": 0,
+                "calls": 90,
+                "medianMs": 0.14480000000003201,
+                "p95Ms": 0.8303999999998268,
+                "medianStates": 1,
+                "p95States": 5,
+                "truncated": 2,
+                "timeCutoffs": 1,
+                "recommendations": 90,
+                "preparationOnly": 0
+              }
+            },
+            "comparison": {
+              "bothWon": 0,
+              "previousOnlyWon": 0,
+              "currentOnlyWon": 0,
+              "neitherWon": 3,
+              "revealBetter": 0,
+              "revealWorse": 2,
+              "revealEqual": 1,
+              "meanRevealDelta": -1,
+              "discordantCurrentWinShare95": null
+            }
+          },
+          {
+            "drawCount": 3,
+            "summaries": {
+              "rank": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 14,
+                "steps": 90,
+                "cycles": 35,
+                "boardReturns": 35,
+                "calls": 90,
+                "medianMs": 0.09549999999944703,
+                "p95Ms": 0.2151000000003478,
+                "medianStates": 1,
+                "p95States": 1,
+                "truncated": 0,
+                "timeCutoffs": 0,
+                "recommendations": 90,
+                "preparationOnly": 49
+              },
+              "previous": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 9,
+                "steps": 90,
+                "cycles": 0,
+                "boardReturns": 0,
+                "calls": 90,
+                "medianMs": 20.02230000000054,
+                "p95Ms": 20.31959999999981,
+                "medianStates": 10,
+                "p95States": 37,
+                "truncated": 49,
+                "timeCutoffs": 49,
+                "recommendations": 90,
+                "preparationOnly": 0
+              },
+              "current": {
+                "deals": 3,
+                "wins": 0,
+                "inconclusive": 0,
+                "moveLimit": 3,
+                "revealed": 15,
+                "steps": 90,
+                "cycles": 0,
+                "boardReturns": 11,
+                "calls": 90,
+                "medianMs": 20.03150000000005,
+                "p95Ms": 20.5003999999999,
+                "medianStates": 33,
+                "p95States": 105,
+                "truncated": 55,
+                "timeCutoffs": 48,
+                "recommendations": 90,
+                "preparationOnly": 0
+              }
+            },
+            "comparison": {
+              "bothWon": 0,
+              "previousOnlyWon": 0,
+              "currentOnlyWon": 0,
+              "neitherWon": 3,
+              "revealBetter": 2,
+              "revealWorse": 0,
+              "revealEqual": 1,
+              "meanRevealDelta": 2,
+              "discordantCurrentWinShare95": null
+            }
+          }
+        ],
+        "positionComparison": {
+          "sameFirstMove": 8,
+          "currentOnlyStrategic": 0,
+          "previousOnlyStrategic": 0,
+          "bothStrategic": 9,
+          "neitherStrategic": 3,
+          "medianPairedSpeedup": 1.0089346222842228
+        }
+      }
+    ]
+  },
+  "notes": [
+    "All game and plan effects measured independently with the shared engine.",
+    "Repaired full game baseline is A/90fba4f, at depth32 for both. Original B is compared separately on the frozen pre-repair position corpus.",
+    "Zero repeated board+knowledge observations is sample evidence, not proof of cycle freedom.",
+    "Board-only returns can increase knowledge and are reported separately.",
+    "Zero wins within100 moves; no win-rate superiority established.",
+    "No extended game/held-out/device or full10000-state-budget experiment.",
+    "Corpus compacted after measurements; exact parsed equality to the measured positions was asserted. Measured serialization hash and current artifact hash are both retained."
+  ],
+  "beforeAfterSources": {
+    "beforeCommit": "02fb845",
+    "beforeSourceSha256": "bc070b229bc4bc381b308b421d32de11efcd864b97bbd3d98a4de00249471875",
+    "afterSourceSha256": "4245d032e7903f799c55c08815de92dc1d98fb547401c564da8fd8a054237bae",
+    "corpusSha256": "aac8feadaa2d5a12fe28c8f23831a5cfe2b8631c4178f70a3c247b5dc9566f8f",
+    "sourceReportSha256": "d8545911a53f66c968dc7e0910ca453f96f45d3364bb9e2dcc5bb6b503839221",
+    "corpusDataSha256": "2d58fb8a32e7e7303bdb7982096856bc8d751404f5f227cbe2c610d162467446"
+  }
+}

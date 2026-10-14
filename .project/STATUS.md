@@ -1,5 +1,7 @@
 # Project status
 
+- T028 REVIEW (2026-10-14): both histories integrated in canonical C:\Sources\MyProjets\Solitaire. 325 unit tests, 98 Chromium E2E/build and 600-run benchmark passed. Integrated reveals2588 vs advanced2583/repaired2442, repeated board+knowledge0 vs repaired10; no win-rate claim. See [integration report](reports/T028-integration.md). Earlier entries are historical.
+
 - T028 IN_PROGRESS checkpoint (2026-10-13): allocation-free estimate, shared verification, command-field alternative keys, shorter information/equal-F plans and cooperative final shortener implemented. 36 distinct focused tests and build passed; full unit/E2E/benchmark deferred at coordinator bedtime request. No p95 claim. See [checkpoint](reports/T028-p95-checkpoint.md); resume only on assignment, no push.
 
 - T028 IN_PROGRESS (2026-10-13): coordinator assigned p95/short-plan follow-up on `master` at `7a36c30`. Latest instruction: only very basic checks tonight; full unit/E2E and benchmarks deferred. Preserve unrelated cursor-114 JSON. See [checkpoint](reports/T028-p95-checkpoint.md).

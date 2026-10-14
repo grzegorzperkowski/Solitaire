@@ -1,9 +1,8 @@
 # SmartHint — specyfikacja T028
 
-Status: IN_PROGRESS — p95/short-plan follow-up checkpoint with basic checks only,
-2026-10-13; current evidence: [checkpoint](../reports/T028-p95-checkpoint.md).
-Previous evidence: [report](../reports/T028-proposal-adaptation.md). Prior v3
-scope/acceptance remain outstanding. Źródło: opis
+Status: REVIEW — integration assigned 2026-10-14 in the canonical
+`C:\Sources\MyProjets\Solitaire` workspace. See [integration report](../reports/T028-integration.md).
+Earlier reports describe their own revisions. Źródło: opis
 koordynatora „Inteligentna pomoc do pasjansa Klondike”. To specyfikacja produktu,
 nie potwierdzenie wyników badań ani skuteczności proponowanych wag.
 
@@ -22,7 +21,7 @@ autogry, nowych zależności lub zmiany F04 dowodzącego braku postępu.
 ## 2. Kontrakt planera
 
 Nowy DOM-free generator:
-`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 30, signal, previousHint} = {})`.
+`searchSmartHint(state, knownCards, {maxStates = 10000, maxDepth = 32, signal, previousHint} = {})`.
 Oddaje sterowanie pomiędzy porcjami pracy; czas mierzy kontroler, nie silnik.
 Każdy yield i wynik końcowy udostępniają najlepszy dotąd wynik, aby przerwanie
 czasowe nie gubiło znalezionej, legalnej sugestii.
@@ -76,7 +75,7 @@ albo dodatni przyrost baz. Waste→tableau jest przygotowaniem, nie celem.
    oraz wiedzę. Można wykorzystać `progressStateKey`; nie scalać kolumn
    przez sortowanie bez dowodu zachowania komend i podświetleń.
 6. Limit obejmuje maksymalnie 10 000 zachowanych różnych stanów (łącznie
-   z korzeniem); maksymalna długość 30 komend. Preferencja 1–8 wynika z kosztu
+   z korzeniem); maksymalna długość 32 komend. Preferencja 1–8 wynika z kosztu
    L, nie z osobnego odcięcia. Zachować najlepszą ścieżkę do powtórzonego stanu.
 7. Kontroler wykonuje krótkie porcje, początkowo około 4 ms, z celem 100 ms
    łącznego aktywnego czasu. Umożliwia anulowanie i normalne granie; nie wymaga
@@ -89,8 +88,9 @@ zapisuje wartości użyte w danej instancji, aby wyniki dało się odtworzyć.
 
 Stały budżet stanów bez limitu zegara daje deterministyczny wynik. Limit czasu
 może dawać różne jakościowo wyniki na różnych urządzeniach; nie ukrywać tego.
-Nie ma obowiązku znajdowania planów dłuższych niż 30 ruchów. Limit podniesiono
-z 12: w 200 grach z pamięcią planu dał 46 wygranych zamiast 40, w tym samym czasie.
+Nie ma obowiązku znajdowania planów dłuższych niż 32 ruchów. Historyczne
+podniesienie 12→30 miało osobny pomiar; integracja używa 32 zgodnie z drugą
+naprawioną wersją. Porównanie bieżących rewizji opisuje raport integracji.
 
 ## 4. Granice informacji
 
@@ -114,8 +114,16 @@ nowo ujawnione wartości. Planowanie nie aktualizuje wiedzy rzeczywistej sesji.
 
 ## 5. Ocena sekwencji
 
-Początkowe wagi: `U = 120H + 65W + 40F + 20I + 10M - 4L - 50B`.
-Nie są kalibracją naukową. Wszystkie różnice liczyć względem korzenia S0.
+W integracji (2026-10-14): `U = 120H + 40F_goal + 20I + 10M - E - 50B`.
+Wszystkie różnice liczyć względem korzenia S0. W jest wyłącznie premią kolejki
+przygotowań (+65W), nigdy nagrodą końcowego planu. Dla odkrycia F_goal liczy
+ujemne F oraz najwyżej jeden dodatni awans, jeśli ostatnia odkrywająca komenda
+jednocześnie przenosi do bazy; dla pozostałych celów F_goal = F. Poboczne awanse
+baz nie podbijają oceny odkrycia. E wynosi 4 za transfer lub nieznane dobranie
+i 0,5 za znane dobranie/recycle. L nadal liczy wszystkie komendy. Kolejka używa
+U + 65W - 3,5N, gdzie N to liczba draw/recycle: nawigacja kosztuje w niej 4, aby
+długie przygotowania nie wypierały krótszych dróg do tego samego stanu.
+To heurystyka wymagająca pomiaru, nie kalibracja naukowa.
 
 - H: liczba odkrytych zakrytych kart tableau; terminalna granica zwykle daje 1.
 - W: liczba różnych kart ze stock/waste w S0, które na końcu są w tableau/bazach
@@ -123,7 +131,8 @@ Nie są kalibracją naukową. Wszystkie różnice liczyć względem korzenia S0.
   Nie sumować zdarzeń przeniesienia; recycle ani powrót bazy nie generuje W.
 - F: liczba kart w bazach na końcu minus liczba w bazach S0 (ze znakiem).
   Powrót tej samej karty do bazy daje zero dodatkowego zysku.
-- I: 1 za rzeczywiście nową informację na granicy (tableau, draw lub waste fan), inaczej 0;
+- I: 1 wyłącznie za nieznane draw lub odsłonięcie nieznanej karty w waste fan;
+  tableau już otrzymuje H, niezależnie od pamięci zakrytej karty;
   nie mnożyć przez liczbę kart w Draw 3 ani przez powtarzane dobrania.
 - L: wszystkie komendy, także draw/recycle; automatyczne odkrycie nie dodaje L.
 - M/B: mierzyć zmianę zbioru użytecznych możliwości opisanych poniżej.
@@ -165,7 +174,7 @@ na bazę, inaczej 1,5 za króla przy pustej kolumnie, inaczej 1 za dopasowanie
 do znanego wierzchu kolumny (ranga i przeciwny kolor). Podzielić przez rozmiar
 puli, dla pustej puli zwrócić 0. Pominąć właśnie odsłonięty wierzch tableau,
 także zapamiętany. Estymować tylko na granicy; w pozostałych końcach 0.
-Nie zmieniać wag U ani dodatniego progu przeciw pętlom. Nie gwarantować
+Zachować dodatni próg U przeciw pętlom. Nie gwarantować
 minimalnego planu w ograniczonym grafie.
 
 W checkpoint p95 (2026-10-13) statystyki nieznanych rang/kolorów obliczyć raz
@@ -177,51 +186,40 @@ zapisie i wyborze; klucz alternatyw budować z pól pierwszej komendy i celu.
 Na końcu skracać tylko wybranego zwycięzcę: zachłannie usuwać pojedynczą komendę
 przed ostatnią, odtwarzając legalność i tę samą granicę. Zachować co najmniej
 pierwotne H/F/I, ten sam typ celu, dodatnie U i B nie większe od pierwotnego.
-Dla końca bez granicy zachować dokładny klucz końcowego stanu i nie dodawać
-nowych przodków do wykluczeń istniejącego dowodu grafowego. Inne skrócenie
-wymaga ponownej weryfikacji grafu i nie należy do tego checkpointu.
+Dla końca bez granicy konserwatywnie zachować dokładny klucz końcowego stanu
+i podzbiór wcześniejszych stanów pośrednich. Jest to ograniczenie skracania,
+nie dowód bezpiecznej przyszłości. Każdy skrócony plan ponownie sprawdzić
+przez legalny replay i wspólną ocenę końca.
 Oddawać sterowanie po każdej próbie, zachowując sprawdzony plan przy anulowaniu.
 Raportować shorteningAttempts/shortenedPlansCount/savedMovesCount. Nie obiecywać
-globalnej minimalności ani kosztu <0,1 ms; pełne testy i pomiar są odroczone.
+globalnej minimalności ani kosztu <0,1 ms. Bieżące dowody są w raporcie integracji.
 
 Testy arytmetyki przy innych składnikach równych zero: odkrycie w 2 ruchach
 112, baza w 1 ruchu 36, nowa informacja w 1 ruchu 16. Fixture całych plansz
 muszą uwzględniać także M/B, nie zakładać tych sum automatycznie.
 
-### Weryfikacja końca i diagnostyka (rewizja 2026-10-11)
+### Weryfikacja końca i diagnostyka (integracja 2026-10-14)
 
-Przed publikacją lepszego kandydata sprawdzić jego osiągnięty cel, dodatni
-wynik, M/B i bezpośrednie legalne akcje końca. Odrzucić koniec bez dalszych
-akcji albo z samym bezpośrednim powrotem do S0, chyba że to wygrana lub granica
-informacji. Nie utożsamiać dodatniego wyniku z bezpieczeństwem strategicznym.
+Przed publikacją sprawdzić legalność osiągniętego celu, dodatnie U i M/B.
+Dodatni net F jest samodzielnym celem także bez dalszego osiągalnego postępu.
+Nie odrzucać go jako KNOWN_DEAD_END ani wymagać drugiego celu po jego końcu.
+Usunięto końcowe przeszukiwanie kontynuacji i kosztowną symulację 1-ply.
+verification ma horizon=0: INFORMATION_BOUNDARY, WON, TERMINAL_PROGRESS
+(brak legalnych akcji po osiągnięciu celu) lub UNPROVEN. Nie obiecuje wygranej.
 
-Kontynuować tę samą kolejkę po transferach waste i po ruchach do baz. Po
-zakończeniu głównego wyszukiwania porównywać dodatnio ocenionych kandydatów:
-według wspólnego porządku z §5 (krótsze REVEAL przed pobocznym W).
-Odczyt istniejących krawędzi grafu sprawdza, czy z końca
-kandydata można osiągnąć odsłonięcie, nową informację lub dalszy przyrost baz.
-Nie symuluje nowych stanów i nie przekracza granic informacji.
-Nie przechodzi ponownie przez S0: dojście do celu inną gałęzią z korzenia
-nie potwierdza korzystnej kontynuacji wybranego kandydata.
+Graf przechowuje jedynie metadane rozwinięcia i krawędzie do rozliczenia cięć,
+nie dowody kontynuacji. children zachowuje także brakujące następniki;
+unresolvedCutoffs i unexpandedStates wykrywają nadal nieprzeszukane drogi.
+Przeliczyć kompletność po krótszych ścieżkach i odfiltrować przestarzałe wpisy
+kolejki przed liczeniem rozwinięcia. Limit stanów obejmuje zarówno zachowane
+stany, jak i rozwinięcia; nie liczyć kontrolnego pop jako dodatkowego rozwinięcia.
+NO_STRATEGIC_PROGRESS nadal wymaga pełnego zakończenia bez H/F/I.
 
-KNOWN_DEAD_END oznacza wyłącznie wyczerpaną część znanego grafu względem
-końca kandydata; odrzucić taką rekomendację i rozważyć następną. Brak pełnego
-grafu daje UNPROVEN, nie dowód impasu. Łączny limit odczytów weryfikacji to
-maxStates, z yield co 64 odczyty oraz między alternatywnymi kandydatami;
-wyczerpanie limitu ustawia truncated. To nie solver wygrywalności ani NO_PROGRESS.
-Limit odczytów liczy wyłącznie nowe, niewykluczone węzły danej weryfikacji;
-pozostały na stosie duplikat lub S0 nie oznacza obcięcia. `children` zachowuje
-także klucze następców odciętych limitem; przed końcową weryfikacją przeliczyć
-kompletność po późniejszych krótszych ścieżkach. `unresolvedCutoffs` liczy
-krawędzie do nadal brakujących węzłów, a `unexpandedStates` zapamiętane stany
-z nierozwiniętą najlepszą ścieżką. Historyczne trafienia limitów nie przesądzają
-końcowego `truncated`. Brakujący węzeł lub nierozwinięty stan pozostaje niepewny.
-Kandydatury celu zachować niezależnie od możliwości zapamiętania ich planszy;
-nie rozwijać dodatkowych stanów poza budżetem. Anulowanie zachowuje kandydaturę
-sprawdzoną co najmniej lokalnie, która nie została odrzucona przez weryfikację;
-zawsze ustawia `truncated`, także między kandydatami i po yield grafu.
-Wynik po granicy informacji ma INFORMATION_BOUNDARY, bez analizy odsłoniętej
-wartości. `verification` opisuje zakres sprawdzenia, nie obiecuje bezpieczeństwa.
+Każdy yield, wynik końcowy i anulowanie zachowują najlepszy zaakceptowany plan
+według wspólnego komparatora; nie emitować pustego INCONCLUSIVE po znalezieniu
+celu. Podczas końcowego skracania oddawać aktualny legalny plan po każdej próbie.
+Anulowanie zawsze ustawia truncated. verificationReads/cachedDeadEnds zostają
+zerowymi polami zgodności diagnostyki; nie wykonuje się dowodzenia kontynuacji.
 
 `analyzeHintPlan(state, knownCards, plan)` odtwarza komendy tym samym silnikiem,
 odrzuca nielegalną akcję lub kontynuację po granicy informacji i zwraca stan
@@ -239,12 +237,13 @@ Uruchamiać na żądanie przycisku. Kolejne kliknięcie tej samej planszy może
 ponownie pokazać aktualny wynik, bez cyklicznego oferowania jałowych ruchów.
 Kontroler pamięta ostatni pokazany plan i jego planszę (`previousHint`).
 Gdy plansza to wynik pierwszego ruchu planu, następna podpowiedź to reszta planu
-(`continued: true`), bez nowego wyszukiwania. Warunki: ruchy legalne, bez granicy
+(`continued: true`), bez nowego wyszukiwania. Warunki: reszta mieści się w maxDepth, ruchy legalne, bez granicy
 informacji, a reszta nadal osiąga cel względem nowej planszy.
 Powód: U liczone względem S0 zmienia się po jednym ruchu. Nowe wyszukiwanie
 potrafi wtedy cofnąć poprzedni ruch i podpowiedzi krążą bez końca
 (fixture `smart-hint-seed1-draw1-76.json`). Każdy ukończony plan odsłania kartę,
-zwiększa bazy albo daje wiedzę, więc idąc za podpowiedziami nie da się zapętlić.
+zwiększa bazy albo daje wiedzę względem swojego korzenia. To ogranicza
+oscylowanie, ale nie jest globalnym dowodem braku cykli między planami.
 Inna plansza oznacza zwykłe wyszukiwanie. Wykonanie podpowiedzi jest zawsze
 zwykłą akcją gracza.
 
@@ -286,7 +285,7 @@ pustej listy legalnych akcji i dowodu braku osiągalnego postępu.
 | H06 | Draw 3 po zabraniu waste/recycle: zachować dokładną kolejność, resztki 1/2 kart. |
 | H07 | Król między pustymi kolumnami: brak jałowej sugestii i punktów za cykl. |
 | H08 | Jedyna opcja to nieznany stock: EXPLORATION, bez obietnicy strategii. |
-| H09 | Dwie ścieżki: zgodny z U wybór; remis preferuje krótszą, potem mniejsze B. |
+| H09 | Dwie ścieżki: wspólny komparator z §5; stabilny wybór celu i planu. |
 | H10 | Permutacje nieznanych tableau/stock, ta sama obserwacja i wiedza: identyczny wynik. |
 | H11 | Limit stanów/czasu/głębokości (także cel za 15 ruchami): nigdy NO_PROGRESS. |
 | H12 | Inny ruch gracza i wynik starego żądania: stary plan odrzucony. |

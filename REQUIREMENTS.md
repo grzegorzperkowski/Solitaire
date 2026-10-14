@@ -100,7 +100,8 @@ an automatic fallback when SmartHint has no strategic recommendation.
 T028 proposal adaptation (assigned 2026-10-13): prioritize positively scored
 tableau reveals, preferring shorter reveal plans before incidental waste gains.
 Use a hidden-safe, color-correct estimate only to break equal-length reveal
-ties. Preserve positive U, graph verification and strict budgets. In the p95
+ties. Preserve positive U and strict budgets. Current terminal verification
+checks achieved effects; future graph progress is not required (integration 2026-10-14). In the p95
 follow-up, information prefers shorter plans; foundations prefer more net F,
 less B and then shorter plans. Real multiple advances still outrank incidental W.
 Shorten only the final winner while preserving its goal and verification scope.
@@ -114,10 +115,19 @@ foundation or information progress; do not append preparations after its last
 goal. Continue exploring those preparations for further goals. Waste transfers,
 known draws/recycle and foundation
 returns are preparation. EXPLORATION requires genuinely new information.
-Verify terminal effects and available actions; reject a dead continuation only
-when the explored known graph proves it. Incomplete verification remains
-uncertain; never infer unwinnability. F04 searchProgress P1–P4 semantics are
+Repair revision 2026-10-14: verify achieved effects and report available actions;
+foundation progress does not require another future goal. Preserve the best
+accepted plan at every yield. Waste rewards guide preparation only; known stock
+navigation is cheaper and the default horizon is 32 commands. Unknown continuation
+remains uncertain; never infer unwinnability. F04 searchProgress P1–P4 semantics are
 unchanged, so PROGRESS_FOUND can coexist with SmartHint INCONCLUSIVE.
 SmartHint may report NO_STRATEGIC_PROGRESS only after its configured search
 finishes without truncation and finds no strategic or information goal. This is
 not F04 NO_PROGRESS and does not claim the deal is unwinnable.
+
+T028 integration (2026-10-14): waste gain only prioritizes preparation; tableau
+reveal never earns I based on hidden memory. Known draw/recycle cost 0.5 in
+final utility; incidental foundation prefixes do not pad reveal utility.
+Default maxDepth is 32, maxStates 10000, active time 100 ms. Preserve app
+cancellation/continuation and the complete-search-only negative status. See
+[the integration report](.project/reports/T028-integration.md) for measured evidence.

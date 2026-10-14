@@ -188,7 +188,8 @@ knowledge will identify information boundaries, never rank concealed values.
 SmartHint strategic revision keeps Best-First Search and shared getLegalMoves /
 applyMove. Waste/tableau transfers and foundation returns are intermediate;
 only H>0 or net F>0 confirms FOUND. A new-information boundary permits
-EXPLORATION and stops expansion. U weights remain unchanged; M/B count direct
+EXPLORATION and stops expansion. Current U excludes W (queue preparation only), uses discounted known navigation
+and caps incidental F for reveal plans; M/B count direct
 reveal/foundation opportunities, excluding standalone waste transfers.
 Register a recommendation only on an edge adding H/F/I, so later preparation
 cannot pad a goal plan. Keep expanding preparation after earlier goals to find
@@ -199,13 +200,12 @@ information goal, it returns NO_STRATEGIC_PROGRESS with no recommendation.
 Any cutoff without a recommendation remains INCONCLUSIVE/truncated. This status
 describes only the configured SmartHint search and is not the formal F04 result.
 
-The result carries H/F/I/W/M/B/L and terminal verification. Retained nodes and
-edges share the main state budget; goal alternatives reference those nodes.
-Final verification reads the already explored graph (bounded by maxStates,
-yield every 64 reads) to discard proven dead continuations, preserving UNKNOWN
-scope as UNPROVEN. A one-ply check reports terminal actions and lost mobility;
-it is not a safety proof. No hidden-value continuation, new game rules or
-heuristic F04 NO_PROGRESS. Existing diagnostic export includes these observations.
+The result carries H/F/I/W/M/B/L and horizon-zero terminal verification.
+An achieved net foundation advance remains a goal even with no continuation.
+Graph nodes/edges track exhaustion and unresolved limits only; no final future-
+goal rejection or one-ply simulation runs. Partial/cancelled results preserve the
+best accepted recommendation. This proves neither safety nor solvability.
+Existing diagnostic export includes these observations.
 
 T028 supplied-proposal adaptation (2026-10-13) prioritizes positive reveals,
 then foundation advances, then exploration. Reveal candidates prefer more H,
@@ -216,16 +216,16 @@ rank/color counts once, uses an allocation-free destination mask and only known 
 foundation lengths, and excludes the newly revealed top even if remembered.
 It is a tie-breaker/diagnostic, not a continuation search or U weight change.
 Final results include up to five alternatives with distinct first-command/goal
-pairs: the selected graph-verified plan plus positive boundary candidates.
-Keep exact column keys, atomic search/strict budgets and graph verification;
-no speculative macro pruning, score clamping or extension of maxDepth.
+pairs: the selected locally verified plan plus positive boundary candidates.
+Keep exact column keys, atomic search/strict budgets and complete-search bookkeeping;
+no speculative macro pruning or score clamping. Integrated default maxDepth is 32.
 
 The p95 checkpoint shares candidate verification and builds alternative keys
 from command fields. A cooperative final-only shortener reuses legal replay and
-root evaluation; non-boundary endpoints/exclusions preserve the original graph
-proof. It never expands a new graph or changes root limits. Cancellation keeps
-the latest locally/graph-verified selected plan. Full validation and p95
-measurement remain deferred at coordinator request.
+root evaluation; non-boundary endpoints/intermediate-state subsets are
+conservatively preserved. It never expands a new graph or changes root limits. Cancellation keeps
+the latest locally verified selected plan. The 2026-10-14 integration report
+supersedes the previous checkpoint's deferred verification state.
 
 ## 7. Persistence and ownership
 

@@ -15,7 +15,7 @@ export function createApp({
   progressMaxStates = 10000,
   progressActiveMs = 100,
   hintMaxStates = 10000,
-  hintMaxDepth = 30,
+  hintMaxDepth = 32,
   hintActiveMs = HINT_ACTIVE_MS,
   hintBatchMs = HINT_BATCH_MS,
   lockManager = globalThis?.navigator?.locks,

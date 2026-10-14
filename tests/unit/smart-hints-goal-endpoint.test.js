@@ -47,7 +47,7 @@ test('a known waste preparation cannot pad an already completed foundation hint'
   const preparation = { type: 'move', from: { pile: 'waste' }, to: { pile: 'tableau', index: 0 } };
   const known = visibleCards(state);
   expect(analyzeHintPlan(state, known, [foundationMove, preparation])).toMatchObject({
-    ok: true, score: 97, components: { F: 1, W: 1, L: 2 }, verification: { accepted: true },
+    ok: true, score: 32, components: { F: 1, W: 1, L: 2 }, verification: { accepted: true },
   });
 
   const result = cancelAfter(state, known, 2);
@@ -115,7 +115,7 @@ test('search still continues past a first goal to a later foundation advance', (
 
   const result = cancelAfter(state, visibleCards(state), 2);
 
-  expect(result).toMatchObject({ status: 'FOUND', score: 137, components: { F: 2, W: 1, L: 2 } });
+  expect(result).toMatchObject({ status: 'FOUND', score: 72, components: { F: 2, W: 1, L: 2 } });
   expect(result.plan).toEqual([
     { type: 'move', from: { pile: 'tableau', index: 0, cardIndex: 0 }, to: { pile: 'foundation', index: 0 } },
     { type: 'move', from: { pile: 'waste' }, to: { pile: 'foundation', index: 0 } },

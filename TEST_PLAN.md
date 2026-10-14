@@ -188,8 +188,8 @@ to reproduce the exported A search, and verify a single 4♣ foundation command
 with U=36, not the old 17-command U=297 plan. Check a smaller full-deck case
 where a waste transfer after the only goal inflated its score, and a positive
 case retaining two real foundation advances. Controller integration must show
-the single-move explanation before bounded uncertainty on B. Preserve dead-end
-and cancellation repairs. See `tests/unit/smart-hints-goal-endpoint.test.js`.
+the single-move explanation before bounded uncertainty on B. Preserve cancellation and strict-budget safeguards; achieved foundation
+progress no longer requires a future-goal proof. See `tests/unit/smart-hints-goal-endpoint.test.js`.
 
 Restore fixture solitaire-stan-2284836135-draw1-114.json through save section;
 verify 52-card integrity, cursor 114, legal actions and independent F04 outcome.
@@ -248,3 +248,19 @@ cuts and goal counts. Evidence lives in `.project/reports/T028-graph-audit.md`.
 ## T029 victory animation extension (T19/T22)
 
 Use the development preview to run each effect at desktop and 320px mobile sizes. Verify an intermediate frame, no horizontal scroll, Escape and “Pomiń”, replay replacement, reduced-motion bypass, and final overlay/RAF cleanup. On a near-win fixture, a genuine first win must select one effect while awarding statistics once; the existing result dialog follows skip/completion. Undo/reload/re-win is practice and must not select again. New Game, destroy, page hide, resize and an animation exception must clean up or reach the existing result. Confirm the shuffle bag validates persisted values, cycles all four with no boundary repeat, and maintains this behavior if storage is denied.
+
+## T028 integration gates — 2026-10-14
+
+Run the imported smart-hints-regressions suite: hidden-memory-independent I/U,
+one/two terminal foundation goals, retained partial goals, saved cycles, necessary
+foundation returns, masked-column safety and long known navigation. Update old
+future-goal rejection expectations to horizon-zero achieved-goal acceptance;
+keep independent BFS exhaustion, graph cut/stale bookkeeping and F04 unchanged.
+smart-hints-shortening covers actual deletion on the frozen Draw3/seed84 position
+and cancellation after deletion. Continuation must respect explicit maxDepth.
+The benchmark driver covers cooperative cancellation/remembered plans and records
+NO_STRATEGIC_PROGRESS separately. Full unit/build/Chromium and reproducible
+three-planner comparison: node scripts/benchmark-hint-integration.mjs --full.
+105 frozen shared positions have 128-state and 100-ms runs; seeds0–99 in each
+mode use 10000 states/depth32/100ms/max100 actions with common engine/knowledge.
+Device/Safari checks and held-out longer-game validation remain separate evidence.

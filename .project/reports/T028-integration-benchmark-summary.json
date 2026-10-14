@@ -1,0 +1,340 @@
+{
+  "format": "pl.solitaire.hint-integration-summary",
+  "formatVersion": 1,
+  "measuredAt": "2026-10-14T19:19:38.856Z",
+  "approximateWallSeconds": 1174.0344848632812,
+  "environment": {
+    "node": "v22.22.0",
+    "platform": "win32",
+    "arch": "x64",
+    "cpu": "Intel(R) Xeon(R) W-10885M CPU @ 2.40GHz"
+  },
+  "budget": {
+    "maxStates": 10000,
+    "maxDepth": 32,
+    "activeMs": 100,
+    "budget": "time",
+    "maxSteps": 100
+  },
+  "sources": {
+    "advanced": {
+      "commit": "2447cff",
+      "sha256": "0fb4b55e839d034d3f1c02c96e0547a71c1eeb098eaf5af2cbdd80a3c1340daa"
+    },
+    "repaired": {
+      "commit": "5320616",
+      "sha256": "4245d032e7903f799c55c08815de92dc1d98fb547401c564da8fd8a054237bae"
+    },
+    "integrated": {
+      "commit": "working tree",
+      "sha256": "cd5835528d2cce99c9e3c13e9ecffb9c022e437273faade33cf8c011efd0c96f"
+    }
+  },
+  "sharedSourceSha256": {
+    "src/engine/smart-hints.js": "cd5835528d2cce99c9e3c13e9ecffb9c022e437273faade33cf8c011efd0c96f",
+    "src/engine/game.js": "4c62d0760cd5cb2bd2c0f5c660e74e6423169cb52f0f246818c6aa3a8fad8980",
+    "src/engine/cards.js": "b0e857adc0fe79b04a2f338e2a9a90ddd0cbd4107e98edcefb25e7ea51a64eed",
+    "src/engine/knowledge.js": "f048b17b88ca256bd6b6b55c5ce558d6e6acc02fbe812653c3c6cf9be75a145a",
+    "src/engine/progress.js": "76aa11e18cb2dfb41d7d5566a2d096366bed7c30d1dbc509063ecff7ebcb59e2",
+    "src/app.js": "fb89dbf8a4ec8a1e3abb26ab69371f098fb2e448ae978ee7acea2d88350e2d4f",
+    "scripts/hint-benchmark.js": "390aae4354213433ddf16621a417ffb4b13ec8702f0ae2bda72b2ead55e2b1b4",
+    "scripts/benchmark-hint-integration.mjs": "cf775298e72278cd39fa8bf677c2a2d5bfa9ea2afa84341fa5d55189f7700609"
+  },
+  "rawArtifact": {
+    "path": ".cache/hints-integration-full.json",
+    "bytes": 12805968,
+    "sha256": "f5bb28f6bcfdc73241d012e0d3c136305e14521a9357af6e02262c5ccf8fc2c7"
+  },
+  "frozenCorpusSha256": "18639cf8e426771f994cdd9a71052d50be14081bf178202f73ddcddda3ab0df1",
+  "positions": 105,
+  "positionRuns": [
+    {
+      "budget": {
+        "maxStates": 128,
+        "maxDepth": 32,
+        "activeMs": 100,
+        "budget": "states",
+        "maxSteps": 100
+      },
+      "summaries": {
+        "advanced": {
+          "found": 60,
+          "exploration": 9,
+          "inconclusive": 21,
+          "noStrategicProgress": 15,
+          "revealPlans": 54,
+          "foundationPlans": 27,
+          "medianMs": 6.1778000000000475,
+          "p95Ms": 30.429299999999785,
+          "medianStates": 63,
+          "truncated": 53,
+          "shortened": 1
+        },
+        "repaired": {
+          "found": 62,
+          "exploration": 9,
+          "inconclusive": 34,
+          "noStrategicProgress": 0,
+          "revealPlans": 58,
+          "foundationPlans": 32,
+          "medianMs": 7.060299999999984,
+          "p95Ms": 32.5342999999998,
+          "medianStates": 64,
+          "truncated": 53,
+          "shortened": 0
+        },
+        "integrated": {
+          "found": 60,
+          "exploration": 9,
+          "inconclusive": 21,
+          "noStrategicProgress": 15,
+          "revealPlans": 54,
+          "foundationPlans": 27,
+          "medianMs": 7.113299999999981,
+          "p95Ms": 29.4699999999998,
+          "medianStates": 63,
+          "truncated": 53,
+          "shortened": 1
+        }
+      },
+      "comparisons": {
+        "advanced": {
+          "baselineOnlyStrategic": 0,
+          "integratedOnlyStrategic": 0,
+          "bothStrategic": 60,
+          "neitherStrategic": 45,
+          "sameFirstMove": 105
+        },
+        "repaired": {
+          "baselineOnlyStrategic": 2,
+          "integratedOnlyStrategic": 0,
+          "bothStrategic": 60,
+          "neitherStrategic": 43,
+          "sameFirstMove": 90
+        }
+      }
+    },
+    {
+      "budget": {
+        "maxStates": 10000,
+        "maxDepth": 32,
+        "activeMs": 100,
+        "budget": "time",
+        "maxSteps": 100
+      },
+      "summaries": {
+        "advanced": {
+          "found": 62,
+          "exploration": 9,
+          "inconclusive": 6,
+          "noStrategicProgress": 28,
+          "revealPlans": 58,
+          "foundationPlans": 29,
+          "medianMs": 8.652200000000448,
+          "p95Ms": 100.25550000000021,
+          "medianStates": 152,
+          "truncated": 34,
+          "shortened": 0
+        },
+        "repaired": {
+          "found": 62,
+          "exploration": 9,
+          "inconclusive": 34,
+          "noStrategicProgress": 0,
+          "revealPlans": 58,
+          "foundationPlans": 33,
+          "medianMs": 9.42489999999998,
+          "p95Ms": 100.17000000000007,
+          "medianStates": 152,
+          "truncated": 34,
+          "shortened": 0
+        },
+        "integrated": {
+          "found": 62,
+          "exploration": 9,
+          "inconclusive": 6,
+          "noStrategicProgress": 28,
+          "revealPlans": 58,
+          "foundationPlans": 29,
+          "medianMs": 9.425099999998565,
+          "p95Ms": 100.22749999999996,
+          "medianStates": 152,
+          "truncated": 34,
+          "shortened": 0
+        }
+      },
+      "comparisons": {
+        "advanced": {
+          "baselineOnlyStrategic": 0,
+          "integratedOnlyStrategic": 0,
+          "bothStrategic": 62,
+          "neitherStrategic": 43,
+          "sameFirstMove": 105
+        },
+        "repaired": {
+          "baselineOnlyStrategic": 0,
+          "integratedOnlyStrategic": 0,
+          "bothStrategic": 62,
+          "neitherStrategic": 43,
+          "sameFirstMove": 92
+        }
+      }
+    }
+  ],
+  "summaries": {
+    "1": {
+      "advanced": {
+        "deals": 100,
+        "wins": 0,
+        "inconclusive": 40,
+        "noStrategicProgress": 7,
+        "moveLimit": 53,
+        "revealed": 1460,
+        "steps": 8712,
+        "cycles": 0,
+        "boardReturns": 18,
+        "calls": 8759,
+        "medianMs": 0.19479999993927777,
+        "p95Ms": 100.16549999997369,
+        "medianStates": 0,
+        "p95States": 546,
+        "truncated": 881,
+        "timeCutoffs": 862,
+        "recommendations": 8712,
+        "preparationOnly": 0,
+        "foundationCards": 1558
+      },
+      "repaired": {
+        "deals": 100,
+        "wins": 0,
+        "inconclusive": 38,
+        "noStrategicProgress": 0,
+        "moveLimit": 62,
+        "revealed": 1349,
+        "steps": 8801,
+        "cycles": 0,
+        "boardReturns": 14,
+        "calls": 8839,
+        "medianMs": 100.0058999999892,
+        "p95Ms": 100.21659999998519,
+        "medianStates": 352,
+        "p95States": 1312,
+        "truncated": 4742,
+        "timeCutoffs": 4579,
+        "recommendations": 8801,
+        "preparationOnly": 0,
+        "foundationCards": 1432
+      },
+      "integrated": {
+        "deals": 100,
+        "wins": 0,
+        "inconclusive": 40,
+        "noStrategicProgress": 8,
+        "moveLimit": 52,
+        "revealed": 1460,
+        "steps": 8690,
+        "cycles": 0,
+        "boardReturns": 18,
+        "calls": 8738,
+        "medianMs": 0.17119999998249114,
+        "p95Ms": 100.16439999999784,
+        "medianStates": 0,
+        "p95States": 605,
+        "truncated": 877,
+        "timeCutoffs": 858,
+        "recommendations": 8690,
+        "preparationOnly": 0,
+        "foundationCards": 1561
+      }
+    },
+    "3": {
+      "advanced": {
+        "deals": 100,
+        "wins": 0,
+        "inconclusive": 43,
+        "noStrategicProgress": 41,
+        "moveLimit": 16,
+        "revealed": 1123,
+        "steps": 5510,
+        "cycles": 0,
+        "boardReturns": 61,
+        "calls": 5594,
+        "medianMs": 0.1770999999716878,
+        "p95Ms": 100.16689999995288,
+        "medianStates": 0,
+        "p95States": 639,
+        "truncated": 585,
+        "timeCutoffs": 561,
+        "recommendations": 5510,
+        "preparationOnly": 0,
+        "foundationCards": 1097
+      },
+      "repaired": {
+        "deals": 100,
+        "wins": 0,
+        "inconclusive": 83,
+        "noStrategicProgress": 0,
+        "moveLimit": 17,
+        "revealed": 1093,
+        "steps": 5785,
+        "cycles": 10,
+        "boardReturns": 71,
+        "calls": 5868,
+        "medianMs": 100.00660000008065,
+        "p95Ms": 100.20419999992009,
+        "medianStates": 434,
+        "p95States": 1319,
+        "truncated": 3259,
+        "timeCutoffs": 3091,
+        "recommendations": 5785,
+        "preparationOnly": 0,
+        "foundationCards": 1039
+      },
+      "integrated": {
+        "deals": 100,
+        "wins": 0,
+        "inconclusive": 30,
+        "noStrategicProgress": 53,
+        "moveLimit": 17,
+        "revealed": 1128,
+        "steps": 5605,
+        "cycles": 0,
+        "boardReturns": 61,
+        "calls": 5688,
+        "medianMs": 0.15370000002440065,
+        "p95Ms": 100.15690000005998,
+        "medianStates": 0,
+        "p95States": 696,
+        "truncated": 588,
+        "timeCutoffs": 564,
+        "recommendations": 5605,
+        "preparationOnly": 0,
+        "foundationCards": 1152
+      }
+    }
+  },
+  "pairedComparisons": {
+    "advanced": {
+      "revealBetter": 3,
+      "revealWorse": 2,
+      "revealEqual": 195,
+      "totalRevealDelta": 5,
+      "sameHistory": 173,
+      "baselineOnlyWin": 0,
+      "integratedOnlyWin": 0,
+      "bothWon": 0,
+      "neitherWon": 200
+    },
+    "repaired": {
+      "revealBetter": 63,
+      "revealWorse": 26,
+      "revealEqual": 111,
+      "totalRevealDelta": 146,
+      "sameHistory": 25,
+      "baselineOnlyWin": 0,
+      "integratedOnlyWin": 0,
+      "bothWon": 0,
+      "neitherWon": 200
+    }
+  }
+}

@@ -1,5 +1,11 @@
 # Fresh-session handoff
 
+## Current T028 integration — 2026-10-14
+
+REVIEW: 325 unit tests, 98 Chromium E2E and build passed. Full three-planner comparison completed: 200 deals each, 105 shared boards, 100-ms budget. Integrated2588 reveals vs advanced2583/repaired2442; 0 observed same-knowledge cycles, wins0 under100 actions. Report/summary record sources and raw evidence. Acceptance pending; push explicitly authorized by coordinator. No successor.
+
+Coordinator approved merging both local histories and selected C:\Sources\MyProjets\Solitaire. Start 2447cff; merge parent 5320616; common bdad66c. Keep advanced app features and checkpoint, integrate planner repairs and benchmark evidence. Full checks and three-planner comparison authorized; earlier basic-only restriction superseded. Preserve unrelated untracked cursor114 JSON and the other checkout. See reports/T028-integration.md for current state, commands and resume steps. No successor assigned.
+
 ## T028 p95 / shorter goals — checkpoint, 2026-10-13
 
 Implemented cache/mask estimator with single-benefit precedence, shared
