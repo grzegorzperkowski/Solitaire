@@ -1,5 +1,7 @@
 # Project status
 
+T028 REVIEW (2026-10-15): partial external proposal adapted with reconstructed history/high-water goals and verified plan commitments; rejected worse-performing trial weights. Final337 unit/98 Chromium/build pass. Held-out40 deals:15 wins before/after,8 fewer commands,0 same-knowledge repeats; seed42 wins in137. See [report](reports/T028-belief-planner.md). Await acceptance; no push/successor; both untracked diagnostics preserved.
+
 - T028 documentation follow-up REVIEW (2026-10-15): self-contained SMART_HINT_PROMPT.md delivered, 21,082 UTF-8 bytes. Requests implementation-level pseudocode, whole-game quality and cross-request cycle prevention; speed tuning deferred. Static document checks passed; runtime unchanged. See reports/T028.md.
 
 - T028 REVIEW (2026-10-14): both histories integrated in canonical C:\Sources\MyProjets\Solitaire. 325 unit tests, 98 Chromium E2E/build and 600-run benchmark passed. Integrated reveals2588 vs advanced2583/repaired2442, repeated board+knowledge0 vs repaired10; no win-rate claim. See [integration report](reports/T028-integration.md). Earlier entries are historical.

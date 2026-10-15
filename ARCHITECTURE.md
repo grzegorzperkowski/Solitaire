@@ -227,6 +227,53 @@ conservatively preserved. It never expands a new graph or changes root limits. C
 the latest locally verified selected plan. The 2026-10-14 integration report
 supersedes the previous checkpoint's deferred verification state.
 
+
+
+### T028 — commitment/history adaptation, 2026-10-15
+
+This revision supersedes the local-positive-score requirement only for a validated
+suffix of an already accepted plan. `searchSmartHint` accepts optional read-only
+`plannerContext: {visitedStates: Set<string>, foundationHighWater: number}`.
+`createHintContext(activeSnapshots, knownCards)` reconstructs it from the active
+Undo/Redo prefix; no schema or GameState changes. Union the prefix's visible
+observations, treat remembered cards absent from that prefix as prior memory,
+then scan forward. First observations and decreased hidden-tableau count reset
+the epoch; reversible foundation changes never reset it. Keys use current memory.
+After Undo, exact historical acquisition times are unavailable; reconstructed
+first-observation epochs are conservative, not reconstructed timestamps.
+
+Keep all legal preparatory transitions, including previous boards and foundation
+returns. History only breaks otherwise equal queue/candidate ties. A fresh
+foundation recommendation must end above the greatest actual foundation count
+in this epoch (a winning endpoint always qualifies); restoring an old height
+is preparation. Reveals/new information remain goals. This is not a hard tabu
+on visited states. If only previously attained foundation goals were found,
+return INCONCLUSIVE/HISTORY_RESTRICTED, never a negative reachability proof.
+`diagnostics.historyRejectedGoals` counts these nonqualifying goal endpoints.
+F04 and complete-graph/limit bookkeeping are unchanged.
+
+When a player follows a plan, retain its legal suffix and original
+`commitment:{state,plan}`. Revalidate current-board match, information boundaries,
+maxDepth and the epoch target. A suffix may have nonpositive local U: retain it
+only if replay of the original commitment still has an accepted goal/positive U.
+Report its actual local score and `verification.localScoreAccepted`, with
+`verification.committed:true`; acceptance is for the commitment, not a claim
+that the local score became positive. Without context, legacy continuation rules
+remain. A newly planned recommendation still requires positive local U.
+A discovered winning plan outranks other candidates; otherwise preserve existing
+ranking and hidden-safe knowledge-complement estimate. Trial depth/foundation
+weights from the external proposal were rejected after worse measured outcomes.
+
+With fixed limits, correct context and continuous adherence, completed plans
+reduce hidden tableau, add knowledge or raise an epoch high-water mark, so they
+cannot form an endless sequence of reversible goals. Intermediate purposeful
+returns are possible. Limits/uncertainty can still stop a solvable game; this is
+not a guarantee of victory or of zero board returns. Manual deviations and
+Undo/Redo invalidate continuation through replay/goal checks. Restart/new game
+start with their own history. Restore rebuilds history protection but does not
+restore an unfinished commitment; repeated reloads are outside the continuous-
+adherence argument. Pause/cancellation do not mutate context. No F04 changes.
+
 ## 7. Persistence and ownership
 
 T028 diagnostic export is a separate JSON wrapper (`format:pl.solitaire.hint-diagnostic`,

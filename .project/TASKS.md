@@ -46,7 +46,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T025](tasks/T025.md) | P8 follow-up | Eliminate delayed court artwork rendering | T017 | DONE | [Criteria](tasks/T025.md#acceptance-criteria); coordinator accepted 2026-10-11 at `3a50ba8`; [report](reports/T025.md) |
 | [T026](tasks/T026.md) | P9 follow-up | Integrate Solitaire with the Playground PWA | None | REVIEW | [Criteria](tasks/T026.md#acceptance-criteria); implementation commits `005c25e` and `6e7db44`; [report](reports/T026.md) |
 | [T027](tasks/T027.md) | P7 follow-up | Reachable progress detection | T014, T007, T008, T015 | DONE | [Report](reports/T027.md); [spec](tasks/T027-spec.md) |
-| [T028](tasks/T028.md) | P7 follow-up | SmartHint goal-directed hints | T014, T027 | REVIEW | 2026-10-15: self-contained browser-chat design prompt delivered; static checks passed, runtime unchanged. [Report](reports/T028.md). Integrated runtime still awaits acceptance. |
+| [T028](tasks/T028.md) | P7 follow-up | SmartHint goal-directed hints | T014, T027 | REVIEW | 2026-10-15: history/commitment adaptation;337 unit/98 Chromium/build pass;40 paired deals,15 wins both; [report](reports/T028-belief-planner.md). Await acceptance. |
 | [T029](tasks/T029.md) | P8 follow-up | Random victory animations | T015, T017 | DONE | Coordinator accepted 2026-10-12 at `2ea1a1e`; [report](reports/T029.md) |
 
 ## Selection and model suitability

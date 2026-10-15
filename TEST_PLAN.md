@@ -264,3 +264,24 @@ three-planner comparison: node scripts/benchmark-hint-integration.mjs --full.
 105 frozen shared positions have 128-state and 100-ms runs; seeds0–99 in each
 mode use 10000 states/depth32/100ms/max100 actions with common engine/knowledge.
 Device/Safari checks and held-out longer-game validation remain separate evidence.
+
+
+## T028 commitment/history regressions — 2026-10-15
+
+- Reversible foundation pulls/returns never reset the epoch; column cycles and
+  known stock laps retain visits. Restore reconstructs the active prefix with
+  retained knowledge, and Undo excludes redo-tail visits. Restart starts fresh.
+- A fresh goal must exceed the epoch's actual foundation high-water mark, reveal
+  or learn. Previously attained goals alone give INCONCLUSIVE/HISTORY_RESTRICTED.
+  Preparatory paths may pass through visited boards to reach a new endpoint.
+- Keep a legal commitment suffix even if local U is negative only with a replayed
+  positive original certificate; expose localScoreAccepted/committed separately.
+  No context mutation, hidden-value lookahead, stale publication or depth bypass.
+- Existing hidden-permutation, graph/BFS exhaustion, shortening and cancellation
+  tests remain; winning endpoints outrank partial progress. Full production
+  Chromium checks cover existing input/restore/hint flows.
+- Pair whole games against fa98db3, not just reveals. Reject trial structural
+  weights if quality falls. Final validation uses untouched seeds100–119 in both
+  modes at 512 states/depth32 and up to500 commands, recording outcomes/cycles,
+  source hashes and legal plan replay. This is bounded development evidence,
+  not proof of win rate or phone performance. Seed42 has a separate app-budget run.

@@ -4,7 +4,7 @@ import { rememberVisible, visibleCards } from '../src/engine/knowledge.js';
 import { progressStateKey } from '../src/engine/progress.js';
 import { rankHints } from '../src/engine/hints.js';
 import { searchSmartHint as previous } from './baselines/smart-hints-90fba4f.js';
-import { searchSmartHint as current } from '../src/engine/smart-hints.js';
+import { searchSmartHint as current, createHintContext } from '../src/engine/smart-hints.js';
 
 export const ALGORITHMS = [
   { id: 'rank', search: function* (state) {
@@ -54,7 +54,7 @@ export function parseOptions(args) {
 export function runHint(algorithm, state, known, options, now = () => performance.now()) {
   const controller = algorithm.cancellable ? new AbortController() : null;
   const generator = algorithm.search(state, known, { maxStates: options.maxStates, maxDepth: options.maxDepth,
-    signal: controller?.signal, previousHint: options.previousHint });
+    signal: controller?.signal, previousHint: options.previousHint, plannerContext: options.plannerContext });
   const start = now();
   let next;
   let latest;
@@ -106,6 +106,7 @@ export function playDeal(algorithm, seed, drawCount, options, positions = [], in
   const initialHidden = hidden(state);
   const boards = new Set([progressStateKey(state, [])]);
   const observations = new Set([progressStateKey(state, known)]);
+  const snapshots = [state];
   const calls = [];
   const history = [];
   let cycles = 0;
@@ -121,7 +122,8 @@ export function playDeal(algorithm, seed, drawCount, options, positions = [], in
     let result;
     let effect;
     try {
-      result = runHint(algorithm, state, known, { ...options, previousHint });
+      result = runHint(algorithm, state, known, { ...options, previousHint,
+        plannerContext: createHintContext(snapshots, known) });
       if (!['FOUND', 'EXPLORATION', 'INCONCLUSIVE', 'NO_STRATEGIC_PROGRESS', 'WON'].includes(result.status) || !Array.isArray(result.plan)) throw Error('invalid result');
       if (result.status === 'WON' && !isWon(state)) throw Error('false WON');
       if (['INCONCLUSIVE', 'NO_STRATEGIC_PROGRESS'].includes(result.status) && result.plan.length || ['FOUND', 'EXPLORATION'].includes(result.status) && !result.plan.length) throw Error('invalid result plan');
@@ -131,9 +133,11 @@ export function playDeal(algorithm, seed, drawCount, options, positions = [], in
       elapsedMs: result.elapsedMs, visitedStates: result.visitedStates, truncated: result.truncated,
       timeCutoff: result.timeCutoff, ...effect });
     if (['INCONCLUSIVE', 'NO_STRATEGIC_PROGRESS'].includes(result.status)) { stop = result.status; break; }
-    previousHint = { state, plan: result.plan };
+    previousHint = { state, plan: result.plan,
+      commitment: result.commitment || { state, plan: result.plan } };
     const move = result.plan[0];
     state = applyMove(state, move).state;
+    snapshots.push(state);
     known = rememberVisible(state, known);
     history.push(move);
     const board = progressStateKey(state, []);

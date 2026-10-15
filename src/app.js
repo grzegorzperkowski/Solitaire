@@ -2,7 +2,7 @@ import { createSession, execute, undo, redo, restartSession, addElapsedMs } from
 import { loadSession, saveSession, serializeSession, STORAGE_KEY, SCHEMA_VERSION } from './persistence.js';
 import { isWon } from './engine/game.js';
 import { searchProgress } from './engine/progress.js';
-import { searchSmartHint } from './engine/smart-hints.js';
+import { searchSmartHint, createHintContext } from './engine/smart-hints.js';
 import { getNextVictoryAnimation } from './ui/victory-bag.js';
 
 export const LOCK_NAME = 'pl.solitaire.writer';
@@ -109,6 +109,7 @@ export function createApp({
       maxStates: hintMaxStates,
       maxDepth: hintMaxDepth,
       previousHint: shownPlan,
+      plannerContext: createHintContext(session.snapshots.slice(0, session.cursor + 1), session.knownCards),
     });
 
     const now = () => performance ? performance.now() : Date.now();
@@ -140,7 +141,8 @@ export function createApp({
         }
         isHintLoading = false;
         hint = Object.freeze(next.value);
-        shownPlan = hint.plan?.length ? { state: board, plan: hint.plan } : null;
+        shownPlan = hint.plan?.length ? { state: board, plan: hint.plan,
+          commitment: hint.commitment || { state: board, plan: hint.plan } } : null;
         notifyListeners();
       } else {
         hintTimer = setTimeout(hintBatch, 0);

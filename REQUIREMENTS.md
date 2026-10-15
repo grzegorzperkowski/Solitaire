@@ -131,3 +131,18 @@ final utility; incidental foundation prefixes do not pad reveal utility.
 Default maxDepth is 32, maxStates 10000, active time 100 ms. Preserve app
 cancellation/continuation and the complete-search-only negative status. See
 [the integration report](.project/reports/T028-integration.md) for measured evidence.
+
+
+## T028 adaptation of partial external proposal — 2026-10-15
+
+Preserve the established hidden-safe score/ranking after experimental structural
+weights failed quality comparison. Add history-derived per-information/reveal
+foundation high-water marks and stable plan commitments. Legal returns through
+old boards remain searchable; restoring an already attained foundation count
+is preparation, not a fresh recommendation goal. A verified original plan's
+legal suffix may continue despite a negative local score, with explicit
+commitment/local-score verification. Fresh plans still require positive U.
+A discovered winning plan has highest priority. History-policy rejection yields
+uncertainty, not NO_STRATEGIC_PROGRESS or a loss. Keep F04, rules, saves, Undo/Redo,
+budgets and UI contracts. No guarantee of solving every winnable deal. See the
+2026-10-15 section of T028-spec for reconstruction, lifecycle and limitations.

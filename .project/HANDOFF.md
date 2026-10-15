@@ -1,5 +1,7 @@
 # Fresh-session handoff
 
+T028 REVIEW (2026-10-15): partial external proposal adapted with reconstructed history/high-water goals and verified plan commitments; rejected worse-performing trial weights. Final337 unit/98 Chromium/build pass. Held-out40 deals:15 wins before/after,8 fewer commands,0 same-knowledge repeats; seed42 wins in137. See [report](reports/T028-belief-planner.md). Await acceptance; no push/successor; both untracked diagnostics preserved.
+
 ## T028 browser-chat prompt delivered — 2026-10-15
 
 REVIEW: SMART_HINT_PROMPT.md is self-contained (21,082 UTF-8 bytes), with data/command/API contracts, information boundaries, implementation-level pseudocode requirements and explicit whole-game/cross-request cycle criteria. Allows proposing a minimal plannerContext extension and new strategy; does not impose current weights or speed budgets. Static document checks and diff checks passed; no runtime tests needed for this documentation change. Await coordinator review; no successor or push. Both untracked diagnostic JSON files preserved.

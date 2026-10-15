@@ -44,6 +44,34 @@ import { progressKeyFor, progressStateKey } from './progress.js';
  *   of deal solvability or optimality.
  */
 
+// Reconstruct actual visits from the active history, including after reload/Undo.
+// Knowledge from discarded branches is prior memory; no new save fields are needed.
+export function createHintContext(snapshots, knownCards = []) {
+  const observations = snapshots.map(visibleCards);
+  const observed = new Set(observations.flat());
+  const known = new Set(knownCards.filter(id => !observed.has(id)));
+  const stateKey = progressKeyFor([...new Set([...knownCards, ...observations.flat()])]);
+  const visitedStates = new Set();
+  let hidden = Infinity;
+  let foundationHighWater = 0;
+  for (let index = 0; index < snapshots.length; index++) {
+    const state = snapshots[index];
+    const nextHidden = state.tableau.reduce((sum, col) => sum + col.faceUpStart, 0);
+    let learned = false;
+    for (const id of observations[index]) {
+      if (!known.has(id)) { known.add(id); learned = true; }
+    }
+    if (learned || nextHidden < hidden) {
+      visitedStates.clear();
+      foundationHighWater = 0;
+    }
+    foundationHighWater = Math.max(foundationHighWater, state.foundations.reduce((sum, pile) => sum + pile.length, 0));
+    visitedStates.add(stateKey(state));
+    hidden = nextHidden;
+  }
+  return { visitedStates, foundationHighWater };
+}
+
 // ── Key for uniquely identifying a useful possibility ──
 
 function possibilityKey(cardId, benefit) {
@@ -278,18 +306,19 @@ function firstMoveKey(move, goal) {
 }
 
 function compareCandidates(a, b) {
+  if (a.completesGame !== b.completesGame) return a.completesGame ? -1 : 1;
   if (a.goal !== b.goal) return GOAL_PRIORITY[b.goal] - GOAL_PRIORITY[a.goal];
   if (a.goal === 'REVEAL') {
     return b.components.H - a.components.H || a.plan.length - b.plan.length ||
       b.expectedPostRevealScore - a.expectedPostRevealScore || a.components.B - b.components.B ||
-      b.score - a.score || a.order - b.order;
+      b.score - a.score || (a.historyReturns ?? 0) - (b.historyReturns ?? 0) || a.order - b.order;
   }
   if (a.goal === 'INFORMATION') {
     return a.plan.length - b.plan.length || b.expectedPostRevealScore - a.expectedPostRevealScore ||
-      a.components.B - b.components.B || b.score - a.score || a.order - b.order;
+      a.components.B - b.components.B || b.score - a.score || (a.historyReturns ?? 0) - (b.historyReturns ?? 0) || a.order - b.order;
   }
   return b.components.F - a.components.F || a.components.B - b.components.B ||
-    a.plan.length - b.plan.length || b.score - a.score || a.order - b.order;
+    a.plan.length - b.plan.length || b.score - a.score || (a.historyReturns ?? 0) - (b.historyReturns ?? 0) || a.order - b.order;
 }
 
 // Verify the achieved goal, without demanding a second goal beyond the horizon.
@@ -343,17 +372,29 @@ export function analyzeHintPlan(state, knownCards, plan) {
 // Scores are relative to the current board, so after one move a fresh search can
 // prefer a plan that undoes it, and hints loop. While the player follows the shown
 // plan, keep its rest: every finished plan reveals, advances or learns something.
-function continuePlan(state, knownCards, previousHint, maxDepth) {
+function continuePlan(state, knownCards, previousHint, maxDepth, plannerContext) {
   if (!previousHint?.plan || previousHint.plan.length < 2 || previousHint.plan.length - 1 > maxDepth) return null;
   const first = applyMove(previousHint.state, previousHint.plan[0]);
   if (!first.ok || progressStateKey(first.state, knownCards) !== progressStateKey(state, knownCards)) return null;
   const plan = previousHint.plan.slice(1);
   const analysis = analyzeHintPlan(state, knownCards, plan);
-  if (!analysis.ok || !analysis.goal || !analysis.verification.accepted) return null;
+  if (!analysis.ok || !analysis.goal) return null;
+  // An unbroken commitment may cross old boards to reach a genuinely new goal.
+  // Re-scoring a suffix must not replace that goal with its own reverse move.
+  const newGoal = !plannerContext || isWon(analysis.state) || analysis.goal !== 'FOUNDATION_ADVANCE' ||
+    analysis.state.foundations.reduce((sum, pile) => sum + pile.length, 0) > plannerContext.foundationHighWater;
+  if (!newGoal || (!plannerContext && !analysis.verification.accepted)) return null;
+  const commitment = previousHint.commitment || { state: previousHint.state, plan: previousHint.plan };
+  if (!analysis.verification.accepted) {
+    const origin = analyzeHintPlan(commitment.state, knownCards, commitment.plan);
+    if (!origin.ok || !origin.verification.accepted) return null;
+  }
   return {
     phase: 'FINAL', status: analysis.goal === 'INFORMATION' ? 'EXPLORATION' : 'FOUND', plan,
     goal: analysis.goal, score: analysis.score, components: analysis.components,
-    verification: analysis.verification, visitedStates: 0, truncated: false, continued: true,
+    verification: { ...analysis.verification, accepted: true,
+      localScoreAccepted: analysis.verification.accepted, committed: true },
+    commitment, visitedStates: 0, truncated: false, continued: true,
   };
 }
 
@@ -402,12 +443,12 @@ function checkBoundary(move, state, knownSet) {
 
 // ── Main search generator (§2–§3) ──
 
-export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 32, signal, previousHint } = {}) {
+export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 32, signal, previousHint, plannerContext } = {}) {
   // Pre-check WON
   if (isWon(state)) {
     return { phase: 'FINAL', status: 'WON', plan: [], goal: null, score: null, visitedStates: 0, truncated: false };
   }
-  const continued = signal?.aborted ? null : continuePlan(state, knownCards, previousHint, maxDepth);
+  const continued = signal?.aborted ? null : continuePlan(state, knownCards, previousHint, maxDepth, plannerContext);
   if (continued) return continued;
 
   const knownSet = new Set([...knownCards, ...visibleCards(state)]);
@@ -439,7 +480,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     strategicCandidates: 0, explorationCandidates: 0, preparatoryStates: 0,
     rejectedEndStates: 0, staleQueueEntries: 0, duplicateStatesRejected: 0,
     depthLimitedBranches: 0, stateLimitedBranches: 0, unresolvedCutoffs: 0, unexpandedStates: 0,
-    cachedDeadEnds: 0, nonPositiveGoals: 0,
+    cachedDeadEnds: 0, nonPositiveGoals: 0, historyRejectedGoals: 0,
     shorteningAttempts: 0, shortenedPlansCount: 0, savedMovesCount: 0,
   };
 
@@ -451,7 +492,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     const target = candidate.components;
     for (let index = 0; index < candidate.plan.length - 1; index++) {
       const plan = [...candidate.plan.slice(0, index), ...candidate.plan.slice(index + 1)];
-      const replay = replayPlan(state, knownCards, plan, knownSet);
+      const replay = replayPlan(state, [...knownSet], plan, knownSet);
       diagnostics.shorteningAttempts++;
       // Preserve the mechanical endpoint for foundation plans.
       const preservesProof = replay.ok && (original.atBoundary ||
@@ -471,6 +512,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
               verification,
               expectedPostRevealScore: replay.atBoundary
                 ? estimatePostRevealUtility(replay.state, state, knownSet, unknownCount, unknownByRankColor) : 0 };
+            candidate.completesGame = isWon(replay.state);
             diagnostics.shortenedPlansCount = 1;
             diagnostics.savedMovesCount++;
             index = -1;
@@ -516,6 +558,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       if (a.score !== b.score) return a.score > b.score;
       if (a.path.length !== b.path.length) return a.path.length < b.path.length;
       if (a.B !== b.B) return a.B < b.B;
+      if (a.historyReturns !== b.historyReturns) return a.historyReturns < b.historyReturns;
       return a.insertOrder < b.insertOrder;
     }
     _up(pos) {
@@ -547,7 +590,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   }
 
   const queue = new PriorityQueue();
-  queue.push({ state, key: rootKey, moves: rootMoves, path: [], cost: 0, score: 0, B: 0, insertOrder: 0 });
+  queue.push({ state, key: rootKey, moves: rootMoves, path: [], cost: 0, score: 0, B: 0, historyReturns: 0, insertOrder: 0 });
   let insertCounter = 1;
 
   while (queue.length > 0) {
@@ -626,14 +669,19 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
 
       // Preparation after an earlier goal must not pad the recommended plan.
       const addsGoalProgress = components.H > node.H || components.F > node.F || components.I > node.I;
-      if (score > 0 && (isConfirmedGoal || isExploration) && addsGoalProgress) {
+      const newGoal = !plannerContext || isWon(nextState) || components.H > 0 || components.I > 0 ||
+        nextState.foundations.reduce((sum, pile) => sum + pile.length, 0) > plannerContext.foundationHighWater;
+      if (addsGoalProgress && goal && !newGoal) diagnostics.historyRejectedGoals++;
+      if (newGoal && score > 0 && (isConfirmedGoal || isExploration) && addsGoalProgress) {
         const candidate = {
           status: isConfirmedGoal ? 'FOUND' : 'EXPLORATION',
           plan: nextPath, goal, score, components, key, order: insertCounter,
           visitedStates: stateCount, truncated,
+          historyReturns: current.historyReturns + (!atBoundary && plannerContext?.visitedStates.has(key) ? 1 : 0),
           expectedPostRevealScore: atBoundary
             ? estimatePostRevealUtility(nextState, state, knownSet, unknownCount, unknownByRankColor) : 0,
         };
+        candidate.completesGame = isWon(nextState);
         // Keep goal metadata even when its board cannot fit the retained-state budget.
         const previousCandidate = candidates.get(key);
         const beatsPrevious = !previousCandidate || compareCandidates(candidate, previousCandidate) < 0;
@@ -661,6 +709,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
           cost: nextCost,
           score: evaluation.priority,
           B,
+          historyReturns: current.historyReturns + (plannerContext?.visitedStates.has(key) ? 1 : 0),
           insertOrder: insertCounter++,
         });
       }
@@ -728,7 +777,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
         expectedPostRevealScore: bestResult.expectedPostRevealScore } };
   }
 
-  const status = !truncated && diagnostics.strategicCandidates === 0 && diagnostics.explorationCandidates === 0
+  const status = !truncated && diagnostics.historyRejectedGoals === 0 && diagnostics.strategicCandidates === 0 && diagnostics.explorationCandidates === 0
     ? 'NO_STRATEGIC_PROGRESS'
     : 'INCONCLUSIVE';
   return {
@@ -736,7 +785,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     status,
     ...(status === 'NO_STRATEGIC_PROGRESS' ? { recommendedMove: null } : {}),
     diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads },
-    reason: truncated ? 'LIMIT_REACHED' : status === 'NO_STRATEGIC_PROGRESS' ? 'SEARCH_EXHAUSTED' : 'NO_STRATEGIC_RECOMMENDATION',
+    reason: diagnostics.historyRejectedGoals > 0 ? 'HISTORY_RESTRICTED' : truncated ? 'LIMIT_REACHED' : status === 'NO_STRATEGIC_PROGRESS' ? 'SEARCH_EXHAUSTED' : 'NO_STRATEGIC_RECOMMENDATION',
     plan: [],
     goal: null,
     score: null,

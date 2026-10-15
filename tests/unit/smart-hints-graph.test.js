@@ -134,3 +134,37 @@ test('cancellation at every yield preserves the best achieved goal', () => {
       plan: partial.value.plan, components: partial.value.components, verification: { accepted: true } });
   }
 });
+
+
+test('a committed route may revisit an old board to exceed the epoch foundation high-water mark', () => {
+  const { states } = graph({ S: [], Old: [[0]], New: [[0,1]] }, { S:['Old'], Old:['New'], New:[] });
+  const known=Array.from({length:52},(_,id)=>id);
+  const context={visitedStates:new Set([progressStateKey(states.Old,known)]),foundationHighWater:1};
+  const result=finish(searchSmartHint(states.S,known,{plannerContext:context,maxStates:100,maxDepth:4}));
+  expect(result).toMatchObject({status:'FOUND',components:{F:2}});
+  expect(result.plan.map(command=>command.target)).toEqual(['Old','New']);
+  const continued=finish(searchSmartHint(states.Old,known,{
+    plannerContext:context,previousHint:{state:states.S,plan:result.plan},maxDepth:4,maxStates:100,
+  }));
+  expect(continued).toMatchObject({status:'FOUND',continued:true,verification:{committed:true,accepted:true}});
+  expect(continued.plan.map(command=>command.target)).toEqual(['New']);
+});
+
+
+test('commitment uses its verified original goal when a suffix has negative local utility', () => {
+  const { states } = graph({ S:[], A:[], B:[[],[13]] }, {
+    S:['A'], A:[{type:'move',from:{pile:'waste'},to:{pile:'foundation',index:0},target:'B'}], B:[],
+  });
+  states.A.waste=[0];
+  const known=Array.from({length:52},(_,id)=>id);
+  const context={visitedStates:new Set(),foundationHighWater:0};
+  const plan=finish(searchSmartHint(states.S,known,{plannerContext:context,maxDepth:4,maxStates:100})).plan;
+  expect(plan).toHaveLength(2);
+  const result=finish(searchSmartHint(states.A,known,{
+    plannerContext:context,previousHint:{state:states.S,plan},maxStates:100,maxDepth:4,
+  }));
+  expect(result).toMatchObject({status:'FOUND',continued:true,verification:{accepted:true,localScoreAccepted:false,committed:true}});
+  expect(result.score).toBeLessThan(0);
+  expect(result.plan).toEqual(plan.slice(1));
+  expect(result.commitment).toEqual({state:states.S,plan});
+});

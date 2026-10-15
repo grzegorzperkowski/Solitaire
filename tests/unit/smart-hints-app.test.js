@@ -260,3 +260,28 @@ describe('SmartHint v1 — App Controller Integration (H12, H13, Cancellation, T
     app.destroy();
   });
 });
+
+
+test('controller derives hint context from the active timeline after reload, Undo and restart', () => {
+  const captured=[];
+  vi.spyOn(smartHints,'searchSmartHint').mockImplementation(function* (state,known,options) {
+    captured.push({state,known,context:options.plannerContext});
+    return {phase:'FINAL',status:'INCONCLUSIVE',plan:[],goal:null,score:null,truncated:false};
+  });
+  const app=createTestApp(h01());
+  try {
+    app.requestSmartHint(); vi.advanceTimersByTime(10);
+    expect(captured.at(-1).context).toEqual(smartHints.createHintContext([app.getState().session.state],app.getState().session.knownCards));
+    app.executeCommand({type:'draw'});
+    app.undo();
+    app.requestSmartHint(); vi.advanceTimersByTime(10);
+    const session=app.getState().session;
+    expect(captured.at(-1).context).toEqual(smartHints.createHintContext(session.snapshots.slice(0,session.cursor+1),session.knownCards));
+    expect(captured.at(-1).context.visitedStates.size).toBe(1);
+    app.redo(); app.requestSmartHint(); vi.advanceTimersByTime(10);
+    const redone=app.getState().session;
+    expect(captured.at(-1).context).toEqual(smartHints.createHintContext(redone.snapshots.slice(0,redone.cursor+1),redone.knownCards));
+    app.restart(); app.requestSmartHint(); vi.advanceTimersByTime(10);
+    expect(captured.at(-1).context.visitedStates.size).toBe(1);
+  } finally {app.destroy();}
+});
