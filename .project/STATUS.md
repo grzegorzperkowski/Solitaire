@@ -1,6 +1,6 @@
-T028 IN_PROGRESS (2026-10-15): coordinator resumed R&D; implement isolated FIFO/BFS versus 2d1ecfc and measure complete paired games. Preserve current scoring/history/commitments and both diagnostic JSON files. See .project/reports/T028-bfs-rd.md.
-
 # Project status
+
+T028 REVIEW (2026-10-15): implemented isolated FIFO/BFS R&D against 2d1ecfc. Baseline/FIFO wins 9/3 at 512 and 11/3 at 2048 (40 paired deals each), 4/1 at 10000 (10-deal subset). 367 tests/build pass; FIFO not promoted, production unchanged. See [report](reports/T028-bfs-rd.md). Both diagnostic JSON files preserved; no push/successor; acceptance pending.
 
 T028 REVIEW (2026-10-15): partial external proposal adapted with reconstructed history/high-water goals and verified plan commitments; rejected worse-performing trial weights. Final337 unit/98 Chromium/build pass. Held-out40 deals:15 wins before/after,8 fewer commands,0 same-knowledge repeats; seed42 wins in137. See [report](reports/T028-belief-planner.md). Await acceptance; no push/successor; both untracked diagnostics preserved.
 

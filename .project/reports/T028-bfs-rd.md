@@ -1,6 +1,6 @@
 # T028 — FIFO/BFS R&D, 2026-10-15
 
-IN_PROGRESS. Coordinator explicitly resumed experimental implementation and whole-game measurement: "teraz robimy badania ... żeby sprawdzić czy jest lepszy trzeba to zaimplementować i sprawdzić".
+REVIEW. Coordinator explicitly resumed experimental implementation and whole-game measurement: "teraz robimy badania ... żeby sprawdzić czy jest lepszy trzeba to zaimplementować i sprawdzić". Experiment complete; no coordinator acceptance inferred.
 
 Base: 2d1ecfc on master. T014/T027 dependencies remain accepted. Both unrelated untracked diagnostic JSON files must remain untouched. Sequential execution; no agents, branches, worktrees or push.
 
@@ -58,11 +58,32 @@ Paired: both win3, baseline-only8, FIFO-only0, neither29. No move-limit terminat
 
 ### 10000-state follow-up
 
-Exploratory subset seeds200–204, both modes (10 paired deals), same depth32/500-command cap and no clock cutoff. This subset was chosen as the first five consecutive seeds, not selected by outcome. It is not a new independent validation sample. Measurement in progress.
+Command: `node scripts/experiments/smart-hint-bfs.mjs --budget=states --count=5 --start-seed=200 --max-steps=500 --max-states=10000 --max-depth=32 --output=.cache/T028-bfs-10000.json`
+
+Exploratory subset seeds200–204, both modes (10 paired deals), same depth32/500-command cap and no clock cutoff. This subset was chosen as the first five consecutive seeds, not selected by outcome. It is not a new independent validation sample. All runs completed, exit0.
+
+| Metric | Baseline | FIFO/BFS |
+| --- | ---: | ---: |
+| Draw1 wins / 5 | 3 | 1 |
+| Draw3 wins / 5 | 1 | 0 |
+| Total wins / 10 | 4 | 1 |
+| INCONCLUSIVE | 1 | 4 |
+| NO_STRATEGIC_PROGRESS | 5 | 5 |
+| Tableau reveals | 135 | 125 |
+| Commands | 950 | 823 |
+| Same board+knowledge returns | 2 | 0 |
+
+Paired: both win1, baseline-only3, FIFO-only0, neither6. No move-limit terminations or preparation-only recommendations. FIFO recovered seed203/Draw1 at this budget (152 commands versus baseline148) but still lost seed202/Draw1 and seed204/Draw1 that baseline won. Baseline also won seed201/Draw3, where FIFO stopped. The depth limit is still32: this tests the application's numeric state ceiling without its 100ms time ceiling, not unlimited BFS.
+
+## Finding
+
+Do not promote FIFO as the default: it produced fewer wins at both 40-deal budgets and in the 10-deal high-budget follow-up. This is an implemented, measured negative experiment, not a theoretical rejection of BFS. It does not establish that every BFS-based strategy is worse; only the isolated FIFO replacement with the current scoring/history policy and measured limits was tested.
+
+There were 90 paired runs (180 whole-game trajectories) over 40 distinct mode/seed combinations, including repeated budgets. Same-board returns alone are insufficient as a quality metric. A larger search can choose a different, worse goal even though it can reach more states. Goal selection and finite-budget exploration remain separate questions for a future coordinator-assigned experiment; no change to U, history policy or information model was bundled here.
 
 ## Evidence and scope
 
-Tracked summaries contain all individual outcomes, paired counts, Node version, options and hashes of both planner sources. Full commands and per-hint checks are in ignored `.cache/T028-bfs-{512,2048}.json`; summaries include their normalized SHA256. `previous`/`current` retain the existing comparison helper's naming and mean baseline/FIFO here.
+Tracked summaries contain all individual outcomes, paired counts, Node version, options and hashes of both planner sources: [512](T028-bfs-512-summary.json), [2048](T028-bfs-2048-summary.json), [10000](T028-bfs-10000-summary.json). Full command histories and per-hint checks are in ignored `.cache/T028-bfs-{512,2048,10000}.json`; summaries include their normalized SHA256. `previous`/`current` retain the existing comparison helper's naming and mean baseline/FIFO here. All three runners exited0, including legal-replay, invariants, no-preparation-only and expansion-limit assertions.
 
 Production `src/` has no diff. `npm run build`: exit0, 35 modules, JS108.10kB/gzip32.94. Build overlapped deterministic-work measurement; no speed claim. No new dependencies, schema, F04, input or UI changes. The in-memory pinned planner imports engine dependencies from the checked-out tree; reproduce at this experiment's commit, not an arbitrary future engine revision.
 
@@ -70,4 +91,10 @@ Both untracked files retain report hashes: cursor114 `e37b9b83a9954eca408926ba99
 
 E2E and physical-device checks are not rerun for this isolated Node experiment. Full production UI evidence remains in the previous delivery, not claimed fresh here. No improvement, shortest-plan, mobile latency, universal win-rate or zero-return guarantee. No automatic promotion into the application.
 
-10000-state comparison pending. Resume here if interrupted; do not treat an unfinished measurement as a conclusion.
+## Delivery / resume
+
+Implementation, focused tests and the 512/2048 results are checkpointed at `6176477`. Follow-up commit records the 10000 results and REVIEW status. Sequential author review checked the source replacement boundaries, monotonic FIFO depth, unchanged production imports, outcome labels, paired seed coverage, budgets, raw hashes and explicit staging. No agents, new branches, push or publication.
+
+`git diff --check` and `git diff --cached --check` passed before checkpoint commit; final checks are repeated before the results commit. No behavior changed after the 367-test/build runs. No fresh seed42 game, E2E, physical-device or speed calibration was run in this experiment. The earlier 137-command result belongs to its earlier 100ms profile and is not claimed for these fixed-state runs.
+
+For resumption, reproduce using the commands above at this experiment commit and read the saved paired outcomes. All planned measurements are finished. Keep T028 REVIEW until explicit coordinator acceptance (date, approver, accepted commit); do not auto-start a successor. The experiment remains available in Git without changing the application's planner.
