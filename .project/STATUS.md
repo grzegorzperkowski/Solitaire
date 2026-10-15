@@ -1,5 +1,7 @@
 # Project status
 
+- T028 documentation follow-up REVIEW (2026-10-15): self-contained SMART_HINT_PROMPT.md delivered, 21,082 UTF-8 bytes. Requests implementation-level pseudocode, whole-game quality and cross-request cycle prevention; speed tuning deferred. Static document checks passed; runtime unchanged. See reports/T028.md.
+
 - T028 REVIEW (2026-10-14): both histories integrated in canonical C:\Sources\MyProjets\Solitaire. 325 unit tests, 98 Chromium E2E/build and 600-run benchmark passed. Integrated reveals2588 vs advanced2583/repaired2442, repeated board+knowledge0 vs repaired10; no win-rate claim. See [integration report](reports/T028-integration.md). Earlier entries are historical.
 
 - T028 IN_PROGRESS checkpoint (2026-10-13): allocation-free estimate, shared verification, command-field alternative keys, shorter information/equal-F plans and cooperative final shortener implemented. 36 distinct focused tests and build passed; full unit/E2E/benchmark deferred at coordinator bedtime request. No p95 claim. See [checkpoint](reports/T028-p95-checkpoint.md); resume only on assignment, no push.

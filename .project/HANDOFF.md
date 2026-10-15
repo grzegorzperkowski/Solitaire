@@ -1,5 +1,13 @@
 # Fresh-session handoff
 
+## T028 browser-chat prompt delivered — 2026-10-15
+
+REVIEW: SMART_HINT_PROMPT.md is self-contained (21,082 UTF-8 bytes), with data/command/API contracts, information boundaries, implementation-level pseudocode requirements and explicit whole-game/cross-request cycle criteria. Allows proposing a minimal plannerContext extension and new strategy; does not impose current weights or speed budgets. Static document checks and diff checks passed; no runtime tests needed for this documentation change. Await coordinator review; no successor or push. Both untracked diagnostic JSON files preserved.
+
+## T028 browser-chat prompt assignment — 2026-10-15
+
+Coordinator approved a detailed algorithm design with implementation-level pseudocode, not full JavaScript. Rewrite SMART_HINT_PROMPT.md so the external AI needs no repository access. Prioritize whole-game quality and cross-request cycle prevention; speed tuning is deferred. Preserve both untracked diagnostic JSON files; no runtime changes or successor.
+
 ## Current T028 integration — 2026-10-14
 
 REVIEW: 325 unit tests, 98 Chromium E2E and build passed. Full three-planner comparison completed: 200 deals each, 105 shared boards, 100-ms budget. Integrated2588 reveals vs advanced2583/repaired2442; 0 observed same-knowledge cycles, wins0 under100 actions. Report/summary record sources and raw evidence. Acceptance pending; push explicitly authorized by coordinator. No successor.

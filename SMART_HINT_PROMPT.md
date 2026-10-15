@@ -1,180 +1,382 @@
-# Prompt: SmartHint do pasjansa Klondike
+# Prompt do zewnętrznego AI: projekt Smart Hint dla Klondike
 
-Zaimplementuj lub popraw inteligentną podpowiedź (SmartHint) w istniejącej
-aplikacji Klondike. Pokaż pierwszy ruch krótkiego planu, który prowadzi do
-rzeczywistego postępu. Priorytetem są poprawność i brak podglądania ukrytych
-kart; szybkość można poprawić później.
+Jesteś projektantem algorytmów wyszukiwania i podejmowania decyzji przy niepełnej
+informacji. Zaprojektuj Smart Hint dla opisanej poniżej aplikacji pasjansa.
+Nie masz dostępu do repozytorium. Ten dokument jest samodzielnym opisem zadania;
+nie proś o źródła, pliki ani historię rozmowy. Jeśli czegoś brakuje, nazwij
+założenie i zaproponuj najmniejszy potrzebny dodatek do kontraktu.
 
-Pracuj na dostarczonym kodzie i zachowaj jego strukturę. Jeśli czat nie widzi
-repozytorium, poproś najpierw tylko o te fragmenty, których brakuje:
+Odpowiedz po polsku. Potrzebujemy szczegółowego projektu i pseudokodu na poziomie
+implementacji, nie kompletnego modułu JavaScript. Inny programista ma móc
+zaimplementować go bez samodzielnego wymyślania istotnych reguł decyzyjnych.
+Nie wystarczy „zastosuj A*, heurystykę i unikaj cykli”.
 
-1. Moduł SmartHint oraz sygnatury i kształt stanu z silnika gry.
-2. Implementacje widoczności/kart znanych i klucza stanu używanego w wyszukiwaniu.
-3. Fragment kontrolera, który uruchamia hint, oraz formatter komunikatu UI.
-4. Powiązane testy SmartHint i fixture odtwarzające przypadki brzegowe.
+## 1. Cel i priorytety
 
-Poproś o treść fragmentów, nie o ścieżkę do repozytorium. Nie żądaj całego UI,
-stylów, `package.json` ani pełnego zestawu testów, chyba że konkretna zmiana tego
-wymaga. Jeśli zakres kodu jest duży, poproś o pliki etapami. Nie zgaduj brakującego
-API ani nie pisz fikcyjnej integracji. Uzupełnij istniejący kod zamiast budować
-drugi system. Nie dodawaj zależności runtime ani nie zmieniaj zasad gry, zapisu
-czy shuffle.
+Gracz naciska „Podpowiedź”, otrzymuje jeden legalny ruch i krótkie wyjaśnienie
+celu. Po wykonaniu ruchu może poprosić o następną podpowiedź. Oceniaj algorytm
+przez jakość CAŁEJ takiej partii, od rozdania do wygranej albo uzasadnionego
+zatrzymania. Każda podpowiedź powinna pomagać w rozwiązaniu gry, a nie tylko
+poprawiać lokalny wynik heurystyki.
 
-## Kontrakt silnika
+Priorytety:
 
-- JavaScript ES modules, bez TypeScriptu. Planer jest czystą logiką: bez DOM,
-  historii sesji, zapisu i wykonywania ruchów.
-- Używaj istniejących `getLegalMoves(state)`, niemutującego
-  `applyMove(state, command)`, `isWon(state)` i `visibleCards(state)`.
-  Silnik jest jedynym autorytetem legalności. Nie duplikuj zasad.
-- `CardId` to liczba 0–51 (`suitIndex * 13 + rank - 1`). Tablice są ułożone
-  od dołu do góry; wierzch jest na końcu. Tableau ma zakryty prefix przed
-  `faceUpStart`. `drawCount` wynosi 1 lub 3.
-- Komendy to `{type:'draw'}`, `{type:'recycle'}` lub
-  `{type:'move', from, to}`. Tableau `cardIndex` wskazuje początek całego
-  przenoszonego odkrytego ciągu. Odsłonięcie karty tableau jest częścią ruchu.
-- Wiedza `knownCards` należy do sesji. Podpowiedź jej nie aktualizuje; pamięć
-  zmienia się dopiero po prawdziwym ruchu. Undo nie zapomina kart.
+1. Legalność i brak korzystania z nieznanych zakrytych kart.
+2. Jak największa szansa wygrania przy konsekwentnym wykonywaniu wskazówek.
+3. Brak jałowych pętli: A→B→A, dłuższych cykli, ciągłego przekładania kart
+   między kolumnami lub bazą i tableau, bezproduktywnego obiegania stock/waste.
+4. Sensowne plany przygotowawcze, spójność kolejnych wskazówek i uczciwa niepewność.
+5. Krótsza droga do wygranej, jeśli nie pogarsza powyższych celów.
 
-## Wyszukiwanie i wiedza
+Szybkość i optymalizacje pamięci odłożymy na później. Nie podporządkowuj
+strategii obecnym limitom 100 ms ani konkretnym dotychczasowym wagom.
+Obliczenia muszą jednak dać się porcjować i przerwać bez zawieszania interfejsu.
+Nie proponuj nieskończonego przeszukiwania jako sposobu na pewną odpowiedź.
 
-Zachowaj generator API:
+Wiemy, że bez znajomości zakrytych kart nie można zagwarantować wygranej każdego
+rozwiązywalnego rozdania. Wyraźnie oddziel: dowód, heurystykę, oszacowanie
+prawdopodobieństwa i wynik pomiaru. Nie obiecuj globalnej optymalności ani
+rozwiązywalności na podstawie krótkiego planu lub dodatniej oceny.
+
+## 2. Aplikacja i zasady
+
+Przeglądarkowa aplikacja offline, vanilla JavaScript ES modules, bez backendu
+ani zależności runtime. Silnik jest deterministyczny, bez DOM. Podpowiedź nie
+wykonuje ruchów; robi to gracz przez ten sam walidowany interfejs co zwykły ruch.
+Nie projektuj UI, zapisu gry, shuffle ani nowego silnika legalności.
+
+- 52 karty, cztery kolory; as=1, król=13.
+- Siedem kolumn tableau. Początkowo długości 1–7, tylko wierzchy odkryte;
+  pozostałe 24 karty są w stock. Waste i cztery bazy zaczynają puste.
+- Tableau układa się malejąco, z naprzemiennymi barwami czerwony/czarny.
+  Przenosi się wybrany odkryty ciąg w całości: od wybranej karty do wierzchu.
+  Pustą kolumnę może zająć tylko król lub ciąg zaczynający się królem.
+- Bazy mają przypisane kolory kart i rosną od asa do króla.
+  Wierzch bazy wolno cofnąć na legalne tableau. Baza→baza jest zabronione.
+- Tylko wierzch waste jest grywalny. Stock nie można grać bez dobrania.
+- Draw 1 albo Draw 3: dobierz odpowiednio do 1 albo do 3 kart, po jednej,
+  ze stock na waste; ostatnia dobrana jest grywalnym wierzchem waste.
+  Gdy stock zawiera mniej kart, dobiera się pozostałe. Kolejne dobranie
+  jest legalne również przy niepustym waste.
+- Przy pustym stock można przenieść całe waste z powrotem do stock, odwracając
+  kolejność, bez tasowania. Recycle jest osobną komendą, nie dobiera karty.
+  Liczba obiegów jest nieograniczona. Puste stock i waste nie dają akcji.
+- Przeniesienie odsłaniające zakrytą kartę tableau automatycznie ją odkrywa;
+  transfer i odkrycie są jedną komendą.
+- Wygrana: wszystkie 52 karty w czterech poprawnych bazach.
+- Undo/Redo są operacjami sesji, nie krawędziami grafu legalnych ruchów planera.
+
+## 3. Dokładny model danych
+
+Poniżej zapis przypominający typy służy opisowi; aplikacja używa zwykłego JS.
+
+```text
+CardId = integer 0..51
+suitIndex(id) = floor(id / 13)
+rank(id) = (id % 13) + 1
+suits: 0=trefl, 1=karo, 2=kier, 3=pik
+color(id): 1 i 2 czerwone, 0 i 3 czarne
+
+GameState = {
+  rulesVersion: 1,
+  shuffleVersion: 1,
+  seed: uint32,
+  drawCount: 1 | 3,
+  stock: CardId[],
+  waste: CardId[],
+  tableau: Array[7] of { cards: CardId[], faceUpStart: integer },
+  foundations: Array[4] of CardId[]
+}
+```
+
+W KAŻDEJ tablicy kart indeks 0 oznacza spód, ostatni indeks — wierzch.
+W kolumnie indeksy `< faceUpStart` są zakryte, pozostałe odkryte.
+Pusta kolumna ma `cards=[]`, `faceUpStart=0`. W bazach indeks odpowiada suitIndex.
+Przykład kolumny: `{cards:[8,42,24,10],faceUpStart:2}` oznacza dwie zakryte
+karty, a potem odkryte Q karo i J trefl, z waletem na wierzchu.
+
+Kolejność stock/waste: stock `[D,C,B,A]`, draw3 → stock `[D]`,
+waste `[A,B,C]`. Recycle waste `[A,B,C]` → stock `[C,B,A]`, waste `[]`.
+To symbole przykładowych kart, nie dodatkowy typ danych.
+
+Stan zawiera rzeczywiste ID wszystkich kart, również zakrytych. Jest to
+szczegół reprezentacji silnika, NIE uprawnienie planera do ich podglądania.
+Nie odtwarzaj tasowania z seed; seed i wersje to metadane zgodności.
+Plansza nie przechowuje historii, pamięci gracza, zegara, statystyk ani selekcji.
+
+### Komendy
 
 ```js
-searchSmartHint(state, knownCards = [], {
+{ type: 'draw' }
+{ type: 'recycle' }
+{ type: 'move', from: {pile:'tableau', index:0, cardIndex:2},
+                to: {pile:'tableau', index:3} }
+{ type: 'move', from: {pile:'waste'},
+                to: {pile:'foundation', index:1} }
+{ type: 'move', from: {pile:'foundation', index:2},
+                to: {pile:'tableau', index:4} }
+```
+
+Indeksy kolumn 0..6, baz 0..3. `cardIndex` wskazuje początek całego przenoszonego
+odkrytego ciągu. Każde źródło tableau ma index/cardIndex, waste tylko pile,
+baza pile/index. Cel ma pile/index. Brak dodatkowych pól w komendach; silnik
+odrzuca także nadmiarowe pola. Przykłady pokazują kształt, nie legalność
+w dowolnym stanie.
+
+### Dostępne funkcje — przyjmij, że istnieją
+
+```text
+createGame({seed,drawCount,rulesVersion=1,shuffleVersion=1}) -> GameState
+getLegalMoves(state) -> Command[]
+applyMove(state,command) ->
+    {ok:true,state:GameState,revealed:CardId|null} | {ok:false,reason:string}
+isWon(state) -> boolean
+assertInvariants(state) -> throws on invalid state, otherwise returns
+rank(id), suitIndex(id), color(id)
+visibleCards(state) -> CardId[]
+rememberVisible(state,knownCards=[]) -> CardId[]
+progressStateKey(state,knownCards) -> string
+progressKeyFor(knownCards) -> function(state)->string
+```
+
+`applyMove` nie mutuje wejścia. `revealed` dotyczy automatycznego odsłonięcia
+tableau; nową informację ze stock/waste wykrywa się przez widoczność.
+Ruchy bierz z `getLegalMoves`, a skutki z `applyMove`; nie pisz drugiej
+implementacji reguł. Enumeracja jest stabilna: draw, recycle, źródła tableau
+według index i cardIndex rosnąco, waste, bazy rosnąco; cele tableau, potem bazy.
+To porządek remisów, nie strategia.
+
+`visibleCards` zwraca wszystkie odkryte karty tableau, wszystkie karty baz
+oraz ostatnie `drawCount` kart waste. Zatem w Draw 3 widać wachlarz do trzech
+kart, choć grać wolno tylko ostatnią.
+
+`knownCards` jest tablicą unikalnych ID kart wcześniej widzianych przez gracza.
+Po rzeczywistym ruchu sesja wykonuje `rememberVisible`, czyli sumę pamięci
+z obecną widocznością. Undo nie wymazuje poznanych kart, również po zmianie
+gałęzi historii. Podpowiedź nie zmienia rzeczywistej pamięci.
+
+Dokładna semantyka dostępnego klucza:
+
+```text
+JSON.stringify([
+  state.rulesVersion,
+  state.drawCount,
+  state.tableau.map(c => [c.faceUpStart,
+                         c.cards.map((id,i) => i<c.faceUpStart ? null : id)]),
+  state.foundations, state.stock, state.waste,
+  sortedUnique(knownCards)
+])
+```
+
+`progressKeyFor` jedynie przygotowuje stałą część wiedzy do wielokrotnego użycia.
+Ukryte ID w stock/waste są tu tokenami kolejności, nie cechami do oceny.
+Klucz nie sortuje kolumn ani nie zmienia indeksów komend. Dla symulacji
+przekraczającej odkrycia lub hipotetycznych rozkładów zaprojektuj osobny
+poprawny klucz; nie zakładaj automatycznie, że powyższy wystarczy.
+
+## 4. Granice informacji i swoboda projektu
+
+Rozdziel obserwację gracza, jego pamięć oraz pełny stan techniczny silnika.
+Nieznane zakryte ID traktuj wyłącznie jako nieprzezroczyste tokeny dla
+kolejności, równości i sprawdzania, czy karta była już znana. Ich ranga, kolor,
+suit, wartość liczbowa lub faktyczne miejsce nie mogą wpływać na ocenę,
+priorytety, próbkowanie, losowy seed ani rozstrzyganie remisów.
+
+Obecna integracja stosuje następujące granice:
+
+- Plan kończy się przy KAŻDYM odsłonięciu tableau, także zapamiętanej karty.
+- Kończy się też, jeśli draw albo zdjęcie waste ujawnia jakąkolwiek kartę
+  spoza wiedzy korzenia. Dotyczy to również nowego elementu wachlarza Draw 3.
+- Końcowy ruch jest legalny, ale nie wolno oceniać go przez podgląd wartości
+  dopiero ujawnionej karty ani rozwijać na tej podstawie dalszych ruchów.
+  Dotyczy to również wywołania `getLegalMoves` na rzeczywistym stanie po odkryciu
+  w celu policzenia jego mobilności lub rozstrzygnięcia remisu.
+- Znane dobrania mogą być przygotowaniem. Gdy zapamiętana karta legalnie staje
+  się widoczna po draw, można rozważać jej legalne ruchy. Samo członkostwo
+  w knownCards nie uprawnia do oceniania obecnie zakrytej karty tableau.
+
+To obowiązujący kontrakt publikowanego planu, a nie narzucona metoda
+wyszukiwania. Możesz zaproponować ocenę probabilistyczną, plany warunkowe lub
+próbkowanie NIEZNANYCH rozkładów wewnątrz algorytmu, jeśli uznasz to za potrzebne.
+Wtedy zdefiniuj konstrukcję hipotez z obserwacji i pamięci, rozkład losowania,
+aktualizację przekonań i agregację wyników. Nie korzystaj z prawdziwego układu
+zakrytych kart. Żadna pojedyncza hipotetyczna gałąź nie jest potwierdzonym planem
+w rzeczywistej grze. Publikuj wykonalny wspólny prefix do najbliższej granicy,
+a następnie przelicz po faktycznej obserwacji. Jeśli wymaga to zmiany kontraktu,
+wyraźnie ją nazwij i oddziel od wersji kompatybilnej.
+
+Test uczciwości: przy zamianie tożsamości kart całkowicie nieznanych graczowi,
+z zachowaniem legalnej planszy i tej samej historii obserwacji, rekomendacje
+muszą być jednakowe przy stałym budżecie i ustalonej losowości. Dla tokenów
+potrzebne jest spójne przemianowanie; numeryczne ID nie mogą ukradkiem
+sterować kolejnością. Podaj, jak taki test przeprowadzić.
+
+## 5. Kontrakt wywołania i wyniku
+
+Obecny interfejs, który należy uwzględnić w projekcie:
+
+```js
+function* searchSmartHint(state, knownCards = [], {
   maxStates = 10000, maxDepth = 32, signal, previousHint,
 } = {})
 ```
 
-Użyj ograniczonego Best-First Search legalnych komend. Można rozwijać ruchy
-przygotowawcze, także przejściowo niekorzystne (np. cofnięcie karty z bazy).
-Nie kończ gałęzi po samym awansie baz, jeśli może prowadzić dalej do celu.
-Odrzucaj powtórzony stan osiągnięty nie droższą ścieżką; użyj istniejącego
-`progressStateKey`/`progressKeyFor`, jeśli pasuje. Remisy rozstrzygaj stabilnie.
-
-`maxStates` ogranicza zachowane różne stany i rzeczywiste rozwinięcia; korzeń
-też liczy się do limitu. `maxDepth` ogranicza wszystkie komendy, w tym draw
-i recycle. Limit, przerwanie lub anulowanie nie mogą zostać przedstawione jako
-pełne przeszukanie. Stały limit stanów powinien dawać deterministyczny wynik.
-
-Stan zawiera zakryte ID, ale ich wartości nie są informacją dla planera.
-Ukryte rangi, symbole i kolory nie mogą wpływać na ocenę, wybór gałęzi ani remisy.
-Pamięć `knownCards` nie uprawnia do przewidywania ruchów zakrytej karty.
-
-Zakończ gałąź na pierwszej granicy nowej informacji:
-
-- każde odsłonięcie tableau, także wcześniej zapamiętanej karty;
-- dobranie nieznanej karty ze stock;
-- zdjęcie waste, które odsłania nieznaną kartę pod wachlarzem.
-
-Ruch na granicy może być końcem planu; nie analizuj potem ujawnionej wartości.
-Na tej granicy maskuj nową kartę także przy obliczaniu legalnych możliwości.
-Nie wolno traktować zakrytej, niepustej kolumny jako pustej. Odsłonięcie tableau
-liczy się jako H, nigdy jako I.
-
-## Cele i ocena
-
-Cel końcowy musi być jednym z poniższych:
-
-- `REVEAL`: odsłonięcie co najmniej jednej zakrytej karty tableau;
-- `FOUNDATION_ADVANCE`: dodatni przyrost liczby kart w bazach względem
-  korzenia analizy;
-- `INFORMATION`: zdobycie nowej informacji na granicy opisanej wyżej.
-
-Waste→tableau, znany draw/recycle, ruchy między kolumnami i powrót z bazy mogą
-być przygotowaniem, ale samodzielnie nie tworzą celu. Ostatnia komenda planu
-musi wprowadzać H, F lub I względem poprzedniego stanu. Nie dopisuj ruchów po
-osiągnięciu celu. Awans baz jest samodzielnym celem: nie wymagaj kolejnego celu
-ani dowodu, że da się kontynuować.
-
-Składniki licz względem korzenia S0:
-
-| Symbol | Znaczenie |
-| --- | --- |
-| H | Liczba odsłoniętych zakrytych kart tableau. |
-| F | Zmiana liczby kart w bazach (może być ujemna). Powrót tej samej karty do bazy nie daje zysku. |
-| I | 1 za nieznany draw/nową kartę waste, w przeciwnym razie 0. Tableau nie daje I. |
-| W | Liczba różnych kart ze stock/waste S0 przeniesionych do tableau/baz; premia wyłącznie za przygotowanie. |
-| M / B | Nowe / utracone użyteczne możliwości: legalny ruch bezpośrednio odsłaniający tableau lub zwiększający bazy. Zrealizowana korzyść nie jest stratą B. |
-| L | Liczba komend, wliczając draw i recycle. |
-
-Użyteczną możliwość identyfikuj kartą rozpoczynającą przenoszony ciąg i typem
-korzyści; równoważne miejsca docelowe nie mnożą wyniku. Pusta kolumna lub
-przesuwanie króla między pustymi kolumnami samo nie daje punktów.
+`previousHint`, jeśli podano: `{state: poprzedniaPlansza, plan: Command[]}`.
+Nie jest historią całej partii. Kontroler zachowuje ostatni pokazany plan;
+po ruchu ponownie woła generator, a UI wykonuje wyłącznie `plan[0]` na żądanie
+gracza. Powtarzane żądanie na tej samej planszy/wiedzy pokazuje zapamiętany wynik.
+Nie wolno zakładać, że kolejne żądanie dostarczy nowe losowanie.
 
 ```text
-U = 120H + 40F_goal + 20I + 10M - E - 50B
-priorytet kolejki = U + 65W - 3,5N
+HintResult = {
+  status: 'FOUND'|'EXPLORATION'|'INCONCLUSIVE'|'NO_STRATEGIC_PROGRESS'|'WON',
+  plan: Command[],
+  goal: 'REVEAL'|'FOUNDATION_ADVANCE'|'INFORMATION'|null,
+  score: number|null,
+  visitedStates: integer,
+  truncated: boolean
+}
 ```
 
-`N` to liczba draw/recycle. `E` wynosi 4 za transfer lub nieznane dobranie oraz
-0,5 za znane dobranie/recycle. Dla REVEAL `F_goal` zachowuje ujemne F, a dodatnie
-F liczy najwyżej jako 1 i tylko wtedy, gdy końcowy ruch jednocześnie przenosi
-kartę do bazy. Dla pozostałych celów `F_goal = F`. W nie wchodzi do U. Publikuj
-tylko plany z U > 0.
+- FOUND: legalny plan rzeczywiście odkrywa tableau lub kończy z większą liczbą
+  kart w bazach niż na początku analizy. Sam powrót wcześniej cofniętej karty
+  nie stanowi zysku netto względem tego korzenia.
+- EXPLORATION: plan doprowadza do nowej informacji; jej korzystność jest nieznana.
+- Sam waste→tableau, przestawienie kolumn, znany draw/recycle czy cofnięcie
+  z bazy mogą przygotować cel, ale nie wystarczają do FOUND.
+- INCONCLUSIVE: brak rekomendacji, pusty plan, goal/score=null.
+- NO_STRATEGIC_PROGRESS: tylko pełne wyczerpanie grafu osiągalności bez celu
+  odsłonięcia, przyrostu baz ani nowej informacji. Pusty plan, truncated=false.
+  Odrzucenie celów przez heurystykę lub pamięć pętli nie jest takim dowodem.
+- WON: wejściowa plansza jest już wygrana; pusty plan i goal/score=null.
 
-Wybór celu: REVEAL przed FOUNDATION_ADVANCE przed INFORMATION. W ramach celu:
-REVEAL preferuje większe H, krótszy plan, lepszą estymację po odsłonięciu,
-mniejsze B, większe U; FOUNDATION_ADVANCE preferuje większe F, mniejsze B,
-krótszy plan i większe U; INFORMATION preferuje krótszy plan, lepszą estymację,
-mniejsze B i większe U. Na końcu użyj stabilnej kolejności.
+Plan jest konkretną sekwencją legalnych komend, nie obietnicą wygranej.
+Cel musi opisywać faktyczny efekt sekwencji. Nie wydłużaj osiągniętego celu
+jałowymi ruchami dla zwiększenia punktacji. Awans baz może być końcem planu,
+ale nie musi kończyć wewnętrznego rozważania dalszej strategii.
 
-Estymacja po odsłonięciu jest pomocnicza, tylko na granicy informacji. Nie
-odczytuj położeń nieznanych kart: oszacuj jedną kartę z puli ID 0–51 poza kartami
-znanymi i widocznymi w korzeniu. Korzyść: 2 za ruch do bazy, w przeciwnym razie
-1,5 za króla pasującego do pustej kolumny, w przeciwnym razie 1 za dopasowanie
-rangi i przeciwnego koloru do znanego wierzchu tableau, inaczej 0. Policz średnią
-po puli; pusta pula daje 0. Pomiń właśnie odsłonięty wierzch tableau, również
-zapamiętany. Estymacja nie jest gwarancją ani składnikiem U.
+Wynik może zawierać opcjonalną diagnostykę, wyjaśnienie i oszacowanie pewności;
+nie udawaj skalibrowanego prawdopodobieństwa zwykłym wynikiem heurystyki.
+Obecne dodatkowe pola oceny nie narzucają nowemu projektowi konkretnych wag.
+UI pokazuje po polsku pierwszy ruch, rodzaj celu i długość planu.
 
-## Wyniki i anulowanie
+Generator oddaje sterowanie regularnie. Każdy yield i wynik końcowy powinny
+udostępniać najlepszą dotąd sprawdzoną rekomendację, o ile istnieje.
+AbortSignal kończy pracę wynikiem cząstkowym z truncated=true, zachowując plan.
+Limity głębokości, stanów, czasu i próbkowania nie dowodzą wyczerpania grafu.
+Nawet FOUND może mieć truncated=true. Zdefiniuj liczenie odwiedzonych stanów,
+rozwinięć, hipotez i obcięć, również dla proponowanej metody probabilistycznej.
 
-Wynik zawiera `{status, plan, goal, score, visitedStates, truncated}`.
-Rekomendacja zawiera też `components: {H,F,I,W,M,B,L}`, `verification` i
-diagnostykę. Zachowaj istniejące `analyzeHintPlan` do legalnego replayu i oceny
-planu.
+Obecne wartości 10000 stanów/32 komendy/100 ms aktywnej pracy i porcje ok. 4 ms
+opisują stan aplikacji, nie cel wydajnościowy tego zadania. Zaproponuj parametry
+jakościowe z wyraźnymi granicami zasobów. Dla stałych limitów pracy i ustalonej
+losowości wynik powinien być powtarzalny. Zegar i planowanie porcji należą do
+kontrolera; silnik nie zarządza interfejsem.
 
-- `FOUND`: dodatni plan celu REVEAL lub FOUNDATION_ADVANCE.
-- `EXPLORATION`: dodatni plan celu INFORMATION; nie obiecuje dalszego postępu.
-- `INCONCLUSIVE`: brak wiarygodnej dodatniej rekomendacji; pusty plan,
-  `goal: null`, `score: null`.
-- `NO_STRATEGIC_PROGRESS`: wyłącznie po pełnym przeszukaniu bez celów H/F/I;
-  `truncated: false`, pusty plan, `recommendedMove: null`.
-- `WON`: plansza już wygrana; sprawdzaj przed wyszukiwaniem, bez sugestii.
+Nowy ruch, Undo/Redo, restore, restart i nowa gra unieważniają starą podpowiedź.
+Pauza/ukrycie strony przerywają obliczenia. Spóźniony wynik nie nadpisuje nowszego.
+Osobny istniejący detektor `searchProgress` bada formalną osiągalność dalszego
+postępu. Smart Hint nie zastępuje go i nie ogłasza niewygrywalności rozdania.
 
-Przy każdym yield zachowuj najlepszą dotąd legalną rekomendację. `signal`
-pozwala przerwać generator; anulowanie zawsze ustawia `truncated: true` i
-zwraca zachowany plan, jeśli istnieje. Nie raportuj wyczerpania po limicie,
-przerwaniu ani anulowaniu. `verification` potwierdza osiągnięty cel i dodatnie
-U; `horizon` wynosi 0, więc nie obiecuje przyszłego rozwiązania.
+## 6. Zapobieganie pętlom — obowiązkowa część projektu
 
-Jeśli istnieje `previousHint` i gracz wykonał pierwszy ruch jego planu, sprawdź
-pozostałe komendy replayem. Kontynuuj tylko, gdy są legalne, mieszczą się w
-`maxDepth`, nie przekraczają granicy informacji i nadal osiągają dodatni cel.
-W przeciwnym razie wykonaj nowe wyszukiwanie.
+Sama deduplikacja w jednym wyszukiwaniu NIE rozwiązuje pętli kolejnych żądań.
+Korzeń i jego ocena resetują się po ruchu: przestawienie A→B może wyglądać
+korzystnie, a następna analiza może równie wysoko ocenić B→A.
 
-## Integracja i sprawdzenie
+Zaprojektuj i rozpisz mechanizm obejmujący CAŁĄ partię:
 
-Kontroler uruchamia analizę na żądanie, w krótkich porcjach, poza planerem.
-Domyślne limity aplikacji: 10000 stanów, 32 komendy, około 4 ms pracy na porcję,
-100 ms łącznej aktywnej pracy. Wolniejsze wyszukiwanie jest akceptowalne, jeśli
-interfejs pozostaje responsywny i wynik uczciwie sygnalizuje cięcie.
-Unieważnij stare wyniki po ruchu, Undo/Redo, nowej grze, restarcie, restore lub
-zmianie wiedzy. Anuluj przy pauzie, dialogu, ukryciu strony i zamknięciu widoku.
-Stary wynik nie może nadpisać nowszego.
+- Klucz sytuacji uwzględnia mechaniczną planszę i dostępną wiedzę. Powrót
+  z nową informacją nie jest automatycznie jałowym powrotem.
+- Wyjaśnij, czy i kiedy potrzebujesz historii odwiedzin, wykonanych krawędzi,
+  odrzuconych alternatyw, zobowiązania do planu lub innej pamięci. Pokaż jej
+  dokładną strukturę i reguły odczytu/aktualizacji.
+- Obecne wejście nie zawiera pełnej historii ani trwałej pamięci planera.
+  Jeśli jest konieczna, zaproponuj minimalny jawny dodatek, np. plannerContext
+  zarządzany przez sesję. Nie udawaj, że previousHint wystarcza, i nie ukrywaj
+  zmiennej globalnej. Nie umieszczaj jej w GameState ani w knownCards.
+- Określ, kiedy pamięć zmienia rzeczywisty ruch gracza, kiedy tylko symulacja,
+  co po ruchu niezgodnym z sugestią, anulowaniu, Undo/Redo, rozwidleniu historii,
+  restarcie, nowej grze i odtworzeniu zapisu. Jeśli wymaga persystencji lub
+  odbudowy z historii, nazwij to jako zmianę integracyjną.
+- Nie zakazuj wszystkich cofnięć z baz ani wszystkich powrotów do planszy:
+  bywają niezbędnym przygotowaniem. Twarda lista „nigdy nie wracaj” może
+  odciąć jedyną dobrą drogę; omów ten konflikt i konkretną regułę rozstrzygnięcia.
+- Kontynuowanie dobrego planu musi zapobiegać oscylacji celów; plan nie może
+  jednak wymusić ruchu nielegalnego, przestarzałego lub przekraczającego informację.
+- Sam dodatni wynik heurystyki albo liczba kart w bazach nie dowodzą braku cyklu.
+  Jeśli używasz potencjału, zdefiniuj go i pokaż, co z koniecznymi pogorszeniami.
+- Jeśli nie ma bezpiecznej nowej rekomendacji, zakończ uczciwym INCONCLUSIVE
+  i diagnostyką. Zakaz powtórzeń nie upoważnia do NO_STRATEGIC_PROGRESS.
 
-UI pokazuje po polsku opis pierwszego legalnego ruchu, cel i długość planu,
-podświetla jego źródło/cel i ogłasza wynik czytnikom ekranu. Nie ujawniaj
-zakrytych kart; nie wykonuj planu automatycznie. Wykonanie podpowiedzi pozostaje
-zwykłym, walidowanym ruchem gracza. Zachowaj klawiaturę, fokus i obsługę ekranu
-320 px. F04 (`searchProgress`) jest oddzielnym dowodem osiągalności: SmartHint
-`NO_STRATEGIC_PROGRESS` nigdy go nie zastępuje i żaden status nie oznacza,
-że rozdanie jest niewygrywalne.
+Podaj, jaki dokładnie brak pętli potrafisz udowodnić, przy jakich założeniach,
+a co tylko ograniczasz heurystycznie. Samo zatrzymanie zamiast pętli nie jest
+sukcesem: oceń również, czy mechanizm nie obniża wygrywalności przez przedwczesne
+odcięcie potrzebnych przygotowań. Nie dodawaj komendy Undo do planu bez jawnej
+propozycji rozszerzenia produktu; obecna gra według wskazówek oznacza legalne
+ruchy do przodu.
 
-Zachowaj regresje dla: bezpośredniego i wieloetapowego celu, przygotowania przez
-stock/waste i powrotu z bazy, Draw 1/3, cykli, terminalnego awansu baz, ukrytych
-permutacji, granic informacji, limitów/anulowania, kontynuacji, Undo/Redo,
-starego wyniku, WON oraz oddzielnego F04. Każdy plan musi przechodzić replay
-przez silnik; sprawdź niemutowanie stanu. Użyj testów i skryptów już obecnych
-w projekcie. Raportuj faktycznie uruchomione testy i ograniczenia. Benchmark
-może być odroczony; szybkość nie jest kryterium tej implementacji.
+## 7. Oczekiwana odpowiedź
+
+1. Krótko porównaj 2–3 podejścia odpowiednie do tych wymagań. Wybierz jedno
+   i uzasadnij wybór jakością gry oraz obsługą niepełnej informacji.
+2. Rozpisz model: węzeł, klucze, pamięć między wywołaniami, cele,
+   warunki końca, limity i ewentualne hipotezy. Rozdziel istniejące dane
+   od proponowanych dodatków integracyjnych.
+3. Zdefiniuj funkcję oceny i kolejność wyboru. Wszystkie składniki, znaki,
+   wagi startowe, normalizacje, progi i remisy muszą mieć konkretne znaczenie.
+   Jeśli nie używasz wag, podaj równie dokładną inną regułę. Nazwij parametry
+   do późniejszej kalibracji; nie pozostawiaj „dobierz dobrą heurystykę”.
+4. Podaj spójny pseudokod całej drogi: żądanie → przygotowanie wiedzy →
+   wyszukiwanie → wybór planu → wynik cząstkowy/końcowy → aktualizacja po
+   prawdziwym ruchu → następne żądanie. Zdefiniuj każdy własny helper,
+   zwłaszcza evaluate, deduplicate, select, sample i updateContext, jeśli
+   występują. Tylko wymienione funkcje silnika można traktować jak gotowe.
+   Opisz kolejność mutacji, warunki pętli i przerwań, nie tylko nazwy kroków.
+5. Pokaż kontynuację planu i zapobieganie cyklom na konkretnych przykładach:
+   A→B→A, dłuższy cykl, pełny obieg znanego stock/waste, konieczne cofnięcie
+   z bazy, granica nieznanej karty oraz powrót z bogatszą wiedzą.
+   Przykłady kart muszą być legalne według podanych reguł.
+6. Podaj niezmienniki, uzasadnienia poprawności, słabości i sytuacje,
+   w których metoda może przegrać rozwiązywalne rozdanie lub się zatrzymać.
+7. Zaproponuj konkretne testy z oczekiwanymi własnościami i protokół oceny
+   całych partii. Oddziel wersję bazową od przyszłych optymalizacji.
+
+Jeśli kompletny projekt nie mieści się w jednej odpowiedzi, najpierw opisz
+cały działający wariant bazowy, a dopiero potem rozszerzenia. Nie zastępuj
+brakujących reguł samymi nazwami algorytmów ani kolekcją luźnych pomysłów.
+Nie potrzebujemy kodu UI, instalacji bibliotek ani kompletnego kodu JS.
+
+## 8. Sprawdzenie jakości
+
+Wymagane testy: legalny replay każdego planu przez silnik, niemutowanie wejścia,
+Draw 1/3 i krótki stock, poprawność wachlarza waste, granice informacji,
+permutacje nieznanych kart, pamięć po Undo, anulowanie w dowolnym yield,
+limity, terminalny ruch do bazy, legalne przygotowanie przez cofnięcie z bazy,
+kontynuacja planu, wygrana oraz wszystkie scenariusze cykli z poprzedniej sekcji.
+Małe pozycje porównuj z niezależnym pełnym przeszukiwaniem bez heurystycznych
+odcięć. Odróżniaj osiągalność celu od jakości wybranej rekomendacji.
+
+Benchmark całej partii: start od rozdania; po każdej analizie wykonaj dokładnie
+pierwszy wskazany ruch, zaktualizuj prawdziwą pamięć i powtórz. Bez ręcznych
+poprawek i bez podglądania. Mierz wygrane, stany nierozstrzygnięte, wyczerpane
+bez postępu, powtórzenia plansza+wiedza, liczbę ruchów do wygranej oraz koszt
+obliczeń. Osobno raportuj ujawnione karty i awanse baz; nie zastępują wygrywalności.
+Limit ruchów lub obliczeń oznacza wynik ograniczony, a nie dowód przegranej.
+
+Użyj tych samych rozdań i limitów do porównań; część rozdań odłóż na walidację,
+poza dostrajaniem wag. Przy próbkowaniu powtarzaj różne ustalone losowania.
+Nie twierdź, że testy przeszły, skoro nie masz silnika ani danych do ich wykonania.
+
+Kontekst motywacyjny: w naszym silniku rozdanie seed=42, Draw 1 jest wygrywalne;
+znaleziono i legalnie odtworzono rozwiązanie w 116 komendach, bez dowodu
+najkrótszej drogi. Obecny Smart Hint w trzech symulacjach wygrał je w 137
+komendach przy 100 ms/10000 stanów/głębokości 32. Inna rzeczywista ścieżka
+utknęła po 89 komendach; pełny BFS jej pozycji obejmował 1872 stany bez postępu.
+Nie masz tu sekwencji ani implementacji shuffle, więc nie możesz odtwarzać tych
+wyników z samego seed. To przykład znaczenia kolejnych decyzji, nie fixture,
+cel do zakodowania na sztywno ani dowód ogólnej skuteczności obecnej metody.
+
+W odpowiedzi skup się na jednym kompletnym, możliwym do implementacji projekcie.
+Celem jest lepsze prowadzenie całej gry i brak jałowych pętli; dotychczasowy
+Best-First Search, kolejność celów i arbitralne wagi nie są narzuconym rozwiązaniem.
