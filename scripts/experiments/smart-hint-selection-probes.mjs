@@ -45,7 +45,7 @@ for(const s of specs) {
      endpointFoundByBestFirst:baseline.selectionProbe.candidates.some(c=>c.key===key),
      exactPlanFoundByBestFirst:baseline.selectionProbe.candidates.some(c=>JSON.stringify(c.plan)===JSON.stringify(plan))};
    let fifoSource=readFileSync('SMART_HINT_BFS_CODE.md','utf8').match(/## src\/engine\/smart-hints.js\n\n```javascript\n([\s\S]*?)\n```/)[1]+'\n';
-   fifoSource=fifoSource.replace('  // Pre-check WON','  auditCandidates.length=0;\n  // Pre-check WON').replace('        candidate.completesGame = isWon(nextState);','        candidate.completesGame = isWon(nextState);\n        auditCandidates.push({ ...candidate });');
+   fifoSource=fifoSource.replace('  // Pre-check WON','  auditCandidates.length=0;\n  // Pre-check WON').replace('        candidate.completesGame = isWon(nextState);','        candidate.completesGame = isWon(nextState);\n        if (verifyEndState(nextState, evaluation, atBoundary).accepted) auditCandidates.push({ ...candidate });');
    fifoSource+='\nexport const auditCandidates=[];\n';
    fifoSource=fifoSource.replace(/from '\.\/(.*?)'/g,(_,f)=>`from '${pathToFileURL(path.resolve('src/engine',f)).href}'`);
    const audit=await import(`data:text/javascript;base64,${Buffer.from(fifoSource).toString('base64')}`);

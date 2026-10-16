@@ -1,0 +1,676 @@
+{
+  "options": {
+    "profile": "quick",
+    "count": 1,
+    "maxSteps": 500,
+    "maxStates": 10000,
+    "activeMs": 20,
+    "positions": 12,
+    "startSeed": 202,
+    "maxDepth": 32,
+    "budget": "states",
+    "output": ".cache/T028-selection-seed202.json"
+  },
+  "metadata": {
+    "revision": "2d1ecfc",
+    "baselineSha256": "d152efd1eabcd5278c410949ab2a0462fcbe8e527060393f6d2878eb31b486cb",
+    "variantSha256": "11bf98cc15df6c10baeaad544269216742ea811bc3d3a729c2000f6c57aac524",
+    "change": "Only REVEAL B before length/expected in compareCandidates; capture does not guide search."
+  },
+  "node": "v22.22.0",
+  "createdAt": "2026-10-16T21:24:49.192Z",
+  "games": [
+    {
+      "algorithm": "previous",
+      "seed": 202,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 184,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 2,
+      "boardReturns": 2,
+      "choiceSummary": {
+        "fresh": 47,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 1747,
+            "distinctRevealFirstMoves": 2,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 4
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 3,
+                "M": 0,
+                "B": 1,
+                "L": 22
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 4
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 4,
+                "M": 0,
+                "B": 0,
+                "L": 23
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 202,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 181,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 2,
+      "boardReturns": 2,
+      "choiceSummary": {
+        "fresh": 47,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 1747,
+            "distinctRevealFirstMoves": 2,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 4
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 3,
+                "M": 0,
+                "B": 1,
+                "L": 22
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 4
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 4,
+                "M": 0,
+                "B": 0,
+                "L": 23
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 202,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 37,
+      "revealed": 6,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 3,
+      "choiceSummary": {
+        "fresh": 15,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 202,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 37,
+      "revealed": 6,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 3,
+      "choiceSummary": {
+        "fresh": 15,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    }
+  ],
+  "summaries": {
+    "previous": {
+      "deals": 2,
+      "wins": 1,
+      "inconclusive": 0,
+      "noStrategicProgress": 1,
+      "moveLimit": 0,
+      "revealed": 27,
+      "steps": 221,
+      "cycles": 2,
+      "boardReturns": 5,
+      "calls": 222,
+      "medianMs": 0.3389999999999418,
+      "p95Ms": 1857.9474999999984,
+      "medianStates": 0,
+      "p95States": 8258,
+      "truncated": 20,
+      "timeCutoffs": 0,
+      "recommendations": 221,
+      "preparationOnly": 0
+    },
+    "current": {
+      "deals": 2,
+      "wins": 1,
+      "inconclusive": 0,
+      "noStrategicProgress": 1,
+      "moveLimit": 0,
+      "revealed": 27,
+      "steps": 218,
+      "cycles": 2,
+      "boardReturns": 5,
+      "calls": 219,
+      "medianMs": 0.307200000002922,
+      "p95Ms": 1575.065999999999,
+      "medianStates": 0,
+      "p95States": 8096,
+      "truncated": 20,
+      "timeCutoffs": 0,
+      "recommendations": 218,
+      "preparationOnly": 0
+    }
+  },
+  "paired": {
+    "bothWon": 1,
+    "previousOnlyWon": 0,
+    "currentOnlyWon": 0,
+    "neitherWon": 1,
+    "revealBetter": 0,
+    "revealWorse": 0,
+    "revealEqual": 2,
+    "meanRevealDelta": 0,
+    "discordantCurrentWinShare95": null
+  },
+  "rawSha256": "4c6edbb771dc3477177ee3762eabe6f4952b8e3d19cb55ace375a85621d8f369",
+  "purpose": "diagnostic",
+  "byMode": {
+    "1": {
+      "previous": {
+        "deals": 1,
+        "wins": 1
+      },
+      "current": {
+        "deals": 1,
+        "wins": 1
+      }
+    },
+    "3": {
+      "previous": {
+        "deals": 1,
+        "wins": 0
+      },
+      "current": {
+        "deals": 1,
+        "wins": 0
+      }
+    }
+  },
+  "selectionCounts": {
+    "previous": {
+      "fresh": 62,
+      "multipleReveal": 27,
+      "multipleRevealFirstMoves": 22,
+      "candidateChanges": 1,
+      "planChanges": 1,
+      "firstMoveChanges": 1
+    },
+    "current": {
+      "fresh": 62,
+      "multipleReveal": 27,
+      "multipleRevealFirstMoves": 22,
+      "candidateChanges": 1,
+      "planChanges": 1,
+      "firstMoveChanges": 1
+    }
+  },
+  "discordantSeeds": []
+}

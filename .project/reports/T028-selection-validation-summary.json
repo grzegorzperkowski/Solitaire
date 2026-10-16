@@ -1,0 +1,5691 @@
+{
+  "options": {
+    "profile": "quick",
+    "count": 40,
+    "maxSteps": 500,
+    "maxStates": 4096,
+    "activeMs": 20,
+    "positions": 12,
+    "startSeed": 220,
+    "maxDepth": 32,
+    "budget": "states",
+    "output": ".cache/T028-selection-validation.json"
+  },
+  "metadata": {
+    "revision": "2d1ecfc",
+    "baselineSha256": "d152efd1eabcd5278c410949ab2a0462fcbe8e527060393f6d2878eb31b486cb",
+    "variantSha256": "11bf98cc15df6c10baeaad544269216742ea811bc3d3a729c2000f6c57aac524",
+    "change": "Only REVEAL B before length/expected in compareCandidates; capture does not guide search."
+  },
+  "node": "v22.22.0",
+  "createdAt": "2026-10-16T21:30:53.138Z",
+  "games": [
+    {
+      "algorithm": "previous",
+      "seed": 220,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 140,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 47,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 0,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 8336,
+            "distinctRevealFirstMoves": 1,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": false,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 2
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "foundation",
+                    "index": 2
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 1,
+                "L": 5
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 2
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 0,
+                    "cardIndex": 5
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 4
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 0,
+                    "cardIndex": 4
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 3,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 0,
+                "L": 6
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 220,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 119,
+      "revealed": 18,
+      "foundationCards": 30,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 45,
+        "candidateChoiceChanged": 2,
+        "choiceChanged": 2,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 8336,
+            "distinctRevealFirstMoves": 1,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": false,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 2
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "foundation",
+                    "index": 2
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 1,
+                "L": 5
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 2
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 0,
+                    "cardIndex": 5
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 4
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 0,
+                    "cardIndex": 4
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 3,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 0,
+                "L": 6
+              }
+            }
+          },
+          {
+            "acceptedRevealCandidates": 7014,
+            "distinctRevealFirstMoves": 2,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 2,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "foundation",
+                    "index": 2
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": -1,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 2
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 0,
+                "L": 4
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 221,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 132,
+      "revealed": 15,
+      "foundationCards": 17,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 44,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 221,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 132,
+      "revealed": 15,
+      "foundationCards": 17,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 44,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 222,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 71,
+      "revealed": 6,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 34,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 868,
+            "distinctRevealFirstMoves": 3,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 2,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 1,
+                "L": 12
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 2,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 3,
+                "M": 0,
+                "B": 0,
+                "L": 13
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 222,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 51,
+      "revealed": 6,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 34,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 868,
+            "distinctRevealFirstMoves": 3,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 2,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 1,
+                "L": 12
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 2,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 3,
+                "M": 0,
+                "B": 0,
+                "L": 13
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 223,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 51,
+      "revealed": 6,
+      "foundationCards": 2,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 223,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 51,
+      "revealed": 6,
+      "foundationCards": 2,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 224,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 164,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 48,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 7036,
+            "distinctRevealFirstMoves": 11,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 2
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 224,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 164,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 48,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 7036,
+            "distinctRevealFirstMoves": 11,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 2
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 225,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 141,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 51,
+        "candidateChoiceChanged": 2,
+        "choiceChanged": 2,
+        "firstMoveChanged": 2,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 6,
+            "distinctRevealFirstMoves": 4,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 6,
+                    "cardIndex": 6
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          },
+          {
+            "acceptedRevealCandidates": 6,
+            "distinctRevealFirstMoves": 4,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 225,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 141,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 51,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 6,
+            "distinctRevealFirstMoves": 4,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 6,
+                    "cardIndex": 6
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 226,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 141,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 48,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 226,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 141,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 48,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 227,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 165,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 227,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 165,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 228,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 160,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 47,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 228,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 160,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 47,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 229,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 123,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 52,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 229,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 123,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 52,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 230,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 86,
+      "revealed": 17,
+      "foundationCards": 19,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 230,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 86,
+      "revealed": 17,
+      "foundationCards": 19,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 231,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 85,
+      "revealed": 15,
+      "foundationCards": 23,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 45,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 231,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 85,
+      "revealed": 15,
+      "foundationCards": 23,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 45,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 232,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 143,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 232,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 143,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 233,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 140,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 52,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 233,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 140,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 52,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 234,
+      "drawCount": 1,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 100,
+      "revealed": 10,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 38,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 234,
+      "drawCount": 1,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 100,
+      "revealed": 10,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 38,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 235,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 161,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 2,
+        "choiceChanged": 2,
+        "firstMoveChanged": 2,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 3099,
+            "distinctRevealFirstMoves": 5,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          },
+          {
+            "acceptedRevealCandidates": 1942,
+            "distinctRevealFirstMoves": 4,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 19,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 0,
+                "L": 20
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 235,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 145,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 3099,
+            "distinctRevealFirstMoves": 5,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 236,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 57,
+      "revealed": 9,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 38,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 236,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 57,
+      "revealed": 9,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 38,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 237,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 77,
+      "revealed": 13,
+      "foundationCards": 16,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 45,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 237,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 77,
+      "revealed": 13,
+      "foundationCards": 16,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 45,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 238,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 99,
+      "revealed": 19,
+      "foundationCards": 24,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 238,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 99,
+      "revealed": 19,
+      "foundationCards": 24,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 239,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 113,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 53,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 239,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 113,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 53,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 240,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 143,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 51,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 240,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 143,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 51,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 241,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 30,
+      "revealed": 1,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 29,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 241,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 30,
+      "revealed": 1,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 29,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 242,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 81,
+      "revealed": 6,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 36,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 1290,
+            "distinctRevealFirstMoves": 6,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 242,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 80,
+      "revealed": 6,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 36,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 1290,
+            "distinctRevealFirstMoves": 6,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 243,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 62,
+      "revealed": 12,
+      "foundationCards": 12,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 44,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 243,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 62,
+      "revealed": 12,
+      "foundationCards": 12,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 44,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 244,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 120,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 54,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 244,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 120,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 54,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 245,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 125,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 245,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 125,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 246,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 127,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 53,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 246,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 127,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 53,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 247,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 28,
+      "revealed": 1,
+      "foundationCards": 2,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 27,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 247,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 28,
+      "revealed": 1,
+      "foundationCards": 2,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 27,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 248,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 154,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 48,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 248,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 154,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 48,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 249,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 25,
+      "revealed": 0,
+      "foundationCards": 1,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 26,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 249,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 25,
+      "revealed": 0,
+      "foundationCards": 1,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 26,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 250,
+      "drawCount": 1,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 82,
+      "revealed": 6,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 34,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 250,
+      "drawCount": 1,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 82,
+      "revealed": 6,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 34,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 251,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 137,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 251,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 137,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 252,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 136,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 252,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 136,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 253,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 144,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 253,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 144,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 254,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 142,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 51,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 254,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 142,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 51,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 255,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 129,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 255,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 129,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 256,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 129,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 256,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 129,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 49,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 257,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 141,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 257,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 141,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 50,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 258,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 144,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 47,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 258,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 144,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 47,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 259,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 127,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 51,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 259,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 127,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 51,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 220,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 105,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 220,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 105,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 221,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 37,
+      "revealed": 8,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 18,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 221,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 37,
+      "revealed": 8,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 18,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 222,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 44,
+      "revealed": 6,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 17,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 222,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 44,
+      "revealed": 6,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 17,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 223,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 14,
+      "revealed": 4,
+      "foundationCards": 0,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 13,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 223,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 14,
+      "revealed": 4,
+      "foundationCards": 0,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 13,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 224,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 121,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 5,
+      "choiceSummary": {
+        "fresh": 30,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 5680,
+            "distinctRevealFirstMoves": 10,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 2
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 224,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 69,
+      "revealed": 17,
+      "foundationCards": 16,
+      "cycles": 0,
+      "boardReturns": 5,
+      "choiceSummary": {
+        "fresh": 27,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 5680,
+            "distinctRevealFirstMoves": 10,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 1,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 2
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 225,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 118,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 2,
+        "choiceChanged": 2,
+        "firstMoveChanged": 2,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 6,
+            "distinctRevealFirstMoves": 4,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 6,
+                    "cardIndex": 6
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          },
+          {
+            "acceptedRevealCandidates": 6,
+            "distinctRevealFirstMoves": 4,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 225,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 118,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 6,
+            "distinctRevealFirstMoves": 4,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 0,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 6,
+                    "cardIndex": 6
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 0,
+                "L": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 226,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 57,
+      "revealed": 21,
+      "foundationCards": 13,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 226,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 57,
+      "revealed": 21,
+      "foundationCards": 13,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 227,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 135,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 227,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 135,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 228,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 71,
+      "revealed": 17,
+      "foundationCards": 9,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 27,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 228,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 71,
+      "revealed": 17,
+      "foundationCards": 9,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 27,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 229,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 113,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 229,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 113,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 230,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 21,
+      "revealed": 7,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 17,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 230,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 21,
+      "revealed": 7,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 17,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 231,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 81,
+      "revealed": 15,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 27,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 231,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 81,
+      "revealed": 15,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 27,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 232,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 130,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 232,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 130,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 233,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 68,
+      "revealed": 19,
+      "foundationCards": 18,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 233,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 68,
+      "revealed": 19,
+      "foundationCards": 18,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 234,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 75,
+      "revealed": 10,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 20,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 234,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 75,
+      "revealed": 10,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 20,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 235,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 76,
+      "revealed": 19,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 2,
+        "choiceChanged": 2,
+        "firstMoveChanged": 2,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 2319,
+            "distinctRevealFirstMoves": 7,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 16,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 2,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 6,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 3,
+                "M": 0,
+                "B": 0,
+                "L": 17
+              }
+            }
+          },
+          {
+            "acceptedRevealCandidates": 2159,
+            "distinctRevealFirstMoves": 9,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 7,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 5
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 5,
+                "M": 1,
+                "B": 0,
+                "L": 8
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 235,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 112,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 2319,
+            "distinctRevealFirstMoves": 7,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 16,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 5,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 2,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "recycle"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 6,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 2
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 3,
+                "M": 0,
+                "B": 0,
+                "L": 17
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 236,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 39,
+      "revealed": 6,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 16,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 236,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 39,
+      "revealed": 6,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 16,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 237,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 64,
+      "revealed": 12,
+      "foundationCards": 16,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 25,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 237,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 64,
+      "revealed": 12,
+      "foundationCards": 16,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 25,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 238,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 48,
+      "revealed": 11,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 21,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 238,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 48,
+      "revealed": 11,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 21,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 239,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 111,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 239,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 111,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 240,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 52,
+      "revealed": 11,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 23,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 240,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 52,
+      "revealed": 11,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 23,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 241,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 42,
+      "revealed": 2,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 13,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 241,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 42,
+      "revealed": 2,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 13,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 242,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 40,
+      "revealed": 1,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 12,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 242,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 40,
+      "revealed": 1,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 12,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 243,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 59,
+      "revealed": 12,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 24,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 243,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 59,
+      "revealed": 12,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 24,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 244,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 81,
+      "revealed": 21,
+      "foundationCards": 26,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 244,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 81,
+      "revealed": 21,
+      "foundationCards": 26,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 245,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 102,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 64,
+            "distinctRevealFirstMoves": 6,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 2,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 6,
+                    "cardIndex": 5
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 0,
+                "L": 3
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 245,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 102,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 33,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 64,
+            "distinctRevealFirstMoves": 6,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 2,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 3,
+                    "cardIndex": 3
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 1
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 1
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 6,
+                    "cardIndex": 5
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 3
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 2,
+                "M": 0,
+                "B": 0,
+                "L": 3
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 246,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 33,
+      "revealed": 14,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 25,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 246,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 33,
+      "revealed": 14,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 25,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 247,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 89,
+      "revealed": 10,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 20,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 247,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 89,
+      "revealed": 10,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 20,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 248,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 130,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 6,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 248,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 130,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 6,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 249,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 57,
+      "revealed": 3,
+      "foundationCards": 3,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 14,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 249,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 57,
+      "revealed": 3,
+      "foundationCards": 3,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 14,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 250,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 30,
+      "revealed": 4,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 13,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 250,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 30,
+      "revealed": 4,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 13,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 251,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 146,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 7,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 1439,
+            "distinctRevealFirstMoves": 5,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 8,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 3,
+                "M": 0,
+                "B": 0,
+                "L": 9
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 251,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 103,
+      "revealed": 19,
+      "foundationCards": 24,
+      "cycles": 0,
+      "boardReturns": 7,
+      "choiceSummary": {
+        "fresh": 30,
+        "candidateChoiceChanged": 1,
+        "choiceChanged": 1,
+        "firstMoveChanged": 1,
+        "changedChoices": [
+          {
+            "acceptedRevealCandidates": 1439,
+            "distinctRevealFirstMoves": 5,
+            "candidateChoiceChanged": true,
+            "choiceChanged": true,
+            "firstMoveChanged": true,
+            "sameH": true,
+            "deltaB": -1,
+            "deltaL": 8,
+            "shadowRun": true,
+            "baseline": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 0,
+                "I": 0,
+                "W": 0,
+                "M": 0,
+                "B": 1,
+                "L": 1
+              }
+            },
+            "variant": {
+              "plan": [
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "foundation",
+                    "index": 3
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "draw"
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "waste"
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 1,
+                    "cardIndex": 0
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 6
+                  }
+                },
+                {
+                  "type": "move",
+                  "from": {
+                    "pile": "tableau",
+                    "index": 4,
+                    "cardIndex": 1
+                  },
+                  "to": {
+                    "pile": "tableau",
+                    "index": 0
+                  }
+                }
+              ],
+              "goal": "REVEAL",
+              "components": {
+                "H": 1,
+                "F": 1,
+                "I": 0,
+                "W": 3,
+                "M": 0,
+                "B": 0,
+                "L": 9
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 252,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 57,
+      "revealed": 12,
+      "foundationCards": 11,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 24,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 252,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 57,
+      "revealed": 12,
+      "foundationCards": 11,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 24,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 253,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 76,
+      "revealed": 19,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 29,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 253,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 76,
+      "revealed": 19,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 29,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 254,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 52,
+      "revealed": 14,
+      "foundationCards": 9,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 26,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 254,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 52,
+      "revealed": 14,
+      "foundationCards": 9,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 26,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 255,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 123,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 255,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 123,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 256,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 53,
+      "revealed": 13,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 23,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 256,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 53,
+      "revealed": 13,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 23,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 257,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 36,
+      "revealed": 9,
+      "foundationCards": 9,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 20,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 257,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 36,
+      "revealed": 9,
+      "foundationCards": 9,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 20,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 258,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 89,
+      "revealed": 21,
+      "foundationCards": 20,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 258,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 89,
+      "revealed": 21,
+      "foundationCards": 20,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 31,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 259,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 108,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 259,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 108,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "choiceSummary": {
+        "fresh": 32,
+        "candidateChoiceChanged": 0,
+        "choiceChanged": 0,
+        "firstMoveChanged": 0,
+        "changedChoices": []
+      }
+    }
+  ],
+  "summaries": {
+    "previous": {
+      "deals": 80,
+      "wins": 37,
+      "inconclusive": 28,
+      "noStrategicProgress": 15,
+      "moveLimit": 0,
+      "revealed": 1234,
+      "steps": 7515,
+      "cycles": 0,
+      "boardReturns": 18,
+      "calls": 7558,
+      "medianMs": 0.22109999996609986,
+      "p95Ms": 734.8823000000557,
+      "medianStates": 0,
+      "p95States": 3481,
+      "truncated": 727,
+      "timeCutoffs": 0,
+      "recommendations": 7515,
+      "preparationOnly": 0
+    },
+    "current": {
+      "deals": 80,
+      "wins": 35,
+      "inconclusive": 30,
+      "noStrategicProgress": 15,
+      "moveLimit": 0,
+      "revealed": 1227,
+      "steps": 7444,
+      "cycles": 0,
+      "boardReturns": 18,
+      "calls": 7489,
+      "medianMs": 0.21649999998044223,
+      "p95Ms": 723.2608000000473,
+      "medianStates": 0,
+      "p95States": 3468,
+      "truncated": 719,
+      "timeCutoffs": 0,
+      "recommendations": 7444,
+      "preparationOnly": 0
+    }
+  },
+  "paired": {
+    "bothWon": 34,
+    "previousOnlyWon": 3,
+    "currentOnlyWon": 1,
+    "neitherWon": 42,
+    "revealBetter": 1,
+    "revealWorse": 3,
+    "revealEqual": 76,
+    "meanRevealDelta": -0.0875,
+    "discordantCurrentWinShare95": [
+      0.045586062644636216,
+      0.6993639475573634
+    ]
+  },
+  "rawSha256": "7232773049c187612c9580f3ba61e288532209cb35daefca02d8b41e17acc7a4",
+  "purpose": "validation",
+  "byMode": {
+    "1": {
+      "previous": {
+        "deals": 40,
+        "wins": 25
+      },
+      "current": {
+        "deals": 40,
+        "wins": 24
+      }
+    },
+    "3": {
+      "previous": {
+        "deals": 40,
+        "wins": 12
+      },
+      "current": {
+        "deals": 40,
+        "wins": 11
+      }
+    }
+  },
+  "selectionCounts": {
+    "previous": {
+      "fresh": 2828,
+      "multipleReveal": 1105,
+      "multipleRevealFirstMoves": 732,
+      "candidateChanges": 11,
+      "planChanges": 11,
+      "firstMoveChanges": 10
+    },
+    "current": {
+      "fresh": 2823,
+      "multipleReveal": 1098,
+      "multipleRevealFirstMoves": 730,
+      "candidateChanges": 16,
+      "planChanges": 16,
+      "firstMoveChanges": 15
+    }
+  },
+  "discordantSeeds": [
+    {
+      "seed": 220,
+      "draw": 1,
+      "control": "WON",
+      "variant": "INCONCLUSIVE"
+    },
+    {
+      "seed": 224,
+      "draw": 3,
+      "control": "WON",
+      "variant": "INCONCLUSIVE"
+    },
+    {
+      "seed": 235,
+      "draw": 3,
+      "control": "WON",
+      "variant": "INCONCLUSIVE"
+    },
+    {
+      "seed": 251,
+      "draw": 3,
+      "control": "INCONCLUSIVE",
+      "variant": "WON"
+    }
+  ],
+  "pairedDifference": {
+    "method": "paired seed-cluster percentile bootstrap; both draw modes remain together",
+    "repetitions": 20000,
+    "randomSeed": 20261016,
+    "seedCount": 40,
+    "difference": -0.025,
+    "interval95": [
+      -0.075,
+      0.025
+    ],
+    "limitation": "Descriptive small-sample bootstrap; not proof of improvement. Training is exploratory."
+  }
+}
