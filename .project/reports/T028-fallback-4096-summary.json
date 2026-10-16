@@ -1,0 +1,1698 @@
+{
+  "createdAt": "2026-10-16T20:54:43.316Z",
+  "node": "v22.22.0",
+  "revision": "2d1ecfc",
+  "baselineSha256": "d152efd1eabcd5278c410949ab2a0462fcbe8e527060393f6d2878eb31b486cb",
+  "bfsSha256": "48e390c7d62146352b9970a1efd892d7bc33895de252699b1ee99e43b212a785",
+  "change": "Only nested priority queue replaced by FIFO with monotonic-depth assertion.",
+  "options": {
+    "profile": "quick",
+    "count": 20,
+    "maxSteps": 500,
+    "maxStates": 4096,
+    "activeMs": 20,
+    "positions": 12,
+    "startSeed": 200,
+    "maxDepth": 32,
+    "budget": "states",
+    "output": ".cache/T028-fallback-4096.json"
+  },
+  "meaning": "previous=BestFirst(total), current=BestFirst(total/2) then FIFO(total/2) after final INCONCLUSIVE; instrumented, no clock cutoff.",
+  "games": [
+    {
+      "algorithm": "previous",
+      "seed": 200,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 85,
+      "revealed": 10,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 167849,
+        "applyMovesReplay": 485,
+        "applyMovesShortening": 781,
+        "getLegalMoves": 55762,
+        "evaluations": 55676,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 200,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 85,
+      "revealed": 10,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 98869,
+        "applyMovesReplay": 485,
+        "applyMovesShortening": 781,
+        "getLegalMoves": 37489,
+        "evaluations": 37402,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 201,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 99,
+      "revealed": 15,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 137687,
+        "applyMovesReplay": 747,
+        "applyMovesShortening": 1108,
+        "getLegalMoves": 43405,
+        "evaluations": 43304,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 201,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 105,
+      "revealed": 15,
+      "foundationCards": 14,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 240228,
+        "applyMovesReplay": 754,
+        "applyMovesShortening": 1201,
+        "getLegalMoves": 68534,
+        "evaluations": 68428,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 202,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 181,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 2,
+      "boardReturns": 2,
+      "work": {
+        "applyMovesSearch": 573041,
+        "applyMovesReplay": 1674,
+        "applyMovesShortening": 2255,
+        "getLegalMoves": 226868,
+        "evaluations": 226687,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 202,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 168,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 249340,
+        "applyMovesReplay": 1564,
+        "applyMovesShortening": 2586,
+        "getLegalMoves": 110817,
+        "evaluations": 110649,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 203,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 148,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 316516,
+        "applyMovesReplay": 812,
+        "applyMovesShortening": 1551,
+        "getLegalMoves": 138186,
+        "evaluations": 138038,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 203,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 148,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 609135,
+        "applyMovesReplay": 812,
+        "applyMovesShortening": 1490,
+        "getLegalMoves": 228525,
+        "evaluations": 228377,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 204,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 152,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 417535,
+        "applyMovesReplay": 1167,
+        "applyMovesShortening": 2176,
+        "getLegalMoves": 112500,
+        "evaluations": 112348,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 204,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 152,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 231626,
+        "applyMovesReplay": 1167,
+        "applyMovesShortening": 2859,
+        "getLegalMoves": 72238,
+        "evaluations": 72086,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 205,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 103,
+      "revealed": 16,
+      "foundationCards": 17,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 150174,
+        "applyMovesReplay": 523,
+        "applyMovesShortening": 954,
+        "getLegalMoves": 68644,
+        "evaluations": 68539,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 205,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 103,
+      "revealed": 16,
+      "foundationCards": 17,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 243495,
+        "applyMovesReplay": 523,
+        "applyMovesShortening": 954,
+        "getLegalMoves": 96713,
+        "evaluations": 96609,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 206,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 154,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 583034,
+        "applyMovesReplay": 1118,
+        "applyMovesShortening": 1769,
+        "getLegalMoves": 220590,
+        "evaluations": 220436,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 206,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 155,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 297337,
+        "applyMovesReplay": 1128,
+        "applyMovesShortening": 1790,
+        "getLegalMoves": 132444,
+        "evaluations": 132289,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 207,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 52,
+      "revealed": 5,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 26133,
+        "applyMovesReplay": 211,
+        "applyMovesShortening": 346,
+        "getLegalMoves": 8068,
+        "evaluations": 8014,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 207,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 52,
+      "revealed": 5,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 35048,
+        "applyMovesReplay": 211,
+        "applyMovesShortening": 346,
+        "getLegalMoves": 9936,
+        "evaluations": 9883,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 208,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 87,
+      "revealed": 7,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 104431,
+        "applyMovesReplay": 613,
+        "applyMovesShortening": 1269,
+        "getLegalMoves": 29182,
+        "evaluations": 29094,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 208,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 87,
+      "revealed": 7,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 66394,
+        "applyMovesReplay": 613,
+        "applyMovesShortening": 1269,
+        "getLegalMoves": 21600,
+        "evaluations": 21511,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 209,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 82,
+      "revealed": 13,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 115566,
+        "applyMovesReplay": 328,
+        "applyMovesShortening": 836,
+        "getLegalMoves": 53174,
+        "evaluations": 53090,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 209,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 82,
+      "revealed": 13,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 195582,
+        "applyMovesReplay": 328,
+        "applyMovesShortening": 608,
+        "getLegalMoves": 78593,
+        "evaluations": 78510,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 210,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 131,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 365128,
+        "applyMovesReplay": 912,
+        "applyMovesShortening": 2032,
+        "getLegalMoves": 174205,
+        "evaluations": 174074,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 210,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 131,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 189176,
+        "applyMovesReplay": 912,
+        "applyMovesShortening": 2032,
+        "getLegalMoves": 102903,
+        "evaluations": 102772,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 211,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 98,
+      "revealed": 18,
+      "foundationCards": 16,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 156796,
+        "applyMovesReplay": 675,
+        "applyMovesShortening": 1547,
+        "getLegalMoves": 73053,
+        "evaluations": 72953,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 211,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 98,
+      "revealed": 18,
+      "foundationCards": 16,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 266819,
+        "applyMovesReplay": 675,
+        "applyMovesShortening": 1547,
+        "getLegalMoves": 86792,
+        "evaluations": 86693,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 212,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 143,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 393482,
+        "applyMovesReplay": 1209,
+        "applyMovesShortening": 1424,
+        "getLegalMoves": 136903,
+        "evaluations": 136760,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 212,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 144,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 211956,
+        "applyMovesReplay": 1046,
+        "applyMovesShortening": 2032,
+        "getLegalMoves": 78511,
+        "evaluations": 78367,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 213,
+      "drawCount": 1,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 92,
+      "revealed": 7,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 27414,
+        "applyMovesReplay": 823,
+        "applyMovesShortening": 1164,
+        "getLegalMoves": 9532,
+        "evaluations": 9439,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 213,
+      "drawCount": 1,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 92,
+      "revealed": 7,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 45186,
+        "applyMovesReplay": 823,
+        "applyMovesShortening": 1164,
+        "getLegalMoves": 16465,
+        "evaluations": 16372,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 214,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 141,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 355388,
+        "applyMovesReplay": 1082,
+        "applyMovesShortening": 1784,
+        "getLegalMoves": 118368,
+        "evaluations": 118227,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 214,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 141,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 187261,
+        "applyMovesReplay": 1082,
+        "applyMovesShortening": 1784,
+        "getLegalMoves": 75259,
+        "evaluations": 75118,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 215,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 117,
+      "revealed": 16,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 185565,
+        "applyMovesReplay": 902,
+        "applyMovesShortening": 1238,
+        "getLegalMoves": 84460,
+        "evaluations": 84340,
+        "fallbackCalls": 2,
+        "fallbackRescues": 1
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 215,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 86,
+      "revealed": 15,
+      "foundationCards": 8,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 194212,
+        "applyMovesReplay": 492,
+        "applyMovesShortening": 726,
+        "getLegalMoves": 59771,
+        "evaluations": 59684,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 216,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 131,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 589086,
+        "applyMovesReplay": 792,
+        "applyMovesShortening": 1075,
+        "getLegalMoves": 225396,
+        "evaluations": 225265,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 216,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 131,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 296260,
+        "applyMovesReplay": 792,
+        "applyMovesShortening": 1075,
+        "getLegalMoves": 127206,
+        "evaluations": 127075,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 217,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 49,
+      "revealed": 5,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 49783,
+        "applyMovesReplay": 86,
+        "applyMovesShortening": 110,
+        "getLegalMoves": 13988,
+        "evaluations": 13937,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 217,
+      "drawCount": 1,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 49,
+      "revealed": 5,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 69617,
+        "applyMovesReplay": 86,
+        "applyMovesShortening": 110,
+        "getLegalMoves": 20112,
+        "evaluations": 20062,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 218,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 133,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 381727,
+        "applyMovesReplay": 1192,
+        "applyMovesShortening": 1627,
+        "getLegalMoves": 130710,
+        "evaluations": 130577,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 218,
+      "drawCount": 1,
+      "stop": "WON",
+      "steps": 133,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 200141,
+        "applyMovesReplay": 1192,
+        "applyMovesShortening": 1627,
+        "getLegalMoves": 89355,
+        "evaluations": 89222,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 219,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 68,
+      "revealed": 15,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 99973,
+        "applyMovesReplay": 248,
+        "applyMovesShortening": 929,
+        "getLegalMoves": 35695,
+        "evaluations": 35625,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 219,
+      "drawCount": 1,
+      "stop": "INCONCLUSIVE",
+      "steps": 68,
+      "revealed": 15,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 116334,
+        "applyMovesReplay": 248,
+        "applyMovesShortening": 929,
+        "getLegalMoves": 36031,
+        "evaluations": 35962,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 200,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 43,
+      "revealed": 10,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 39590,
+        "applyMovesReplay": 236,
+        "applyMovesShortening": 281,
+        "getLegalMoves": 9520,
+        "evaluations": 9476,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 200,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 43,
+      "revealed": 10,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 28132,
+        "applyMovesReplay": 236,
+        "applyMovesShortening": 281,
+        "getLegalMoves": 6063,
+        "evaluations": 6019,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 201,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 79,
+      "revealed": 14,
+      "foundationCards": 18,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 87165,
+        "applyMovesReplay": 605,
+        "applyMovesShortening": 746,
+        "getLegalMoves": 27802,
+        "evaluations": 27722,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 201,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 79,
+      "revealed": 14,
+      "foundationCards": 18,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 150036,
+        "applyMovesReplay": 605,
+        "applyMovesShortening": 746,
+        "getLegalMoves": 45552,
+        "evaluations": 45472,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 202,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 37,
+      "revealed": 6,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 3,
+      "work": {
+        "applyMovesSearch": 3212,
+        "applyMovesReplay": 299,
+        "applyMovesShortening": 345,
+        "getLegalMoves": 1155,
+        "evaluations": 1117,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 202,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 37,
+      "revealed": 6,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 3,
+      "work": {
+        "applyMovesSearch": 3212,
+        "applyMovesReplay": 299,
+        "applyMovesShortening": 345,
+        "getLegalMoves": 1155,
+        "evaluations": 1117,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 203,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 40,
+      "revealed": 5,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 57586,
+        "applyMovesReplay": 222,
+        "applyMovesShortening": 293,
+        "getLegalMoves": 21835,
+        "evaluations": 21794,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 203,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 40,
+      "revealed": 5,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 109546,
+        "applyMovesReplay": 222,
+        "applyMovesShortening": 293,
+        "getLegalMoves": 39405,
+        "evaluations": 39364,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 204,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 26,
+      "revealed": 5,
+      "foundationCards": 2,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 2514,
+        "applyMovesReplay": 58,
+        "applyMovesShortening": 77,
+        "getLegalMoves": 923,
+        "evaluations": 896,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 204,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 26,
+      "revealed": 5,
+      "foundationCards": 2,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 2514,
+        "applyMovesReplay": 58,
+        "applyMovesShortening": 77,
+        "getLegalMoves": 923,
+        "evaluations": 896,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 205,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 71,
+      "revealed": 16,
+      "foundationCards": 15,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 140155,
+        "applyMovesReplay": 360,
+        "applyMovesShortening": 597,
+        "getLegalMoves": 71852,
+        "evaluations": 71779,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 205,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 71,
+      "revealed": 16,
+      "foundationCards": 15,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 230921,
+        "applyMovesReplay": 360,
+        "applyMovesShortening": 597,
+        "getLegalMoves": 104576,
+        "evaluations": 104504,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 206,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 11,
+      "revealed": 2,
+      "foundationCards": 2,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 76,
+        "applyMovesReplay": 0,
+        "applyMovesShortening": 0,
+        "getLegalMoves": 60,
+        "evaluations": 48,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 206,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 11,
+      "revealed": 2,
+      "foundationCards": 2,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 76,
+        "applyMovesReplay": 0,
+        "applyMovesShortening": 0,
+        "getLegalMoves": 60,
+        "evaluations": 48,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 207,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 64,
+      "revealed": 10,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 88206,
+        "applyMovesReplay": 316,
+        "applyMovesShortening": 387,
+        "getLegalMoves": 29357,
+        "evaluations": 29292,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 207,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 64,
+      "revealed": 10,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 166460,
+        "applyMovesReplay": 316,
+        "applyMovesShortening": 387,
+        "getLegalMoves": 52093,
+        "evaluations": 52028,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 208,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 75,
+      "revealed": 14,
+      "foundationCards": 13,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 206833,
+        "applyMovesReplay": 320,
+        "applyMovesShortening": 396,
+        "getLegalMoves": 64425,
+        "evaluations": 64349,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 208,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 75,
+      "revealed": 14,
+      "foundationCards": 13,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 131395,
+        "applyMovesReplay": 320,
+        "applyMovesShortening": 439,
+        "getLegalMoves": 37238,
+        "evaluations": 37161,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 209,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 87,
+      "revealed": 13,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 88417,
+        "applyMovesReplay": 532,
+        "applyMovesShortening": 655,
+        "getLegalMoves": 37464,
+        "evaluations": 37376,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 209,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 87,
+      "revealed": 13,
+      "foundationCards": 7,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 169468,
+        "applyMovesReplay": 532,
+        "applyMovesShortening": 642,
+        "getLegalMoves": 65859,
+        "evaluations": 65771,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 210,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 52,
+      "revealed": 13,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 42559,
+        "applyMovesReplay": 124,
+        "applyMovesShortening": 194,
+        "getLegalMoves": 13520,
+        "evaluations": 13467,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 210,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 46,
+      "revealed": 13,
+      "foundationCards": 4,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 22010,
+        "applyMovesReplay": 112,
+        "applyMovesShortening": 131,
+        "getLegalMoves": 8497,
+        "evaluations": 8450,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 211,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 79,
+      "revealed": 17,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 141638,
+        "applyMovesReplay": 537,
+        "applyMovesShortening": 981,
+        "getLegalMoves": 55161,
+        "evaluations": 55080,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 211,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 79,
+      "revealed": 17,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 246381,
+        "applyMovesReplay": 537,
+        "applyMovesShortening": 981,
+        "getLegalMoves": 77946,
+        "evaluations": 77866,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 212,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 34,
+      "revealed": 7,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 34372,
+        "applyMovesReplay": 130,
+        "applyMovesShortening": 151,
+        "getLegalMoves": 8827,
+        "evaluations": 8792,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 212,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 34,
+      "revealed": 7,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 21682,
+        "applyMovesReplay": 130,
+        "applyMovesShortening": 151,
+        "getLegalMoves": 5889,
+        "evaluations": 5854,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 213,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 40,
+      "revealed": 3,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 1859,
+        "applyMovesReplay": 379,
+        "applyMovesShortening": 432,
+        "getLegalMoves": 927,
+        "evaluations": 886,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 213,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 40,
+      "revealed": 3,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 1859,
+        "applyMovesReplay": 379,
+        "applyMovesShortening": 432,
+        "getLegalMoves": 927,
+        "evaluations": 886,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 214,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 116,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 476151,
+        "applyMovesReplay": 842,
+        "applyMovesShortening": 1041,
+        "getLegalMoves": 172864,
+        "evaluations": 172748,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 214,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 115,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 248658,
+        "applyMovesReplay": 827,
+        "applyMovesShortening": 1031,
+        "getLegalMoves": 104030,
+        "evaluations": 103915,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 215,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 82,
+      "revealed": 16,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 155814,
+        "applyMovesReplay": 553,
+        "applyMovesShortening": 639,
+        "getLegalMoves": 81264,
+        "evaluations": 81180,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 215,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 82,
+      "revealed": 16,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 259958,
+        "applyMovesReplay": 553,
+        "applyMovesShortening": 639,
+        "getLegalMoves": 121917,
+        "evaluations": 121834,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 216,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 111,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 573226,
+        "applyMovesReplay": 772,
+        "applyMovesShortening": 910,
+        "getLegalMoves": 253927,
+        "evaluations": 253816,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 216,
+      "drawCount": 3,
+      "stop": "WON",
+      "steps": 111,
+      "revealed": 21,
+      "foundationCards": 52,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 291493,
+        "applyMovesReplay": 772,
+        "applyMovesShortening": 910,
+        "getLegalMoves": 146600,
+        "evaluations": 146489,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 217,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 34,
+      "revealed": 5,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 24565,
+        "applyMovesReplay": 87,
+        "applyMovesShortening": 110,
+        "getLegalMoves": 6990,
+        "evaluations": 6955,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 217,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 34,
+      "revealed": 5,
+      "foundationCards": 5,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 42585,
+        "applyMovesReplay": 87,
+        "applyMovesShortening": 110,
+        "getLegalMoves": 11893,
+        "evaluations": 11858,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 218,
+      "drawCount": 3,
+      "stop": "NO_STRATEGIC_PROGRESS",
+      "steps": 57,
+      "revealed": 15,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 87337,
+        "applyMovesReplay": 268,
+        "applyMovesShortening": 331,
+        "getLegalMoves": 23269,
+        "evaluations": 23211,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 218,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 57,
+      "revealed": 15,
+      "foundationCards": 10,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 59447,
+        "applyMovesReplay": 268,
+        "applyMovesShortening": 331,
+        "getLegalMoves": 19192,
+        "evaluations": 19133,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "current",
+      "seed": 219,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 74,
+      "revealed": 18,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 211022,
+        "applyMovesReplay": 294,
+        "applyMovesShortening": 405,
+        "getLegalMoves": 94999,
+        "evaluations": 94923,
+        "fallbackCalls": 1,
+        "fallbackRescues": 0
+      }
+    },
+    {
+      "algorithm": "previous",
+      "seed": 219,
+      "drawCount": 3,
+      "stop": "INCONCLUSIVE",
+      "steps": 74,
+      "revealed": 18,
+      "foundationCards": 6,
+      "cycles": 0,
+      "boardReturns": 0,
+      "work": {
+        "applyMovesSearch": 363206,
+        "applyMovesReplay": 294,
+        "applyMovesShortening": 405,
+        "getLegalMoves": 144455,
+        "evaluations": 144380,
+        "fallbackCalls": 0,
+        "fallbackRescues": 0
+      }
+    }
+  ],
+  "summaries": {
+    "previous": {
+      "deals": 40,
+      "wins": 11,
+      "inconclusive": 13,
+      "noStrategicProgress": 16,
+      "moveLimit": 0,
+      "revealed": 546,
+      "steps": 3433,
+      "cycles": 2,
+      "boardReturns": 5,
+      "calls": 3462,
+      "medianMs": 0.2184999999590218,
+      "p95Ms": 504.5421000000206,
+      "medianStates": 0,
+      "p95States": 3136,
+      "truncated": 300,
+      "timeCutoffs": 0,
+      "recommendations": 3433,
+      "preparationOnly": 0
+    },
+    "current": {
+      "deals": 40,
+      "wins": 11,
+      "inconclusive": 16,
+      "noStrategicProgress": 13,
+      "moveLimit": 0,
+      "revealed": 547,
+      "steps": 3440,
+      "cycles": 0,
+      "boardReturns": 3,
+      "calls": 3469,
+      "medianMs": 0.21209999998973217,
+      "p95Ms": 263.91029999998864,
+      "medianStates": 0,
+      "p95States": 1650,
+      "truncated": 310,
+      "timeCutoffs": 0,
+      "recommendations": 3440,
+      "preparationOnly": 0
+    }
+  },
+  "paired": {
+    "bothWon": 11,
+    "previousOnlyWon": 0,
+    "currentOnlyWon": 0,
+    "neitherWon": 29,
+    "revealBetter": 1,
+    "revealWorse": 0,
+    "revealEqual": 39,
+    "meanRevealDelta": 0.025,
+    "discordantCurrentWinShare95": null
+  },
+  "rawSha256": "40a3c08b2e559259afa0035b26d4afdbced1c9c6eef6221af3c7c7771c65a6c7",
+  "workTotals": {
+    "previous": {
+      "applyMovesSearch": 9152647,
+      "applyMovesReplay": 22130,
+      "applyMovesShortening": 34225,
+      "getLegalMoves": 3345069,
+      "evaluations": 3341607,
+      "fallbackCalls": 0,
+      "fallbackRescues": 0
+    },
+    "current": {
+      "applyMovesSearch": 5099013,
+      "applyMovesReplay": 22243,
+      "applyMovesShortening": 36559,
+      "getLegalMoves": 2133325,
+      "evaluations": 2129839,
+      "fallbackCalls": 17,
+      "fallbackRescues": 1
+    }
+  },
+  "baselineBWinnersExactlyPreserved": 11
+}

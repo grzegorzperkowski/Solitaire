@@ -1,12 +1,12 @@
 # T028 — E1 fallback R&D, 2026-10-16
 
-IN_PROGRESS. Coordinator continued Smart Hint R&D by supplying the external diagnosis and E1 proposal. Base120aaa5, master. Work sequentially, no agents/branches/push; preserve both untracked diagnostic JSON files.
+REVIEW. Coordinator continued Smart Hint R&D by supplying the external diagnosis and E1 proposal. Base120aaa5, master. Sequential implementation, no agents/branches/push; both untracked diagnostic JSON files preserved. Measurements finished; no coordinator acceptance inferred.
 
 Hypothesis: Best-First(B), then FIFO(B) only after final INCONCLUSIVE, improves whole-game wins versus unchanged Best-First(2B). Preserve scoring, history, commitment, boundaries, shortening and engine. Production remains unchanged.
 
 Plan: add observational instrumentation to the pinned experimental modules and prove unchanged results; test generator/fallback routing, streaming, cancellation and A/B/C; measure 40 paired deals at total1024 and4096 (B512/2048), depth32/500 commands/no clock cutoff. If exploratory wins improve, test an independent seed set. Record actual engine-call work; equal state ceilings are not equal CPU work. Also run a bounded independent B reachability probe and two forced-first-choice continuations from B's actual common prefix, if available. Do not infer unwinnability from limits.
 
-Scope: scripts/experiments loader/observation/fallback runner, focused tests, reports and task tracking only. No UI, save, F04 or production strategy changes. Results/checks pending; resume only on assignment if interrupted.
+Scope: scripts/experiments loader/observation/fallback runner, focused tests, reports and task tracking only. No UI, save, F04 or production strategy changes. Actual results and limitations follow.
 
 ## Implementation and verification
 
@@ -36,4 +36,65 @@ Scope: scripts/experiments loader/observation/fallback runner, focused tests, re
 
 Paired: both win9, control-only2, fallback-only0, neither29. Fallback started26 times and recovered3 local recommendations, none a new whole-game win. Zero preparation-only recommendations and zero move-limit terminations. Direct comparison to the previous saved Best-First512 trajectories verifies all9 earlier winners retain their EXACT command histories. That is distinct from superiority to the doubled control, which was not observed. Work counts show lower total work for this policy, not equal CPU and not better wins.
 
-Source/test checkpoint pending commit. Second40-deal series at total4096 and counterfactual diagnostics remain in progress. No promotion or generalized conclusion yet.
+Source/test/first-series checkpoint: `898fb7c`. Tracked [1024 summary](T028-fallback-1024-summary.json) contains per-deal results, work totals and raw SHA256.
+
+## Second whole-game series (complete)
+
+`node scripts/experiments/smart-hint-fallback.mjs --budget=states --count=20 --start-seed=200 --max-steps=500 --max-states=4096 --max-depth=32 --output=.cache/T028-fallback-4096.json`
+
+Same40 mode/seed combinations, another80 trajectories. `previous`=Best-First4096; `current`=Best-First2048 then FIFO2048 only after final uncertainty. These repeated budgets are not independent new deals.
+
+| Metric | Control | Fallback |
+| --- | ---: | ---: |
+| Wins | 11 | 11 |
+| INCONCLUSIVE | 13 | 16 |
+| NO_STRATEGIC_PROGRESS | 16 | 13 |
+| Reveals | 546 | 547 |
+| Commands | 3433 | 3440 |
+| Same board+knowledge returns | 2 | 0 |
+| Search applyMove calls | 9152647 | 5099013 |
+| Replay applyMove calls | 22130 | 22243 |
+| Shortening applyMove calls | 34225 | 36559 |
+
+Paired: both win11, control-only0, fallback-only0, neither29. All11 previously saved Best-First2048 winning histories are preserved exactly. Fallback started17 times, recovered1 local recommendation and added no win. No preparation-only suggestions or move-limit terminations. Tracked [4096 summary](T028-fallback-4096-summary.json) contains per-game work and actual aggregated engine-call counts. State ceilings do not imply equal work: fallback spends only half when primary succeeds. The conservative E1 policy retains primary INCONCLUSIVE even if secondary provides no recommendation; NO_STRATEGIC_PROGRESS/INCONCLUSIVE counts therefore also reflect that policy, not solely coverage.
+
+## Decision
+
+Do not promote E1 as a quality improvement. At B512 it loses9:11 to the doubled control; at B2048 it ties11:11 on identical winners. It recovers local recommendations but no additional whole-game win in either series. It uses fewer engine calls, which may be useful in future speed work, but that was not the quality acceptance criterion. No claim that equal CPU or unlimited search would show the same result. No weights, queue ratios or thresholds were tuned to these samples.
+
+Per the predeclared condition, independent-seed validation was not triggered because neither exploratory comparison improved wins. This rejects this E1 policy as the next default, not every possible portfolio strategy. There were160 measured benchmark trajectories over40 distinct mode/seed combinations, plus2 forced-choice continuations. All runs exited0.
+
+## Observational A/B/C probes (complete)
+
+Command: `node scripts/experiments/smart-hint-fallback-probes.mjs`. All probes use fresh planning without previousHint, reconstructed actual prefix knowledge/context, and verified plan replay. The result source is pinned2d1ecfc with observation-only instrumentation. JSON summary: [probes](T028-fallback-probes-summary.json); raw `.cache/T028-fallback-probes.json` has full observations and trajectories.
+
+| Position | States per search | Best-First | FIFO |
+| --- | ---: | --- | --- |
+| A | 512 | REVEAL25 | INCONCLUSIVE |
+| A | 1024 | REVEAL25 | INCONCLUSIVE |
+| A | 2048 | REVEAL25 | INCONCLUSIVE |
+| C | 512 | INCONCLUSIVE | FOUNDATION11 |
+| C | 1024 | INCONCLUSIVE | FOUNDATION11 |
+| C | 2048 | FOUNDATION13 | FOUNDATION11 |
+
+At512, A expands to depth32/10 and C to24/11. First accepted/raw goal in A Best-First is depth29 (shortened to25), in C FIFO depth11. All unsuccessful A/C probes have rawGoalsBeforeDedup=0: no evidence that U/history/dedup hid a generated goal in those failed searches. C's successful FIFO does skip some raw goals by dedup; this is not the cause of the other search's zero. Fallback preserves A and rescues C at B512 and B1024; at B2048 primary already finds C's13-command plan, so FIFO does not run and cannot replace it with the11-command alternative.
+
+B at10000: both orders expand only to depth6, with zero raw goals, zero U/history rejection and no raw goals lost by dedup. Primary/FIFO search applyMove counts129704/127196, max queued entries7950/7194. In this observed portion the state budget binds before the32-command horizon; this does not prove that a goal exists within or beyond that horizon. Fallback(10000+10000) remains INCONCLUSIVE, not a negative proof.
+
+## Independent B reachability (complete, unresolved)
+
+The same probe command runs an independent FIFO with full mechanical equality, no SmartHint score/depth limit, information boundaries and a100000 retained-state cap. It drains accepted states even after missing new states set truncated. It returns UNKNOWN after100000 expansions/1335381 applyMove transitions; no goal found. Existing independent F04 also returns UNKNOWN at the same retained-state ceiling (39972 expansions before its immediate budget exit). These are two bounded unknown results, not equivalent amounts of work or a proof of no progress.
+
+An assert-based self-check extracted the exact reachable() function from the probe source and compared28 small full-deck fixtures (both modes/visible versus remembered knowledge) to independent F04. All statuses match without truncation;16 positive cases reconstruct and legally replay a nonempty goal plan. This exercises the independent oracle's positive-path reconstruction as well as negative exhaustion.
+
+## Counterfactual first choice (complete)
+
+The saved histories confirm commonPrefix=52. Replay exactly that prefix and force either of the first different commands: baseline waste→tableau2 or FIFO draw. Thereafter use the SAME unchanged Best-First(10000), depth32, max500 total commands, fresh planning after the forced choice, then normal commitment continuation. Every card observation is accumulated from the initial deal along the actual branch; B's later48-card knowledge is NOT assigned retroactively to the prefix. Forced prefix commands are replay input, not claimed strategic recommendations; post-prefix plans are engine-verified.
+
+Both branches WON in184 total commands. Their exact histories are saved in the probe summary. Thus neither first move by itself made this deal unwinnable; the test does not identify the later cause of FIFO's stopped B position or prove that all later choices are equally good. No further queue/weight tuning or hybrid-ratio search was performed.
+
+## Delivery and limits
+
+Full unit/build checks above are fresh for this implementation. Only an unused import was removed afterwards; no search behavior changed. All main benchmark and probe plan replays, full-deck invariants and expansion-bound assertions passed. Final source/diff review checked wrapper final versus temporary statuses, per-run versus total ceilings, abort boundaries, commitment forwarding, immutable work snapshots, observation anchors, raw-goal counter scope and forced-prefix knowledge. No parallel reviewer, per project prohibition.
+
+No E2E, physical-device, mobile latency or new seed42 trial: application/runtime is unchanged and this is a Node-only experiment. Timing columns are not speed evidence. Independent B reachability is still UNKNOWN. Check `git diff --check`, staged diff and raw summary hashes before results commit. Keep REVIEW until explicit acceptance; do not start another experiment automatically. Resume from this report and saved outcomes only on coordinator assignment. No push/publication.

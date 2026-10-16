@@ -1676,6 +1676,7 @@
       0.6576280471103807
     ]
   },
+  "rawSha256": "82029d4f4b09c2cfd396ee8f6b5d77d6ae5c9aad88c4d2bba8fd65cc667e1da5",
   "workTotals": {
     "previous": {
       "applyMovesSearch": 2611826,
@@ -1695,5 +1696,6 @@
       "fallbackCalls": 26,
       "fallbackRescues": 3
     }
-  }
+  },
+  "baselineBWinnersExactlyPreserved": 9
 }

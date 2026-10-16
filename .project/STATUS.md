@@ -1,6 +1,6 @@
 # Project status
 
-T028 IN_PROGRESS (2026-10-16): resumed E1 fallback R&D from external diagnosis; compare Best-First(B)+FIFO(B) with Best-First(2B), observe work and A/B/C. Runtime unchanged. See reports/T028-fallback-rd.md.
+T028 REVIEW (2026-10-16): E1 fallback R&D complete. Fallback/control wins9/11 at512+512 vs1024,11/11 at2048+2048 vs4096 (40 paired deals each);373 tests/build pass. B reachability100000 remains UNKNOWN; both forced first-choice branches win184. Production unchanged, no push/successor. See [report](reports/T028-fallback-rd.md).
 
 T028 REVIEW (2026-10-15): external-LLM feedback and full exact BFS source/dependencies delivered with three diagnostic positions. Extracted-source replay reproduces all six search results; mixed coverage shown on identical boards. Runtime unchanged. See [report](reports/T028-bfs-handoff.md). Both unrelated JSON files preserved; no push; acceptance pending.
 

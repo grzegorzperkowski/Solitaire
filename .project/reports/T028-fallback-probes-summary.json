@@ -1,0 +1,5654 @@
+{
+  "metadata": {
+    "revision": "2d1ecfc",
+    "baselineSha256": "d152efd1eabcd5278c410949ab2a0462fcbe8e527060393f6d2878eb31b486cb",
+    "bfsSha256": "48e390c7d62146352b9970a1efd892d7bc33895de252699b1ee99e43b212a785",
+    "change": "Only nested priority queue replaced by FIFO with monotonic-depth assertion."
+  },
+  "notes": "Fresh searches, same active-prefix context, no previousHint; counters do not steer search.",
+  "rawSha256": "d92a45330af1598b78d773140d0c6d71f30623dffa3cad7f46a2620e447786ef",
+  "cases": [
+    {
+      "id": "seed203-draw1-states512",
+      "results": [
+        {
+          "id": "baseline",
+          "maxStates": 512,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 1
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "tableau",
+                  "index": 5,
+                  "cardIndex": 4
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              }
+            ],
+            "goal": "REVEAL",
+            "score": 93.5,
+            "visitedStates": 457,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0.5,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": null,
+              "continuation": "INFORMATION_BOUNDARY",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 82,
+              "explorationCandidates": 0,
+              "preparatoryStates": 806,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 6,
+              "duplicateStatesRejected": 1087,
+              "depthLimitedBranches": 221,
+              "stateLimitedBranches": 348,
+              "unresolvedCutoffs": 529,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 29,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 64,
+              "shortenedPlansCount": 1,
+              "savedMovesCount": 3,
+              "retainedStates": 512,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0.5,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  4,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  8,
+                  12,
+                  5,
+                  4,
+                  5,
+                  4,
+                  7,
+                  10,
+                  9,
+                  9,
+                  9,
+                  11,
+                  17,
+                  24,
+                  25,
+                  24,
+                  24,
+                  31,
+                  41,
+                  52,
+                  61
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": 29,
+                "firstAcceptedGoalDepth": 29,
+                "rawGoalsBeforeDedup": 138,
+                "rawGoalsBeyondDepth": 56,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 29,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 175,
+                "applyMovesSearch": 2196,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 985,
+                "getLegalMoves": 892,
+                "evaluations": 891
+              }
+            }
+          }
+        },
+        {
+          "id": "fifo",
+          "maxStates": 512,
+          "result": {
+            "phase": "FINAL",
+            "status": "INCONCLUSIVE",
+            "diagnostics": {
+              "strategicCandidates": 0,
+              "explorationCandidates": 0,
+              "preparatoryStates": 762,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 1767,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 251,
+              "unresolvedCutoffs": 251,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 0,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 512,
+              "verificationReads": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  18,
+                  36,
+                  53,
+                  62,
+                  64,
+                  64,
+                  65,
+                  69,
+                  74
+                ],
+                "maxExpandedDepth": 10,
+                "firstRawGoalDepth": null,
+                "firstAcceptedGoalDepth": null,
+                "rawGoalsBeforeDedup": 0,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 89,
+                "applyMovesSearch": 2529,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 0,
+                "getLegalMoves": 763,
+                "evaluations": 762
+              }
+            },
+            "reason": "LIMIT_REACHED",
+            "plan": [],
+            "goal": null,
+            "score": null,
+            "visitedStates": 512,
+            "truncated": true
+          }
+        },
+        {
+          "id": "fallback",
+          "maxStates": 1024,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 1
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "tableau",
+                  "index": 5,
+                  "cardIndex": 4
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              }
+            ],
+            "goal": "REVEAL",
+            "score": 93.5,
+            "visitedStates": 457,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0.5,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": null,
+              "continuation": "INFORMATION_BOUNDARY",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 82,
+              "explorationCandidates": 0,
+              "preparatoryStates": 806,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 6,
+              "duplicateStatesRejected": 1087,
+              "depthLimitedBranches": 221,
+              "stateLimitedBranches": 348,
+              "unresolvedCutoffs": 529,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 29,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 64,
+              "shortenedPlansCount": 1,
+              "savedMovesCount": 3,
+              "retainedStates": 512,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0.5,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  4,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  8,
+                  12,
+                  5,
+                  4,
+                  5,
+                  4,
+                  7,
+                  10,
+                  9,
+                  9,
+                  9,
+                  11,
+                  17,
+                  24,
+                  25,
+                  24,
+                  24,
+                  31,
+                  41,
+                  52,
+                  61
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": 29,
+                "firstAcceptedGoalDepth": 29,
+                "rawGoalsBeforeDedup": 138,
+                "rawGoalsBeyondDepth": 56,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 29,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 175,
+                "applyMovesSearch": 2196,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 985,
+                "getLegalMoves": 892,
+                "evaluations": 891
+              },
+              "fallback": {
+                "used": false,
+                "primaryVisited": 457,
+                "secondaryVisited": 0,
+                "primaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    6,
+                    4,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    8,
+                    12,
+                    5,
+                    4,
+                    5,
+                    4,
+                    7,
+                    10,
+                    9,
+                    9,
+                    9,
+                    11,
+                    17,
+                    24,
+                    25,
+                    24,
+                    24,
+                    31,
+                    41,
+                    52,
+                    61
+                  ],
+                  "maxExpandedDepth": 32,
+                  "firstRawGoalDepth": 29,
+                  "firstAcceptedGoalDepth": 29,
+                  "rawGoalsBeforeDedup": 138,
+                  "rawGoalsBeyondDepth": 56,
+                  "rawGoalsSkippedByDedup": 0,
+                  "rejectedByU": 29,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 0,
+                  "maxFrontierSize": 175,
+                  "applyMovesSearch": 2196,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 985,
+                  "getLegalMoves": 892,
+                  "evaluations": 891
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "baseline",
+          "maxStates": 1024,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 1
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "tableau",
+                  "index": 5,
+                  "cardIndex": 4
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              }
+            ],
+            "goal": "REVEAL",
+            "score": 93.5,
+            "visitedStates": 906,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0.5,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": null,
+              "continuation": "INFORMATION_BOUNDARY",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 241,
+              "explorationCandidates": 0,
+              "preparatoryStates": 1423,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 24,
+              "duplicateStatesRejected": 2378,
+              "depthLimitedBranches": 631,
+              "stateLimitedBranches": 535,
+              "unresolvedCutoffs": 1040,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 73,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 70,
+              "shortenedPlansCount": 1,
+              "savedMovesCount": 3,
+              "retainedStates": 1024,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0.5,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  4,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  8,
+                  12,
+                  5,
+                  4,
+                  5,
+                  4,
+                  7,
+                  10,
+                  15,
+                  18,
+                  18,
+                  22,
+                  32,
+                  42,
+                  52,
+                  57,
+                  59,
+                  77,
+                  104,
+                  132,
+                  158
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": 29,
+                "firstAcceptedGoalDepth": 29,
+                "rawGoalsBeforeDedup": 398,
+                "rawGoalsBeyondDepth": 157,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 73,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 310,
+                "applyMovesSearch": 4673,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 1072,
+                "getLegalMoves": 1668,
+                "evaluations": 1667
+              }
+            }
+          }
+        },
+        {
+          "id": "fifo",
+          "maxStates": 1024,
+          "result": {
+            "phase": "FINAL",
+            "status": "INCONCLUSIVE",
+            "diagnostics": {
+              "strategicCandidates": 0,
+              "explorationCandidates": 0,
+              "preparatoryStates": 1732,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 3470,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 709,
+              "unresolvedCutoffs": 709,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 0,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 1024,
+              "verificationReads": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  18,
+                  36,
+                  53,
+                  62,
+                  64,
+                  64,
+                  65,
+                  69,
+                  78,
+                  95,
+                  123,
+                  167,
+                  123
+                ],
+                "maxExpandedDepth": 14,
+                "firstRawGoalDepth": null,
+                "firstAcceptedGoalDepth": null,
+                "rawGoalsBeforeDedup": 0,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 202,
+                "applyMovesSearch": 5202,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 0,
+                "getLegalMoves": 1733,
+                "evaluations": 1732
+              }
+            },
+            "reason": "LIMIT_REACHED",
+            "plan": [],
+            "goal": null,
+            "score": null,
+            "visitedStates": 1024,
+            "truncated": true
+          }
+        },
+        {
+          "id": "fallback",
+          "maxStates": 2048,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 1
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "tableau",
+                  "index": 5,
+                  "cardIndex": 4
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              }
+            ],
+            "goal": "REVEAL",
+            "score": 93.5,
+            "visitedStates": 906,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0.5,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": null,
+              "continuation": "INFORMATION_BOUNDARY",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 241,
+              "explorationCandidates": 0,
+              "preparatoryStates": 1423,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 24,
+              "duplicateStatesRejected": 2378,
+              "depthLimitedBranches": 631,
+              "stateLimitedBranches": 535,
+              "unresolvedCutoffs": 1040,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 73,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 70,
+              "shortenedPlansCount": 1,
+              "savedMovesCount": 3,
+              "retainedStates": 1024,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0.5,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  4,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  8,
+                  12,
+                  5,
+                  4,
+                  5,
+                  4,
+                  7,
+                  10,
+                  15,
+                  18,
+                  18,
+                  22,
+                  32,
+                  42,
+                  52,
+                  57,
+                  59,
+                  77,
+                  104,
+                  132,
+                  158
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": 29,
+                "firstAcceptedGoalDepth": 29,
+                "rawGoalsBeforeDedup": 398,
+                "rawGoalsBeyondDepth": 157,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 73,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 310,
+                "applyMovesSearch": 4673,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 1072,
+                "getLegalMoves": 1668,
+                "evaluations": 1667
+              },
+              "fallback": {
+                "used": false,
+                "primaryVisited": 906,
+                "secondaryVisited": 0,
+                "primaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    6,
+                    4,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    8,
+                    12,
+                    5,
+                    4,
+                    5,
+                    4,
+                    7,
+                    10,
+                    15,
+                    18,
+                    18,
+                    22,
+                    32,
+                    42,
+                    52,
+                    57,
+                    59,
+                    77,
+                    104,
+                    132,
+                    158
+                  ],
+                  "maxExpandedDepth": 32,
+                  "firstRawGoalDepth": 29,
+                  "firstAcceptedGoalDepth": 29,
+                  "rawGoalsBeforeDedup": 398,
+                  "rawGoalsBeyondDepth": 157,
+                  "rawGoalsSkippedByDedup": 0,
+                  "rejectedByU": 73,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 0,
+                  "maxFrontierSize": 310,
+                  "applyMovesSearch": 4673,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 1072,
+                  "getLegalMoves": 1668,
+                  "evaluations": 1667
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "baseline",
+          "maxStates": 2048,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 1
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "tableau",
+                  "index": 5,
+                  "cardIndex": 4
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              }
+            ],
+            "goal": "REVEAL",
+            "score": 93.5,
+            "visitedStates": 1761,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0.5,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": null,
+              "continuation": "INFORMATION_BOUNDARY",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 428,
+              "explorationCandidates": 0,
+              "preparatoryStates": 2284,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 33,
+              "duplicateStatesRejected": 5138,
+              "depthLimitedBranches": 1183,
+              "stateLimitedBranches": 511,
+              "unresolvedCutoffs": 1490,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 151,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 48,
+              "shortenedPlansCount": 1,
+              "savedMovesCount": 2,
+              "retainedStates": 2048,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0.5,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  4,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  8,
+                  12,
+                  5,
+                  4,
+                  7,
+                  9,
+                  13,
+                  20,
+                  27,
+                  35,
+                  41,
+                  52,
+                  66,
+                  92,
+                  109,
+                  116,
+                  136,
+                  169,
+                  206,
+                  257,
+                  312
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": 29,
+                "firstAcceptedGoalDepth": 29,
+                "rawGoalsBeforeDedup": 706,
+                "rawGoalsBeyondDepth": 278,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 151,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 387,
+                "applyMovesSearch": 9033,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 738,
+                "getLegalMoves": 2715,
+                "evaluations": 2714
+              }
+            }
+          }
+        },
+        {
+          "id": "fifo",
+          "maxStates": 2048,
+          "result": {
+            "phase": "FINAL",
+            "status": "INCONCLUSIVE",
+            "diagnostics": {
+              "strategicCandidates": 0,
+              "explorationCandidates": 0,
+              "preparatoryStates": 4092,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 6785,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 2045,
+              "unresolvedCutoffs": 2045,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 0,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 2048,
+              "verificationReads": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  18,
+                  36,
+                  53,
+                  62,
+                  64,
+                  64,
+                  65,
+                  69,
+                  78,
+                  95,
+                  123,
+                  167,
+                  235,
+                  340,
+                  512,
+                  60
+                ],
+                "maxExpandedDepth": 17,
+                "firstRawGoalDepth": null,
+                "firstAcceptedGoalDepth": null,
+                "rawGoalsBeforeDedup": 0,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 542,
+                "applyMovesSearch": 10877,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 0,
+                "getLegalMoves": 4093,
+                "evaluations": 4092
+              }
+            },
+            "reason": "LIMIT_REACHED",
+            "plan": [],
+            "goal": null,
+            "score": null,
+            "visitedStates": 2048,
+            "truncated": true
+          }
+        },
+        {
+          "id": "fallback",
+          "maxStates": 4096,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 1
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "tableau",
+                  "index": 5,
+                  "cardIndex": 4
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              }
+            ],
+            "goal": "REVEAL",
+            "score": 93.5,
+            "visitedStates": 1761,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0.5,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": null,
+              "continuation": "INFORMATION_BOUNDARY",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 428,
+              "explorationCandidates": 0,
+              "preparatoryStates": 2284,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 33,
+              "duplicateStatesRejected": 5138,
+              "depthLimitedBranches": 1183,
+              "stateLimitedBranches": 511,
+              "unresolvedCutoffs": 1490,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 151,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 48,
+              "shortenedPlansCount": 1,
+              "savedMovesCount": 2,
+              "retainedStates": 2048,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0.5,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  6,
+                  4,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  6,
+                  8,
+                  12,
+                  5,
+                  4,
+                  7,
+                  9,
+                  13,
+                  20,
+                  27,
+                  35,
+                  41,
+                  52,
+                  66,
+                  92,
+                  109,
+                  116,
+                  136,
+                  169,
+                  206,
+                  257,
+                  312
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": 29,
+                "firstAcceptedGoalDepth": 29,
+                "rawGoalsBeforeDedup": 706,
+                "rawGoalsBeyondDepth": 278,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 151,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 387,
+                "applyMovesSearch": 9033,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 738,
+                "getLegalMoves": 2715,
+                "evaluations": 2714
+              },
+              "fallback": {
+                "used": false,
+                "primaryVisited": 1761,
+                "secondaryVisited": 0,
+                "primaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    6,
+                    4,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    6,
+                    8,
+                    12,
+                    5,
+                    4,
+                    7,
+                    9,
+                    13,
+                    20,
+                    27,
+                    35,
+                    41,
+                    52,
+                    66,
+                    92,
+                    109,
+                    116,
+                    136,
+                    169,
+                    206,
+                    257,
+                    312
+                  ],
+                  "maxExpandedDepth": 32,
+                  "firstRawGoalDepth": 29,
+                  "firstAcceptedGoalDepth": 29,
+                  "rawGoalsBeforeDedup": 706,
+                  "rawGoalsBeyondDepth": 278,
+                  "rawGoalsSkippedByDedup": 0,
+                  "rejectedByU": 151,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 0,
+                  "maxFrontierSize": 387,
+                  "applyMovesSearch": 9033,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 738,
+                  "getLegalMoves": 2715,
+                  "evaluations": 2714
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "seed202-draw1-states10000",
+      "results": [
+        {
+          "id": "baseline",
+          "maxStates": 10000,
+          "result": {
+            "phase": "FINAL",
+            "status": "INCONCLUSIVE",
+            "diagnostics": {
+              "strategicCandidates": 0,
+              "explorationCandidates": 0,
+              "preparatoryStates": 77376,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 52328,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 67377,
+              "unresolvedCutoffs": 67377,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 0,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 10000,
+              "verificationReads": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  10,
+                  53,
+                  218,
+                  802,
+                  2626,
+                  6290
+                ],
+                "maxExpandedDepth": 6,
+                "firstRawGoalDepth": null,
+                "firstAcceptedGoalDepth": null,
+                "rawGoalsBeforeDedup": 0,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 7950,
+                "applyMovesSearch": 129704,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 0,
+                "getLegalMoves": 77377,
+                "evaluations": 77376
+              }
+            },
+            "reason": "LIMIT_REACHED",
+            "plan": [],
+            "goal": null,
+            "score": null,
+            "visitedStates": 10000,
+            "truncated": true
+          }
+        },
+        {
+          "id": "fifo",
+          "maxStates": 10000,
+          "result": {
+            "phase": "FINAL",
+            "status": "INCONCLUSIVE",
+            "diagnostics": {
+              "strategicCandidates": 0,
+              "explorationCandidates": 0,
+              "preparatoryStates": 76998,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 50198,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 66999,
+              "unresolvedCutoffs": 66999,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 0,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 10000,
+              "verificationReads": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  10,
+                  57,
+                  257,
+                  1016,
+                  3552,
+                  5107
+                ],
+                "maxExpandedDepth": 6,
+                "firstRawGoalDepth": null,
+                "firstAcceptedGoalDepth": null,
+                "rawGoalsBeforeDedup": 0,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 7194,
+                "applyMovesSearch": 127196,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 0,
+                "getLegalMoves": 76999,
+                "evaluations": 76998
+              }
+            },
+            "reason": "LIMIT_REACHED",
+            "plan": [],
+            "goal": null,
+            "score": null,
+            "visitedStates": 10000,
+            "truncated": true
+          }
+        },
+        {
+          "id": "fallback",
+          "maxStates": 20000,
+          "result": {
+            "phase": "FINAL",
+            "status": "INCONCLUSIVE",
+            "diagnostics": {
+              "strategicCandidates": 0,
+              "explorationCandidates": 0,
+              "preparatoryStates": 77376,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 52328,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 67377,
+              "unresolvedCutoffs": 67377,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 0,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 10000,
+              "verificationReads": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  10,
+                  53,
+                  218,
+                  802,
+                  2626,
+                  6290
+                ],
+                "maxExpandedDepth": 6,
+                "firstRawGoalDepth": null,
+                "firstAcceptedGoalDepth": null,
+                "rawGoalsBeforeDedup": 0,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 7950,
+                "applyMovesSearch": 129704,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 0,
+                "getLegalMoves": 77377,
+                "evaluations": 77376
+              },
+              "fallback": {
+                "used": true,
+                "primaryVisited": 10000,
+                "secondaryVisited": 10000,
+                "primaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    10,
+                    53,
+                    218,
+                    802,
+                    2626,
+                    6290
+                  ],
+                  "maxExpandedDepth": 6,
+                  "firstRawGoalDepth": null,
+                  "firstAcceptedGoalDepth": null,
+                  "rawGoalsBeforeDedup": 0,
+                  "rawGoalsBeyondDepth": 0,
+                  "rawGoalsSkippedByDedup": 0,
+                  "rejectedByU": 0,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 0,
+                  "maxFrontierSize": 7950,
+                  "applyMovesSearch": 129704,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 0,
+                  "getLegalMoves": 77377,
+                  "evaluations": 77376
+                },
+                "secondaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    10,
+                    57,
+                    257,
+                    1016,
+                    3552,
+                    5107
+                  ],
+                  "maxExpandedDepth": 6,
+                  "firstRawGoalDepth": null,
+                  "firstAcceptedGoalDepth": null,
+                  "rawGoalsBeforeDedup": 0,
+                  "rawGoalsBeyondDepth": 0,
+                  "rawGoalsSkippedByDedup": 0,
+                  "rejectedByU": 0,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 0,
+                  "maxFrontierSize": 7194,
+                  "applyMovesSearch": 127196,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 0,
+                  "getLegalMoves": 76999,
+                  "evaluations": 76998
+                },
+                "secondaryStatus": "INCONCLUSIVE"
+              }
+            },
+            "reason": "LIMIT_REACHED",
+            "plan": [],
+            "goal": null,
+            "score": null,
+            "visitedStates": 20000,
+            "truncated": true,
+            "cancelled": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "seed203-draw3-states512",
+      "results": [
+        {
+          "id": "baseline",
+          "maxStates": 512,
+          "result": {
+            "phase": "FINAL",
+            "status": "INCONCLUSIVE",
+            "diagnostics": {
+              "strategicCandidates": 0,
+              "explorationCandidates": 0,
+              "preparatoryStates": 713,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 22,
+              "duplicateStatesRejected": 1606,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 76,
+              "unresolvedCutoffs": 76,
+              "unexpandedStates": 90,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 0,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 512,
+              "verificationReads": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  1,
+                  1,
+                  2,
+                  6,
+                  4,
+                  8,
+                  14,
+                  21,
+                  31,
+                  33,
+                  33,
+                  31,
+                  25,
+                  23,
+                  19,
+                  23,
+                  29,
+                  28,
+                  36,
+                  40,
+                  38,
+                  31,
+                  20,
+                  14
+                ],
+                "maxExpandedDepth": 24,
+                "firstRawGoalDepth": null,
+                "firstAcceptedGoalDepth": null,
+                "rawGoalsBeforeDedup": 0,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 223,
+                "applyMovesSearch": 2319,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 0,
+                "getLegalMoves": 714,
+                "evaluations": 713
+              }
+            },
+            "reason": "LIMIT_REACHED",
+            "plan": [],
+            "goal": null,
+            "score": null,
+            "visitedStates": 512,
+            "truncated": true
+          }
+        },
+        {
+          "id": "fifo",
+          "maxStates": 512,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "foundation",
+                  "index": 0
+                }
+              }
+            ],
+            "goal": "FOUNDATION_ADVANCE",
+            "score": 31,
+            "visitedStates": 512,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": 6,
+              "continuation": "UNPROVEN",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 7,
+              "explorationCandidates": 0,
+              "preparatoryStates": 780,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 1551,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 276,
+              "unresolvedCutoffs": 276,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 10,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 512,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  3,
+                  5,
+                  11,
+                  17,
+                  27,
+                  44,
+                  62,
+                  82,
+                  98,
+                  118,
+                  44
+                ],
+                "maxExpandedDepth": 11,
+                "firstRawGoalDepth": 11,
+                "firstAcceptedGoalDepth": 11,
+                "rawGoalsBeforeDedup": 8,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 1,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 3,
+                "maxFrontierSize": 124,
+                "applyMovesSearch": 2338,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 82,
+                "getLegalMoves": 788,
+                "evaluations": 787
+              }
+            }
+          }
+        },
+        {
+          "id": "fallback",
+          "maxStates": 1024,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "foundation",
+                  "index": 0
+                }
+              }
+            ],
+            "goal": "FOUNDATION_ADVANCE",
+            "score": 31,
+            "visitedStates": 1024,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": 6,
+              "continuation": "UNPROVEN",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 7,
+              "explorationCandidates": 0,
+              "preparatoryStates": 780,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 1551,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 276,
+              "unresolvedCutoffs": 276,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 10,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 512,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  3,
+                  5,
+                  11,
+                  17,
+                  27,
+                  44,
+                  62,
+                  82,
+                  98,
+                  118,
+                  44
+                ],
+                "maxExpandedDepth": 11,
+                "firstRawGoalDepth": 11,
+                "firstAcceptedGoalDepth": 11,
+                "rawGoalsBeforeDedup": 8,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 1,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 3,
+                "maxFrontierSize": 124,
+                "applyMovesSearch": 2338,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 82,
+                "getLegalMoves": 788,
+                "evaluations": 787
+              },
+              "fallback": {
+                "used": true,
+                "primaryVisited": 512,
+                "secondaryVisited": 512,
+                "primaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    1,
+                    1,
+                    2,
+                    6,
+                    4,
+                    8,
+                    14,
+                    21,
+                    31,
+                    33,
+                    33,
+                    31,
+                    25,
+                    23,
+                    19,
+                    23,
+                    29,
+                    28,
+                    36,
+                    40,
+                    38,
+                    31,
+                    20,
+                    14
+                  ],
+                  "maxExpandedDepth": 24,
+                  "firstRawGoalDepth": null,
+                  "firstAcceptedGoalDepth": null,
+                  "rawGoalsBeforeDedup": 0,
+                  "rawGoalsBeyondDepth": 0,
+                  "rawGoalsSkippedByDedup": 0,
+                  "rejectedByU": 0,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 0,
+                  "maxFrontierSize": 223,
+                  "applyMovesSearch": 2319,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 0,
+                  "getLegalMoves": 714,
+                  "evaluations": 713
+                },
+                "secondaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    3,
+                    5,
+                    11,
+                    17,
+                    27,
+                    44,
+                    62,
+                    82,
+                    98,
+                    118,
+                    44
+                  ],
+                  "maxExpandedDepth": 11,
+                  "firstRawGoalDepth": 11,
+                  "firstAcceptedGoalDepth": 11,
+                  "rawGoalsBeforeDedup": 8,
+                  "rawGoalsBeyondDepth": 0,
+                  "rawGoalsSkippedByDedup": 1,
+                  "rejectedByU": 0,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 3,
+                  "maxFrontierSize": 124,
+                  "applyMovesSearch": 2338,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 82,
+                  "getLegalMoves": 788,
+                  "evaluations": 787
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "baseline",
+          "maxStates": 1024,
+          "result": {
+            "phase": "FINAL",
+            "status": "INCONCLUSIVE",
+            "diagnostics": {
+              "strategicCandidates": 0,
+              "explorationCandidates": 0,
+              "preparatoryStates": 1476,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 20,
+              "duplicateStatesRejected": 3081,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 168,
+              "unresolvedCutoffs": 160,
+              "unexpandedStates": 245,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 0,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 1024,
+              "verificationReads": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  1,
+                  1,
+                  2,
+                  2,
+                  4,
+                  8,
+                  14,
+                  21,
+                  23,
+                  27,
+                  35,
+                  33,
+                  27,
+                  30,
+                  27,
+                  42,
+                  55,
+                  71,
+                  79,
+                  83,
+                  77,
+                  63,
+                  45,
+                  40,
+                  32,
+                  42,
+                  37,
+                  36,
+                  30,
+                  20,
+                  12,
+                  4
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": null,
+                "firstAcceptedGoalDepth": null,
+                "rawGoalsBeforeDedup": 0,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 0,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 0,
+                "maxFrontierSize": 358,
+                "applyMovesSearch": 4557,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 0,
+                "getLegalMoves": 1477,
+                "evaluations": 1476
+              }
+            },
+            "reason": "LIMIT_REACHED",
+            "plan": [],
+            "goal": null,
+            "score": null,
+            "visitedStates": 1024,
+            "truncated": true
+          }
+        },
+        {
+          "id": "fifo",
+          "maxStates": 1024,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "foundation",
+                  "index": 0
+                }
+              }
+            ],
+            "goal": "FOUNDATION_ADVANCE",
+            "score": 31,
+            "visitedStates": 1024,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": 6,
+              "continuation": "UNPROVEN",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 56,
+              "explorationCandidates": 0,
+              "preparatoryStates": 1618,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 3246,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 651,
+              "unresolvedCutoffs": 651,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 10,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 1024,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  3,
+                  5,
+                  11,
+                  17,
+                  27,
+                  44,
+                  62,
+                  82,
+                  98,
+                  118,
+                  128,
+                  142,
+                  189,
+                  97
+                ],
+                "maxExpandedDepth": 14,
+                "firstRawGoalDepth": 11,
+                "firstAcceptedGoalDepth": 11,
+                "rawGoalsBeforeDedup": 126,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 70,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 48,
+                "maxFrontierSize": 237,
+                "applyMovesSearch": 4920,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 82,
+                "getLegalMoves": 1675,
+                "evaluations": 1674
+              }
+            }
+          }
+        },
+        {
+          "id": "fallback",
+          "maxStates": 2048,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "foundation",
+                  "index": 0
+                }
+              }
+            ],
+            "goal": "FOUNDATION_ADVANCE",
+            "score": 31,
+            "visitedStates": 2048,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": 6,
+              "continuation": "UNPROVEN",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 56,
+              "explorationCandidates": 0,
+              "preparatoryStates": 1618,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 3246,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 651,
+              "unresolvedCutoffs": 651,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 10,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 1024,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  3,
+                  5,
+                  11,
+                  17,
+                  27,
+                  44,
+                  62,
+                  82,
+                  98,
+                  118,
+                  128,
+                  142,
+                  189,
+                  97
+                ],
+                "maxExpandedDepth": 14,
+                "firstRawGoalDepth": 11,
+                "firstAcceptedGoalDepth": 11,
+                "rawGoalsBeforeDedup": 126,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 70,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 48,
+                "maxFrontierSize": 237,
+                "applyMovesSearch": 4920,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 82,
+                "getLegalMoves": 1675,
+                "evaluations": 1674
+              },
+              "fallback": {
+                "used": true,
+                "primaryVisited": 1024,
+                "secondaryVisited": 1024,
+                "primaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    1,
+                    1,
+                    2,
+                    2,
+                    4,
+                    8,
+                    14,
+                    21,
+                    23,
+                    27,
+                    35,
+                    33,
+                    27,
+                    30,
+                    27,
+                    42,
+                    55,
+                    71,
+                    79,
+                    83,
+                    77,
+                    63,
+                    45,
+                    40,
+                    32,
+                    42,
+                    37,
+                    36,
+                    30,
+                    20,
+                    12,
+                    4
+                  ],
+                  "maxExpandedDepth": 32,
+                  "firstRawGoalDepth": null,
+                  "firstAcceptedGoalDepth": null,
+                  "rawGoalsBeforeDedup": 0,
+                  "rawGoalsBeyondDepth": 0,
+                  "rawGoalsSkippedByDedup": 0,
+                  "rejectedByU": 0,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 0,
+                  "maxFrontierSize": 358,
+                  "applyMovesSearch": 4557,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 0,
+                  "getLegalMoves": 1477,
+                  "evaluations": 1476
+                },
+                "secondaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    3,
+                    5,
+                    11,
+                    17,
+                    27,
+                    44,
+                    62,
+                    82,
+                    98,
+                    118,
+                    128,
+                    142,
+                    189,
+                    97
+                  ],
+                  "maxExpandedDepth": 14,
+                  "firstRawGoalDepth": 11,
+                  "firstAcceptedGoalDepth": 11,
+                  "rawGoalsBeforeDedup": 126,
+                  "rawGoalsBeyondDepth": 0,
+                  "rawGoalsSkippedByDedup": 70,
+                  "rejectedByU": 0,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 48,
+                  "maxFrontierSize": 237,
+                  "applyMovesSearch": 4920,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 82,
+                  "getLegalMoves": 1675,
+                  "evaluations": 1674
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "baseline",
+          "maxStates": 2048,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 0
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "foundation",
+                  "index": 0
+                }
+              }
+            ],
+            "goal": "FOUNDATION_ADVANCE",
+            "score": 23,
+            "visitedStates": 2048,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": 6,
+              "continuation": "UNPROVEN",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 54,
+              "explorationCandidates": 0,
+              "preparatoryStates": 2738,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 88,
+              "duplicateStatesRejected": 6911,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 144,
+              "unresolvedCutoffs": 124,
+              "unexpandedStates": 464,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 12,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 2048,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  1,
+                  1,
+                  3,
+                  8,
+                  10,
+                  13,
+                  19,
+                  27,
+                  37,
+                  37,
+                  44,
+                  42,
+                  37,
+                  41,
+                  58,
+                  75,
+                  113,
+                  140,
+                  172,
+                  198,
+                  202,
+                  166,
+                  135,
+                  86,
+                  63,
+                  63,
+                  67,
+                  65,
+                  56,
+                  40,
+                  24,
+                  4
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": 13,
+                "firstAcceptedGoalDepth": 13,
+                "rawGoalsBeforeDedup": 251,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 197,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 53,
+                "maxFrontierSize": 625,
+                "applyMovesSearch": 9703,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 123,
+                "getLegalMoves": 2793,
+                "evaluations": 2792
+              }
+            }
+          }
+        },
+        {
+          "id": "fifo",
+          "maxStates": 2048,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "foundation",
+                  "index": 0
+                }
+              }
+            ],
+            "goal": "FOUNDATION_ADVANCE",
+            "score": 31,
+            "visitedStates": 2048,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": 6,
+              "continuation": "UNPROVEN",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 140,
+              "explorationCandidates": 0,
+              "preparatoryStates": 3360,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 0,
+              "duplicateStatesRejected": 7069,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 1453,
+              "unresolvedCutoffs": 1453,
+              "unexpandedStates": 0,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 10,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 2048,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  3,
+                  5,
+                  11,
+                  17,
+                  27,
+                  44,
+                  62,
+                  82,
+                  98,
+                  118,
+                  128,
+                  142,
+                  189,
+                  281,
+                  407,
+                  433
+                ],
+                "maxExpandedDepth": 16,
+                "firstRawGoalDepth": 11,
+                "firstAcceptedGoalDepth": 11,
+                "rawGoalsBeforeDedup": 434,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 294,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 129,
+                "maxFrontierSize": 534,
+                "applyMovesSearch": 10569,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 82,
+                "getLegalMoves": 3501,
+                "evaluations": 3500
+              }
+            }
+          }
+        },
+        {
+          "id": "fallback",
+          "maxStates": 4096,
+          "result": {
+            "status": "FOUND",
+            "plan": [
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 0
+                }
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "tableau",
+                  "index": 2
+                }
+              },
+              {
+                "type": "recycle"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "draw"
+              },
+              {
+                "type": "move",
+                "from": {
+                  "pile": "waste"
+                },
+                "to": {
+                  "pile": "foundation",
+                  "index": 0
+                }
+              }
+            ],
+            "goal": "FOUNDATION_ADVANCE",
+            "score": 23,
+            "visitedStates": 2048,
+            "truncated": true,
+            "historyReturns": 0,
+            "expectedPostRevealScore": 0,
+            "completesGame": false,
+            "verification": {
+              "goalReached": true,
+              "lostMorePossibilities": false,
+              "usefulPossibilities": 0,
+              "legalActions": 6,
+              "continuation": "UNPROVEN",
+              "horizon": 0,
+              "accepted": true
+            },
+            "phase": "FINAL",
+            "diagnostics": {
+              "strategicCandidates": 54,
+              "explorationCandidates": 0,
+              "preparatoryStates": 2738,
+              "rejectedEndStates": 0,
+              "staleQueueEntries": 88,
+              "duplicateStatesRejected": 6911,
+              "depthLimitedBranches": 0,
+              "stateLimitedBranches": 144,
+              "unresolvedCutoffs": 124,
+              "unexpandedStates": 464,
+              "cachedDeadEnds": 0,
+              "nonPositiveGoals": 0,
+              "historyRejectedGoals": 0,
+              "shorteningAttempts": 12,
+              "shortenedPlansCount": 0,
+              "savedMovesCount": 0,
+              "retainedStates": 2048,
+              "verificationReads": 0,
+              "expectedPostRevealScore": 0,
+              "work": {
+                "expandedByDepth": [
+                  1,
+                  1,
+                  1,
+                  3,
+                  8,
+                  10,
+                  13,
+                  19,
+                  27,
+                  37,
+                  37,
+                  44,
+                  42,
+                  37,
+                  41,
+                  58,
+                  75,
+                  113,
+                  140,
+                  172,
+                  198,
+                  202,
+                  166,
+                  135,
+                  86,
+                  63,
+                  63,
+                  67,
+                  65,
+                  56,
+                  40,
+                  24,
+                  4
+                ],
+                "maxExpandedDepth": 32,
+                "firstRawGoalDepth": 13,
+                "firstAcceptedGoalDepth": 13,
+                "rawGoalsBeforeDedup": 251,
+                "rawGoalsBeyondDepth": 0,
+                "rawGoalsSkippedByDedup": 197,
+                "rejectedByU": 0,
+                "rejectedByHistory": 0,
+                "rejectedByAddsGoalProgress": 53,
+                "maxFrontierSize": 625,
+                "applyMovesSearch": 9703,
+                "applyMovesReplay": 0,
+                "applyMovesShortening": 123,
+                "getLegalMoves": 2793,
+                "evaluations": 2792
+              },
+              "fallback": {
+                "used": false,
+                "primaryVisited": 2048,
+                "secondaryVisited": 0,
+                "primaryWork": {
+                  "expandedByDepth": [
+                    1,
+                    1,
+                    1,
+                    3,
+                    8,
+                    10,
+                    13,
+                    19,
+                    27,
+                    37,
+                    37,
+                    44,
+                    42,
+                    37,
+                    41,
+                    58,
+                    75,
+                    113,
+                    140,
+                    172,
+                    198,
+                    202,
+                    166,
+                    135,
+                    86,
+                    63,
+                    63,
+                    67,
+                    65,
+                    56,
+                    40,
+                    24,
+                    4
+                  ],
+                  "maxExpandedDepth": 32,
+                  "firstRawGoalDepth": 13,
+                  "firstAcceptedGoalDepth": 13,
+                  "rawGoalsBeforeDedup": 251,
+                  "rawGoalsBeyondDepth": 0,
+                  "rawGoalsSkippedByDedup": 197,
+                  "rejectedByU": 0,
+                  "rejectedByHistory": 0,
+                  "rejectedByAddsGoalProgress": 53,
+                  "maxFrontierSize": 625,
+                  "applyMovesSearch": 9703,
+                  "applyMovesReplay": 0,
+                  "applyMovesShortening": 123,
+                  "getLegalMoves": 2793,
+                  "evaluations": 2792
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bReachability": {
+    "limit": 100000,
+    "oracle": {
+      "status": "UNKNOWN",
+      "plan": [],
+      "visited": 100000,
+      "expanded": 100000,
+      "transitions": 1335381,
+      "truncated": true
+    },
+    "f04": {
+      "status": "UNKNOWN",
+      "visitedStates": 39972,
+      "noLegalMoves": false
+    }
+  },
+  "counterfactual": [
+    {
+      "branch": "baseline",
+      "forcedPrefixLength": 53,
+      "firstChoice": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 2
+        }
+      },
+      "note": "Same Best-First(10000) after forced common prefix plus one differing move; no inherited unfinished plan.",
+      "game": {
+        "algorithm": "baseline",
+        "seed": 202,
+        "drawCount": 1,
+        "stop": "WON",
+        "steps": 184,
+        "revealed": 21,
+        "foundationCards": 52,
+        "cycles": 2,
+        "boardReturns": 2,
+        "history": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 5
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 6
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 5
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 5
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 5
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 13
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 12
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 11
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 10
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 9
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 7
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 6
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 6
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          }
+        ]
+      }
+    },
+    {
+      "branch": "bfs",
+      "forcedPrefixLength": 53,
+      "firstChoice": {
+        "type": "draw"
+      },
+      "note": "Same Best-First(10000) after forced common prefix plus one differing move; no inherited unfinished plan.",
+      "game": {
+        "algorithm": "bfs",
+        "seed": 202,
+        "drawCount": 1,
+        "stop": "WON",
+        "steps": 184,
+        "revealed": 21,
+        "foundationCards": 52,
+        "cycles": 0,
+        "boardReturns": 0,
+        "history": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 5
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 6
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 5
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 7
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
