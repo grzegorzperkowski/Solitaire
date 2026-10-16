@@ -1,5 +1,7 @@
 # Fresh-session handoff
 
+T028 IN_PROGRESS (2026-10-16): resumed E1 fallback R&D from external diagnosis; compare Best-First(B)+FIFO(B) with Best-First(2B), observe work and A/B/C. Runtime unchanged. See reports/T028-fallback-rd.md.
+
 T028 REVIEW (2026-10-15): external-LLM handoff ready: SMART_HINT_RND_FEEDBACK.md, SMART_HINT_BFS_CODE.md and .project/reports/T028-bfs-diagnostics.json. Six standalone-source probes reproduce exact results; both search orders have same-position coverage counterexamples. See [report](reports/T028-bfs-handoff.md). Runtime unchanged; await external feedback/coordinator assignment, preserve both untracked JSON files; no push or successor.
 
 T028 REVIEW (2026-10-15): FIFO/BFS R&D finished. See [report](reports/T028-bfs-rd.md) and `scripts/experiments/smart-hint-bfs.mjs`; implementation checkpoint 6176477. 180 whole-game trajectories: FIFO wins 3 vs baseline 9 at 512, 3 vs 11 at 2048 (40 paired deals each), 1 vs 4 at 10000 (10-deal subset). 367 tests/build pass. Preserve production planner and both untracked diagnostic JSON files; no push/successor or DONE without explicit acceptance. No unfinished benchmark.

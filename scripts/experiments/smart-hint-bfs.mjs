@@ -6,12 +6,13 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { parseOptions, playDeal, summarizeGames, compareGames } from '../hint-benchmark.js';
+import { observeSource } from './smart-hint-observations.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const revision = '2d1ecfc';
 const digest = source => createHash('sha256').update(source.replaceAll('\r\n', '\n')).digest('hex');
 
-export async function loadPlanners() {
+export async function loadPlanners({ observe = false } = {}) {
   const source = execFileSync('git', ['show', `${revision}:src/engine/smart-hints.js`], { cwd: root, encoding: 'utf8' });
   const start = source.indexOf('  class PriorityQueue {');
   const end = source.indexOf('  const queue = new PriorityQueue();', start);
@@ -36,7 +37,7 @@ export async function loadPlanners() {
       `from '${pathToFileURL(path.join(root, 'src/engine', file)).href}'`);
     return import(`data:text/javascript;base64,${Buffer.from(relocated).toString('base64')}`);
   };
-  return { baseline: await load(source), bfs: await load(modified),
+  return { baseline: await load(observe ? observeSource(source) : source), bfs: await load(observe ? observeSource(modified) : modified),
     metadata: { revision, baselineSha256: digest(source), bfsSha256: digest(modified),
       change: 'Only nested priority queue replaced by FIFO with monotonic-depth assertion.' } };
 }

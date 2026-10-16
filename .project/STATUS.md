@@ -1,5 +1,7 @@
 # Project status
 
+T028 IN_PROGRESS (2026-10-16): resumed E1 fallback R&D from external diagnosis; compare Best-First(B)+FIFO(B) with Best-First(2B), observe work and A/B/C. Runtime unchanged. See reports/T028-fallback-rd.md.
+
 T028 REVIEW (2026-10-15): external-LLM feedback and full exact BFS source/dependencies delivered with three diagnostic positions. Extracted-source replay reproduces all six search results; mixed coverage shown on identical boards. Runtime unchanged. See [report](reports/T028-bfs-handoff.md). Both unrelated JSON files preserved; no push; acceptance pending.
 
 T028 REVIEW (2026-10-15): implemented isolated FIFO/BFS R&D against 2d1ecfc. Baseline/FIFO wins 9/3 at 512 and 11/3 at 2048 (40 paired deals each), 4/1 at 10000 (10-deal subset). 367 tests/build pass; FIFO not promoted, production unchanged. See [report](reports/T028-bfs-rd.md). Both diagnostic JSON files preserved; no push/successor; acceptance pending.
