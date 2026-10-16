@@ -1,5 +1,7 @@
 # Fresh-session handoff
 
+T028 IN_PROGRESS (2026-10-16): X1 prefix-switch sweep and isolated X2 REVEAL comparator R&D resumed. Runtime unchanged. See reports/T028-x1-x2-rd.md.
+
 T028 REVIEW (2026-10-16): E1 fallback R&D complete. Fallback/control wins9/11 at512+512 vs1024,11/11 at2048+2048 vs4096 (40 paired deals each);373 tests/build pass. B reachability100000 remains UNKNOWN; both forced first-choice branches win184. Production unchanged, no push/successor. See [report](reports/T028-fallback-rd.md).
 
 T028 REVIEW (2026-10-15): external-LLM handoff ready: SMART_HINT_RND_FEEDBACK.md, SMART_HINT_BFS_CODE.md and .project/reports/T028-bfs-diagnostics.json. Six standalone-source probes reproduce exact results; both search orders have same-position coverage counterexamples. See [report](reports/T028-bfs-handoff.md). Runtime unchanged; await external feedback/coordinator assignment, preserve both untracked JSON files; no push or successor.
