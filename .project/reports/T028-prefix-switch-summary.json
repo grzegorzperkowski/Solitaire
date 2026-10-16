@@ -1,0 +1,8662 @@
+{
+  "metadata": {
+    "revision": "2d1ecfc",
+    "baselineSha256": "d152efd1eabcd5278c410949ab2a0462fcbe8e527060393f6d2878eb31b486cb",
+    "bfsSha256": "48e390c7d62146352b9970a1efd892d7bc33895de252699b1ee99e43b212a785",
+    "change": "Only nested priority queue replaced by FIFO with monotonic-depth assertion."
+  },
+  "runnerSha256": "989009ba110f2702f92b1ec783b31dfe5491ed3d1db58e2faeb9f1f51abee3b3",
+  "checkpoints": [
+    52,
+    72,
+    73,
+    75,
+    81,
+    82,
+    86,
+    89,
+    103,
+    104,
+    114,
+    117,
+    122,
+    129,
+    132,
+    139,
+    142
+  ],
+  "records": [
+    {
+      "prefixLength": 52,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            43,
+            35,
+            7
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45,
+            41,
+            25,
+            47,
+            37
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                10,
+                12
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17,
+                8,
+                18,
+                51
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                13,
+                27,
+                42
+              ],
+              "faceUpStart": 2
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [],
+            [
+              26
+            ],
+            [
+              39,
+              40
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          9,
+          11,
+          12,
+          14,
+          15,
+          16,
+          19,
+          21,
+          23,
+          25,
+          26,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          51
+        ],
+        "knownCount": 37,
+        "hiddenCount": 15,
+        "foundationCount": 4,
+        "foundationHighWater": 4
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 2
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 184,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 92.5,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 3,
+          "M": 0,
+          "B": 0,
+          "L": 27
+        }
+      }
+    },
+    {
+      "prefixLength": 72,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            43,
+            35,
+            7,
+            37,
+            47,
+            25
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                10,
+                12
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17,
+                8,
+                18,
+                51
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                13,
+                27
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [],
+            [
+              26
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          9,
+          11,
+          12,
+          14,
+          15,
+          16,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          51
+        ],
+        "knownCount": 38,
+        "hiddenCount": 14,
+        "foundationCount": 6,
+        "foundationHighWater": 6
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 5,
+          "cardIndex": 1
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 2
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 5,
+          "cardIndex": 1
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 2
+        }
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 165,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 156,
+        "components": {
+          "H": 1,
+          "F": 1,
+          "I": 0,
+          "W": 0,
+          "M": 0,
+          "B": 0,
+          "L": 1
+        }
+      }
+    },
+    {
+      "prefixLength": 73,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            43,
+            35,
+            7,
+            37,
+            47,
+            25
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                10,
+                12
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17,
+                8,
+                18,
+                51
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                13
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          9,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          51
+        ],
+        "knownCount": 39,
+        "hiddenCount": 13,
+        "foundationCount": 7,
+        "foundationHighWater": 7
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 5,
+          "cardIndex": 0
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 5,
+          "cardIndex": 0
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 165,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 5,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 5
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 122,
+        "components": {
+          "H": 1,
+          "F": 1,
+          "I": 0,
+          "W": 0,
+          "M": 1,
+          "B": 0,
+          "L": 2
+        }
+      }
+    },
+    {
+      "prefixLength": 75,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            43,
+            35,
+            7,
+            37,
+            47,
+            25
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                10
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17,
+                8,
+                18,
+                51
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          51
+        ],
+        "knownCount": 40,
+        "hiddenCount": 12,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 165,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 106.5,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 1,
+          "M": 0,
+          "B": 0,
+          "L": 6
+        }
+      }
+    },
+    {
+      "prefixLength": 81,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            43,
+            35,
+            7
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45,
+            25,
+            47
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17,
+                8,
+                18
+              ],
+              "faceUpStart": 2
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          51
+        ],
+        "knownCount": 41,
+        "hiddenCount": 11,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 4,
+          "cardIndex": 2
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 0
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 4,
+          "cardIndex": 2
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 0
+        }
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 165,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 116,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 0,
+          "M": 0,
+          "B": 0,
+          "L": 1
+        }
+      }
+    },
+    {
+      "prefixLength": 82,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            43,
+            35,
+            7
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45,
+            25,
+            47
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17,
+                8
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          51
+        ],
+        "knownCount": 42,
+        "hiddenCount": 10,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 165,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 111,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 1,
+          "M": 0,
+          "B": 0,
+          "L": 4
+        }
+      }
+    },
+    {
+      "prefixLength": 86,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            43
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45,
+            25,
+            47,
+            7
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          51
+        ],
+        "knownCount": 43,
+        "hiddenCount": 9,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 1,
+          "cardIndex": 3
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 165,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "foundation",
+              "index": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 1,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 90,
+        "components": {
+          "H": 1,
+          "F": 4,
+          "I": 0,
+          "W": 3,
+          "M": 0,
+          "B": 0,
+          "L": 11
+        }
+      }
+    },
+    {
+      "prefixLength": 89,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45,
+            25,
+            47,
+            7
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 0,
+          "cardIndex": 5
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 164,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 71,
+        "components": {
+          "H": 1,
+          "F": 9,
+          "I": 0,
+          "W": 4,
+          "M": 0,
+          "B": 0,
+          "L": 21
+        }
+      }
+    },
+    {
+      "prefixLength": 90,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45,
+            25,
+            47,
+            7,
+            28
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 2
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 164,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 71.5,
+        "components": {
+          "H": 1,
+          "F": 9,
+          "I": 0,
+          "W": 4,
+          "M": 0,
+          "B": 0,
+          "L": 20
+        }
+      }
+    },
+    {
+      "prefixLength": 91,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45,
+            25,
+            47,
+            7,
+            28,
+            34
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 0,
+          "cardIndex": 5
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 166,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 76,
+        "components": {
+          "H": 1,
+          "F": 8,
+          "I": 0,
+          "W": 3,
+          "M": 0,
+          "B": 0,
+          "L": 18
+        }
+      }
+    },
+    {
+      "prefixLength": 92,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [],
+          "waste": [
+            15,
+            31,
+            30,
+            33,
+            5,
+            38,
+            19,
+            44,
+            29,
+            45,
+            25,
+            47,
+            7,
+            28,
+            34,
+            1
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "recycle"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 0
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "WON",
+      "totalCommands": 166,
+      "stopReason": "WON",
+      "firstStopRawGoals": null,
+      "maxExpandedDepth": null,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 4
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 76.5,
+        "components": {
+          "H": 1,
+          "F": 8,
+          "I": 0,
+          "W": 3,
+          "M": 0,
+          "B": 0,
+          "L": 17
+        }
+      }
+    },
+    {
+      "prefixLength": 93,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19,
+            38,
+            5,
+            33,
+            30,
+            31,
+            15
+          ],
+          "waste": [],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 0,
+          "cardIndex": 5
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 141,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 84,
+        "components": {
+          "H": 1,
+          "F": 2,
+          "I": 0,
+          "W": 5,
+          "M": 0,
+          "B": 0,
+          "L": 16
+        }
+      }
+    },
+    {
+      "prefixLength": 94,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19,
+            38,
+            5,
+            33,
+            30,
+            31
+          ],
+          "waste": [
+            15
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 0,
+          "cardIndex": 5
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 141,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 84.5,
+        "components": {
+          "H": 1,
+          "F": 2,
+          "I": 0,
+          "W": 5,
+          "M": 0,
+          "B": 0,
+          "L": 15
+        }
+      }
+    },
+    {
+      "prefixLength": 95,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19,
+            38,
+            5,
+            33,
+            30
+          ],
+          "waste": [
+            15,
+            31
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 8,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 93,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 4,
+          "M": 0,
+          "B": 0,
+          "L": 12
+        }
+      }
+    },
+    {
+      "prefixLength": 96,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19,
+            38,
+            5,
+            33
+          ],
+          "waste": [
+            15,
+            31,
+            30
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 8,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 93.5,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 4,
+          "M": 0,
+          "B": 0,
+          "L": 11
+        }
+      }
+    },
+    {
+      "prefixLength": 97,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19,
+            38,
+            5
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            33
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 2
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 2
+        }
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 8,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 94,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 4,
+          "M": 0,
+          "B": 0,
+          "L": 10
+        }
+      }
+    },
+    {
+      "prefixLength": 98,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19,
+            38,
+            5
+          ],
+          "waste": [
+            15,
+            31,
+            30
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 8,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 98,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 3,
+          "M": 0,
+          "B": 0,
+          "L": 9
+        }
+      }
+    },
+    {
+      "prefixLength": 99,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19,
+            38
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 8,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 98.5,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 3,
+          "M": 0,
+          "B": 0,
+          "L": 8
+        }
+      }
+    },
+    {
+      "prefixLength": 100,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5,
+            38
+          ],
+          "tableau": [
+            {
+              "cards": [
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 0,
+          "cardIndex": 0
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 2
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 8,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 99,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 3,
+          "M": 0,
+          "B": 0,
+          "L": 7
+        }
+      }
+    },
+    {
+      "prefixLength": 101,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5,
+            38
+          ],
+          "tableau": [
+            {
+              "cards": [],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 0
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 0
+        }
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 112,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 1,
+          "M": 0,
+          "B": 0,
+          "L": 2
+        }
+      }
+    },
+    {
+      "prefixLength": 102,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5
+          ],
+          "tableau": [
+            {
+              "cards": [
+                38
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 3
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          51
+        ],
+        "knownCount": 44,
+        "hiddenCount": 8,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 3,
+          "cardIndex": 3
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 0
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 3,
+          "cardIndex": 3
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 0
+        }
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 3
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 116,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 0,
+          "M": 0,
+          "B": 0,
+          "L": 1
+        }
+      }
+    },
+    {
+      "prefixLength": 103,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5
+          ],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50
+              ],
+              "faceUpStart": 2
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20,
+                23
+              ],
+              "faceUpStart": 5
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 45,
+        "hiddenCount": 7,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 6,
+          "cardIndex": 5
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 3
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 6,
+          "cardIndex": 5
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 3
+        }
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 116,
+        "components": {
+          "H": 1,
+          "F": 0,
+          "I": 0,
+          "W": 0,
+          "M": 0,
+          "B": 0,
+          "L": 1
+        }
+      }
+    },
+    {
+      "prefixLength": 104,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47,
+            25,
+            45,
+            29,
+            44,
+            19
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5
+          ],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4,
+                50,
+                23
+              ],
+              "faceUpStart": 2
+            },
+            {
+              "cards": [
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20
+              ],
+              "faceUpStart": 4
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 46,
+        "hiddenCount": 6,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 2,
+          "cardIndex": 11
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 11
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 6
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 10
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 9
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 4,
+              "cardIndex": 0
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 4
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 76,
+        "components": {
+          "H": 1,
+          "F": 8,
+          "I": 0,
+          "W": 8,
+          "M": 2,
+          "B": 0,
+          "L": 30
+        }
+      }
+    },
+    {
+      "prefixLength": 114,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5,
+            29,
+            45
+          ],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46,
+                19,
+                44,
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                43,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24,
+                4
+              ],
+              "faceUpStart": 1
+            },
+            {
+              "cards": [
+                25,
+                50,
+                23
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20
+              ],
+              "faceUpStart": 4
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 47,
+        "hiddenCount": 5,
+        "foundationCount": 8,
+        "foundationHighWater": 8
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 2,
+          "cardIndex": 9
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 3
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 6
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 140,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 8,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 6
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 11
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 2
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 9
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 3,
+              "cardIndex": 1
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 2
+            }
+          }
+        ],
+        "goal": "REVEAL",
+        "score": 86.5,
+        "components": {
+          "H": 1,
+          "F": 4,
+          "I": 0,
+          "W": 3,
+          "M": 0,
+          "B": 0,
+          "L": 11
+        }
+      }
+    },
+    {
+      "prefixLength": 117,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34,
+            28,
+            7,
+            47
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5,
+            29,
+            45
+          ],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46,
+                19,
+                44,
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                4,
+                16,
+                2,
+                14
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                25,
+                50,
+                23
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20
+              ],
+              "faceUpStart": 4
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13
+            ],
+            [
+              26,
+              27
+            ],
+            [
+              39,
+              40,
+              41,
+              42,
+              43
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 48,
+        "hiddenCount": 4,
+        "foundationCount": 9,
+        "foundationHighWater": 9
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 6
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 143,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 6
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 11
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 10
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 9
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 7
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 6,
+              "cardIndex": 5
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          }
+        ],
+        "goal": "FOUNDATION_ADVANCE",
+        "score": 414.5,
+        "components": {
+          "H": 0,
+          "F": 12,
+          "I": 0,
+          "W": 8,
+          "M": 0,
+          "B": 0,
+          "L": 26
+        }
+      }
+    },
+    {
+      "prefixLength": 122,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            1,
+            34
+          ],
+          "waste": [
+            15,
+            31,
+            30,
+            5,
+            29,
+            45,
+            47,
+            7
+          ],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46,
+                19,
+                44,
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                4,
+                16,
+                2
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                25,
+                50,
+                23
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20
+              ],
+              "faceUpStart": 4
+            }
+          ],
+          "foundations": [
+            [
+              0
+            ],
+            [
+              13,
+              14
+            ],
+            [
+              26,
+              27,
+              28
+            ],
+            [
+              39,
+              40,
+              41,
+              42,
+              43
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 48,
+        "hiddenCount": 4,
+        "foundationCount": 11,
+        "foundationHighWater": 11
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 143,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 10
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 0
+            }
+          },
+          {
+            "type": "recycle"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 9
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 7
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          }
+        ],
+        "goal": "FOUNDATION_ADVANCE",
+        "score": 347.5,
+        "components": {
+          "H": 0,
+          "F": 10,
+          "I": 0,
+          "W": 7,
+          "M": 0,
+          "B": 0,
+          "L": 21
+        }
+      }
+    },
+    {
+      "prefixLength": 129,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            34,
+            7,
+            47,
+            45,
+            29,
+            5,
+            30,
+            31
+          ],
+          "waste": [],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46,
+                19,
+                44,
+                17
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                4,
+                16
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                25,
+                50,
+                23
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20
+              ],
+              "faceUpStart": 4
+            }
+          ],
+          "foundations": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              13,
+              14,
+              15
+            ],
+            [
+              26,
+              27,
+              28
+            ],
+            [
+              39,
+              40,
+              41,
+              42,
+              43
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 48,
+        "hiddenCount": 4,
+        "foundationCount": 14,
+        "foundationHighWater": 14
+      },
+      "nextFifoCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 2,
+          "cardIndex": 9
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 2,
+          "cardIndex": 9
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 1
+        }
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 143,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 2,
+              "cardIndex": 9
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 1
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 7
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          }
+        ],
+        "goal": "FOUNDATION_ADVANCE",
+        "score": 241.5,
+        "components": {
+          "H": 0,
+          "F": 7,
+          "I": 0,
+          "W": 5,
+          "M": 0,
+          "B": 0,
+          "L": 14
+        }
+      }
+    },
+    {
+      "prefixLength": 132,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            34,
+            7,
+            47,
+            45,
+            29,
+            5,
+            30,
+            31
+          ],
+          "waste": [],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46,
+                19
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                4
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                25,
+                50,
+                23
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20
+              ],
+              "faceUpStart": 4
+            }
+          ],
+          "foundations": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            [
+              26,
+              27,
+              28
+            ],
+            [
+              39,
+              40,
+              41,
+              42,
+              43,
+              44
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 48,
+        "hiddenCount": 4,
+        "foundationCount": 17,
+        "foundationHighWater": 17
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "draw"
+      },
+      "sameFirstCommand": true,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 143,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "tableau",
+              "index": 0
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "tableau",
+              "index": 0,
+              "cardIndex": 8
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          }
+        ],
+        "goal": "FOUNDATION_ADVANCE",
+        "score": 133.5,
+        "components": {
+          "H": 0,
+          "F": 4,
+          "I": 0,
+          "W": 5,
+          "M": 0,
+          "B": 0,
+          "L": 11
+        }
+      }
+    },
+    {
+      "prefixLength": 139,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            34,
+            7,
+            47,
+            45
+          ],
+          "waste": [
+            31
+          ],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46,
+                19,
+                5
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                4
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                25,
+                50,
+                23
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20
+              ],
+              "faceUpStart": 4
+            }
+          ],
+          "foundations": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            [
+              26,
+              27,
+              28,
+              29,
+              30
+            ],
+            [
+              39,
+              40,
+              41,
+              42,
+              43,
+              44
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 48,
+        "hiddenCount": 4,
+        "foundationCount": 19,
+        "foundationHighWater": 19
+      },
+      "nextFifoCommand": {
+        "type": "draw"
+      },
+      "nextBestFirstCommand": {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "foundation",
+          "index": 2
+        }
+      },
+      "sameFirstCommand": false,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 142,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 2
+            }
+          },
+          {
+            "type": "draw"
+          },
+          {
+            "type": "move",
+            "from": {
+              "pile": "waste"
+            },
+            "to": {
+              "pile": "foundation",
+              "index": 3
+            }
+          }
+        ],
+        "goal": "FOUNDATION_ADVANCE",
+        "score": 71.5,
+        "components": {
+          "H": 0,
+          "F": 2,
+          "I": 0,
+          "W": 2,
+          "M": 0,
+          "B": 0,
+          "L": 3
+        }
+      }
+    },
+    {
+      "prefixLength": 142,
+      "root": {
+        "state": {
+          "rulesVersion": 1,
+          "shuffleVersion": 1,
+          "seed": 202,
+          "drawCount": 1,
+          "stock": [
+            34,
+            7,
+            47
+          ],
+          "waste": [],
+          "tableau": [
+            {
+              "cards": [
+                38,
+                11,
+                36,
+                9,
+                21,
+                46,
+                19,
+                5
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                49
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                51,
+                37,
+                10,
+                35,
+                8,
+                33,
+                6,
+                18,
+                4
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                24
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                25,
+                50,
+                23
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                12
+              ],
+              "faceUpStart": 0
+            },
+            {
+              "cards": [
+                22,
+                48,
+                32,
+                3,
+                20
+              ],
+              "faceUpStart": 4
+            }
+          ],
+          "foundations": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              13,
+              14,
+              15,
+              16,
+              17
+            ],
+            [
+              26,
+              27,
+              28,
+              29,
+              30,
+              31
+            ],
+            [
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45
+            ]
+          ]
+        },
+        "knownCards": [
+          0,
+          1,
+          2,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          49,
+          50,
+          51
+        ],
+        "knownCount": 48,
+        "hiddenCount": 4,
+        "foundationCount": 21,
+        "foundationHighWater": 21
+      },
+      "nextFifoCommand": null,
+      "nextBestFirstCommand": null,
+      "sameFirstCommand": null,
+      "bestFirstOutcome": "INCONCLUSIVE",
+      "totalCommands": 142,
+      "stopReason": "LIMIT_REACHED",
+      "firstStopRawGoals": 0,
+      "maxExpandedDepth": 6,
+      "firstHint": {
+        "plan": [],
+        "goal": null,
+        "score": null
+      }
+    }
+  ],
+  "lossWindows": [
+    [
+      89,
+      103
+    ]
+  ],
+  "localIntervention": {
+    "prefix": 89,
+    "end": 103,
+    "fifoPlan": [
+      {
+        "type": "draw"
+      },
+      {
+        "type": "draw"
+      },
+      {
+        "type": "draw"
+      },
+      {
+        "type": "recycle"
+      },
+      {
+        "type": "draw"
+      },
+      {
+        "type": "draw"
+      },
+      {
+        "type": "draw"
+      },
+      {
+        "type": "draw"
+      },
+      {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 2
+        }
+      },
+      {
+        "type": "draw"
+      },
+      {
+        "type": "draw"
+      },
+      {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 0,
+          "cardIndex": 0
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 2
+        }
+      },
+      {
+        "type": "move",
+        "from": {
+          "pile": "waste"
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 0
+        }
+      },
+      {
+        "type": "move",
+        "from": {
+          "pile": "tableau",
+          "index": 3,
+          "cardIndex": 3
+        },
+        "to": {
+          "pile": "tableau",
+          "index": 0
+        }
+      }
+    ],
+    "fifoPlanAnalysis": {
+      "ok": true,
+      "state": {
+        "rulesVersion": 1,
+        "shuffleVersion": 1,
+        "seed": 202,
+        "drawCount": 1,
+        "stock": [
+          1,
+          34,
+          28,
+          7,
+          47,
+          25,
+          45,
+          29,
+          44,
+          19
+        ],
+        "waste": [
+          15,
+          31,
+          30,
+          5
+        ],
+        "tableau": [
+          {
+            "cards": [
+              38,
+              11,
+              36,
+              9,
+              21,
+              46
+            ],
+            "faceUpStart": 0
+          },
+          {
+            "cards": [
+              49
+            ],
+            "faceUpStart": 0
+          },
+          {
+            "cards": [
+              51,
+              37,
+              10,
+              35,
+              8,
+              33,
+              6,
+              18,
+              43,
+              16,
+              2,
+              14
+            ],
+            "faceUpStart": 0
+          },
+          {
+            "cards": [
+              24,
+              4,
+              50
+            ],
+            "faceUpStart": 2
+          },
+          {
+            "cards": [
+              17
+            ],
+            "faceUpStart": 0
+          },
+          {
+            "cards": [
+              12
+            ],
+            "faceUpStart": 0
+          },
+          {
+            "cards": [
+              22,
+              48,
+              32,
+              3,
+              20,
+              23
+            ],
+            "faceUpStart": 5
+          }
+        ],
+        "foundations": [
+          [
+            0
+          ],
+          [
+            13
+          ],
+          [
+            26,
+            27
+          ],
+          [
+            39,
+            40,
+            41,
+            42
+          ]
+        ]
+      },
+      "goal": "REVEAL",
+      "score": 99,
+      "components": {
+        "H": 1,
+        "F": 0,
+        "I": 0,
+        "W": 2,
+        "M": 0,
+        "B": 0,
+        "L": 14
+      },
+      "verification": {
+        "goalReached": true,
+        "lostMorePossibilities": false,
+        "usefulPossibilities": 1,
+        "legalActions": null,
+        "continuation": "INFORMATION_BOUNDARY",
+        "horizon": 0,
+        "accepted": true
+      }
+    },
+    "controlOutcome": "INCONCLUSIVE",
+    "interventionOutcome": "WON",
+    "note": "Control executes the one recorded complete FIFO plan then switches; intervention switches immediately. Same policy/budget/chronological knowledge after each handover."
+  }
+}
