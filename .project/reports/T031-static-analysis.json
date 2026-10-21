@@ -1,0 +1,426 @@
+{
+  "commit": "779c6a31b7bc105737b75a6f7c97d5118fe67063",
+  "tool": "ESLint 10.5.0",
+  "config": "CLI correctness/unused rules, complexity >25, max-depth >5; no-config-lookup; scripts/baselines excluded",
+  "files": 88,
+  "errors": 0,
+  "warnings": 51,
+  "npmAudit": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "messages": [
+    {
+      "file": "scripts/benchmark-hint-integration.mjs",
+      "line": 11,
+      "column": 27,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'visibleCards' is defined but never used."
+    },
+    {
+      "file": "scripts/experiments/smart-hint-bfs.mjs",
+      "line": 68,
+      "column": 59,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'history' is defined but never used."
+    },
+    {
+      "file": "scripts/experiments/smart-hint-bfs.mjs",
+      "line": 68,
+      "column": 68,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'calls' is defined but never used."
+    },
+    {
+      "file": "scripts/experiments/smart-hint-fallback.mjs",
+      "line": 74,
+      "column": 59,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'history' is defined but never used."
+    },
+    {
+      "file": "scripts/experiments/smart-hint-fallback.mjs",
+      "line": 74,
+      "column": 68,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'calls' is defined but never used."
+    },
+    {
+      "file": "scripts/experiments/smart-hint-prefix-recovery.mjs",
+      "line": 38,
+      "column": 121,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'key' is defined but never used."
+    },
+    {
+      "file": "scripts/experiments/smart-hint-prefix.mjs",
+      "line": 86,
+      "column": 57,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'game' is defined but never used."
+    },
+    {
+      "file": "scripts/experiments/smart-hint-selection.mjs",
+      "line": 88,
+      "column": 53,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'history' is defined but never used."
+    },
+    {
+      "file": "scripts/experiments/smart-hint-selection.mjs",
+      "line": 88,
+      "column": 61,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'calls' is defined but never used."
+    },
+    {
+      "file": "src/app.js",
+      "line": 252,
+      "column": 16,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'err' is defined but never used."
+    },
+    {
+      "file": "src/engine/game.js",
+      "line": 78,
+      "column": 8,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'assertInvariants' has a complexity of 32. Maximum allowed is 25."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 160,
+      "column": 1,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'evaluateSequence' has a complexity of 33. Maximum allowed is 25."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 308,
+      "column": 1,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'compareCandidates' has a complexity of 28. Maximum allowed is 25."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 446,
+      "column": 8,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Generator function 'searchSmartHint' has a complexity of 94. Maximum allowed is 25."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 528,
+      "column": 13,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'key' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 528,
+      "column": 18,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'order' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 694,
+      "column": 13,
+      "rule": "max-depth",
+      "severity": 1,
+      "message": "Blocks are nested too deeply (6). Maximum allowed is 5."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 720,
+      "column": 20,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'unusedKey' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 720,
+      "column": 38,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'unusedOrder' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 756,
+      "column": 22,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'unusedKey' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 756,
+      "column": 40,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'unusedOrder' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 762,
+      "column": 13,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'key' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 762,
+      "column": 18,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'order' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 770,
+      "column": 20,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'unusedKey' is assigned a value but never used."
+    },
+    {
+      "file": "src/engine/smart-hints.js",
+      "line": 770,
+      "column": 38,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'unusedOrder' is assigned a value but never used."
+    },
+    {
+      "file": "src/persistence.js",
+      "line": 77,
+      "column": 8,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'serializeSession' has a complexity of 47. Maximum allowed is 25."
+    },
+    {
+      "file": "src/persistence.js",
+      "line": 163,
+      "column": 8,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'restoreSession' has a complexity of 98. Maximum allowed is 25."
+    },
+    {
+      "file": "src/ui/dialogs.js",
+      "line": 11,
+      "column": 8,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'renderDialogs' has a complexity of 26. Maximum allowed is 25."
+    },
+    {
+      "file": "src/ui/dialogs.js",
+      "line": 358,
+      "column": 42,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Arrow function has a complexity of 27. Maximum allowed is 25."
+    },
+    {
+      "file": "src/ui/input.js",
+      "line": 7,
+      "column": 10,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'rankHints' is defined but never used."
+    },
+    {
+      "file": "src/ui/input.js",
+      "line": 23,
+      "column": 7,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'hintMoves' is assigned a value but never used."
+    },
+    {
+      "file": "src/ui/input.js",
+      "line": 24,
+      "column": 7,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'hintIndex' is assigned a value but never used."
+    },
+    {
+      "file": "src/ui/input.js",
+      "line": 345,
+      "column": 3,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'cancelDrag' has a complexity of 31. Maximum allowed is 25."
+    },
+    {
+      "file": "src/ui/input.js",
+      "line": 711,
+      "column": 3,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'handleArrowNavigation' has a complexity of 42. Maximum allowed is 25."
+    },
+    {
+      "file": "src/ui/input.js",
+      "line": 871,
+      "column": 3,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'handleGlobalKeydown' has a complexity of 46. Maximum allowed is 25."
+    },
+    {
+      "file": "src/ui/render.js",
+      "line": 126,
+      "column": 8,
+      "rule": "complexity",
+      "severity": 1,
+      "message": "Function 'renderGame' has a complexity of 40. Maximum allowed is 25."
+    },
+    {
+      "file": "tests/e2e/play.spec.js",
+      "line": 32,
+      "column": 11,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'expected' is assigned a value but never used."
+    },
+    {
+      "file": "tests/e2e/play.spec.js",
+      "line": 60,
+      "column": 40,
+      "rule": "no-promise-executor-return",
+      "severity": 1,
+      "message": "Return values from promise executor functions cannot be read."
+    },
+    {
+      "file": "tests/e2e/play.spec.js",
+      "line": 150,
+      "column": 11,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'stateBefore' is assigned a value but never used."
+    },
+    {
+      "file": "tests/e2e/play.spec.js",
+      "line": 153,
+      "column": 11,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'moveInfo' is assigned a value but never used."
+    },
+    {
+      "file": "tests/e2e/play.spec.js",
+      "line": 161,
+      "column": 17,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'from' is assigned a value but never used."
+    },
+    {
+      "file": "tests/e2e/play.spec.js",
+      "line": 165,
+      "column": 19,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'to' is assigned a value but never used."
+    },
+    {
+      "file": "tests/e2e/play.spec.js",
+      "line": 166,
+      "column": 19,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'validation' is assigned a value but never used."
+    },
+    {
+      "file": "tests/e2e/play.spec.js",
+      "line": 182,
+      "column": 15,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'app' is assigned a value but never used."
+    },
+    {
+      "file": "tests/unit/layout.test.js",
+      "line": 5,
+      "column": 3,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'getGap' is defined but never used."
+    },
+    {
+      "file": "tests/unit/layout.test.js",
+      "line": 6,
+      "column": 3,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'getSidePadding' is defined but never used."
+    },
+    {
+      "file": "tests/unit/persistence.test.js",
+      "line": 27,
+      "column": 3,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'INVALID_REPLAY_SAVE' is defined but never used."
+    },
+    {
+      "file": "tests/unit/session.test.js",
+      "line": 3,
+      "column": 10,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'applyMove' is defined but never used."
+    },
+    {
+      "file": "tests/unit/smart-hints-app.test.js",
+      "line": 3,
+      "column": 10,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'progressFixture' is defined but never used."
+    },
+    {
+      "file": "tests/unit/smart-hints-app.test.js",
+      "line": 4,
+      "column": 20,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'h07' is defined but never used."
+    },
+    {
+      "file": "tests/unit/smart-hints-graph.test.js",
+      "line": 88,
+      "column": 10,
+      "rule": "no-unused-vars",
+      "severity": 1,
+      "message": "'cancellationGraph' is defined but never used."
+    }
+  ]
+}

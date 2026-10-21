@@ -1,5 +1,7 @@
 # Fresh-session handoff
 
+T031 REVIEW (2026-10-21): seven-finding audit in reports/T031.md, normalized ESLint and probe JSON evidence committed beside it. Temporary CLI reports/reproduction script in `.cache/T031-*`. No fixes applied. Await coordinator acceptance and explicit selection of implementation scope; no successor or push. T030 final CI 39663303115/Pages pass. Preserve both untracked diagnostic JSON files.
+
 T030 REVIEW (2026-10-21): delivery `fc36075` pushed. CI fetches full history for experiment loaders; html uses manipulation while face-up/selected cards retain pinch-zoom for native touch drag. 379 unit/13 simulation/98 E2E/build pass locally, GitHub CI 39662907837 passes, Pages deployment 39662907417 succeeds. Await coordinator acceptance; physical pinch/zoom evidence remains unavailable. See report; preserve both untracked diagnostic JSON files.
 
 T030 REVIEW (2026-10-21): double-tap zoom prevention for buttons/face-up cards complete. Build and 34 targeted E2E tests pass. See `.project/reports/T030.md`; await coordinator acceptance. Physical-device zoom/drag verification remains unavailable. Preserve unrelated `solitaire-stan-2284836135-draw1-114.json` and `solitaire-stan-42-draw1-89.json`.

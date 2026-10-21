@@ -1,0 +1,26 @@
+{
+  "readOnly": {
+    "isWriter": false,
+    "hasConflict": true,
+    "commandAccepted": true,
+    "moveCount": 1
+  },
+  "rejectedLock": {
+    "isWriter": false,
+    "hasConflict": false,
+    "lockNotice": null,
+    "unhandled": [
+      "Audit: lock request rejected"
+    ]
+  },
+  "focus": {
+    "before": "Szóstka kier",
+    "afterTag": "BODY",
+    "afterLabel": null,
+    "cardConnected": false,
+    "removedCards": 29
+  },
+  "destroyController": {
+    "movesForOneClickAfterRemount": 2
+  }
+}
