@@ -214,7 +214,7 @@ export function createInputController(app, rootElement) {
   function getDraggableSource(targetEl) {
     if (!targetEl) return null;
     const appState = app.getState();
-    if (appState.activeDialog || appState.isPaused || !appState.isWriter || appState.hasConflict) return null;
+    if (appState.activeDialog || appState.isPaused || appState.isCompleting || !appState.isWriter || appState.hasConflict) return null;
     const gameState = appState.state;
     if (!gameState) return null;
 
@@ -934,7 +934,7 @@ export function createInputController(app, rootElement) {
     }
 
     // If dialog or pause is active, block board shortcuts and navigation
-    if (appState.activeDialog || appState.isPaused) {
+    if (appState.activeDialog || appState.isPaused || appState.isCompleting) {
       return;
     }
 
@@ -1200,6 +1200,13 @@ export function createInputController(app, rootElement) {
       return;
     }
     suppressNextClick = false;
+
+    if (e.target.closest('#btn-complete')) {
+      cancelDrag();
+      setSelection(null);
+      if (app.startCompletion()) announce('Automatyczne kończenie gry.');
+      return;
+    }
 
     // Menu button click
     const btnMenu = e.target.closest('#btn-menu');

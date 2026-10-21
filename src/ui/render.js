@@ -87,6 +87,10 @@ export function createBoardStructure(rootElement) {
 
       <!-- Bottom notices (Hint explanation & Progress guidance above controls) -->
       <div class="bottom-notice-container" id="bottom-notice-container">
+        <div id="completion-notice" class="notice-banner bottom-notice hidden">
+          <span id="completion-message" role="status" aria-live="polite"></span>
+          <button id="btn-complete" class="control-btn">Dokończ automatycznie</button>
+        </div>
         <div id="progress-notice" class="notice-banner bottom-notice hidden" role="status" aria-live="polite" aria-atomic="true"></div>
         <div id="hint-notice" class="notice-banner bottom-notice hidden" role="status" aria-live="polite" aria-atomic="true"></div>
       </div>
@@ -135,8 +139,8 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   }
   container.inert = Boolean(state.victoryAnimation);
   const readOnly = !state.isWriter || state.hasConflict;
-  rootElement.querySelector('#board-area').inert = readOnly;
-  rootElement.querySelector('#btn-hint').disabled = readOnly;
+  rootElement.querySelector('#board-area').inert = readOnly || state.isCompleting;
+  rootElement.querySelector('#btn-hint').disabled = readOnly || state.isCompleting;
 
   // Calculate layout if not provided
   const dims = layoutDims || calculateBoardDimensions(container.clientWidth || window.innerWidth);
@@ -167,7 +171,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   const btnRedo = rootElement.querySelector('#btn-redo');
   if (btnRedo) {
     const canRedo = Boolean(state.session && state.session.cursor < state.session.commands.length);
-    btnRedo.disabled = readOnly || !canRedo;
+    btnRedo.disabled = readOnly || state.isCompleting || !canRedo;
   }
 
   // Notice banner (locks / conflict)
@@ -185,6 +189,14 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
 
   rootElement.querySelector('#practice-status')?.classList.toggle('hidden', !state.winRecorded || state.activeDialog === 'win');
 
+  const showCompletion = !readOnly && !state.isPaused && !state.activeDialog && !state.isWon && Boolean(state.completionPlan);
+  rootElement.querySelector('#completion-notice').classList.toggle('hidden', !showCompletion);
+  const completionText = showCompletion
+    ? state.isCompleting ? 'Kończenie gry…' : `Możesz zakończyć grę. Pozostałe ruchy: ${state.completionPlan.length}.` : '';
+  const completionMessage = rootElement.querySelector('#completion-message');
+  if (completionMessage.textContent !== completionText) completionMessage.textContent = completionText;
+  rootElement.querySelector('#btn-complete').disabled = state.isCompleting;
+
   renderProgressNotice(rootElement, state);
   renderHintNotice(rootElement, state);
 
@@ -195,11 +207,25 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   const previous = container._boardRender;
   // Preserve card nodes and focus when only time, notices or dialogs change.
   if (previous?.board !== gameState || previous.selection !== selection || previous.layoutKey !== layoutKey) {
+    const travel = state.isCompleting && previous?.board !== gameState
+      && Number(rootElement.dataset.renderedCursor) === state.session.cursor - 1
+      ? completionTravel(rootElement, state.session.commands[state.session.cursor - 1]) : null;
     renderStock(rootElement, gameState);
     renderWaste(rootElement, gameState.waste, gameState.drawCount, dims, selection);
     renderFoundations(rootElement, gameState.foundations, selection, legalDestinations);
     renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
     applyMoveFeedback(rootElement, state);
+    if (travel) {
+      const card = rootElement.querySelector(`#foundation-${travel.index} .card-node:last-child`);
+      if (card) {
+        const to = card.getBoundingClientRect();
+        card.style.zIndex = '100';
+        card.animate([
+          { transform: `translate(${travel.from.left - to.left}px, ${travel.from.top - to.top}px)` },
+          { transform: 'translate(0, 0)' },
+        ], { duration: 140, easing: 'ease-out' });
+      }
+    }
     container._boardRender = { board: gameState, selection, layoutKey };
   }
   renderHint(rootElement, gameState, inputController?.getHint?.());
@@ -277,6 +303,16 @@ function nextDealVariant() {
   }
   lastDealVariant = dealVariantOrder.pop();
   return lastDealVariant;
+}
+
+function completionTravel(rootElement, command) {
+  if (command?.type !== 'move' || command.to.pile !== 'foundation'
+    || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return null;
+  const from = command.from;
+  const source = from.pile === 'waste'
+    ? rootElement.querySelector('#waste-pile .card-node:last-child')
+    : rootElement.querySelector(`#column-${from.index}`)?.querySelectorAll('.card-node')[from.cardIndex];
+  return source ? { from: source.getBoundingClientRect(), index: command.to.index } : null;
 }
 
 function applyMoveFeedback(rootElement, state) {

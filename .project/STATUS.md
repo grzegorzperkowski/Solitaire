@@ -1,3 +1,7 @@
+# T016 REVIEW — 2026-10-21
+
+Safe completion delivered with approved nonempty-waste preflight, 140ms card travel / 160ms command cadence and no separate cancel button. Real cursor-126 save wins in 15 commands. Final 401 unit / 13 simulation / 106 Chromium E2E / production build pass; 320px and travel screenshots inspected. Await coordinator acceptance. No push or physical-device evidence; both unrelated diagnostic JSON files preserved. See reports/T016.md.
+
 # Project status
 
 T032 REVIEW (2026-10-21): all seven audit findings repaired with a validated commit per issue. 384 unit/13 simulation/101 E2E/build pass; actionlint clean, ESLint 0 errors/48 informational warnings. Await coordinator acceptance; commits local, new hosted workflow/device checks unverified. Both unrelated diagnostic JSON files preserved. See reports/T032.md.

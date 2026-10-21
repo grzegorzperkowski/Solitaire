@@ -158,6 +158,21 @@ body {
   width: 100%;
 }
 
+#completion-notice:not(.hidden) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  background: #174b3d;
+  border: 1px solid #a99553;
+}
+
+#btn-complete {
+  flex: 0 0 auto;
+  padding-inline: 12px;
+}
+
 /* Board Area */
 .board-area {
   width: 100%;

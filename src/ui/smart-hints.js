@@ -86,6 +86,7 @@ function formatInitialMove(state, move) {
 export function formatSmartHintMessage(state, hint, session = null) {
   if (!hint) return '';
   if (hint.status === 'WON') return '';
+  if (hint.completesGame && hint.plan?.length) return `${formatInitialMove(state, hint.plan[0])} Ta sekwencja kończy grę. Pozostałe ruchy: ${hint.plan.length}.`;
 
   if (hint.status === 'EXPLORATION') {
     if (hint.plan.length === 1 && hint.plan[0].type === 'draw') {

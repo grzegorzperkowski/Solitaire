@@ -176,15 +176,15 @@ No change to formal NO_PROGRESS, persistence, or optional completion scope.
 
 ## P7a — optional safe completion
 
-**Depends on:** P7; deliberately excluded from mandatory release scope unless selected.
+**Depends on:** P7; coordinator selected T016 on 2026-10-21. Implementation REVIEW; acceptance pending.
 
-**Files:** src/engine/hints.js, src/app.js, tests/unit/hints.test.js, tests/e2e/play.spec.js.
+**Files:** src/engine/hints.js, src/app.js, src/ui/render.js, src/ui/input.js, src/ui/smart-hints.js, src/styles.css, tests/unit/completion.test.js, tests/fixtures/completion-save.json, tests/e2e/completion.spec.js.
 
-**Contract:** `getCompletionPlan(state) → Command[] | null`; no mutation, only foundation commands, at most 52.
+**Contract:** `getCompletionPlan(state) → Command[] | null`; no mutation, only foundation commands, at most 52. Empty stock and fully visible tableau required; nonempty waste permitted after winning preflight. No separate cancel button.
 
-- [ ] Test T21 eligibility/rejection and preflight replay; implement only if the copy reaches a win.
-- [ ] Execute through normal session commands; stop at the next committed move on cancel/Undo/hide/pause, and disable competing move input during the batch.
-- [ ] Verify each transfer remains individually undoable, statistics award once, and reduced motion changes presentation only.
+- [x] Test T21 eligibility/rejection and preflight replay; implement only if the copy reaches a win.
+- [x] Execute through normal session commands; stop at the next committed move on Undo/hide/pause/dialog/ownership loss, and disable competing move input during the batch.
+- [x] Verify each transfer remains individually undoable, statistics award once, and reduced motion changes presentation only.
 
 **Exit:** `npm test -- tests/unit/hints.test.js` and completion E2E cases pass, with no offer outside F12. If omitted, omit its control entirely and mark the optional tests “not in scope”.
 

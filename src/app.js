@@ -1,5 +1,6 @@
 import { createSession, execute, undo, redo, restartSession, addElapsedMs } from './session.js';
 import { loadSession, saveSession, serializeSession, STORAGE_KEY, SCHEMA_VERSION } from './persistence.js';
+import { getCompletionPlan } from './engine/hints.js';
 import { isWon } from './engine/game.js';
 import { searchProgress } from './engine/progress.js';
 import { searchSmartHint, createHintContext } from './engine/smart-hints.js';
@@ -41,6 +42,10 @@ export function createApp({
   let checkpointIntervalId = null;
   let releaseLockFn = null;
   let isDestroyed = false;
+  let completionBoard = null;
+  let completionPlan = null;
+  let isCompleting = false;
+  let completionTimer = null;
   let victoryAnimation = null;
   let victoryAnimationCleanup = null;
 
@@ -77,7 +82,7 @@ export function createApp({
   }
 
   function requestSmartHint() {
-    if (!session || isDestroyed) return;
+    if (!session || isDestroyed || isCompleting) return;
     const board = session.state;
     const knowledge = session.knownCards.join(',');
 
@@ -194,6 +199,11 @@ export function createApp({
 
   function notifyListeners(progressOnly = false) {
     if (isDestroyed) return;
+    if (isCompleting && (!isWriter || hasConflict)) stopCompletion();
+    if (session && completionBoard !== session.state) {
+      completionBoard = session.state;
+      completionPlan = getCompletionPlan(completionBoard);
+    }
     updateProgress();
     const currentState = getState();
     for (const listener of listeners) {
@@ -312,6 +322,7 @@ export function createApp({
 
   function handleVisibilityChange() {
     if (isDocumentHidden()) {
+      stopCompletion();
       finishVictoryAnimation();
       if (session && session.started && !isPaused && !activeDialog && !isWon(session.state)) {
         settleElapsed(true);
@@ -330,6 +341,7 @@ export function createApp({
   }
 
   function handlePageHide() {
+    stopCompletion();
     finishVictoryAnimation();
     if (session && session.started && !isPaused && !activeDialog && !isWon(session.state)) {
       settleElapsed(true);
@@ -429,7 +441,40 @@ export function createApp({
     return app;
   }
 
+  function stopCompletion() {
+    clearTimeout(completionTimer);
+    completionTimer = null;
+    isCompleting = false;
+  }
+
+  function startCompletion() {
+    if (isDestroyed || isCompleting || isPaused || activeDialog || victoryAnimation || isDocumentHidden() || !canMutateSession()) return false;
+    const plan = getCompletionPlan(session?.state);
+    if (!plan) return false;
+    isCompleting = true;
+    invalidateHint();
+    let index = 0;
+    function step() {
+      if (!isCompleting) return;
+      if (isDestroyed || isPaused || activeDialog || isDocumentHidden() || index === plan.length || !canMutateSession()) {
+        stopCompletion(); notifyListeners(); return;
+      }
+      if (!executeSessionCommand(plan[index++]).ok) {
+        stopCompletion(); notifyListeners(); return;
+      }
+      if (isCompleting) completionTimer = setTimeout(step, 160);
+    }
+    notifyListeners();
+    completionTimer = setTimeout(step, 0);
+    return true;
+  }
+
   function executeCommand(command) {
+    if (isCompleting) return { ok: false, reason: 'completion-running' };
+    return executeSessionCommand(command);
+  }
+
+  function executeSessionCommand(command) {
     if (!session) return { ok: false, reason: 'no-session' };
     if (!canMutateSession()) return { ok: false, reason: 'read-only' };
     settleElapsed();
@@ -457,6 +502,7 @@ export function createApp({
   }
 
   function handleUndo() {
+    stopCompletion();
     if (!session || !canMutateSession()) return session;
     settleElapsed();
     const next = undo(session);
@@ -469,6 +515,7 @@ export function createApp({
   }
 
   function handleRedo() {
+    stopCompletion();
     if (!session || !canMutateSession()) return session;
     settleElapsed();
     const next = redo(session);
@@ -481,6 +528,7 @@ export function createApp({
   }
 
   function newGame(options = {}) {
+    stopCompletion();
     if (!canMutateSession()) return session;
     clearVictoryAnimation();
     victoryAnimation = null;
@@ -502,6 +550,7 @@ export function createApp({
   }
 
   function restart() {
+    stopCompletion();
     if (!session || !canMutateSession()) return session;
     clearVictoryAnimation();
     victoryAnimation = null;
@@ -515,6 +564,7 @@ export function createApp({
   }
 
   function pause() {
+    stopCompletion();
     settleElapsed();
     isPaused = true;
     save();
@@ -529,6 +579,7 @@ export function createApp({
   }
 
   function openDialog(name) {
+    stopCompletion();
     settleElapsed();
     activeDialog = name;
     notifyListeners();
@@ -596,6 +647,8 @@ export function createApp({
   function getState() {
     return Object.freeze({
       session,
+      completionPlan,
+      isCompleting,
       progress,
       hint,
       isHintLoading,
@@ -624,6 +677,7 @@ export function createApp({
   }
 
   function destroy() {
+    stopCompletion();
     isDestroyed = true;
     clearVictoryAnimation();
     victoryAnimation = null;
@@ -650,6 +704,7 @@ export function createApp({
   const app = {
     init,
     executeCommand,
+    startCompletion,
     undo: handleUndo,
     redo: handleRedo,
     newGame,
