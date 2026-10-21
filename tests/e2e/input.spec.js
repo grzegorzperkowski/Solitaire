@@ -6,6 +6,33 @@ test.describe('T012 Pointer drag and drop, cancellation and gesture handling (T1
     await page.waitForFunction(() => typeof window.__SOLITAIRE_APP__ !== 'undefined');
   });
 
+  test('controller teardown removes handlers and cancels drag before remount', async ({ page }) => {
+    await page.goto('http://localhost:5186/');
+    await page.waitForFunction(() => window.__SOLITAIRE_INPUT__ && window.__SOLITAIRE_APP__.getState().isWriter);
+    const result = await page.evaluate(async () => {
+      const { createInputController } = await import('/src/ui/input.js');
+      const root = document.querySelector('#game-app');
+      const app = window.__SOLITAIRE_APP__;
+      window.__SOLITAIRE_INPUT__.destroy();
+      const replacement = createInputController(app, root);
+      const before = app.getState().moveCount;
+      root.querySelector('#stock-container').click();
+      const moves = app.getState().moveCount - before;
+      const card = root.querySelector('#column-3 .card-face-up');
+      const rect = card.getBoundingClientRect();
+      const pointer = { bubbles: true, pointerId: 21, pointerType: 'touch', clientX: rect.x + 10, clientY: rect.y + 10 };
+      card.dispatchEvent(new PointerEvent('pointerdown', pointer));
+      window.dispatchEvent(new PointerEvent('pointermove', { ...pointer, clientX: pointer.clientX + 12 }));
+      const wasDragging = Boolean(root.querySelector('#drag-overlay'));
+      replacement.destroy();
+      const dragStart = new Event('dragstart', { bubbles: true, cancelable: true });
+      root.dispatchEvent(dragStart);
+      return { moves, wasDragging, overlayRemains: Boolean(root.querySelector('#drag-overlay')),
+        gestureRemains: Boolean(replacement.getActiveGesture()), dragStartBlocked: dragStart.defaultPrevented };
+    });
+    expect(result).toEqual({ moves: 1, wasDragging: true, overlayRemains: false, gestureRemains: false, dragStartBlocked: false });
+  });
+
   test('blocks pull-to-refresh at the top without stopping inner scrolling', async ({ page }) => {
     const result = await page.evaluate(() => {
       const rootBehavior = getComputedStyle(document.documentElement).overscrollBehaviorY;

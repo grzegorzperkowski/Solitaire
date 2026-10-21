@@ -1195,13 +1195,121 @@ export function createInputController(app, rootElement) {
     lastTouchY = e.touches.length === 1 ? e.touches[0].clientY : null;
   }
 
+  function preventNativeDrag(e) { e.preventDefault(); }
+
+  function handleClick(e) {
+    if (suppressNextClick && !e.target.closest('.control-btn')) {
+      suppressNextClick = false;
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    suppressNextClick = false;
+
+    // Menu button click
+    const btnMenu = e.target.closest('#btn-menu');
+    if (btnMenu) {
+      setSelection(null);
+      app.openDialog('menu');
+      announce('Otwarto menu gry.');
+      return;
+    }
+
+    // If dialog or pause is active, ignore clicks on board
+    const appState = app.getState();
+    if (appState.activeDialog || appState.isPaused || !appState.isWriter || appState.hasConflict) {
+      return;
+    }
+
+    if (e.detail === 2) {
+      const source = getDraggableSource(e.target)?.source;
+      const destination = recommendedDestination(appState.state, source);
+      if (destination) {
+        executeMove(source, destination);
+        return;
+      }
+    }
+
+    if (e.target.closest('#btn-hint')) {
+      handleHint();
+      return;
+    }
+
+    // 1. Stock pile click
+    const stockEl = e.target.closest('#stock-container');
+    if (stockEl) {
+      handleStockAction();
+      return;
+    }
+
+    // 2. Waste pile click
+    const wasteEl = e.target.closest('#waste-container');
+    if (wasteEl) {
+      handleWasteClick();
+      return;
+    }
+
+    // 3. Foundations click
+    const foundEl = e.target.closest('.foundation-pile');
+    if (foundEl) {
+      const foundIdx = parseInt(foundEl.dataset.foundationIndex, 10);
+      handleFoundationClick(foundIdx, foundEl);
+      return;
+    }
+
+    // 4. Tableau columns click
+    const colEl = e.target.closest('.tableau-column');
+    if (colEl) {
+      const colIdx = parseInt(colEl.dataset.column, 10);
+      const cardNode = e.target.closest('.card-node');
+      if (cardNode && colEl.contains(cardNode)) {
+        const cards = Array.from(colEl.querySelectorAll('.card-node'));
+        const cardIndex = cards.indexOf(cardNode);
+        handleTableauClick(colIdx, cardIndex, cardNode);
+      } else {
+        handleTableauClick(colIdx, null, colEl);
+      }
+      return;
+    }
+
+    // 5. Undo button click
+    const btnUndo = e.target.closest('#btn-undo');
+    if (btnUndo) {
+      if (!btnUndo.disabled) {
+        setSelection(null);
+        app.undo();
+        announce('Cofnięto ruch.');
+        restoreFocusAfterAction({ type: 'undo' });
+      }
+      return;
+    }
+
+    // 6. Redo button click
+    const btnRedo = e.target.closest('#btn-redo');
+    if (btnRedo) {
+      if (!btnRedo.disabled) {
+        setSelection(null);
+        app.redo();
+        announce('Ponowiono ruch.');
+        restoreFocusAfterAction({ type: 'redo' });
+      }
+      return;
+    }
+
+    // 7. Blank background click -> deselect (F01)
+    if (selection && !e.target.closest('.card-node') && !e.target.closest('.pile-slot') && !e.target.closest('.control-btn')) {
+      setSelection(null);
+      announce('Odznaczono.');
+    }
+  }
+
   function bindEvents() {
     rootElement.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
     window.addEventListener('pointercancel', cancelDrag);
     window.addEventListener('lostpointercapture', cancelDrag);
-    rootElement.addEventListener('dragstart', (e) => e.preventDefault());
+    rootElement.addEventListener('dragstart', preventNativeDrag);
     window.addEventListener('blur', cancelDrag);
     window.addEventListener('pagehide', cancelDrag);
     window.addEventListener('resize', cancelDrag);
@@ -1211,111 +1319,7 @@ export function createInputController(app, rootElement) {
     window.addEventListener('touchend', handleTouchEnd, { passive: true });
     window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
 
-    rootElement.addEventListener('click', (e) => {
-      if (suppressNextClick && !e.target.closest('.control-btn')) {
-        suppressNextClick = false;
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      suppressNextClick = false;
-
-      // Menu button click
-      const btnMenu = e.target.closest('#btn-menu');
-      if (btnMenu) {
-        setSelection(null);
-        app.openDialog('menu');
-        announce('Otwarto menu gry.');
-        return;
-      }
-
-      // If dialog or pause is active, ignore clicks on board
-      const appState = app.getState();
-      if (appState.activeDialog || appState.isPaused || !appState.isWriter || appState.hasConflict) {
-        return;
-      }
-
-      if (e.detail === 2) {
-        const source = getDraggableSource(e.target)?.source;
-        const destination = recommendedDestination(appState.state, source);
-        if (destination) {
-          executeMove(source, destination);
-          return;
-        }
-      }
-
-      if (e.target.closest('#btn-hint')) {
-        handleHint();
-        return;
-      }
-
-      // 1. Stock pile click
-      const stockEl = e.target.closest('#stock-container');
-      if (stockEl) {
-        handleStockAction();
-        return;
-      }
-
-      // 2. Waste pile click
-      const wasteEl = e.target.closest('#waste-container');
-      if (wasteEl) {
-        handleWasteClick();
-        return;
-      }
-
-      // 3. Foundations click
-      const foundEl = e.target.closest('.foundation-pile');
-      if (foundEl) {
-        const foundIdx = parseInt(foundEl.dataset.foundationIndex, 10);
-        handleFoundationClick(foundIdx, foundEl);
-        return;
-      }
-
-      // 4. Tableau columns click
-      const colEl = e.target.closest('.tableau-column');
-      if (colEl) {
-        const colIdx = parseInt(colEl.dataset.column, 10);
-        const cardNode = e.target.closest('.card-node');
-        if (cardNode && colEl.contains(cardNode)) {
-          const cards = Array.from(colEl.querySelectorAll('.card-node'));
-          const cardIndex = cards.indexOf(cardNode);
-          handleTableauClick(colIdx, cardIndex, cardNode);
-        } else {
-          handleTableauClick(colIdx, null, colEl);
-        }
-        return;
-      }
-
-      // 5. Undo button click
-      const btnUndo = e.target.closest('#btn-undo');
-      if (btnUndo) {
-        if (!btnUndo.disabled) {
-          setSelection(null);
-          app.undo();
-          announce('Cofnięto ruch.');
-          restoreFocusAfterAction({ type: 'undo' });
-        }
-        return;
-      }
-
-      // 6. Redo button click
-      const btnRedo = e.target.closest('#btn-redo');
-      if (btnRedo) {
-        if (!btnRedo.disabled) {
-          setSelection(null);
-          app.redo();
-          announce('Ponowiono ruch.');
-          restoreFocusAfterAction({ type: 'redo' });
-        }
-        return;
-      }
-
-      // 7. Blank background click -> deselect (F01)
-      if (selection && !e.target.closest('.card-node') && !e.target.closest('.pile-slot') && !e.target.closest('.control-btn')) {
-        setSelection(null);
-        announce('Odznaczono.');
-      }
-    });
+    rootElement.addEventListener('click', handleClick);
 
     window.addEventListener('keydown', handleGlobalKeydown);
     document.addEventListener('selectstart', handleSelectStart, { capture: true });
@@ -1339,7 +1343,10 @@ export function createInputController(app, rootElement) {
       onStateChangeCallback = fn;
     },
     destroy: () => {
+      cancelDrag();
       unsubscribeFromApp();
+      rootElement.removeEventListener('click', handleClick);
+      rootElement.removeEventListener('dragstart', preventNativeDrag);
       window.removeEventListener('keydown', handleGlobalKeydown);
       document.removeEventListener('selectstart', handleSelectStart, { capture: true });
       document.removeEventListener('selectionchange', handleSelectionChange);

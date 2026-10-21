@@ -178,6 +178,9 @@ available, and temporary play after unreadable/inaccessible storage still works.
 Rejected Web Locks promises must activate and announce fallback without an
 unhandled rejection. Late callbacks/rejections after destroy must not regain
 ownership or keep a lock held.
+Controller teardown/remount (T16): destroying an active input controller removes
+its overlay/gesture and all click/drag handlers. Remounting on the same root
+must leave one committed action per click and no old native-drag suppression.
 
 T028 p95 checkpoint (2026-10-13): basic `smart-hints-optimization.test.js`
 checks one-command information instead of waste padding, equal-F direct
