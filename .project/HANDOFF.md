@@ -1,6 +1,6 @@
 # Fresh-session handoff
 
-T032 IN_PROGRESS (2026-10-21): #1–#4 committed, latest d24564f. #5 teardown now removes click/native-drag handlers and active gesture/overlay; 20 input E2E/build pass. Commit before #6 dead hint declarations. Hosted verification awaits explicit push. Preserve both diagnostic JSON files; see reports/T032.md. Commit each issue before the next.
+T032 IN_PROGRESS (2026-10-21): #1–#5 committed, latest d30c78a. #6 dead hint cleanup is lint-clean and passes build/8 hint E2E; commit before #7 README, then final full checks. Hosted verification awaits explicit push. Preserve both diagnostic JSON files; see reports/T032.md. Commit each issue before the next.
 
 T031 REVIEW (2026-10-21): seven-finding audit in reports/T031.md, normalized ESLint and probe JSON evidence committed beside it. Temporary CLI reports/reproduction script in `.cache/T031-*`. No fixes applied. Await coordinator acceptance and explicit selection of implementation scope; no successor or push. T030 final CI 39663303115/Pages pass. Preserve both untracked diagnostic JSON files.
 

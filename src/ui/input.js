@@ -4,7 +4,6 @@
  */
 
 import { validateMove, getLegalMoves } from '../engine/game.js';
-import { rankHints } from '../engine/hints.js';
 import { noProgressMessage } from './progress.js';
 import { getCardDetails, SUIT_NAMES, createCardElement } from './cards.js';
 import { calculateBoardDimensions } from './layout.js';
@@ -20,16 +19,12 @@ export function createInputController(app, rootElement) {
   let rafId = null;
   let lastTimestamp = 0;
   let lastTouchY = null;
-  let hintMoves = null;
-  let hintIndex = 0;
   let currentHint = null;
   let hintBoard = app.getState().state;
   let waitingForHint = false;
   const unsubscribeFromApp = app.subscribe(({ state, hint }) => {
     if (state !== hintBoard) {
       hintBoard = state;
-      hintMoves = null;
-      hintIndex = 0;
       currentHint = null;
       lastTouchTap = null;
       waitingForHint = false;
