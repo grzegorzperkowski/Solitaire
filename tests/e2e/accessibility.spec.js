@@ -41,6 +41,35 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
     await expect(col1Card).toBeFocused();
   });
 
+  test('arrow navigation preserves board edges and disabled bottom controls', async ({ page }) => {
+    const stock = page.locator('#stock-container');
+    const firstCard = page.locator('#column-0 .card-face-up').first();
+    const undo = page.locator('#btn-undo');
+    const redo = page.locator('#btn-redo');
+    await stock.focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(stock).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await expect(firstCard).toBeFocused();
+    await page.keyboard.press('ArrowLeft');
+    await expect(firstCard).toBeFocused();
+    await expect(undo).toBeDisabled();
+    await page.keyboard.press('ArrowDown');
+    await expect(firstCard).toBeFocused();
+
+    await stock.click();
+    await firstCard.focus();
+    await page.keyboard.press('ArrowDown');
+    await expect(undo).toBeFocused();
+    await page.keyboard.press('ArrowLeft');
+    await expect(undo).toBeFocused();
+    await expect(redo).toBeDisabled();
+    await page.keyboard.press('ArrowRight');
+    await expect(undo).toBeFocused();
+    await page.keyboard.press('ArrowUp');
+    await expect(page.locator('#column-3 .card-face-up').last()).toBeFocused();
+  });
+
   test('Space draws card on stock, Enter selects card, Escape deselects', async ({ page }) => {
     const stock = page.locator('#stock-container');
     await stock.focus();

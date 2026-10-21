@@ -704,130 +704,60 @@ export function createInputController(app, rootElement) {
   }
 
   function handleArrowNavigation(e) {
-    const active = document.activeElement;
-    const upperPiles = getUpperPiles();
+    const target = getArrowTarget(e.key, document.activeElement);
+    if (target === undefined) return;
+    e.preventDefault();
+    target?.focus();
+    if (target && !target.classList.contains('control-btn')) {
+      target.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+  }
 
-    // 1. Check if active in upper piles
+  // null consumes an arrow without a target; undefined leaves the key untouched.
+  function getArrowTarget(key, active) {
+    const upperPiles = getUpperPiles();
     const upperIdx = upperPiles.findIndex(p => p.el === active || p.el?.contains(active));
     if (upperIdx !== -1) {
-      if (e.key === 'ArrowLeft' && upperIdx > 0) {
-        e.preventDefault();
-        upperPiles[upperIdx - 1].el?.focus();
-        upperPiles[upperIdx - 1].el?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        return;
-      }
-      if (e.key === 'ArrowRight' && upperIdx < upperPiles.length - 1) {
-        e.preventDefault();
-        upperPiles[upperIdx + 1].el?.focus();
-        upperPiles[upperIdx + 1].el?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        return;
-      }
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        const targetCol = upperPiles[upperIdx].col;
-        const colCards = getTableauColumnCards(targetCol);
-        if (colCards.length > 0) {
-          colCards[0].focus();
-          colCards[0].scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        }
-        return;
-      }
+      if (key === 'ArrowLeft' && upperIdx > 0) return upperPiles[upperIdx - 1].el;
+      if (key === 'ArrowRight' && upperIdx < upperPiles.length - 1) return upperPiles[upperIdx + 1].el;
+      if (key === 'ArrowDown') return getTableauColumnCards(upperPiles[upperIdx].col)[0] ?? null;
       return;
     }
 
-    // 2. Check if active in tableau column
     const colEl = active?.closest?.('.tableau-column');
     if (colEl) {
       const colIdx = parseInt(colEl.dataset.column, 10);
       const colCards = getTableauColumnCards(colIdx);
       const cardIdx = colCards.indexOf(active);
-
-      if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (cardIdx > 0) {
-          colCards[cardIdx - 1].focus();
-          colCards[cardIdx - 1].scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        } else {
-          // Up from first exposed card enters nearest upper pile
-          const nearest = upperPiles.reduce((best, p) => Math.abs(p.col - colIdx) < Math.abs(best.col - colIdx) ? p : best, upperPiles[0]);
-          nearest?.el?.focus();
-          nearest?.el?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        }
-        return;
+      if (key === 'ArrowUp') {
+        if (cardIdx > 0) return colCards[cardIdx - 1];
+        const nearest = upperPiles.reduce((best, p) => Math.abs(p.col - colIdx) < Math.abs(best.col - colIdx) ? p : best, upperPiles[0]);
+        return nearest?.el ?? null;
       }
-
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (cardIdx >= 0 && cardIdx < colCards.length - 1) {
-          colCards[cardIdx + 1].focus();
-          colCards[cardIdx + 1].scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        } else {
-          // Down at bottom of column moves to bottom controls
-          const btnUndo = rootElement.querySelector('#btn-undo');
-          btnUndo?.focus();
-        }
-        return;
+      if (key === 'ArrowDown') {
+        if (cardIdx >= 0 && cardIdx < colCards.length - 1) return colCards[cardIdx + 1];
+        return rootElement.querySelector('#btn-undo');
       }
-
-      if (e.key === 'ArrowLeft' && colIdx > 0) {
-        e.preventDefault();
-        const targetCards = getTableauColumnCards(colIdx - 1);
-        if (targetCards.length > 0) {
-          const targetIdx = Math.min(Math.max(0, cardIdx), targetCards.length - 1);
-          targetCards[targetIdx].focus();
-          targetCards[targetIdx].scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        }
-        return;
-      }
-
-      if (e.key === 'ArrowRight' && colIdx < 6) {
-        e.preventDefault();
-        const targetCards = getTableauColumnCards(colIdx + 1);
-        if (targetCards.length > 0) {
-          const targetIdx = Math.min(Math.max(0, cardIdx), targetCards.length - 1);
-          targetCards[targetIdx].focus();
-          targetCards[targetIdx].scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        }
-        return;
+      if ((key === 'ArrowLeft' && colIdx > 0) || (key === 'ArrowRight' && colIdx < 6)) {
+        const targetCards = getTableauColumnCards(colIdx + (key === 'ArrowLeft' ? -1 : 1));
+        const targetIdx = Math.min(Math.max(0, cardIdx), targetCards.length - 1);
+        return targetCards[targetIdx] ?? null;
       }
       return;
     }
 
-    // 3. Check if active in bottom bar controls
     const bottomBar = active?.closest?.('.bottom-bar');
     if (bottomBar) {
       const buttons = Array.from(bottomBar.querySelectorAll('.control-btn'));
       const btnIdx = buttons.indexOf(active);
-      if (e.key === 'ArrowLeft' && btnIdx > 0) {
-        e.preventDefault();
-        buttons[btnIdx - 1].focus();
-        return;
-      }
-      if (e.key === 'ArrowRight' && btnIdx < buttons.length - 1) {
-        e.preventDefault();
-        buttons[btnIdx + 1].focus();
-        return;
-      }
-      if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        const middleColCards = getTableauColumnCards(3);
-        if (middleColCards.length > 0) {
-          middleColCards[middleColCards.length - 1].focus();
-          middleColCards[middleColCards.length - 1].scrollIntoView({ block: 'nearest', inline: 'nearest' });
-        }
-        return;
-      }
+      if (key === 'ArrowLeft' && btnIdx > 0) return buttons[btnIdx - 1];
+      if (key === 'ArrowRight' && btnIdx < buttons.length - 1) return buttons[btnIdx + 1];
+      if (key === 'ArrowUp') return getTableauColumnCards(3).at(-1) ?? null;
       return;
     }
 
-    // 4. Default: focus stock or first tableau card
-    if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(e.key)) {
-      e.preventDefault();
-      const stock = rootElement.querySelector('#stock-container');
-      if (stock) {
-        stock.focus();
-        stock.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-      }
+    if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(key)) {
+      return rootElement.querySelector('#stock-container');
     }
   }
 
