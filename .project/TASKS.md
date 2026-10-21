@@ -50,7 +50,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T029](tasks/T029.md) | P8 follow-up | Random victory animations | T015, T017 | DONE | Coordinator accepted 2026-10-12 at `2ea1a1e`; [report](reports/T029.md) |
 | [T030](tasks/T030.md) | P5 follow-up | Prevent double-click zoom on buttons and cards | T010 | REVIEW | CI history and native drag repaired at `fc36075`; full local/GitHub CI passed. [Report](reports/T030.md). |
 | [T031](tasks/T031.md) | Quality review | Code review and static analysis | None | REVIEW | Seven findings; 51 static warnings/0 errors, npm audit 0 vulnerabilities; no runtime changes. [Report](reports/T031.md). |
-| [T032](tasks/T032.md) | Quality fixes | Fix all seven T031 audit findings | None | IN_PROGRESS | Assigned 2026-10-21; commit each issue before the next. [Report](reports/T032.md). |
+| [T032](tasks/T032.md) | Quality fixes | Fix all seven T031 audit findings | None | REVIEW | Seven sequential commits; 384 unit/13 simulation/101 E2E/build pass, actionlint clean. [Report](reports/T032.md). |
 
 ## Selection and model suitability
 

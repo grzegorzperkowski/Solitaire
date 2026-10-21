@@ -1,6 +1,6 @@
 # Project status
 
-T032 IN_PROGRESS (2026-10-21): #1–#5 committed (latest d30c78a). #6 removes dead hint declarations; targeted lint clean, build/8 hint E2E pass. Commit before #7 README, then final full checks. Preserve both unrelated diagnostic JSON files; see reports/T032.md.
+T032 REVIEW (2026-10-21): all seven audit findings repaired with a validated commit per issue. 384 unit/13 simulation/101 E2E/build pass; actionlint clean, ESLint 0 errors/48 informational warnings. Await coordinator acceptance; commits local, new hosted workflow/device checks unverified. Both unrelated diagnostic JSON files preserved. See reports/T032.md.
 
 T031 REVIEW (2026-10-21): read-only audit delivered with seven prioritized findings: timer focus loss, ungated deployment, read-only moves, async lock rejection, incomplete controller teardown, dead hint variables and stale README. ESLint 88 files/51 warnings/0 errors, npm audit 0 vulnerabilities; four behavior probes reproduced. See reports/T031.md. No runtime edits; preserve both diagnostic JSON files. T030 final CI 39663303115 and Pages pass.
 

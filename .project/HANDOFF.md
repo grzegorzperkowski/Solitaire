@@ -1,6 +1,6 @@
 # Fresh-session handoff
 
-T032 IN_PROGRESS (2026-10-21): #1–#5 committed, latest d30c78a. #6 dead hint cleanup is lint-clean and passes build/8 hint E2E; commit before #7 README, then final full checks. Hosted verification awaits explicit push. Preserve both diagnostic JSON files; see reports/T032.md. Commit each issue before the next.
+T032 REVIEW (2026-10-21): #1–#7 repaired and committed sequentially; report lists commits and RED/GREEN evidence. Final 384 unit/13 simulation/101 E2E/build pass; actionlint clean. Await acceptance; no push/successor. After explicit push, verify combined CI → tested artifact → Pages execution. Physical devices remain unverified. Preserve both diagnostic JSON files; see reports/T032.md.
 
 T031 REVIEW (2026-10-21): seven-finding audit in reports/T031.md, normalized ESLint and probe JSON evidence committed beside it. Temporary CLI reports/reproduction script in `.cache/T031-*`. No fixes applied. Await coordinator acceptance and explicit selection of implementation scope; no successor or push. T030 final CI 39663303115/Pages pass. Preserve both untracked diagnostic JSON files.
 
