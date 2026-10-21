@@ -205,7 +205,7 @@ No change to formal NO_PROGRESS, persistence, or optional completion scope.
 
 **Depends on:** P8.
 
-**Files:** public/manifest.webmanifest, public/icons/*, public/sw.js, scripts/build-sw.mjs, src/main.js, src/app.js, vite.config.js, tests/e2e/offline.spec.js, .github/workflows/deploy.yml, README.md. Extend build script with worker asset injection.
+**Files:** public/manifest.webmanifest, public/icons/*, public/sw.js, scripts/build-sw.mjs, src/main.js, src/app.js, vite.config.js, tests/e2e/offline.spec.js, .github/workflows/ci.yml, README.md. Extend build script with worker asset injection.
 
 - [ ] Test generated precache enumeration/base URLs and T23 interrupted install, offline reload and v1→v2 update cases.
 - [ ] Implement native worker/manifest, readiness and installation help, waiting-update prompt and saved safe reload. Register worker only for the production path under test/release, avoiding stale development caches.

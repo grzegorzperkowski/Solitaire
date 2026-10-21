@@ -59,8 +59,7 @@ tests/
   unit/simulation.test.js
   fixtures/                        valid full-deck scenarios and golden deal records
   e2e/                             play, input, layout, accessibility, storage, offline
-.github/workflows/ci.yml            unit + browser + production build gates
-.github/workflows/deploy.yml        tested artifact to GitHub Pages
+.github/workflows/ci.yml            tests/build, then tested artifact to GitHub Pages
 README.md                          implementation-era commands and operation
 THIRD_PARTY_NOTICES.md              asset licenses, only if third-party assets are used
 ```

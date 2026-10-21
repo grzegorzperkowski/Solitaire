@@ -1,6 +1,6 @@
 # Fresh-session handoff
 
-T032 IN_PROGRESS (2026-10-21): #1 preserves card DOM/focus on clock ticks; build and 43 focused E2E pass. Commit/check each finding before the next; next is #2 CI deployment gate. See reports/T032.md; preserve both unrelated diagnostic JSON files. No automatic push or successor.
+T032 IN_PROGRESS (2026-10-21): #1 committed d1e05e4; #2 CI deploy gate validated by actionlint, commit before #3. Deployment is in ci.yml, needs test, consumes tested artifact; independent deploy.yml removed. Hosted verification awaits explicit push. Preserve both diagnostic JSON files; see reports/T032.md. Commit each issue before the next.
 
 T031 REVIEW (2026-10-21): seven-finding audit in reports/T031.md, normalized ESLint and probe JSON evidence committed beside it. Temporary CLI reports/reproduction script in `.cache/T031-*`. No fixes applied. Await coordinator acceptance and explicit selection of implementation scope; no successor or push. T030 final CI 39663303115/Pages pass. Preserve both untracked diagnostic JSON files.
 
