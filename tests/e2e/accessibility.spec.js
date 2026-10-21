@@ -146,6 +146,17 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
     expect(activeTagNameAfterUndo).not.toBe('BODY');
   });
 
+  test('clock ticks preserve the focused card DOM node while time advances', async ({ page }) => {
+    await page.locator('#stock-container').click();
+    const card = page.locator('#column-0 .card-face-up');
+    const original = await card.elementHandle();
+    await card.focus();
+    const timer = page.locator('#timer-display');
+    const before = await timer.textContent();
+    await expect(timer).not.toHaveText(before);
+    expect(await original.evaluate(node => node.isConnected && document.activeElement === node)).toBe(true);
+  });
+
   test('screen reader accessibility and Polish labels comply with N01 and N02', async ({ page }) => {
     // Buttons have clear Polish labels
     await expect(page.locator('#btn-undo')).toHaveText('Cofnij');

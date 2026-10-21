@@ -1,5 +1,7 @@
 # Fresh-session handoff
 
+T032 IN_PROGRESS (2026-10-21): #1 preserves card DOM/focus on clock ticks; build and 43 focused E2E pass. Commit/check each finding before the next; next is #2 CI deployment gate. See reports/T032.md; preserve both unrelated diagnostic JSON files. No automatic push or successor.
+
 T031 REVIEW (2026-10-21): seven-finding audit in reports/T031.md, normalized ESLint and probe JSON evidence committed beside it. Temporary CLI reports/reproduction script in `.cache/T031-*`. No fixes applied. Await coordinator acceptance and explicit selection of implementation scope; no successor or push. T030 final CI 39663303115/Pages pass. Preserve both untracked diagnostic JSON files.
 
 T030 REVIEW (2026-10-21): delivery `fc36075` pushed. CI fetches full history for experiment loaders; html uses manipulation while face-up/selected cards retain pinch-zoom for native touch drag. 379 unit/13 simulation/98 E2E/build pass locally, GitHub CI 39662907837 passes, Pages deployment 39662907417 succeeds. Await coordinator acceptance; physical pinch/zoom evidence remains unavailable. See report; preserve both untracked diagnostic JSON files.

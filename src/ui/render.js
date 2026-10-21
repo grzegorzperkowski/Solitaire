@@ -188,19 +188,17 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   const gameState = state.state;
   if (!gameState) return;
 
-  // Render Stock
-  renderStock(rootElement, gameState);
-
-  // Render Waste
-  const drawCount = gameState.drawCount;
-  renderWaste(rootElement, gameState.waste, drawCount, dims, selection);
-
-  // Render Foundations
-  renderFoundations(rootElement, gameState.foundations, selection, legalDestinations);
-
-  // Render Tableau
-  renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
-  applyMoveFeedback(rootElement, state);
+  const layoutKey = JSON.stringify(dims);
+  const previous = container._boardRender;
+  // Preserve card nodes and focus when only time, notices or dialogs change.
+  if (previous?.board !== gameState || previous.selection !== selection || previous.layoutKey !== layoutKey) {
+    renderStock(rootElement, gameState);
+    renderWaste(rootElement, gameState.waste, gameState.drawCount, dims, selection);
+    renderFoundations(rootElement, gameState.foundations, selection, legalDestinations);
+    renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
+    applyMoveFeedback(rootElement, state);
+    container._boardRender = { board: gameState, selection, layoutKey };
+  }
   renderHint(rootElement, gameState, inputController?.getHint?.());
 
   // Check overflow on tableau scroller and toggle scroll handle & buttons

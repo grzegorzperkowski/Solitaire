@@ -167,6 +167,10 @@ the native Chromium CDP touch-drag test; physical pinch/zoom checks remain requi
 
 ## T028 strategic-goal regression gates (2026-10-11)
 
+T032 focus regression (T18): after a committed draw, focus a tableau card and
+wait for the clock label to advance. The original card node must stay connected
+and focused. Clock/notices/dialog updates must not rebuild an unchanged board.
+
 T028 p95 checkpoint (2026-10-13): basic `smart-hints-optimization.test.js`
 checks one-command information instead of waste padding, equal-F direct
 foundation advancement and exclusion of foundation/placement or foundation/king

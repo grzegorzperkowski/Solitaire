@@ -1,5 +1,7 @@
 # Project status
 
+T032 IN_PROGRESS (2026-10-21): #1 focus repair complete; build and 43 focused E2E pass. Commit before #2 deployment gate, then continue sequentially through #7. Start master/db452ab; preserve both unrelated diagnostic JSON files. See reports/T032.md.
+
 T031 REVIEW (2026-10-21): read-only audit delivered with seven prioritized findings: timer focus loss, ungated deployment, read-only moves, async lock rejection, incomplete controller teardown, dead hint variables and stale README. ESLint 88 files/51 warnings/0 errors, npm audit 0 vulnerabilities; four behavior probes reproduced. See reports/T031.md. No runtime edits; preserve both diagnostic JSON files. T030 final CI 39663303115 and Pages pass.
 
 T030 REVIEW (2026-10-21): `fc36075` fixes CI shallow history and the native touch-drag regression caused by per-card manipulation. Document-level manipulation now suppresses double-tap zoom while cards retain pinch-only behavior. Local 379 unit/13 simulation/98 E2E/build pass; GitHub CI run 39662907837 and Pages deployment pass. Await coordinator acceptance; physical-device zoom checks remain. Both diagnostic JSON files preserved.
