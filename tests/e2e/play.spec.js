@@ -576,6 +576,11 @@ test.describe('T015 seed, statistics and results', () => {
       await page.locator(`#foundation-${move.to.index}`).click();
       await expect(page.locator('.victory-animation')).toBeVisible();
       await expect(page.locator('#game-container')).toHaveJSProperty('inert', true);
+      for (const shortcut of ['Control+z', 'Meta+z', 'Control+y', 'Control+Shift+z', 'Meta+Shift+z']) {
+        await page.keyboard.press(shortcut);
+        expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session.cursor)).toBe(fixture.session.cursor + 1);
+        expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().isWon)).toBe(true);
+      }
       await page.getByRole('button', { name: 'Pomiń' }).click();
       await expect(page.getByRole('dialog', { name: 'Wygrana!' })).toBeVisible();
       await expect(page.locator('#game-container')).toHaveJSProperty('inert', false);

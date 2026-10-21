@@ -1,3 +1,7 @@
+# T033 IN_PROGRESS — 2026-10-21
+
+Explicit assignment "do roboty": implement four follow-up audit items sequentially on master, starting 0f18d76. Add RED/GREEN regressions for victory shortcuts and nested restored commands; remove dead declarations and add ESLint/CI. No broad complexity refactor, agents, worktrees or push. Preserve both diagnostic JSON files. See tasks/T033.md and reports/T033.md.
+
 # T016 REVIEW — 2026-10-21
 
 Safe completion delivered with approved nonempty-waste preflight, 140ms card travel / 160ms command cadence and no separate cancel button. Real cursor-126 save wins in 15 commands. Final 401 unit / 13 simulation / 106 Chromium E2E / production build pass; 320px and travel screenshots inspected. Await coordinator acceptance. No push or physical-device evidence; both unrelated diagnostic JSON files preserved. See reports/T016.md.

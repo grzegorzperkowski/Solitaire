@@ -869,7 +869,7 @@ export function createInputController(app, rootElement) {
     }
 
     const appState = app.getState();
-    if (e.key !== 'Escape' && (appState.activeDialog || appState.isPaused || !appState.isWriter || appState.hasConflict)) return;
+    if (e.key !== 'Escape' && (appState.activeDialog || appState.isPaused || appState.victoryAnimation || !appState.isWriter || appState.hasConflict)) return;
 
     const isCtrlOrCmd = e.ctrlKey || e.metaKey;
 

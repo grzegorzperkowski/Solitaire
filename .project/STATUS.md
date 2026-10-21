@@ -1,3 +1,7 @@
+# T033 IN_PROGRESS — 2026-10-21
+
+Coordinator assigned follow-up audit remediation: victory shortcuts, restored command immutability, unused-code cleanup and lint in CI. Start master 0f18d76; no prior task acceptance implied. Preserve both unrelated diagnostic JSON files. See reports/T033.md.
+
 # T016 REVIEW — 2026-10-21
 
 Safe completion delivered with approved nonempty-waste preflight, 140ms card travel / 160ms command cadence and no separate cancel button. Real cursor-126 save wins in 15 commands. Final 401 unit / 13 simulation / 106 Chromium E2E / production build pass; 320px and travel screenshots inspected. Await coordinator acceptance. No push or physical-device evidence; both unrelated diagnostic JSON files preserved. See reports/T016.md.
