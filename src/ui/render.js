@@ -150,55 +150,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   const selection = inputController?.getSelection ? inputController.getSelection() : inputController?.selection || null;
   const legalDestinations = inputController?.getLegalDestinations ? inputController.getLegalDestinations() : inputController?.legalDestinations || [];
 
-  // Update header stats
-  const timerDisplay = rootElement.querySelector('#timer-display');
-  if (timerDisplay) {
-    timerDisplay.textContent = formatTime(state.elapsedMs || 0);
-  }
-
-  const movesDisplay = rootElement.querySelector('#moves-display');
-  if (movesDisplay) {
-    movesDisplay.textContent = String(state.moveCount || 0);
-  }
-
-  // Update controls states
-  const btnUndo = rootElement.querySelector('#btn-undo');
-  if (btnUndo) {
-    const canUndo = Boolean(state.session && state.session.cursor > 0);
-    btnUndo.disabled = readOnly || !canUndo;
-  }
-
-  const btnRedo = rootElement.querySelector('#btn-redo');
-  if (btnRedo) {
-    const canRedo = Boolean(state.session && state.session.cursor < state.session.commands.length);
-    btnRedo.disabled = readOnly || state.isCompleting || !canRedo;
-  }
-
-  // Notice banner (locks / conflict)
-  const noticeBanner = rootElement.querySelector('#notice-banner');
-  if (noticeBanner) {
-    if (state.lockNotice || state.saveError) {
-      noticeBanner.textContent = [state.lockNotice, state.saveError,
-        state.persistenceBlocked ? 'Gra tymczasowa — zapis wyłączony.' : null].filter(Boolean).join(' ');
-      noticeBanner.classList.remove('hidden');
-    } else {
-      noticeBanner.textContent = '';
-      noticeBanner.classList.add('hidden');
-    }
-  }
-
-  rootElement.querySelector('#practice-status')?.classList.toggle('hidden', !state.winRecorded || state.activeDialog === 'win');
-
-  const showCompletion = !readOnly && !state.isPaused && !state.activeDialog && !state.isWon && Boolean(state.completionPlan);
-  rootElement.querySelector('#completion-notice').classList.toggle('hidden', !showCompletion);
-  const completionText = showCompletion
-    ? state.isCompleting ? 'Kończenie gry…' : `Możesz zakończyć grę. Pozostałe ruchy: ${state.completionPlan.length}.` : '';
-  const completionMessage = rootElement.querySelector('#completion-message');
-  if (completionMessage.textContent !== completionText) completionMessage.textContent = completionText;
-  rootElement.querySelector('#btn-complete').disabled = state.isCompleting;
-
-  renderProgressNotice(rootElement, state);
-  renderHintNotice(rootElement, state);
+  renderControlsAndNotices(rootElement, state, readOnly);
 
   const gameState = state.state;
   if (!gameState) return;
@@ -241,6 +193,62 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
     catch { appInstance.finishVictoryAnimation(); }
   }
   if (animateDeal) renderDealAnimation(container);
+}
+
+function renderControlsAndNotices(rootElement, state, readOnly) {
+  // Update header stats
+  const timerDisplay = rootElement.querySelector('#timer-display');
+  if (timerDisplay) {
+    timerDisplay.textContent = formatTime(state.elapsedMs || 0);
+  }
+
+  const movesDisplay = rootElement.querySelector('#moves-display');
+  if (movesDisplay) {
+    movesDisplay.textContent = String(state.moveCount || 0);
+  }
+
+  // Update controls states
+  const btnUndo = rootElement.querySelector('#btn-undo');
+  if (btnUndo) {
+    const canUndo = Boolean(state.session && state.session.cursor > 0);
+    btnUndo.disabled = readOnly || !canUndo;
+  }
+
+  const btnRedo = rootElement.querySelector('#btn-redo');
+  if (btnRedo) {
+    const canRedo = Boolean(state.session && state.session.cursor < state.session.commands.length);
+    btnRedo.disabled = readOnly || state.isCompleting || !canRedo;
+  }
+
+  // Notice banner (locks / conflict)
+  const noticeBanner = rootElement.querySelector('#notice-banner');
+  if (noticeBanner) {
+    if (state.lockNotice || state.saveError) {
+      noticeBanner.textContent = [state.lockNotice, state.saveError,
+        state.persistenceBlocked ? 'Gra tymczasowa — zapis wyłączony.' : null].filter(Boolean).join(' ');
+      noticeBanner.classList.remove('hidden');
+    } else {
+      noticeBanner.textContent = '';
+      noticeBanner.classList.add('hidden');
+    }
+  }
+
+  rootElement.querySelector('#practice-status')?.classList.toggle('hidden', !state.winRecorded || state.activeDialog === 'win');
+
+  renderCompletionNotice(rootElement, state, readOnly);
+
+  renderProgressNotice(rootElement, state);
+  renderHintNotice(rootElement, state);
+}
+
+function renderCompletionNotice(rootElement, state, readOnly) {
+  const showCompletion = !readOnly && !state.isPaused && !state.activeDialog && !state.isWon && Boolean(state.completionPlan);
+  rootElement.querySelector('#completion-notice').classList.toggle('hidden', !showCompletion);
+  const completionText = showCompletion
+    ? state.isCompleting ? 'Kończenie gry…' : `Możesz zakończyć grę. Pozostałe ruchy: ${state.completionPlan.length}.` : '';
+  const completionMessage = rootElement.querySelector('#completion-message');
+  if (completionMessage.textContent !== completionText) completionMessage.textContent = completionText;
+  rootElement.querySelector('#btn-complete').disabled = state.isCompleting;
 }
 
 export function renderProgressNotice(rootElement, state) {
