@@ -1,3 +1,7 @@
+# T034 IN_PROGRESS — 2026-10-21
+
+Coordinator approved five-function refactoring: keyboard handler, renderer, restore, arrow navigation and SmartHint result construction. Start eeb9a61; preserve behavior and both unrelated diagnostic JSON files. No prior acceptance/push implied. See reports/T034.md.
+
 # T033 REVIEW — 2026-10-21
 
 Victory shortcuts and restored command immutability repaired; dead-code cleanup and pinned ESLint/CI delivered. Final 403 unit/13 simulation/106 Chromium E2E/build pass; lint 0 errors/15 informational complexity/nesting warnings, actionlint clean. Node 22 minimum is now 22.13 for ESLint 10; tested 22.22. Await coordinator acceptance; no push/hosted/device check. Both unrelated diagnostic JSON files preserved. See reports/T033.md.

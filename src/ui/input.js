@@ -899,42 +899,13 @@ export function createInputController(app, rootElement) {
       return;
     }
 
-    // Escape: cancel drag, close active dialog, resume paused game, or clear selection
     if (e.key === 'Escape') {
-      if (activeGesture && activeGesture.isDragging) {
-        e.preventDefault();
-        cancelDrag();
-        announce('Anulowano przeciąganie.');
-        return;
-      }
-      const state = app.getState();
-      if (state.victoryAnimation) {
-        e.preventDefault();
-        app.finishVictoryAnimation();
-        return;
-      }
-      if (state.activeDialog) {
-        e.preventDefault();
-        app.closeDialog();
-        announce('Zamknięto okno dialogowe.');
-        return;
-      }
-      if (state.isPaused) {
-        e.preventDefault();
-        app.resume();
-        announce('Wznowiono grę.');
-        return;
-      }
-      if (selection) {
-        e.preventDefault();
-        setSelection(null);
-        announce('Odznaczono.');
-      }
+      handleEscape(e);
       return;
     }
 
-    // If dialog or pause is active, block board shortcuts and navigation
-    if (appState.activeDialog || appState.isPaused || appState.isCompleting) {
+    // Undo can stop completion; board navigation and activation cannot.
+    if (appState.isCompleting) {
       return;
     }
 
@@ -944,6 +915,42 @@ export function createInputController(app, rootElement) {
       return;
     }
 
+    handleBoardKeydown(e);
+  }
+
+  function handleEscape(e) {
+    if (activeGesture && activeGesture.isDragging) {
+      e.preventDefault();
+      cancelDrag();
+      announce('Anulowano przeciąganie.');
+      return;
+    }
+    const state = app.getState();
+    if (state.victoryAnimation) {
+      e.preventDefault();
+      app.finishVictoryAnimation();
+      return;
+    }
+    if (state.activeDialog) {
+      e.preventDefault();
+      app.closeDialog();
+      announce('Zamknięto okno dialogowe.');
+      return;
+    }
+    if (state.isPaused) {
+      e.preventDefault();
+      app.resume();
+      announce('Wznowiono grę.');
+      return;
+    }
+    if (selection) {
+      e.preventDefault();
+      setSelection(null);
+      announce('Odznaczono.');
+    }
+  }
+
+  function handleBoardKeydown(e) {
     // Space on stock when focused
     if (e.key === ' ' && document.activeElement && document.activeElement.id === 'stock-container') {
       e.preventDefault();

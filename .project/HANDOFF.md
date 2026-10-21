@@ -1,3 +1,7 @@
+# T034 IN_PROGRESS — 2026-10-21
+
+Explicit assignment: refactor the five prioritized functions on master from eeb9a61. Preserve exact behavior; SmartHint changes only public-result construction. Sequential checks/commits, no agents/worktrees or push. Preserve both diagnostic JSON files; prior REVIEW tasks are not implicitly accepted. See tasks/T034.md and reports/T034.md.
+
 # T033 REVIEW — 2026-10-21
 
 Four follow-up audit items delivered sequentially on master. Victory guard b78e00e; nested restored commands 0a344ca; final task commit adds unused-code cleanup and lint/CI. RED/GREEN regressions plus final 403 unit/13 simulation/106 Chromium E2E/build pass; lint 0 errors/15 informational complexity/nesting warnings and actionlint clean. Node 22 minimum 22.13; current 22.22 works. Await coordinator acceptance. No broad refactor, agents, worktrees, push, hosted workflow or physical-device verification. Preserve both diagnostic JSON files; see reports/T033.md.
