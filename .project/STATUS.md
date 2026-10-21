@@ -1,6 +1,6 @@
-# T034 IN_PROGRESS — 2026-10-21
+# T034 REVIEW — 2026-10-21
 
-Coordinator approved five-function refactoring: keyboard handler, renderer, restore, arrow navigation and SmartHint result construction. Start eeb9a61; preserve behavior and both unrelated diagnostic JSON files. No prior acceptance/push implied. See reports/T034.md.
+Five scoped refactorings delivered: keyboard dispatch, status rendering, save validation/replay, arrow targets/effects and SmartHint public results. Final 403 unit/13 simulation/107 Chromium E2E/build pass; 315 persistence cases and 108 planner traces match baseline. Lint 0 errors/16 informational warnings; validation remains intact. Await coordinator acceptance; no push/device/performance claim. Both unrelated diagnostic JSON files preserved. See reports/T034.md.
 
 # T033 REVIEW — 2026-10-21
 

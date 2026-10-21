@@ -441,6 +441,25 @@ function checkBoundary(move, state, knownSet) {
   return false;
 }
 
+function toPublicCandidate(candidate) {
+  const { key, order, ...result } = candidate;
+  return result;
+}
+
+function hintAlternatives(bestResult, ordered, visitedStates, truncated) {
+  // Boundary alternatives need no continuation proof or additional graph budget.
+  const diverse = new Map();
+  for (const candidate of [bestResult, ...ordered]) {
+    if (!candidate.verification.accepted || (candidate !== bestResult &&
+      candidate.verification.continuation !== 'INFORMATION_BOUNDARY')) continue;
+    const signature = firstMoveKey(candidate.plan[0], candidate.goal);
+    if (diverse.has(signature)) continue;
+    diverse.set(signature, { ...toPublicCandidate(candidate), visitedStates, truncated });
+    if (diverse.size === 5) break;
+  }
+  return [...diverse.values()];
+}
+
 // ── Main search generator (§2–§3) ──
 
 export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, maxDepth = 32, signal, previousHint, plannerContext } = {}) {
@@ -525,9 +544,8 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
   }
 
   function cancelledResult(candidate = bestResult) {
-    const { key, order, ...partial } = candidate || {};
     return {
-      ...(candidate ? partial : { status: 'INCONCLUSIVE', plan: [], goal: null, score: null }),
+      ...(candidate ? toPublicCandidate(candidate) : { status: 'INCONCLUSIVE', plan: [], goal: null, score: null }),
       phase: 'CANCELLED', visitedStates: stateCount, truncated: true, cancelled: true, reason: 'CANCELLED',
       diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads,
         ...(candidate ? { expectedPostRevealScore: candidate.expectedPostRevealScore } : {}) },
@@ -716,8 +734,7 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
 
     // Yield between expanded states for controller cancellation
     if (queue.length > 0 || stateCount > 1) {
-      const { key: unusedKey, order: unusedOrder, ...publicBest } = bestResult || {};
-      yield bestResult ? { ...publicBest, phase: 'TEMPORARY', visitedStates: stateCount, truncated,
+      yield bestResult ? { ...toPublicCandidate(bestResult), phase: 'TEMPORARY', visitedStates: stateCount, truncated,
         diagnostics: { ...diagnostics, retainedStates: visited.size, expectedPostRevealScore: bestResult.expectedPostRevealScore } } : {
         phase: 'TEMPORARY',
         status: 'INCONCLUSIVE',
@@ -752,26 +769,13 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
       shortened = shortener.next();
       bestResult = shortened.value;
       if (!shortened.done) {
-        const { key: unusedKey, order: unusedOrder, ...partial } = bestResult;
-        yield { ...partial, phase: 'TEMPORARY', visitedStates: stateCount, truncated,
+        yield { ...toPublicCandidate(bestResult), phase: 'TEMPORARY', visitedStates: stateCount, truncated,
           diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads,
             expectedPostRevealScore: bestResult.expectedPostRevealScore } };
       }
     } while (!shortened.done);
-    const { key, order, ...result } = bestResult;
-    // Boundary alternatives need no continuation proof or additional graph budget.
-    const diverse = new Map();
-    for (const candidate of [bestResult, ...ordered]) {
-      if (!candidate.verification.accepted || (candidate !== bestResult &&
-        candidate.verification.continuation !== 'INFORMATION_BOUNDARY')) continue;
-      const signature = firstMoveKey(candidate.plan[0], candidate.goal);
-      if (diverse.has(signature)) continue;
-      const { key: unusedKey, order: unusedOrder, ...alternative } = candidate;
-      diverse.set(signature, { ...alternative, visitedStates: stateCount, truncated });
-      if (diverse.size === 5) break;
-    }
-    return { ...result, phase: 'FINAL', visitedStates: stateCount, truncated,
-      alternatives: [...diverse.values()],
+    return { ...toPublicCandidate(bestResult), phase: 'FINAL', visitedStates: stateCount, truncated,
+      alternatives: hintAlternatives(bestResult, ordered, stateCount, truncated),
       diagnostics: { ...diagnostics, retainedStates: visited.size, verificationReads,
         expectedPostRevealScore: bestResult.expectedPostRevealScore } };
   }

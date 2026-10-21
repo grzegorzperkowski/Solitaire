@@ -54,7 +54,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 
 | [T033](tasks/T033.md) | Quality fixes | Follow-up audit fixes, dead-code cleanup and continuous lint | None | REVIEW | 403 unit/13 simulation/106 E2E/build pass; lint 0 errors/15 complexity warnings. [Report](reports/T033.md). |
 
-| [T034](tasks/T034.md) | Maintainability | Simplify the five prioritized functions without behavior changes | None | IN_PROGRESS | Explicitly assigned 2026-10-21. [Report](reports/T034.md). |
+| [T034](tasks/T034.md) | Maintainability | Simplify the five prioritized functions without behavior changes | None | REVIEW | 403 unit/13 simulation/107 E2E/build pass; 315 restore cases/108 planner traces unchanged. [Report](reports/T034.md). |
 
 ## Selection and model suitability
 

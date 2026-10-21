@@ -1,6 +1,6 @@
-# T034 IN_PROGRESS — 2026-10-21
+# T034 REVIEW — 2026-10-21
 
-Explicit assignment: refactor the five prioritized functions on master from eeb9a61. Preserve exact behavior; SmartHint changes only public-result construction. Sequential checks/commits, no agents/worktrees or push. Preserve both diagnostic JSON files; prior REVIEW tasks are not implicitly accepted. See tasks/T034.md and reports/T034.md.
+Five-function refactoring delivered sequentially: cb1789c keyboard; ace986d renderer; 1542472 persistence; 1b8ac09 arrow navigation; final T034 commit publishes SmartHint result helpers and evidence. Final 403 unit/13 simulation/107 Chromium E2E/build pass; 315 restore cases and 108 complete planner traces unchanged; lint 0 errors/16 informational warnings. No strategy/rules/schema changes or measured speed claim. Await acceptance; no push, agents, worktrees or device check. Preserve both unrelated diagnostic JSON files; prior REVIEW tasks remain unchanged. See reports/T034.md.
 
 # T033 REVIEW — 2026-10-21
 

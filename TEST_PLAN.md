@@ -167,6 +167,11 @@ the native Chromium CDP touch-drag test; physical pinch/zoom checks remain requi
 
 ## T028 strategic-goal regression gates (2026-10-11)
 
+T034 navigation characterization (T18): stock/first-column left edges preserve
+focus; Down from the last exposed card retains focus when Undo is disabled,
+reaches Undo when enabled, Right toward disabled Redo leaves focus unchanged,
+and Up from bottom controls returns to the last exposed card in column four.
+
 T032 focus regression (T18): after a committed draw, focus a tableau card and
 wait for the clock label to advance. The original card node must stay connected
 and focused. Clock/notices/dialog updates must not rebuild an unchanged board.
