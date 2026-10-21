@@ -1,5 +1,7 @@
 # Fresh-session handoff
 
+T030 IN_PROGRESS (2026-10-21): coordinator resumed for failing CI. Run 39661943688 fails `npm test` before E2E: experiment loaders need `2d1ecfc`, absent from default shallow checkout. Change only CI checkout depth, run full CI checks, push and verify the new run. Both untracked diagnostic JSON files remain unrelated.
+
 T030 REVIEW (2026-10-21): double-tap zoom prevention for buttons/face-up cards complete. Build and 34 targeted E2E tests pass. See `.project/reports/T030.md`; await coordinator acceptance. Physical-device zoom/drag verification remains unavailable. Preserve unrelated `solitaire-stan-2284836135-draw1-114.json` and `solitaire-stan-42-draw1-89.json`.
 
 T028 DONE (2026-10-21): coordinator accepted X1/X2 R&D at `8a129043fb13abded404074648dd9fa397c7707e`; X2 remains rejected for production.

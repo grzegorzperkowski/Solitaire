@@ -1,5 +1,7 @@
 # Project status
 
+T030 IN_PROGRESS (2026-10-21): coordinator reported failed GitHub CI. Run 39661943688 fails importing three experiment suites because shallow checkout omits pinned commit `2d1ecfc`. Fetch full history in CI and run its checks; preserve both diagnostic JSON files.
+
 T030 REVIEW (2026-10-21): double-tap zoom prevention applied to buttons and face-up cards. Build and 34 accessibility/gameplay E2E tests pass. Await coordinator acceptance; physical device check remains. Preserve unrelated diagnostic JSON. See [report](reports/T030.md).
 
 T028 DONE (2026-10-21): coordinator accepted X1/X2 R&D; X2 not promoted. Accepted commit `8a129043fb13abded404074648dd9fa397c7707e`. See [report](reports/T028-x1-x2-rd.md).

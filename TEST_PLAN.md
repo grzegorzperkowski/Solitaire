@@ -159,10 +159,11 @@ Covered in tests/e2e/smart-hints.spec.js alongside existing touch/drag regressio
 On mobile emulation, Help and Hint buttons use `touch-action: manipulation` to
 avoid double-tap zoom while retaining pinch zoom; covered in accessibility.spec.js.
 
-T030 double-tap zoom regression: all native buttons, including dynamically
-rendered dialog actions, and face-up cards use `touch-action: manipulation` on
-mobile. Verify pinch zoom and drag behavior remain available; covered in
-accessibility.spec.js and play.spec.js.
+T030 double-tap zoom regression: the document and native buttons, including
+dynamically rendered dialog actions, use `touch-action: manipulation` on mobile.
+Face-up cards retain `pinch-zoom` to prevent browser panning from cancelling
+drag. Covered in accessibility.spec.js, play.spec.js and input.spec.js, including
+the native Chromium CDP touch-drag test; physical pinch/zoom checks remain required.
 
 ## T028 strategic-goal regression gates (2026-10-11)
 

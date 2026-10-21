@@ -216,10 +216,11 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
     });
     const page = await context.newPage();
     await page.goto('/');
+    await expect(page.locator('html')).toHaveCSS('touch-action', 'manipulation');
     for (const button of await page.locator('button').all()) {
       await expect(button).toHaveCSS('touch-action', 'manipulation');
     }
-    await expect(page.locator('.card-node.card-face-up').first()).toHaveCSS('touch-action', 'manipulation');
+    await expect(page.locator('.card-node.card-face-up').first()).toHaveCSS('touch-action', 'pinch-zoom');
     await page.locator('#btn-menu').click();
 
     await expect(page.locator('#btn-menu-help')).toHaveCSS('touch-action', 'manipulation');
