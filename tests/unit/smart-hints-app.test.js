@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test, vi } from 'vitest';
 import { createApp } from '../../src/app.js';
-import { progressFixture, fixtureSession } from '../fixtures/progress.js';
-import { h01, h02, h07, h15 } from '../fixtures/smart-hints.js';
+import { fixtureSession } from '../fixtures/progress.js';
+import { h01, h02, h15 } from '../fixtures/smart-hints.js';
 import { visibleCards } from '../../src/engine/knowledge.js';
 import { createGame } from '../../src/engine/cards.js';
 import { searchSmartHint } from '../../src/engine/smart-hints.js';

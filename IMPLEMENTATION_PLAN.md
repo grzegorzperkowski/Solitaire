@@ -220,7 +220,7 @@ No change to formal NO_PROGRESS, persistence, or optional completion scope.
 
 **Files:** tests/unit/simulation.test.js, tests/e2e/*, README.md, docs/release-check.md (created during implementation), CI configuration if needed.
 
-- [ ] Run clean `npm ci`, `npm test`, `npm run test:coverage`, `npm run test:simulation -- --profile=release`, `npm run build`, `npm run test:e2e`.
+- [ ] Run clean `npm ci`, `npm run lint`, `npm test`, `npm run test:coverage`, `npm run test:simulation -- --profile=release`, `npm run build`, `npm run test:e2e`.
 - [ ] Complete the physical-device/browser matrix and exploratory checklist in TEST_PLAN.md. Record exact seed/action traces for any failures, fix and rerun affected checks.
 - [ ] Record requirement-to-test coverage, tool/browser versions, performance/size results, storage/offline limitations and optional-feature scope. Require zero unresolved release-blocking defects.
 - [ ] When deployment is requested, publish the tested artifact and smoke-test its actual HTTPS URL/subpath, restore and offline behavior. Otherwise hand off the deployable artifact and instructions.

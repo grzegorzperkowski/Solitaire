@@ -7,6 +7,7 @@ import { searchSmartHint as previous } from './baselines/smart-hints-90fba4f.js'
 import { searchSmartHint as current, createHintContext } from '../src/engine/smart-hints.js';
 
 export const ALGORITHMS = [
+  // eslint-disable-next-line require-yield -- The rank adapter returns immediately through the planner iterator interface.
   { id: 'rank', search: function* (state) {
     const move = rankHints(state)[0];
     return { status: move ? 'FOUND' : 'INCONCLUSIVE', plan: move ? [move] : [], goal: null, visitedStates: 1, truncated: false };
@@ -128,7 +129,7 @@ export function playDeal(algorithm, seed, drawCount, options, positions = [], in
       if (result.status === 'WON' && !isWon(state)) throw Error('false WON');
       if (['INCONCLUSIVE', 'NO_STRATEGIC_PROGRESS'].includes(result.status) && result.plan.length || ['FOUND', 'EXPLORATION'].includes(result.status) && !result.plan.length) throw Error('invalid result plan');
       effect = inspectPlan(state, known, result.plan);
-    } catch (error) { throw Error(`${algorithm.id} seed=${seed} draw=${drawCount} step=${step}: ${error.message}`); }
+    } catch (error) { throw Error(`${algorithm.id} seed=${seed} draw=${drawCount} step=${step}: ${error.message}`, { cause: error }); }
     calls.push({ status: result.status, goal: result.goal, planLength: result.plan.length,
       elapsedMs: result.elapsedMs, visitedStates: result.visitedStates, truncated: result.truncated,
       timeCutoff: result.timeCutoff, ...effect });

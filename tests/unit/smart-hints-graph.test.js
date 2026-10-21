@@ -85,14 +85,6 @@ test('a genuine continuation reaches information but never crosses its boundary'
   expect(apply.mock.calls.some(([, move]) => move.target === 'Forbidden')).toBe(false);
 });
 
-function cancellationGraph() {
-  return graph({ S: [], Safe: [[], [13]], SafeStep: [[], [13]], Missing: [],
-    Rejected: [[0]], Dead: [[], [], [26, 27, 28]], DeadStep: [[], [], [26, 27, 28]] }, {
-    S: ['Safe', 'Rejected', 'Dead'], Safe: ['SafeStep'], SafeStep: ['Missing'],
-    Rejected: ['S'], Dead: ['DeadStep'], DeadStep: ['Dead'],
-  }, [0]);
-}
-
 test('stateCount counts expansions, including repeated shorter visits, without overshoot', () => {
   const { states } = graph({ S: [], A: [[0]], B: [[0]], X: [[0]], Short: [], Y: [[0]] }, {
     S: ['A', 'Short'], A: ['B'], B: ['X'], X: ['Y'], Short: ['X'], Y: ['S'],

@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { rankHints } from '../../src/engine/hints.js';
 import { nearWin } from '../fixtures/wins.js';
 import { CLUBS, DIAMONDS, HEARTS, SPADES, card, makeState, pile } from '../fixtures/boards.js';
 
@@ -29,7 +28,6 @@ test.describe('T014 deterministic legal hints (T20)', () => {
   test('cycles legal hints, resets after a board change and does not change game state', async ({ page }) => {
     await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 }));
     const before = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state);
-    const expected = rankHints(before);
     const moveCountBefore = await page.locator('#moves-display').textContent();
 
     await page.locator('#btn-hint').click();
@@ -57,7 +55,7 @@ test.describe('T014 deterministic legal hints (T20)', () => {
       app.getState = () => ({ ...getState(), state });
       try {
         document.querySelector('#btn-hint').click();
-        await new Promise((resolve) => setTimeout(resolve, 60));
+        await new Promise((resolve) => { setTimeout(resolve, 60); });
         return document.querySelector('#live-announcer').textContent;
       } finally {
         app.getState = getState;
@@ -147,39 +145,11 @@ test.describe('T010 Tap interaction and gameplay (T15)', () => {
       window.__SOLITAIRE_APP__.newGame({ seed: 42, drawCount: 1 });
     });
 
-    const stateBefore = await page.evaluate(() => window.__SOLITAIRE_APP__.getState().state);
-
-    // Find a valid move in the dealt state using pure engine
-    const moveInfo = await page.evaluate(() => {
-      const app = window.__SOLITAIRE_APP__;
-      const state = app.getState().state;
-      // Search for any legal tableau-to-tableau or waste-to-tableau/foundation move
-      for (let fromCol = 0; fromCol < 7; fromCol++) {
-        const col = state.tableau[fromCol];
-        if (col.cards.length === 0) continue;
-        for (let cardIdx = col.faceUpStart; cardIdx < col.cards.length; cardIdx++) {
-          const from = { pile: 'tableau', index: fromCol, cardIndex: cardIdx };
-          // Check other tableau columns
-          for (let toCol = 0; toCol < 7; toCol++) {
-            if (toCol === fromCol) continue;
-            const to = { pile: 'tableau', index: toCol };
-            const validation = app.executeCommand; // check via test helper
-            // We can test validation
-            if (window.__SOLITAIRE_INPUT__.getLegalDestinations) {
-              window.__SOLITAIRE_INPUT__.clearSelection();
-            }
-          }
-        }
-      }
-      return null;
-    });
-
-    // Alternatively, draw until we find a waste card that fits onto a tableau column or foundation
+    // Draw until a waste card fits onto a tableau column or foundation.
     let foundMove = false;
     for (let draw = 0; draw < 24; draw++) {
       await page.locator('#stock-container').click();
       const legalDests = await page.evaluate(() => {
-        const app = window.__SOLITAIRE_APP__;
         const input = window.__SOLITAIRE_INPUT__;
         // Select waste
         const wasteCard = document.querySelector('#waste-pile .card-node.card-face-up');
@@ -193,7 +163,7 @@ test.describe('T010 Tap interaction and gameplay (T15)', () => {
       if (legalDests.length > 0) {
         foundMove = true;
         const target = legalDests[0];
-        let targetSelector = '';
+        let targetSelector;
         if (target.pile === 'tableau') {
           targetSelector = `#column-${target.index}`;
         } else {

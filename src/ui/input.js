@@ -428,7 +428,7 @@ export function createInputController(app, rootElement) {
         (d) => d.pile === hoveredDest.pile && d.index === hoveredDest.index
       );
       if (isLegal) {
-        let targetEl = null;
+        let targetEl;
         if (hoveredDest.pile === 'foundation') {
           targetEl = rootElement.querySelector(`#foundation-${hoveredDest.index}`);
         } else {
@@ -515,7 +515,7 @@ export function createInputController(app, rootElement) {
   function executeMove(from, to) {
     const res = app.executeCommand({ type: 'move', from, to });
     if (res.ok) {
-      let destName = '';
+      let destName;
       if (to.pile === 'foundation') {
         destName = `bazy ${SUIT_NAMES[to.index]}`;
       } else {
@@ -1120,7 +1120,7 @@ export function createInputController(app, rootElement) {
           executeMove(src, hovered);
           return;
         } else {
-          let targetEl = null;
+          let targetEl;
           if (hovered.pile === 'foundation') {
             targetEl = rootElement.querySelector(`#foundation-${hovered.index}`);
           } else {

@@ -272,6 +272,12 @@ T033 regression: during a genuine win animation, Ctrl/Cmd+Z, Ctrl+Y and
 Ctrl/Cmd+Shift+Z leave the won board/history intact in Draw 1 and Draw 3.
 Escape/skip still reaches the result; closing it enables normal Undo/practice.
 
+T033 static-analysis gate: `npm run lint` runs after the locked install and
+before unit tests in CI. Correctness, undefined-name and unused-declaration
+errors fail the gate; complexity/nesting warnings remain informational.
+Keep intentional object-rest field omission and immediate planner test doubles
+valid; historical baselines/report scripts and generated output are excluded.
+
 Use the development preview to run each effect at desktop and 320px mobile sizes. Verify an intermediate frame, no horizontal scroll, Escape and “Pomiń”, replay replacement, reduced-motion bypass, and final overlay/RAF cleanup. On a near-win fixture, a genuine first win must select one effect while awarding statistics once; the existing result dialog follows skip/completion. Undo/reload/re-win is practice and must not select again. New Game, destroy, page hide, resize and an animation exception must clean up or reach the existing result. Confirm the shuffle bag validates persisted values, cycles all four with no boundary repeat, and maintains this behavior if storage is denied.
 
 ## T028 integration gates — 2026-10-14

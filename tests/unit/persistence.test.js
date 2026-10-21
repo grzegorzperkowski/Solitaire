@@ -24,7 +24,6 @@ import {
 import { simulateDeal } from '../../scripts/run-simulation.mjs';
 import {
   CORRUPT_JSON,
-  INVALID_REPLAY_SAVE,
   UNSUPPORTED_VERSION_SAVE,
   createTestEnvelope,
 } from '../fixtures/saves.js';

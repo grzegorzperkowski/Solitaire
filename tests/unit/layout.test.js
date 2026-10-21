@@ -2,8 +2,6 @@ import { describe, expect, test } from 'vitest';
 import {
   calculateBoardDimensions,
   calculateColumnHeight,
-  getGap,
-  getSidePadding,
   CARD_ASPECT_RATIO,
   MIN_CARD_WIDTH,
   MAX_CARD_WIDTH,

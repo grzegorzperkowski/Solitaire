@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { createGame } from '../../src/engine/cards.js';
-import { applyMove, isWon } from '../../src/engine/game.js';
+import { isWon } from '../../src/engine/game.js';
 import {
   addElapsedMs,
   canRedo,

@@ -25,6 +25,7 @@ No event bus, ECS, class hierarchy, virtual DOM, solver, worker or runtime depen
 ```text
 index.html                         Polish document shell and viewport metadata
 package.json / package-lock.json   scripts and locked dev dependencies
+eslint.config.js                   scoped static-analysis rules and informational complexity limits
 vite.config.js                     build base and Node Vitest configuration
 playwright.config.js               browser matrix and production preview server
 src/

@@ -16,7 +16,7 @@ function getBuildInfo() {
   const map = Object.fromEntries(parts.map((p) => [p.type, p.value]));
   const str = d.toLocaleString('en-US', { timeZone: 'Europe/Warsaw', timeZoneName: 'short' });
   const zone = str.includes('GMT+2') || str.includes('CEST') ? 'CEST' : 'CET';
-  let commit = 'dev';
+  let commit;
   try {
     commit = process.env.GITHUB_SHA
       ? process.env.GITHUB_SHA.slice(0, 7)

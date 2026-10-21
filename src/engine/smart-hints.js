@@ -604,7 +604,6 @@ export function* searchSmartHint(state, knownCards = [], { maxStates = 10000, ma
     }
 
     if (stateCount >= maxStates) {
-      truncated = true;
       break;
     }
     stateCount++;

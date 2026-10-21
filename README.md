@@ -7,9 +7,10 @@ For a fresh AI session start with [AGENTS.md](AGENTS.md), [.project/STATUS.md](.
 ## Requirements and versions
 
 - Validated environment: Node.js **22.22.0**, npm **10.9.4**.
-- Supported Node ranges: `^22.12.0 || ^24.0.0 || >=26.0.0`, matching Vitest 5 and satisfying Vite's requirement. Use a maintained LTS release within this range.
+- Supported Node ranges: `^22.13.0 || ^24.0.0 || >=26.0.0`, satisfying Vite, Vitest 5 and ESLint 10. Use a maintained LTS release within this range.
 - Installed versions: Vite **8.3.4**, Vitest **5.0.3**, `@vitest/coverage-v8` **5.0.3**, `@playwright/test` **1.64.0**. package-lock.json records the exact dependency graph.
 - No runtime dependencies. Unit tests run in Node; browser E2E tests use Playwright and Chromium.
+- Static analysis uses pinned development dependencies: ESLint **10.5.0**, `@eslint/js` **10.0.1** and `globals` **17.13.0**.
 
 Requirements checked against the published npm package `engines`/peer dependencies and current official docs via Context7: [Vite setup](https://vite.dev/guide/), [Vitest setup](https://vitest.dev/guide/). Node 22.22.0 satisfies the selected versions; the coverage provider matches Vitest exactly.
 
@@ -32,6 +33,7 @@ Both servers bind to the local machine by default. Stop them with Ctrl+C. Previe
 ## Checks
 
 ```sh
+npm run lint
 npm test
 npm run test:coverage
 npm run test:simulation -- --profile=ci
@@ -42,13 +44,15 @@ npm run test:e2e
 
 `npm test` runs `vitest run` once (non-watch): engine rules, sessions/history, persistence, application lifecycle, hints, layout calculations and tooling. Golden deals in `tests/fixtures/deals.json` cover seeds 0, 1, 42 and 4294967295; they were generated independently of the engine shuffle. Unit tests run without a DOM emulator.
 
+`npm run lint` checks source, scripts, tests and root configuration files using ESLint's recommended rules plus selected correctness checks. Unused declarations and undefined names fail the check; complexity above 25 and nesting beyond five levels remain informational warnings. Browser/Node globals are scoped by file group; test files include both because browser callbacks live alongside Node test code. Deliberately omitted fields in object-rest expressions are allowed. Frozen planner baselines, generated files and historical report scripts are outside the check. No automatic fixes run.
+
 `npm run test:e2e` starts the production preview at port 5173 and a development harness server at 5186. Rebuild after source changes before running E2E: the main tests exercise `dist`, not live source. Tests cover keyboard/focus, touch/drag, layout, dialogs, storage/ownership and hints. Native Chromium touch-drag coverage supplements synthetic handler checks; physical Safari/Android and assistive-technology checks remain part of the manual test plan. Linux CI installs Chromium with `npx playwright install --with-deps chromium`.
 
 `npm run test:simulation -- --profile=ci` plays seeds 0–999 in Draw 1 and Draw 3, plus seed 4294967295 in both modes, for at most 300 steps. It checks board invariants, input immutability, enumerated moves and rejected commands. The action selector is a separate SplitMix32 generator. Undo, redo and save/restore are not part of this profile. A passing run does not mean the deals are winnable.
 
 `--profile=release` selects seeds 0–9999 in each mode, plus the same maximum seed, for at most 1,000 steps. That full run belongs to the release gate, not to ordinary checks. Any other profile exits nonzero.
 
-GitHub Actions (`.github/workflows/ci.yml`) runs the locked install, unit tests, CI simulation, production build and full Chromium E2E on Node 22. After all checks pass on master, the test job uploads its tested `dist` and a dependent job deploys that artifact to Pages. Pull requests and other branches run checks without publishing. Manual dispatch on master follows the same test gate. A local test command does not run the hosted workflow.
+GitHub Actions (`.github/workflows/ci.yml`) runs the locked install, lint, unit tests, CI simulation, production build and full Chromium E2E on Node 22. After all checks pass on master, the test job uploads its tested `dist` and a dependent job deploys that artifact to Pages. Pull requests and other branches run checks without publishing. Manual dispatch on master follows the same test gate. A local test command does not run the hosted workflow.
 
 ## Static hosting compatibility
 

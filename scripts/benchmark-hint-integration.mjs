@@ -8,7 +8,7 @@ import { cpus } from 'node:os';
 import { searchSmartHint } from '../src/engine/smart-hints.js';
 import { createGame } from '../src/engine/cards.js';
 import { applyMove, assertInvariants, isWon } from '../src/engine/game.js';
-import { rememberVisible, visibleCards } from '../src/engine/knowledge.js';
+import { rememberVisible } from '../src/engine/knowledge.js';
 import { restoreSession } from '../src/persistence.js';
 import { runHint, inspectPlan, playDeal, summarizeGames, percentile } from './hint-benchmark.js';
 
