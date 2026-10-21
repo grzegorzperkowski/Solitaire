@@ -208,7 +208,7 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
     await expect(helpDialog).toBeHidden();
   });
 
-  test('Help and Hint controls suppress mobile double-tap zoom while allowing pinch zoom', async ({ browser }) => {
+  test('buttons and playable cards suppress mobile double-tap zoom while allowing pinch zoom', async ({ browser }) => {
     const context = await browser.newContext({
       hasTouch: true,
       isMobile: true,
@@ -216,7 +216,10 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
     });
     const page = await context.newPage();
     await page.goto('/');
-    await expect(page.locator('#btn-hint')).toHaveCSS('touch-action', 'manipulation');
+    for (const button of await page.locator('button').all()) {
+      await expect(button).toHaveCSS('touch-action', 'manipulation');
+    }
+    await expect(page.locator('.card-node.card-face-up').first()).toHaveCSS('touch-action', 'manipulation');
     await page.locator('#btn-menu').click();
 
     await expect(page.locator('#btn-menu-help')).toHaveCSS('touch-action', 'manipulation');

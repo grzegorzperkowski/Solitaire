@@ -551,7 +551,7 @@ body {
 }
 
 .card-node.card-face-up {
-  touch-action: pinch-zoom;
+  touch-action: manipulation;
 }
 
 .card-node svg {
@@ -559,7 +559,7 @@ body {
 }
 
 .card-node.is-selected {
-  touch-action: pinch-zoom;
+  touch-action: manipulation;
   outline: 3px solid #f59e0b;
   outline-offset: 1px;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.6);

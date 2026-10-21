@@ -1,5 +1,9 @@
 # Fresh-session handoff
 
+T030 REVIEW (2026-10-21): double-tap zoom prevention for buttons/face-up cards complete. Build and 34 targeted E2E tests pass. See `.project/reports/T030.md`; await coordinator acceptance. Physical-device zoom/drag verification remains unavailable. Preserve unrelated `solitaire-stan-2284836135-draw1-114.json` and `solitaire-stan-42-draw1-89.json`.
+
+T028 DONE (2026-10-21): coordinator accepted X1/X2 R&D at `8a129043fb13abded404074648dd9fa397c7707e`; X2 remains rejected for production.
+
 T028 REVIEW (2026-10-16): X1/X2 R&D complete. X1:30 switches, legal recovery witness at93; final B142 remains UNKNOWN. X2 control/variant wins11/13 on40 exploratory pairs,37/35 on80 validation pairs (1 gain,3 losses); reject production promotion.379 unit tests/build and diagnostic replay checks pass. Runtime unchanged; no push/successor. See [report](reports/T028-x1-x2-rd.md). User requested shutdown after completion.
 
 T028 REVIEW (2026-10-16): E1 fallback R&D complete. Fallback/control wins9/11 at512+512 vs1024,11/11 at2048+2048 vs4096 (40 paired deals each);373 tests/build pass. B reachability100000 remains UNKNOWN; both forced first-choice branches win184. Production unchanged, no push/successor. See [report](reports/T028-fallback-rd.md).
