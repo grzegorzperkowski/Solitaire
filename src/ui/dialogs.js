@@ -31,7 +31,7 @@ export function renderDialogs(rootElement, state, app) {
     dialogType = dialogKey;
 
     if (dialogKey === 'menu') {
-      dialogHtml = renderMenuHtml();
+      dialogHtml = renderMenuHtml(!state.isWriter || state.hasConflict);
     } else if (dialogKey === 'new-game') {
       dialogHtml = renderNewGameHtml(currentDrawCount, state.persistenceBlocked);
     } else if (dialogKey === 'statistics') {
@@ -107,7 +107,7 @@ export function renderDialogs(rootElement, state, app) {
   });
 }
 
-function renderMenuHtml() {
+function renderMenuHtml(readOnly) {
   return `
     <div class="dialog-card" id="menu-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title-menu">
       <header class="dialog-header">
@@ -115,8 +115,8 @@ function renderMenuHtml() {
         <button id="btn-dialog-close" class="dialog-close-btn" aria-label="Zamknij menu">✕</button>
       </header>
       <div class="dialog-body">
-        <button id="btn-menu-new-game" class="menu-action-btn">Nowa gra</button>
-        <button id="btn-menu-restart" class="menu-action-btn">Rozdaj ponownie</button>
+        <button id="btn-menu-new-game" class="menu-action-btn" ${readOnly ? 'disabled' : ''}>Nowa gra</button>
+        <button id="btn-menu-restart" class="menu-action-btn" ${readOnly ? 'disabled' : ''}>Rozdaj ponownie</button>
         <button id="btn-menu-statistics" class="menu-action-btn">Statystyki</button>
         <button id="btn-menu-help" class="menu-action-btn">Zasady i pomoc</button>
         <button id="btn-menu-export" class="menu-action-btn">Zapisz stan do analizy</button>

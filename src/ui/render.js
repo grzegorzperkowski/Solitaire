@@ -134,6 +134,9 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
     container = rootElement.querySelector('#game-container');
   }
   container.inert = Boolean(state.victoryAnimation);
+  const readOnly = !state.isWriter || state.hasConflict;
+  rootElement.querySelector('#board-area').inert = readOnly;
+  rootElement.querySelector('#btn-hint').disabled = readOnly;
 
   // Calculate layout if not provided
   const dims = layoutDims || calculateBoardDimensions(container.clientWidth || window.innerWidth);
@@ -158,13 +161,13 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
   const btnUndo = rootElement.querySelector('#btn-undo');
   if (btnUndo) {
     const canUndo = Boolean(state.session && state.session.cursor > 0);
-    btnUndo.disabled = !canUndo;
+    btnUndo.disabled = readOnly || !canUndo;
   }
 
   const btnRedo = rootElement.querySelector('#btn-redo');
   if (btnRedo) {
     const canRedo = Boolean(state.session && state.session.cursor < state.session.commands.length);
-    btnRedo.disabled = !canRedo;
+    btnRedo.disabled = readOnly || !canRedo;
   }
 
   // Notice banner (locks / conflict)

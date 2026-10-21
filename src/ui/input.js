@@ -219,7 +219,7 @@ export function createInputController(app, rootElement) {
   function getDraggableSource(targetEl) {
     if (!targetEl) return null;
     const appState = app.getState();
-    if (appState.activeDialog || appState.isPaused) return null;
+    if (appState.activeDialog || appState.isPaused || !appState.isWriter || appState.hasConflict) return null;
     const gameState = appState.state;
     if (!gameState) return null;
 
@@ -874,7 +874,7 @@ export function createInputController(app, rootElement) {
     }
 
     const appState = app.getState();
-    if (e.key !== 'Escape' && (appState.activeDialog || appState.isPaused)) return;
+    if (e.key !== 'Escape' && (appState.activeDialog || appState.isPaused || !appState.isWriter || appState.hasConflict)) return;
 
     const isCtrlOrCmd = e.ctrlKey || e.metaKey;
 
@@ -1231,7 +1231,7 @@ export function createInputController(app, rootElement) {
 
       // If dialog or pause is active, ignore clicks on board
       const appState = app.getState();
-      if (appState.activeDialog || appState.isPaused) {
+      if (appState.activeDialog || appState.isPaused || !appState.isWriter || appState.hasConflict) {
         return;
       }
 

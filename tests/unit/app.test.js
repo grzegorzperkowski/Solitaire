@@ -390,6 +390,51 @@ describe('T008 app controller: clock, lifecycle and ownership', () => {
     app.destroy();
   });
 
+  test('read-only tabs reject session changes and keep their clock and preferences unchanged', () => {
+    const storage = createMockStorage();
+    const writer = createApp({ storage, lockManager: null, performance: mockPerformance }).init();
+    writer.executeCommand({ type: 'draw' });
+    writer.executeCommand({ type: 'draw' });
+    writer.undo();
+    writer.destroy();
+    const lockManager = { request: (_name, _options, callback) => Promise.resolve(callback(null)) };
+    const app = createApp({ storage, lockManager, performance: mockPerformance }).init();
+    try {
+      const before = app.getState();
+      storage.setItem.mockClear();
+      app.resume();
+      expect(app.executeCommand({ type: 'draw' })).toMatchObject({ ok: false, reason: 'read-only' });
+      expect(app.undo()).toBe(before.session);
+      expect(app.redo()).toBe(before.session);
+      expect(app.restart()).toBe(before.session);
+      expect(app.newGame({ seed: 1, drawCount: 3 })).toBe(before.session);
+      app.setDrawPreference(3);
+      app.markTouchHelpSeen();
+      fakeNow += 5000;
+      app.settleElapsed(true);
+      expect(app.getState().session).toBe(before.session);
+      expect(app.getState().preferences).toEqual(before.preferences);
+      expect(storage.setItem).not.toHaveBeenCalled();
+      expect(app.exportDiagnostic('read-only audit').ok).toBe(true);
+    } finally { app.destroy(); }
+  });
+
+  test('a newer stored revision stops a command before changing the local board', () => {
+    const storage = createMockStorage();
+    const app = createApp({ storage, lockManager: null }).init();
+    try {
+      app.executeCommand({ type: 'draw' });
+      const before = app.getState().session;
+      const foreign = JSON.parse(storage.getItem(STORAGE_KEY));
+      foreign.revision += 1;
+      const raw = JSON.stringify(foreign);
+      storage.setItem(STORAGE_KEY, raw);
+      expect(app.executeCommand({ type: 'draw' })).toMatchObject({ ok: false, reason: 'read-only' });
+      expect(app.getState().session).toBe(before);
+      expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+    } finally { app.destroy(); }
+  });
+
   test('Web Lock grants exclusive writer to first tab and denies second tab', async () => {
     const storage = createMockStorage();
     let lockHolder = null;

@@ -50,6 +50,14 @@ test.describe('T008 storage and tab ownership E2E', () => {
     expect(state2.hasConflict).toBe(true);
     expect(state2.lockNotice).toContain('tylko do odczytu');
 
+    expect(await page2.locator('#board-area').evaluate(el => el.inert)).toBe(true);
+    const rejected = await page2.evaluate(() => window.__SOLITAIRE_APP__.executeCommand({ type: 'draw' }));
+    expect(rejected).toMatchObject({ ok: false, reason: 'read-only' });
+    await page2.locator('#btn-menu').click();
+    await expect(page2.locator('#btn-menu-new-game')).toBeDisabled();
+    await expect(page2.locator('#btn-menu-restart')).toBeDisabled();
+    await expect(page2.locator('#btn-menu-export')).toBeEnabled();
+
     await page1.close();
     await page2.close();
   });

@@ -208,13 +208,13 @@ export function createApp({
   function settleElapsed(forceRun = false) {
     if (!session) return;
     const now = performance ? performance.now() : Date.now();
-    const canRun =
+    const canRun = isWriter && !hasConflict && (
       forceRun ||
       (session.started &&
         !isPaused &&
         !activeDialog &&
         !isDocumentHidden() &&
-        !isWon(session.state));
+        !isWon(session.state)));
 
     if (canRun) {
       const delta = Math.floor(now - lastTickTime);
@@ -284,6 +284,10 @@ export function createApp({
       // ignore
     }
     return false;
+  }
+
+  function canMutateSession() {
+    return isWriter && !hasConflict && !checkFallbackConflictBeforeWrite();
   }
 
   function handleStorageEvent(event) {
@@ -425,6 +429,7 @@ export function createApp({
 
   function executeCommand(command) {
     if (!session) return { ok: false, reason: 'no-session' };
+    if (!canMutateSession()) return { ok: false, reason: 'read-only' };
     settleElapsed();
 
     const wasStarted = session.started;
@@ -450,7 +455,7 @@ export function createApp({
   }
 
   function handleUndo() {
-    if (!session) return session;
+    if (!session || !canMutateSession()) return session;
     settleElapsed();
     const next = undo(session);
     if (next !== session) {
@@ -462,7 +467,7 @@ export function createApp({
   }
 
   function handleRedo() {
-    if (!session) return session;
+    if (!session || !canMutateSession()) return session;
     settleElapsed();
     const next = redo(session);
     if (next !== session) {
@@ -474,6 +479,7 @@ export function createApp({
   }
 
   function newGame(options = {}) {
+    if (!canMutateSession()) return session;
     clearVictoryAnimation();
     victoryAnimation = null;
     settleElapsed();
@@ -494,7 +500,7 @@ export function createApp({
   }
 
   function restart() {
-    if (!session) return null;
+    if (!session || !canMutateSession()) return session;
     clearVictoryAnimation();
     victoryAnimation = null;
     settleElapsed();
@@ -552,6 +558,7 @@ export function createApp({
   }
 
   function setDrawPreference(drawCount) {
+    if (!canMutateSession()) return;
     if (drawCount === 1 || drawCount === 3) {
       preferences.drawCount = drawCount;
       save();
@@ -560,6 +567,7 @@ export function createApp({
   }
 
   function markTouchHelpSeen() {
+    if (!canMutateSession()) return;
     preferences.touchHelpSeen = true;
     save();
     notifyListeners();

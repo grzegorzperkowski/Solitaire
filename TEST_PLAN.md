@@ -171,6 +171,11 @@ T032 focus regression (T18): after a committed draw, focus a tableau card and
 wait for the clock label to advance. The original card node must stay connected
 and focused. Clock/notices/dialog updates must not rebuild an unchanged board.
 
+T032 ownership regression (T14): a denied lock or newer stored revision rejects
+commands before session/history/statistics/preferences change. Read-only clock
+stays frozen, board and replacement controls are disabled, menu/export remain
+available, and temporary play after unreadable/inaccessible storage still works.
+
 T028 p95 checkpoint (2026-10-13): basic `smart-hints-optimization.test.js`
 checks one-command information instead of waste padding, equal-F direct
 foundation advancement and exclusion of foundation/placement or foundation/king
