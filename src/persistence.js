@@ -160,27 +160,7 @@ export function serializeSession(session, metadata = {}) {
   return text;
 }
 
-export function restoreSession(text) {
-  if (typeof text !== 'string') {
-    return { ok: false, reason: 'invalid-input' };
-  }
-
-  const byteLength = TEXT_ENCODER.encode(text).length;
-  if (byteLength > MAX_SERIALIZED_BYTES) {
-    return {
-      ok: false,
-      reason: 'oversized-save',
-      detail: `Save size ${byteLength} exceeds limit of ${MAX_SERIALIZED_BYTES} bytes`,
-    };
-  }
-
-  let envelope;
-  try {
-    envelope = JSON.parse(text);
-  } catch (err) {
-    return { ok: false, reason: 'malformed-json', detail: err.message };
-  }
-
+function validateSaveEnvelope(envelope) {
   if (envelope === null || typeof envelope !== 'object' || Array.isArray(envelope) || hasForbiddenKeys(envelope)) {
     return { ok: false, reason: 'invalid-shape' };
   }
@@ -212,41 +192,8 @@ export function restoreSession(text) {
     return { ok: false, reason: 'invalid-preferences' };
   }
 
-  const stats = envelope.statistics;
-  if (stats === null || typeof stats !== 'object' || Array.isArray(stats) || hasForbiddenKeys(stats)) {
-    return { ok: false, reason: 'invalid-statistics' };
-  }
-  for (const mode of ['draw1', 'draw3']) {
-    const m = stats[mode];
-    if (m === null || typeof m !== 'object' || Array.isArray(m) || hasForbiddenKeys(m)) {
-      return { ok: false, reason: 'invalid-statistics' };
-    }
-    if (!Number.isInteger(m.attempts) || m.attempts < 0) {
-      return { ok: false, reason: 'invalid-statistics' };
-    }
-    if (!Number.isInteger(m.wins) || m.wins < 0) {
-      return { ok: false, reason: 'invalid-statistics' };
-    }
-    if (m.wins > m.attempts) {
-      return {
-        ok: false,
-        reason: 'invalid-statistics',
-        detail: `Wins (${m.wins}) cannot exceed attempts (${m.attempts})`,
-      };
-    }
-    if (m.bestTimeMs !== null && (typeof m.bestTimeMs !== 'number' || !Number.isFinite(m.bestTimeMs) || m.bestTimeMs < 0)) {
-      return { ok: false, reason: 'invalid-statistics' };
-    }
-    if (m.fewestMoves !== null && (!Number.isInteger(m.fewestMoves) || m.fewestMoves < 0)) {
-      return { ok: false, reason: 'invalid-statistics' };
-    }
-    if (m.wins === 0 && (m.bestTimeMs !== null || m.fewestMoves !== null)) {
-      return { ok: false, reason: 'invalid-statistics', detail: 'Best fields must be null when wins is 0' };
-    }
-    if (m.wins > 0 && (m.bestTimeMs === null || m.fewestMoves === null)) {
-      return { ok: false, reason: 'invalid-statistics', detail: 'Best fields cannot be null when wins > 0' };
-    }
-  }
+  const statisticsResult = validateStatistics(envelope.statistics);
+  if (!statisticsResult.ok) return statisticsResult;
 
   const sess = envelope.session;
   if (sess === null || typeof sess !== 'object' || Array.isArray(sess) || hasForbiddenKeys(sess)) {
@@ -310,6 +257,50 @@ export function restoreSession(text) {
     };
   }
 
+  return { ok: true };
+}
+
+function validateStatistics(stats) {
+  if (stats === null || typeof stats !== 'object' || Array.isArray(stats) || hasForbiddenKeys(stats)) {
+    return { ok: false, reason: 'invalid-statistics' };
+  }
+  for (const mode of ['draw1', 'draw3']) {
+    const m = stats[mode];
+    if (m === null || typeof m !== 'object' || Array.isArray(m) || hasForbiddenKeys(m)) {
+      return { ok: false, reason: 'invalid-statistics' };
+    }
+    if (!Number.isInteger(m.attempts) || m.attempts < 0) {
+      return { ok: false, reason: 'invalid-statistics' };
+    }
+    if (!Number.isInteger(m.wins) || m.wins < 0) {
+      return { ok: false, reason: 'invalid-statistics' };
+    }
+    if (m.wins > m.attempts) {
+      return {
+        ok: false,
+        reason: 'invalid-statistics',
+        detail: `Wins (${m.wins}) cannot exceed attempts (${m.attempts})`,
+      };
+    }
+    if (m.bestTimeMs !== null && (typeof m.bestTimeMs !== 'number' || !Number.isFinite(m.bestTimeMs) || m.bestTimeMs < 0)) {
+      return { ok: false, reason: 'invalid-statistics' };
+    }
+    if (m.fewestMoves !== null && (!Number.isInteger(m.fewestMoves) || m.fewestMoves < 0)) {
+      return { ok: false, reason: 'invalid-statistics' };
+    }
+    if (m.wins === 0 && (m.bestTimeMs !== null || m.fewestMoves !== null)) {
+      return { ok: false, reason: 'invalid-statistics', detail: 'Best fields must be null when wins is 0' };
+    }
+    if (m.wins > 0 && (m.bestTimeMs === null || m.fewestMoves === null)) {
+      return { ok: false, reason: 'invalid-statistics', detail: 'Best fields cannot be null when wins > 0' };
+    }
+  }
+
+  return { ok: true };
+}
+
+function replayCommands(sess) {
+  const { seed, drawCount, rulesVersion, shuffleVersion } = sess.options;
   let dealBoard;
   try {
     dealBoard = createGame({ seed, drawCount, rulesVersion, shuffleVersion });
@@ -358,6 +349,38 @@ export function restoreSession(text) {
     }
     frozenCommands.push(Object.freeze(command));
   }
+
+  return { ok: true, snapshots, commands: frozenCommands };
+}
+
+export function restoreSession(text) {
+  if (typeof text !== 'string') {
+    return { ok: false, reason: 'invalid-input' };
+  }
+
+  const byteLength = TEXT_ENCODER.encode(text).length;
+  if (byteLength > MAX_SERIALIZED_BYTES) {
+    return {
+      ok: false,
+      reason: 'oversized-save',
+      detail: `Save size ${byteLength} exceeds limit of ${MAX_SERIALIZED_BYTES} bytes`,
+    };
+  }
+
+  let envelope;
+  try {
+    envelope = JSON.parse(text);
+  } catch (err) {
+    return { ok: false, reason: 'malformed-json', detail: err.message };
+  }
+
+  const validation = validateSaveEnvelope(envelope);
+  if (!validation.ok) return validation;
+  const { preferences: prefs, statistics: stats, session: sess } = envelope;
+  const { seed, drawCount, rulesVersion, shuffleVersion } = sess.options;
+  const replay = replayCommands(sess);
+  if (!replay.ok) return replay;
+  const { snapshots, commands: frozenCommands } = replay;
 
   const cursorHasWin = snapshots.slice(0, sess.cursor + 1).some((s) => isWon(s));
   if (cursorHasWin && !sess.winRecorded) {
