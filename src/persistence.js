@@ -351,7 +351,12 @@ export function restoreSession(text) {
 
     snapshots.push(result.state);
     currentBoard = result.state;
-    frozenCommands.push(Object.freeze(cleanCommandForSerialization(rawCmd)));
+    const command = cleanCommandForSerialization(rawCmd);
+    if (command.type === 'move') {
+      Object.freeze(command.from);
+      Object.freeze(command.to);
+    }
+    frozenCommands.push(Object.freeze(command));
   }
 
   const cursorHasWin = snapshots.slice(0, sess.cursor + 1).some((s) => isWon(s));

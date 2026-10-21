@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { createGame } from '../../src/engine/cards.js';
-import { isWon } from '../../src/engine/game.js';
+import { getLegalMoves, isWon } from '../../src/engine/game.js';
 import {
   MAX_COMMANDS,
   MAX_SERIALIZED_BYTES,
@@ -96,6 +96,28 @@ describe('T007 persistence: serialization, restore and storage handling', () => 
     expect(restoredMeta.revision).toBe(3);
     expect(restoredMeta.savedAt).toBe('2026-10-10T12:30:00.000Z');
     expect(restoredMeta.preferences).toEqual({ drawCount: 1, touchHelpSeen: true });
+  });
+
+  test.each([false, true])('restored transfer commands resist mutation, including redo tail: %s', (undone) => {
+    let session = createSession({ seed: 42, drawCount: 1 });
+    const command = getLegalMoves(session.state).find(move => move.type === 'move');
+    session = execute(session, command).session;
+    const afterMove = session.state;
+    if (undone) session = undo(session);
+
+    const result = restoreSession(serializeSession(session));
+    expect(result.ok).toBe(true);
+    const restored = result.session;
+    for (const field of ['from', 'to']) {
+      expect(Object.isFrozen(restored.commands[0][field])).toBe(true);
+      expect(() => { restored.commands[0][field].index = 99; }).toThrow(TypeError);
+    }
+    const roundTrip = restoreSession(serializeSession(restored));
+    expect(roundTrip.ok).toBe(true);
+    expect(roundTrip.session.commands).toEqual(session.commands);
+    expect(roundTrip.session.state).toEqual(session.state);
+    expect(roundTrip.session.statistics).toEqual(session.statistics);
+    expect(redo(roundTrip.session).state).toEqual(afterMove);
   });
 
   test('round-trip preserves history, cursor, and complete redo tail', () => {
