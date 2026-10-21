@@ -232,7 +232,8 @@ export function createApp({
   async function acquireLock() {
     if (lockManager && typeof lockManager.request === 'function') {
       try {
-        lockManager.request(LOCK_NAME, { ifAvailable: true }, async (lock) => {
+        await lockManager.request(LOCK_NAME, { ifAvailable: true }, async (lock) => {
+          if (isDestroyed) return;
           if (!lock) {
             isWriter = false;
             hasConflict = true;
@@ -249,9 +250,10 @@ export function createApp({
             releaseLockFn = resolve;
           });
         });
-      } catch (err) {
-        // Fallback if request fails
+      } catch {
+        if (isDestroyed) return;
         setupFallbackOwnership();
+        notifyListeners();
       }
     } else {
       setupFallbackOwnership();
@@ -261,7 +263,7 @@ export function createApp({
   function setupFallbackOwnership() {
     isWriter = true;
     hasConflict = false;
-    lockNotice = null;
+    lockNotice = 'Blokada zapisu jest niedostępna. Korzystaj z jednej karty gry.';
   }
 
   function checkFallbackConflictBeforeWrite() {

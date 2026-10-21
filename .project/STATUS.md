@@ -1,6 +1,6 @@
 # Project status
 
-T032 IN_PROGRESS (2026-10-21): #1 d1e05e4, #2 2282274 committed. #3 read-only guards/UI validated: 47 unit, 29 E2E, build pass. Commit before #4 asynchronous locks. Preserve both unrelated diagnostic JSON files; see reports/T032.md.
+T032 IN_PROGRESS (2026-10-21): #1 d1e05e4, #2 2282274, #3 1440869 committed. #4 async lock rejection/teardown validated by 48 unit/7 E2E/build. Commit before #5 controller teardown. Preserve both unrelated diagnostic JSON files; see reports/T032.md.
 
 T031 REVIEW (2026-10-21): read-only audit delivered with seven prioritized findings: timer focus loss, ungated deployment, read-only moves, async lock rejection, incomplete controller teardown, dead hint variables and stale README. ESLint 88 files/51 warnings/0 errors, npm audit 0 vulnerabilities; four behavior probes reproduced. See reports/T031.md. No runtime edits; preserve both diagnostic JSON files. T030 final CI 39663303115 and Pages pass.
 

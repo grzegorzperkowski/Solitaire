@@ -1,6 +1,6 @@
 # Fresh-session handoff
 
-T032 IN_PROGRESS (2026-10-21): #1 d1e05e4 and #2 2282274 committed; #3 read-only controller/UI repair validated by 47 unit/29 E2E/build, commit before #4 async locks. Temporary recovery play and export remain available. Hosted verification awaits explicit push. Preserve both diagnostic JSON files; see reports/T032.md. Commit each issue before the next.
+T032 IN_PROGRESS (2026-10-21): #1 d1e05e4, #2 2282274, #3 1440869 committed. #4 awaits commit after 48 unit/7 E2E/build pass; lock rejection falls back, late callbacks cannot reactivate ownership. Next #5 controller teardown. Hosted verification awaits explicit push. Preserve both diagnostic JSON files; see reports/T032.md. Commit each issue before the next.
 
 T031 REVIEW (2026-10-21): seven-finding audit in reports/T031.md, normalized ESLint and probe JSON evidence committed beside it. Temporary CLI reports/reproduction script in `.cache/T031-*`. No fixes applied. Await coordinator acceptance and explicit selection of implementation scope; no successor or push. T030 final CI 39663303115/Pages pass. Preserve both untracked diagnostic JSON files.
 

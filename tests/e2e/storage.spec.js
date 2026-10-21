@@ -31,6 +31,22 @@ test.describe('T008 storage and tab ownership E2E', () => {
     expect(state.isPaused).toBe(true);
   });
 
+  test('a rejected Web Locks request enables visible fallback and playable persistence', async ({ page }) => {
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, 'locks', { value: {
+        request: () => Promise.reject(new Error('Denied by browser policy')),
+      } });
+    });
+    await page.goto('/');
+    await expect(page.locator('#notice-banner')).toContainText('Korzystaj z jednej karty gry.');
+    await page.locator('#stock-container').click();
+    await expect(page.locator('#moves-display')).toHaveText('1');
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.save')).session.cursor)).toBe(1);
+    expect(errors).toEqual([]);
+  });
+
   test('two tabs enforce single-writer ownership through Web Locks', async ({ context }) => {
     const page1 = await context.newPage();
     await page1.goto('/');

@@ -175,6 +175,9 @@ T032 ownership regression (T14): a denied lock or newer stored revision rejects
 commands before session/history/statistics/preferences change. Read-only clock
 stays frozen, board and replacement controls are disabled, menu/export remain
 available, and temporary play after unreadable/inaccessible storage still works.
+Rejected Web Locks promises must activate and announce fallback without an
+unhandled rejection. Late callbacks/rejections after destroy must not regain
+ownership or keep a lock held.
 
 T028 p95 checkpoint (2026-10-13): basic `smart-hints-optimization.test.js`
 checks one-command information instead of waste padding, equal-F direct

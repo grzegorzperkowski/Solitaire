@@ -435,6 +435,49 @@ describe('T008 app controller: clock, lifecycle and ownership', () => {
     } finally { app.destroy(); }
   });
 
+  test('a rejected Web Lock request enables fallback and notifies subscribers', async () => {
+    const storage = createMockStorage();
+    const app = createApp({ storage, lockManager: { request: () => Promise.reject(new Error('denied')) } });
+    const listener = vi.fn();
+    app.subscribe(listener);
+    app.init();
+    try {
+      await Promise.resolve();
+      expect(app.getState().isWriter).toBe(true);
+      expect(app.getState().lockNotice).toContain('jednej karty');
+      expect(listener.mock.lastCall[0].isWriter).toBe(true);
+      expect(app.executeCommand({ type: 'draw' }).ok).toBe(true);
+      expect(storage.getItem(STORAGE_KEY)).toBeTruthy();
+    } finally { app.destroy(); }
+  });
+
+  test('a Web Lock callback after destroy releases immediately without becoming a writer', async () => {
+    let callback;
+    const app = createApp({ storage: createMockStorage(), lockManager: {
+      request: (_name, _options, fn) => { callback = fn; return Promise.resolve(); },
+    } }).init();
+    app.destroy();
+    let released = false;
+    const held = callback({ name: LOCK_NAME }).then(() => { released = true; });
+    try {
+      await Promise.resolve();
+      expect(released).toBe(true);
+      expect(app.getState().isWriter).toBe(false);
+    } finally { app.destroy(); await held; }
+  });
+
+  test('a Web Lock rejection after destroy cannot reactivate fallback ownership', async () => {
+    let reject;
+    const app = createApp({ storage: createMockStorage(), lockManager: {
+      request: () => new Promise((_resolve, fail) => { reject = fail; }),
+    } }).init();
+    app.destroy();
+    reject(new Error('late rejection'));
+    await Promise.resolve();
+    expect(app.getState().isWriter).toBe(false);
+    expect(app.getState().lockNotice).toBe(null);
+  });
+
   test('Web Lock grants exclusive writer to first tab and denies second tab', async () => {
     const storage = createMockStorage();
     let lockHolder = null;
