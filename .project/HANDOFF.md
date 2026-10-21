@@ -1,6 +1,6 @@
 # Fresh-session handoff
 
-T030 IN_PROGRESS (2026-10-21): coordinator resumed for failing CI. Run 39661943688 fails `npm test` before E2E: experiment loaders need `2d1ecfc`, absent from default shallow checkout. Change only CI checkout depth, run full CI checks, push and verify the new run. Both untracked diagnostic JSON files remain unrelated.
+T030 REVIEW (2026-10-21): delivery `fc36075` pushed. CI fetches full history for experiment loaders; html uses manipulation while face-up/selected cards retain pinch-zoom for native touch drag. 379 unit/13 simulation/98 E2E/build pass locally, GitHub CI 39662907837 passes, Pages deployment 39662907417 succeeds. Await coordinator acceptance; physical pinch/zoom evidence remains unavailable. See report; preserve both untracked diagnostic JSON files.
 
 T030 REVIEW (2026-10-21): double-tap zoom prevention for buttons/face-up cards complete. Build and 34 targeted E2E tests pass. See `.project/reports/T030.md`; await coordinator acceptance. Physical-device zoom/drag verification remains unavailable. Preserve unrelated `solitaire-stan-2284836135-draw1-114.json` and `solitaire-stan-42-draw1-89.json`.
 

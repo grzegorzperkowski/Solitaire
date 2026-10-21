@@ -48,7 +48,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 | [T027](tasks/T027.md) | P7 follow-up | Reachable progress detection | T014, T007, T008, T015 | DONE | [Report](reports/T027.md); [spec](tasks/T027-spec.md) |
 | [T028](tasks/T028.md) | P7 follow-up | SmartHint goal-directed hints | T014, T027 | DONE | Coordinator accepted 2026-10-21 at `8a12904`; no production promotion. [Report](reports/T028-x1-x2-rd.md). |
 | [T029](tasks/T029.md) | P8 follow-up | Random victory animations | T015, T017 | DONE | Coordinator accepted 2026-10-12 at `2ea1a1e`; [report](reports/T029.md) |
-| [T030](tasks/T030.md) | P5 follow-up | Prevent double-click zoom on buttons and cards | T010 | IN_PROGRESS | Coordinator resumed 2026-10-21 to diagnose/fix failing CI; [report](reports/T030.md). |
+| [T030](tasks/T030.md) | P5 follow-up | Prevent double-click zoom on buttons and cards | T010 | REVIEW | CI history and native drag repaired at `fc36075`; full local/GitHub CI passed. [Report](reports/T030.md). |
 
 ## Selection and model suitability
 

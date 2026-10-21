@@ -1,6 +1,6 @@
 # Project status
 
-T030 IN_PROGRESS (2026-10-21): coordinator reported failed GitHub CI. Run 39661943688 fails importing three experiment suites because shallow checkout omits pinned commit `2d1ecfc`. Fetch full history in CI and run its checks; preserve both diagnostic JSON files.
+T030 REVIEW (2026-10-21): `fc36075` fixes CI shallow history and the native touch-drag regression caused by per-card manipulation. Document-level manipulation now suppresses double-tap zoom while cards retain pinch-only behavior. Local 379 unit/13 simulation/98 E2E/build pass; GitHub CI run 39662907837 and Pages deployment pass. Await coordinator acceptance; physical-device zoom checks remain. Both diagnostic JSON files preserved.
 
 T030 REVIEW (2026-10-21): double-tap zoom prevention applied to buttons and face-up cards. Build and 34 accessibility/gameplay E2E tests pass. Await coordinator acceptance; physical device check remains. Preserve unrelated diagnostic JSON. See [report](reports/T030.md).
 
