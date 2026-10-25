@@ -61,6 +61,20 @@ test.describe('T009 Responsive board and SVG cards layout', () => {
     });
   }
 
+  for (const width of [390, 828, 1440]) {
+    test(`corner ranks retain vertical margins at ${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/');
+      await expect(page.locator('.card-rank').first()).toBeVisible();
+      const margins = await page.locator('.card-rank').evaluateAll((ranks) => ranks.map((rank) => {
+        const glyph = rank.getBoundingClientRect();
+        const card = rank.closest('.card-node').getBoundingClientRect();
+        return Math.min(glyph.top - card.top, card.bottom - glyph.bottom);
+      }));
+      for (const margin of margins) expect(margin).toBeGreaterThanOrEqual(2);
+    });
+  }
+
   test('typography and card band constraints meet REQUIREMENTS U03', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 568 });
     await page.goto('/');

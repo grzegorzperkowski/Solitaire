@@ -1,3 +1,7 @@
+# T009 desktop card margins REVIEW — 2026-10-25
+
+Fixed desktop corner clipping: 20px corner height could not contain 33px ranks (browser regression measured -5.64px margin). Shared CSS now grows corner height with rank size, retaining 20px on phones. Regression RED on 828/1440px, GREEN after fix. Build, 6 unit/15 Chromium layout checks pass; 1440px and 320px screenshots inspected. Await coordinator PC acceptance; no push or physical phone/Safari verification. Both diagnostic JSON files preserved.
+
 # T038 test repair REVIEW — 2026-10-25
 
 Coordinator assigned ownership-retry.spec repair. Test controls document.hidden alongside foreground events and probes actual Web Lock availability after writer closure before testing the retry trigger. Runtime unchanged. 30 repeated ownership/26 related Chromium checks and build pass; lint 0 errors/17 existing warnings. Await acceptance; no push or physical-device/full-suite checks. Both unrelated JSON diagnostics preserved. See reports/T038.md.

@@ -354,7 +354,7 @@ body {
   gap: 2px;
   z-index: 3;
   padding: 1px 2px;
-  height: 20px;
+  height: max(20px, calc(var(--card-width) * 0.32 + 6px));
   pointer-events: none;
 }
 
