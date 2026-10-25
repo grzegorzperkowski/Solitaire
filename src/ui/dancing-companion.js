@@ -101,8 +101,6 @@ export function createDancingCompanion(host, random = Math.random) {
         <path d="M -40 -75 Q 0 -125 40 -75 Q 20 -84 0 -75 Q -20 -84 -40 -75 Z" fill="#e9ba57"/>
         <path d="M -40 -75 L -12 -10 M 40 -75 L 12 -10 M 0 -75 L 0 -10"/>
       </g>
-      <rect data-hit x="-35" y="-65" width="70" height="105" fill="transparent" stroke="none"
-        role="button" tabindex="0" aria-label="Zatrzymaj ludzika. Przeciągnij, aby go podnieść."/>
       <path data-part="leftLeg"/><path data-part="rightLeg"/>
       <path data-part="back"/><path data-part="leftArm"/><path data-part="rightArm"/>
       <g data-part="head">
@@ -112,14 +110,13 @@ export function createDancingCompanion(host, random = Math.random) {
         <path d="M -6 5 Q 0 12 7 4" stroke-width="1.9"/>
       </g>
     </g>
-  </svg>`;
+  </svg><button type="button" data-hit aria-label="Zatrzymaj ludzika. Przeciągnij, aby go podnieść."></button>`;
   const svg = host.querySelector('svg');
   const figure = host.querySelector('[data-figure]');
   const hit = host.querySelector('[data-hit]');
   const parachute = host.querySelector('[data-parachute]');
   const events = new AbortController();
   host.removeAttribute('aria-hidden');
-  svg.removeAttribute('aria-hidden');
   const parts = Object.fromEntries(Array.from(host.querySelectorAll('[data-part]'), node => [node.dataset.part, node]));
   let state = null;
   let raf = null;
@@ -129,6 +126,7 @@ export function createDancingCompanion(host, random = Math.random) {
   let pageHidden = false;
   let destroyed = false;
   let sceneWidth = 400;
+  let scale = 1;
   let pose = sampleCompanionPose('sway', 0);
   let stopped = false;
   let gesture = null;
@@ -137,8 +135,9 @@ export function createDancingCompanion(host, random = Math.random) {
 
   function place() {
     figure.setAttribute('transform', `translate(${offset[0]},${offset[1]})`);
-    hit.setAttribute('x', pose.hip[0] - 35);
-    hit.setAttribute('y', pose.hip[1] - 65);
+    hit.style.left = `${(pose.hip[0] + offset[0]) * scale}px`;
+    hit.style.top = `${Math.min(140 * scale - 32, (pose.hip[1] - 12.5 + offset[1]) * scale)}px`;
+    hit.style.height = `${Math.max(64, 105 * scale)}px`;
     parachute.setAttribute('transform', `translate(${pose.head[0]},${pose.head[1]})`);
     parachute.style.display = falling ? '' : 'none';
     host.dataset.interaction = gesture ? 'held' : falling ? 'falling' : stopped ? 'stopped' : 'dancing';
@@ -185,6 +184,7 @@ export function createDancingCompanion(host, random = Math.random) {
     const visible = !host.hidden && !doc.hidden && !pageHidden && state.isWriter && !state.hasConflict
       && !state.isPaused && !state.activeDialog && !state.isWon && !state.victoryAnimation;
     svg.style.visibility = visible ? 'visible' : 'hidden';
+    hit.hidden = !visible;
     if ((!visible && (gesture || falling)) || (media.matches && falling)) {
       resetPosition();
     }
@@ -258,7 +258,11 @@ export function createDancingCompanion(host, random = Math.random) {
     if (hit.hasPointerCapture(event.pointerId)) hit.releasePointerCapture(event.pointerId);
   }
   for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) hit.addEventListener(type, release, { signal: events.signal });
-  hit.addEventListener('click', event => event.stopPropagation(), { signal: events.signal });
+  hit.addEventListener('click', event => {
+    event.stopPropagation();
+    if (event.detail === 0) toggle();
+  }, { signal: events.signal });
+  hit.addEventListener('contextmenu', event => event.preventDefault(), { signal: events.signal });
   hit.addEventListener('keydown', event => {
     if (event.key !== 'Enter' && event.key !== ' ') return;
     event.preventDefault();
@@ -277,6 +281,7 @@ export function createDancingCompanion(host, random = Math.random) {
     const { width, height } = host.getBoundingClientRect();
     if (width <= 0 || height <= 0) return;
     resetPosition();
+    scale = height / 140;
     sceneWidth = width * 140 / height;
     svg.setAttribute('viewBox', `0 0 ${sceneWidth} 140`);
     draw(sampleCompanionPose(media.matches ? 'sway' : action, media.matches ? 0 : elapsed, sceneWidth));

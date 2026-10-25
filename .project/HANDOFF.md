@@ -1,3 +1,7 @@
+# T035 iPhone hold fix REVIEW — 2026-10-25
+
+Replaced small SVG hit rect with transparent native HTML button (minimum 64x64 CSS px), local pinch-zoom/context-menu handling, same pointer capture and lifecycle guards. Exact offset hit test RED to GREEN; 650ms native touch hold while dancing, drag/release covered. 24 companion Chromium/23 unit/build pass; final lifecycle visibility follow-up: 3 Chromium pass. Lint 0 errors/17 existing warnings. Physical iPhone 15 Pro confirmation remains open; no push. Both diagnostics preserved.
+
 # T035 pointer interaction REVIEW — 2026-10-25
 
 Click/Enter/Space stop and resume the figure; captured mouse/touch dragging lifts it, release opens a parachute and lowers it to the strip, leaving it stopped. Reduced motion lands immediately. UI-only state, no engine/save changes. Build, 438 unit tests, final 23 companion Chromium tests and lint (0 errors/17 warnings, one new sync complexity warning) pass. Parachute screenshot inspected. Await coordinator acceptance; no push or physical-device/Safari verification. Preserve both unrelated diagnostic JSON files.

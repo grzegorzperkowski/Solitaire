@@ -395,10 +395,39 @@ test('T035 native touch lifts from compact strip; Menu and resize cancel the ges
     await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
     await expect(host).toHaveAttribute('data-interaction', 'stopped');
     await expect(host.locator('[data-parachute]')).toBeHidden();
+    await expect(hit).toBeHidden();
     await page.getByRole('button', { name: 'Wróć do gry' }).click();
+    await expect(hit).toBeVisible();
     await page.setViewportSize({ width: 320, height: 568 });
     await expect(host).toHaveAttribute('data-running', 'false');
     await expect(host.locator('[data-figure]')).toHaveAttribute('transform', 'translate(0,0)');
+    await cdp.detach();
+  } finally { await context.close(); }
+});
+
+test('T035 compact touch target accepts a finger near the figure after holding', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 670 }, hasTouch: true, isMobile: true });
+  const page = await context.newPage();
+  try {
+    await page.addInitScript(() => { Math.random = () => 0; });
+    await page.goto('http://localhost:5173/');
+    await enableCompanion(page);
+    const host = page.locator('#dancing-companion');
+    const hit = host.locator('[data-hit]');
+    // A finger can land 26 CSS px from the body, inside the 64px finger target.
+    const box = await hit.boundingBox();
+    const x = box.x + box.width / 2 - 26;
+    const y = box.y + box.height / 2;
+    expect(await page.evaluate(({ x, y }) => Boolean(document.elementFromPoint(x, y)?.closest('[data-hit]')), { x, y })).toBe(true);
+    const cdp = await context.newCDPSession(page);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y, id: 1 }] });
+    await expect(host).toHaveAttribute('data-interaction', 'held');
+    await page.waitForTimeout(650);
+    await expect(host).toHaveAttribute('data-interaction', 'held');
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x - 70, y: y - 100, id: 1 }] });
+    expect((await hit.boundingBox()).y).toBeLessThan(box.y - 80);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await expect(host).toHaveAttribute('data-interaction', 'falling');
     await cdp.detach();
   } finally { await context.close(); }
 });

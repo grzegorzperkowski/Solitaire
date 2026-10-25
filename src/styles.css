@@ -445,13 +445,22 @@ body {
 }
 
 .dancing-companion [data-hit] {
-  pointer-events: all;
+  position: absolute;
+  width: 64px;
+  min-height: 64px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  touch-action: pinch-zoom;
   cursor: grab;
 }
 
 .dancing-companion [data-hit]:focus-visible {
-  stroke: #e9ba57;
-  stroke-width: 2;
+  outline: 2px solid #e9ba57;
+  outline-offset: -2px;
 }
 
 .dancing-companion[data-interaction="held"] [data-hit] { cursor: grabbing; }
