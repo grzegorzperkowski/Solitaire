@@ -338,7 +338,7 @@ T035 compact layout: at 390x670 show the real long hint text beside a 72px compa
 
 T035 toggle diagnosis: native touchscreen checkbox and label toggle on 390x670/844 and persist on reload. Reader Menu explains read-only state; disabled toggle cannot write. Close writer and reload reader to restore enabled setting change.
 
-T035 pointer regressions: dancing-companion.spec.js checks click/keyboard stop/resume, stationary geometry, captured drag lift, visible parachute, progressive descent and stopped landing; reduced-motion immediate landing; native CDP touch from compact strip, Menu cancellation and resize reset. Existing card drag, geometry, lifecycle/teardown and persistence cases remain required. Inspect parachute screenshot; physical Safari/touch/pinch remains separate evidence.
+T035 pointer regressions: dancing-companion.spec.js checks click/keyboard stop/resume, stationary geometry, captured drag lift, visible parachute, progressive descent, gentle knee bend/recovery and automatic dance resume; reduced-motion immediate landing; native CDP touch from compact strip through landing and renewed leg geometry, Menu cancellation and resize reset. Existing card drag, geometry, lifecycle/teardown and persistence cases remain required. Inspect parachute screenshot; physical Safari/touch/pinch remains separate evidence.
 
 T035 iPhone hold regression: use exact elementFromPoint hit testing 26 CSS px from the moving figure center in compact layout, then native CDP touch held 650ms, drag upwards and release into parachute descent. This failed with the small SVG target. The HTML button stays at least 64x64 CSS px and avoids SVG-specific interaction; physical iPhone 15 Pro/Safari confirmation is still required.
 

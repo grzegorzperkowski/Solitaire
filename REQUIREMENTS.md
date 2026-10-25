@@ -161,7 +161,7 @@ budgets and UI contracts. No guarantee of solving every winnable deal. See the
 
 Fresh successful moves briefly highlight a revealed tableau card or emptied column. Foundation Aces pulse gently; consecutive foundation transfers gain glow strength up to the fourth card. Any other successful command breaks the streak. Effects last 456ms, do not block input, and are omitted for reduced motion and history navigation/restore. No scoring, sound or persisted animation state.
 
-T035 companion interaction: clicking the enabled figure stops it; clicking again resumes. Holding and dragging lifts/repositions it; release opens a parachute and slowly lowers it to the bottom strip, where it remains stopped. Keyboard Enter/Space toggles stop/resume. Reduced motion lands immediately without automatic descent animation. Gestures never change game history or persisted board state.
+T035 companion interaction: clicking the enabled figure stops it; clicking again resumes. Holding and dragging lifts/repositions it; release opens a parachute and slowly lowers it to the bottom strip, where it gently bends its knees for 600ms and resumes dancing. Keyboard Enter/Space toggles stop/resume. Reduced motion lands immediately without automatic descent animation. Gestures never change game history or persisted board state.
 
 ## T037 — Independent PWA and browser persistence
 

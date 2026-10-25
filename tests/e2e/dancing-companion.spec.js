@@ -373,7 +373,7 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       const lifted = await hit.boundingBox();
       await expect.poll(async () => (await hit.boundingBox()).y).toBeGreaterThan(lifted.y + 15);
     }
-    await expect(host).toHaveAttribute('data-interaction', 'stopped', { timeout: 8000 });
+    await expect(host).toHaveAttribute('data-interaction', 'dancing', { timeout: 8000 });
     await expect(host.locator('[data-parachute]')).toBeHidden();
     await expect(page.locator('#moves-display')).toHaveText('0');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
@@ -436,6 +436,13 @@ test('T035 compact touch target accepts a finger near the figure after holding',
     expect((await hit.boundingBox()).y).toBeLessThan(box.y - 80);
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
     await expect(host).toHaveAttribute('data-interaction', 'falling');
+    await expect(host).toHaveAttribute('data-interaction', 'landing', { timeout: 8000 });
+    await page.waitForTimeout(250);
+    await page.screenshot({ path: 'test-results/screenshots/companion-landing.png' });
+    await expect(host.locator('[data-parachute]')).toBeHidden();
+    await expect(host).toHaveAttribute('data-interaction', 'dancing');
+    const landed = await host.locator('[data-part="leftLeg"]').getAttribute('d');
+    await expect.poll(() => host.locator('[data-part="leftLeg"]').getAttribute('d')).not.toBe(landed);
     await cdp.detach();
   } finally { await context.close(); }
 });

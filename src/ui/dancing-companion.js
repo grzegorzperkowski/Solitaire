@@ -19,7 +19,7 @@ function smooth(value) {
 }
 
 export function sampleCompanionPose(action, elapsedMs, sceneWidth = 400) {
-  const p = Math.max(0, Math.min(1, elapsedMs / COMPANION_DURATIONS[action]));
+  const p = Math.max(0, Math.min(1, elapsedMs / (action === 'landing' ? 600 : COMPANION_DURATIONS[action])));
   // Every phrase meets the same resting pose with zero velocity at its ends.
   const envelope = Math.sin(Math.PI * p) ** 2;
   const beat = p * Math.PI * (action === 'run' || action === 'slide' ? 16 : 8);
@@ -35,7 +35,13 @@ export function sampleCompanionPose(action, elapsedMs, sceneWidth = 400) {
   let arms = [-55 - swing * 50, -25, 55 - swing * 50, 25];
   let legs = [-12 - swing * 12, -8 + bounce * 12, 12 - swing * 12, 8 - bounce * 12];
 
-  if (action === 'disco') {
+  if (action === 'landing') {
+    x = center;
+    y = 91 + envelope * 5;
+    lean = bend = headTilt = 0;
+    arms = [-55, -25, 55, 25];
+    legs = [-12 - envelope * 18, -8 + envelope * 44, 12 + envelope * 18, 8 - envelope * 44];
+  } else if (action === 'disco') {
     arms = [-55 - envelope * 90 - swing * 25, -25 - swing * 30, 55 + swing * 65, 25 + bounce * 20];
     lean = -swing * 12;
     bend = swing * 16;
@@ -131,6 +137,7 @@ export function createDancingCompanion(host, random = Math.random) {
   let stopped = false;
   let gesture = null;
   let falling = false;
+  let landing = null;
   let offset = [0, 0];
 
   function place() {
@@ -140,7 +147,7 @@ export function createDancingCompanion(host, random = Math.random) {
     hit.style.height = `${Math.max(64, 105 * scale)}px`;
     parachute.setAttribute('transform', `translate(${pose.head[0]},${pose.head[1]})`);
     parachute.style.display = falling ? '' : 'none';
-    host.dataset.interaction = gesture ? 'held' : falling ? 'falling' : stopped ? 'stopped' : 'dancing';
+    host.dataset.interaction = gesture ? 'held' : falling ? 'falling' : landing ? 'landing' : stopped ? 'stopped' : 'dancing';
     hit.setAttribute('aria-label', stopped ? 'Wznów ruch ludzika. Przeciągnij, aby go podnieść.' : 'Zatrzymaj ludzika. Przeciągnij, aby go podnieść.');
   }
 
@@ -161,9 +168,29 @@ export function createDancingCompanion(host, random = Math.random) {
     if (falling) {
       const ground = 127 - Math.max(pose.leftLeg[2][1], pose.rightLeg[2][1]);
       offset[1] = Math.min(ground, offset[1] + delta * 0.09);
-      if (offset[1] >= ground) falling = false;
+      if (offset[1] >= ground) {
+        falling = false;
+        landing = { elapsed: 0, x: offset[0] + pose.hip[0] - sceneWidth / 2 };
+        offset = [landing.x, 0];
+        draw(sampleCompanionPose('landing', 0, sceneWidth));
+      }
       previousTime = timestamp;
       place();
+      sync();
+      return;
+    }
+    if (landing) {
+      landing.elapsed += delta;
+      offset[0] = landing.x * (1 - smooth(landing.elapsed / 600));
+      draw(sampleCompanionPose('landing', landing.elapsed, sceneWidth));
+      if (landing.elapsed >= 600) {
+        landing = null;
+        stopped = false;
+        elapsed = 0;
+        action = chooseCompanionAction(null, random);
+        place();
+      }
+      previousTime = timestamp;
       sync();
       return;
     }
@@ -185,10 +212,10 @@ export function createDancingCompanion(host, random = Math.random) {
       && !state.isPaused && !state.activeDialog && !state.isWon && !state.victoryAnimation;
     svg.style.visibility = visible ? 'visible' : 'hidden';
     hit.hidden = !visible;
-    if ((!visible && (gesture || falling)) || (media.matches && falling)) {
+    if ((!visible && (gesture || falling || landing)) || (media.matches && (falling || landing))) {
       resetPosition();
     }
-    const running = visible && !media.matches && !gesture && (!stopped || falling);
+    const running = visible && !media.matches && !gesture && (!stopped || falling || landing !== null);
     host.dataset.running = String(running);
     if (!running) {
       if (raf !== null) win.cancelAnimationFrame(raf);
@@ -204,6 +231,7 @@ export function createDancingCompanion(host, random = Math.random) {
     const pointerId = gesture?.id;
     gesture = null;
     falling = false;
+    landing = null;
     offset = [0, 0];
     if (pointerId !== undefined && hit.hasPointerCapture(pointerId)) hit.releasePointerCapture(pointerId);
     place();
@@ -212,6 +240,7 @@ export function createDancingCompanion(host, random = Math.random) {
   function toggle() {
     stopped = !stopped;
     falling = false;
+    landing = null;
     offset = [0, 0];
     place();
     sync();
@@ -223,6 +252,7 @@ export function createDancingCompanion(host, random = Math.random) {
     event.stopPropagation();
     gesture = { id: event.pointerId, x: event.clientX, y: event.clientY, offset: [...offset], moved: false, wasStopped: stopped };
     falling = false;
+    landing = null;
     stopped = true;
     hit.setPointerCapture(event.pointerId);
     place();
@@ -251,7 +281,10 @@ export function createDancingCompanion(host, random = Math.random) {
       toggle();
     } else {
       falling = held.moved && !media.matches;
-      if (!falling) offset = [0, 0];
+      if (!falling) {
+        offset = [0, 0];
+        stopped = !held.moved;
+      }
       place();
       sync();
     }

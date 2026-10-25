@@ -47,6 +47,17 @@ describe('T035 articulated companion', () => {
     expect(changes.size).toBe(4);
   });
 
+  test('landing gently bends both knees and recovers with fixed bone lengths', () => {
+    const rest = sampleCompanionPose('sway', 0);
+    const bent = sampleCompanionPose('landing', 300);
+    expect(bent.hip[1]).toBe(rest.hip[1] + 5);
+    for (const key of ['leftLeg', 'rightLeg']) {
+      expect(Math.abs(bent[key][1][0] - bent.hip[0])).toBeGreaterThan(Math.abs(rest[key][1][0] - rest.hip[0]));
+      for (let i = 1; i < 3; i++) expect(Math.hypot(bent[key][i][0] - bent[key][i - 1][0], bent[key][i][1] - bent[key][i - 1][1])).toBeCloseTo(18);
+    }
+    expect(sampleCompanionPose('landing', 600).hip).toEqual(rest.hip);
+  });
+
   test('running travels, jumping lifts, and dancing bends the back and tilts the head', () => {
     const rest = sampleCompanionPose('sway', 0);
     expect(Math.abs(sampleCompanionPose('run', 1000).hip[0] - rest.hip[0])).toBeGreaterThan(40);

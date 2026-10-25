@@ -1,3 +1,7 @@
+# T035 landing follow-up REVIEW — 2026-10-25
+
+Delivered 600ms knee bend/recovery and automatic dance resume after phone drag. Native-touch regression RED→GREEN; 24 companion unit/24 Chromium/build pass; lint 0 errors/17 warnings. Landing screenshot inspected. Await coordinator acceptance; no physical phone/Safari checks or push. Both unrelated JSON diagnostics preserved.
+
 # T038 REVIEW — 2026-10-25
 
 Menu/foreground/focus retries probe writer availability and reload the latest save before enabling writes. Occupied/rejected probes remain read-only; requests coalesce and destroyed callbacks cannot reload. 54 unit/50 Chromium/build pass; lint 0 errors/17 complexity warnings. Coordinator authorized commit and push; acceptance pending. Preserve both diagnostics; no physical-device verification of the new build. See reports/T038.md.
