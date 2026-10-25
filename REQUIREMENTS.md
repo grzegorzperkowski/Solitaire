@@ -156,3 +156,7 @@ A discovered winning plan has highest priority. History-policy rejection yields
 uncertainty, not NO_STRATEGIC_PROGRESS or a loss. Keep F04, rules, saves, Undo/Redo,
 budgets and UI contracts. No guarantee of solving every winnable deal. See the
 2026-10-15 section of T028-spec for reconstruction, lifecycle and limitations.
+
+## T036 — Small-success feedback
+
+Fresh successful moves briefly highlight a revealed tableau card or emptied column. Foundation Aces pulse gently; consecutive foundation transfers gain glow strength up to the fourth card. Any other successful command breaks the streak. Effects last 180ms, do not block input, and are omitted for reduced motion and history navigation/restore. No scoring, sound or persisted animation state.

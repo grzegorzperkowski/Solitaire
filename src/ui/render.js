@@ -9,6 +9,7 @@ import { renderDialogs } from './dialogs.js';
 import { noProgressMessage } from './progress.js';
 import { formatSmartHintMessage } from './smart-hints.js';
 import { syncVictoryAnimation } from './victory-animation.js';
+import { successFeedback } from './success-feedback.js';
 
 export function formatTime(ms) {
   const totalSec = Math.floor(Math.max(0, ms) / 1000);
@@ -172,6 +173,15 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
     renderFoundations(rootElement, gameState.foundations, selection, legalDestinations);
     renderTableau(rootElement, gameState.tableau, dims, selection, legalDestinations);
     applyMoveFeedback(rootElement, state);
+    if (!state.isPaused && !state.activeDialog && !state.victoryAnimation
+      && !readOnly && !document.hidden
+      && !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+      for (const effect of successFeedback(previous?.session, state.session)) {
+        const target = rootElement.querySelector(effect.target);
+        target?.classList.add(`success-${effect.kind}`);
+        target?.style.setProperty('--success-level', String(effect.level));
+      }
+    }
     if (travel) {
       const card = rootElement.querySelector(`#foundation-${travel.index} .card-node:last-child`);
       if (card) {
@@ -183,7 +193,7 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
         ], { duration: 140, easing: 'ease-out' });
       }
     }
-    container._boardRender = { board: gameState, selection, layoutKey };
+    container._boardRender = { board: gameState, selection, layoutKey, session: state.session };
   }
   renderHint(rootElement, gameState, inputController?.getHint?.());
 

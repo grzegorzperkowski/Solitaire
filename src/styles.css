@@ -680,6 +680,29 @@ body:has(.has-companion) {
   animation: pile-arrival 150ms ease-out;
 }
 
+.card-node.success-reveal,
+.pile-slot.success-empty,
+.card-node.success-streak {
+  animation: success-glow 180ms ease-out;
+}
+
+.card-node.success-ace {
+  animation: success-pulse 180ms ease-out;
+}
+
+@keyframes success-glow {
+  40% {
+    box-shadow: 0 0 calc(3px + var(--success-level) * 2px) calc(1px + var(--success-level) * 1px) #f6d77b;
+  }
+}
+
+@keyframes success-pulse {
+  45% {
+    scale: 1.025;
+    box-shadow: 0 0 calc(3px + var(--success-level) * 2px) calc(1px + var(--success-level) * 1px) #f6d77b;
+  }
+}
+
 .deal-animation-overlay {
   --card-width: clamp(56px, 17vw, 86px);
   --card-height: calc(var(--card-width) * 1.4);
@@ -802,6 +825,7 @@ body:has(.has-companion) {
   .card-node,
   .card-node.move-feedback,
   .pile-slot.move-feedback,
+  .pile-slot.success-empty,
   .shake-animation,
   #win-dialog {
     filter: none;

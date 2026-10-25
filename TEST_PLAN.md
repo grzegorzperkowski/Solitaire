@@ -327,3 +327,7 @@ Device/Safari checks and held-out longer-game validation remain separate evidenc
   modes at 512 states/depth32 and up to500 commands, recording outcomes/cycles,
   source hashes and legal plan replay. This is bounded development evidence,
   not proof of win rate or phone performance. Seed42 has a separate app-budget run.
+
+## T036 — Small-success animation gates (T09/T19/T22)
+
+Unit tests cover atomic reveal, empty column, Ace, consecutive foundation intensity capped at four, reset by draw, history navigation, initial/unchanged render, new attempt and a fresh branch after Undo. Chromium renderer tests use valid 52-card fixtures at 320px: actual CSS effect/duration/level, empty slot, preserved focus, no horizontal overflow, Undo/Redo suppression and reduced-motion bypass. Existing input/accessibility/completion checks guard interaction and travel. Physical Safari/Android aesthetics and performance remain unverified.

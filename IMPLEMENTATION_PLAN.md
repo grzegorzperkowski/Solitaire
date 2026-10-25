@@ -228,3 +228,7 @@ No change to formal NO_PROGRESS, persistence, or optional completion scope.
 - [ ] When deployment is requested, publish the tested artifact and smoke-test its actual HTTPS URL/subpath, restore and offline behavior. Otherwise hand off the deployable artifact and instructions.
 
 **Exit:** all mandatory requirements have recorded evidence, 10,000 seeds per mode × up to 1,000 steps pass release simulation, required browser/device checks pass, and no solver/solvability claim is made. A blocked physical-device check is reported as incomplete production verification, not replaced by emulation.
+
+## P8 follow-up — T036
+
+Coordinator assigned four small-success effects on 2026-10-25. Scope and acceptance live in [.project/tasks/T036.md](.project/tasks/T036.md); verification and limitations live in [.project/reports/T036.md](.project/reports/T036.md). This does not accept the remaining P8 accessibility/performance gate.

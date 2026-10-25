@@ -1,3 +1,7 @@
+# T036 REVIEW — 2026-10-25
+
+Four small-success effects implemented (180ms glow/pulse; foundation streak capped at four). Fresh commands only, reduced-motion bypass, no engine/save changes. 438 unit/40 Chromium/build pass; lint 0 errors/16 existing warnings. See reports/T036.md. Await coordinator acceptance; no push. Preserve both unrelated diagnostic JSON files. Physical-device aesthetics/performance unverified.
+
 # T032 focus-test follow-up REVIEW — 2026-10-25
 
 Coordinator assigned the clock-focus CI failure. Reproduced a race with draw focus restoration in requestAnimationFrame; the test now awaits that frame before focusing the card. Build, 39 accessibility checks and 10 focused repetitions pass; lint has 0 errors/16 existing warnings. Runtime unchanged. Await coordinator acceptance; no push. Preserve both diagnostic JSON files. See reports/T032.md.
