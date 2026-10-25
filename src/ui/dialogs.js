@@ -121,6 +121,7 @@ function renderMenuHtml(readOnly) {
         <button id="btn-dialog-close" class="dialog-close-btn" aria-label="Zamknij menu">✕</button>
       </header>
       <div class="dialog-body">
+        ${readOnly ? '<p class="notice-banner" role="status">Tryb tylko do odczytu. Aby rozpocząć grę lub zmienić ustawienia, zamknij pozostałe karty pasjansa i odśwież tę kartę.</p>' : ''}
         <button id="btn-menu-new-game" class="menu-action-btn" ${readOnly ? 'disabled' : ''}>Nowa gra</button>
         <button id="btn-menu-restart" class="menu-action-btn" ${readOnly ? 'disabled' : ''}>Rozdaj ponownie</button>
         <button id="btn-menu-statistics" class="menu-action-btn">Statystyki</button>

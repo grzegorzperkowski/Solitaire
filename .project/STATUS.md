@@ -1,3 +1,7 @@
+# T035 toggle diagnosis REVIEW — 2026-10-25
+
+Coordinator confirms New Game/redeal disabled while Help/Statistics work: read-only ownership guard. Added Menu explanation and close-other-tabs/reload guidance. Two touch cases pass; 20 companion Chromium/build pass; recovery focused test passes; lint 0 errors/16 existing warnings. Await acceptance; no push or physical Safari verification. Both diagnostics preserved.
+
 # T035 adaptive compact layout REVIEW — 2026-10-25
 
 Delivered portrait compact layout at <=599px width/<=740px height: hint bubble beside 72px figure, build in Menu; taller/fullscreen and landscape preserve spacious layout. 18 Chromium/build pass; lint 0 errors/16 existing warnings. Compact/roomy screenshots inspected. Await coordinator acceptance; no push, physical Safari check or full suite. Both diagnostics preserved.

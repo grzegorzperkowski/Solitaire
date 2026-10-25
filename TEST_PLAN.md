@@ -335,3 +335,5 @@ Unit tests cover atomic reveal, empty column, Ace, consecutive foundation intens
 T035 placement regression: at all seven existing viewports, assert the companion strip bottom equals both footer top and Menu button top. Notices (including wrapped/200% text) remain above the strip; keep native scrolling and direct onscreen Menu checks.
 
 T035 compact layout: at 390x670 show the real long hint text beside a 72px companion, with onscreen controls and hidden board build; resize to 390x844 to restore full-width scene/build and larger board, then back to compact. Menu must expose build. Existing seven-viewport geometry expects compact strip at portrait <=599x740, spacious otherwise; keep wrapped 200% text and native touch coverage.
+
+T035 toggle diagnosis: native touchscreen checkbox and label toggle on 390x670/844 and persist on reload. Reader Menu explains read-only state; disabled toggle cannot write. Close writer and reload reader to restore enabled setting change.

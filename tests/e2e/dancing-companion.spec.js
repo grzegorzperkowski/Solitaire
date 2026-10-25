@@ -114,11 +114,18 @@ test('T035 a read-only tab cannot change the setting or animate the companion', 
   await reader.goto('/');
   await expect(reader.locator('#dancing-companion')).toHaveAttribute('data-running', 'false');
   await reader.getByRole('button', { name: 'Otwórz menu gry' }).click();
+  await expect(reader.getByRole('dialog', { name: 'Menu gry' })).toContainText('Tryb tylko do odczytu.');
   await expect(reader.getByRole('checkbox', { name: 'Tańczący ludzik' })).toBeDisabled();
   await expect(reader.getByRole('checkbox', { name: 'Tańczący ludzik' })).toBeChecked();
   const before = await reader.evaluate(() => localStorage.getItem('pl.solitaire.save'));
   await reader.evaluate(() => window.__SOLITAIRE_APP__.setDancingCompanion(false));
   expect(await reader.evaluate(() => localStorage.getItem('pl.solitaire.save'))).toBe(before);
+  await writer.close();
+  await reader.reload();
+  await reader.getByRole('button', { name: 'Otwórz menu gry' }).click();
+  await expect(reader.getByRole('checkbox', { name: 'Tańczący ludzik' })).toBeEnabled();
+  await reader.getByRole('checkbox', { name: 'Tańczący ludzik' }).uncheck();
+  await expect(reader.getByRole('checkbox', { name: 'Tańczący ludzik' })).not.toBeChecked();
 });
 
 test('T035 opt-in survives reload, preserves the board, and respects pause/media/teardown', async ({ page }) => {
@@ -298,3 +305,27 @@ test('T035 compact bubble shares space and returns to roomy layout with more hei
   await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
   await expect(page.locator('.menu-build-stamp')).toContainText('Build');
 });
+
+
+for (const height of [670, 844]) {
+  test(`T035 native touch enables companion from Menu at 390x${height}`, async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height }, isMobile: true, hasTouch: true });
+    const page = await context.newPage();
+    try {
+      await page.goto('/');
+      await page.getByRole('button', { name: 'Otwórz menu gry' }).tap();
+      const toggle = page.getByRole('checkbox', { name: 'Tańczący ludzik' });
+      await expect(toggle).toBeEnabled();
+      await toggle.tap();
+      await expect(toggle).toBeChecked();
+      await page.getByRole('button', { name: 'Wróć do gry' }).tap();
+      await expect(page.locator('#dancing-companion')).toBeVisible();
+      await expect(page.locator('#dancing-companion')).toHaveAttribute('data-running', 'true');
+      await page.reload();
+      await expect(page.locator('#dancing-companion')).toBeVisible();
+      await page.getByRole('button', { name: 'Otwórz menu gry' }).tap();
+      await page.locator('.companion-option').tap();
+      await expect(toggle).not.toBeChecked();
+    } finally { await context.close(); }
+  });
+}
