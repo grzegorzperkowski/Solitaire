@@ -285,13 +285,17 @@ test('T035 compact bubble shares space and returns to roomy layout with more hei
   });
   const boxes = () => page.evaluate(() => {
     const box = s => document.querySelector(s).getBoundingClientRect().toJSON();
-    return { notice: box('#hint-notice'), figure: box('#dancing-companion'), menu: box('#btn-menu'), board: box('#board-area') };
+    return { notice: box('#hint-notice'), figure: box('#dancing-companion'), menu: box('#btn-menu'), board: box('#board-area'), build: box('#build-stamp') };
   });
   const compact = await boxes();
   expect(compact.notice.right).toBeLessThan(compact.figure.x);
   expect(compact.notice.bottom).toBeGreaterThan(compact.figure.y);
   expect(compact.menu.bottom).toBeLessThanOrEqual(670);
-  await expect(page.locator('#build-stamp')).toBeHidden();
+  expect(compact.build.y).toBeGreaterThanOrEqual(compact.menu.bottom);
+  expect(compact.build.bottom).toBeLessThanOrEqual(670);
+  expect(compact.build.right).toBeCloseTo(compact.menu.right, 0);
+  expect(await page.locator('#build-stamp').evaluate(el => getComputedStyle(el).textAlign)).toBe('right');
+  await expect(page.locator('#build-stamp')).toBeVisible();
   await page.screenshot({ path: 'test-results/screenshots/companion-bubble-compact.png' });
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator('#build-stamp')).toBeVisible();
@@ -301,7 +305,7 @@ test('T035 compact bubble shares space and returns to roomy layout with more hei
   expect(roomy.board.height).toBeGreaterThan(compact.board.height);
   await page.screenshot({ path: 'test-results/screenshots/companion-bubble-roomy.png' });
   await page.setViewportSize({ width: 390, height: 670 });
-  await expect(page.locator('#build-stamp')).toBeHidden();
+  await expect(page.locator('#build-stamp')).toBeVisible();
   await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
   await expect(page.locator('.menu-build-stamp')).toContainText('Build');
 });

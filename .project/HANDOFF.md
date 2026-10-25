@@ -1,3 +1,7 @@
+# T035 bottom-right build stamp REVIEW — 2026-10-25
+
+Restored the game version below controls at the right edge by removing compact companion CSS hiding. Existing alignment reused; no runtime JS/save/input changes. Focused visibility test RED to GREEN; production build and 24 companion Chromium checks pass; compact screenshot inspected, controls remain onscreen. Await acceptance; no push or physical Safari check. Both unrelated diagnostic JSON files preserved.
+
 # T035 iPhone hold fix REVIEW — 2026-10-25
 
 Replaced small SVG hit rect with transparent native HTML button (minimum 64x64 CSS px), local pinch-zoom/context-menu handling, same pointer capture and lifecycle guards. Exact offset hit test RED to GREEN; 650ms native touch hold while dancing, drag/release covered. 24 companion Chromium/23 unit/build pass; final lifecycle visibility follow-up: 3 Chromium pass. Lint 0 errors/17 existing warnings. Physical iPhone 15 Pro confirmation remains open; no push. Both diagnostics preserved.
