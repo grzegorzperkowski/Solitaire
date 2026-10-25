@@ -5,7 +5,6 @@
 
 import { formatTime, BUILD_INFO } from './render.js';
 import { getWinPercentage } from '../session.js';
-import { requestCompanionMotion } from './dancing-companion.js';
 
 let lastFocusedElement = null;
 
@@ -132,10 +131,6 @@ function renderMenuHtml(readOnly) {
           Tańczący ludzik
         </label>
         <p id="companion-motion-note" class="companion-motion-note">Animacja wyłączona przez ustawienia ograniczenia ruchu.</p>
-        ${[window.DeviceMotionEvent, window.DeviceOrientationEvent].some(api => typeof api?.requestPermission === 'function') ? `
-          <button id="btn-companion-motion" class="menu-action-btn" ${readOnly ? 'disabled' : ''}>Włącz reakcje na ruch telefonu</button>
-          <p id="companion-sensor-status" role="status" aria-live="polite"></p>
-        ` : ''}
         <button id="btn-menu-export" class="menu-action-btn">Zapisz stan do analizy</button>
         <p id="diagnostic-export-status" role="status" aria-live="polite"></p>
         <small class="menu-build-stamp">${BUILD_INFO}</small>
@@ -335,12 +330,6 @@ function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame
 
   dialogEl.querySelector('#dancing-companion-toggle')?.addEventListener('change', (event) => {
     app.setDancingCompanion(event.target.checked);
-  });
-  dialogEl.querySelector('#btn-companion-motion')?.addEventListener('click', async () => {
-    const granted = await requestCompanionMotion(window);
-    dialogEl.querySelector('#companion-sensor-status').textContent = granted
-      ? 'Zgoda udzielona. Włącz ludzika i wróć do gry: potrząśnij góra–dół lub przechylaj lewo–prawo.'
-      : 'Brak zgody na czujniki. Ludzik nadal może tańczyć bez reakcji na telefon.';
   });
 
   // 1. Focus trap on Tab

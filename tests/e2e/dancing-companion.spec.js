@@ -9,64 +9,6 @@ async function enableCompanion(page) {
   await page.getByRole('button', { name: 'Wróć do gry' }).click();
 }
 
-test('T035 sensor permission denial/retry and phone gestures preserve the game', async ({ page }) => {
-  await page.addInitScript(() => {
-    Math.random = () => 0;
-    window.sensorPermission = 'denied';
-    window.sensorRequests = [];
-    for (const name of ['DeviceMotionEvent', 'DeviceOrientationEvent']) {
-      Object.defineProperty(window, name, { configurable: true, value: {
-        requestPermission: () => {
-          window.sensorRequests.push(name);
-          return Promise.resolve(window.sensorPermission);
-        },
-      } });
-    }
-  });
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
-  await page.getByRole('checkbox', { name: 'Tańczący ludzik' }).check();
-  const authorize = page.getByRole('button', { name: 'Włącz reakcje na ruch telefonu' });
-  await authorize.click();
-  await expect(page.locator('#companion-sensor-status')).toContainText('Brak zgody');
-  await page.evaluate(() => { window.sensorPermission = 'granted'; });
-  await authorize.click();
-  await expect(page.locator('#companion-sensor-status')).toContainText('Zgoda udzielona');
-  expect(await page.evaluate(() => window.sensorRequests)).toEqual([
-    'DeviceMotionEvent', 'DeviceOrientationEvent', 'DeviceMotionEvent', 'DeviceOrientationEvent',
-  ]);
-  await page.getByRole('button', { name: 'Wróć do gry' }).click();
-  const before = await page.evaluate(() => {
-    const state = window.__SOLITAIRE_APP__.getState();
-    return JSON.stringify([state.state, state.session.commands, state.session.cursor, state.started, state.session.statistics]);
-  });
-  await page.evaluate(() => {
-    for (const [i, y] of [5, -5, 5].entries()) {
-      const event = new Event('devicemotion');
-      Object.defineProperties(event, {
-        acceleration: { value: { x: 0, y } }, timeStamp: { value: i * 200 },
-      });
-      window.dispatchEvent(event);
-    }
-  });
-  await expect(page.locator('#dancing-companion')).toHaveAttribute('data-action', 'jump');
-  await expect(page.locator('#dancing-companion')).not.toHaveAttribute('data-action', 'jump');
-  await page.evaluate(() => {
-    for (const [i, gamma] of [20, -20, 20].entries()) {
-      const event = new Event('deviceorientation');
-      Object.defineProperties(event, {
-        beta: { value: 0 }, gamma: { value: gamma }, timeStamp: { value: 3000 + i * 200 },
-      });
-      window.dispatchEvent(event);
-    }
-  });
-  await expect(page.locator('#dancing-companion')).toHaveAttribute('data-action', 'sway');
-  expect(await page.evaluate(() => {
-    const state = window.__SOLITAIRE_APP__.getState();
-    return JSON.stringify([state.state, state.session.commands, state.session.cursor, state.started, state.session.statistics]);
-  })).toBe(before);
-});
-
 for (const viewport of [{ width: 568, height: 320 }, { width: 844, height: 390 }, { width: 390, height: 400 }]) {
   test(`T035 Menu stays onscreen without auto-scroll at ${viewport.width}x${viewport.height}`, async ({ browser }) => {
     const context = await browser.newContext({ viewport, isMobile: true, hasTouch: true });

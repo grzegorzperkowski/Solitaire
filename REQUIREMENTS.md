@@ -160,5 +160,3 @@ budgets and UI contracts. No guarantee of solving every winnable deal. See the
 ## T036 — Small-success feedback
 
 Fresh successful moves briefly highlight a revealed tableau card or emptied column. Foundation Aces pulse gently; consecutive foundation transfers gain glow strength up to the fourth card. Any other successful command breaks the streak. Effects last 456ms, do not block input, and are omitted for reduced motion and history navigation/restore. No scoring, sound or persisted animation state.
-
-T035 phone motion: while the companion is enabled and animating, repeated screen-height shaking triggers its jump phrase; cyclic left/right tilting triggers sway. Ignore isolated movements, unavailable sensor data and inactive/reduced-motion states. Where the browser requires sensor permission, Menu offers "Włącz reakcje na ruch telefonu" with Polish granted/denied feedback and retry. Permission denial leaves ordinary dancing available. Sensor readings and permission are not persisted; no gameplay effect.

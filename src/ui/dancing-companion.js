@@ -1,33 +1,6 @@
 export const COMPANION_DURATIONS = Object.freeze({ sway: 4800, disco: 4400, wave: 5200, run: 2800, jump: 1800, slide: 5200 });
 const DANCES = ['sway', 'disco', 'wave'];
 
-export async function requestCompanionMotion(win) {
-  try {
-    const results = await Promise.all([win.DeviceMotionEvent, win.DeviceOrientationEvent]
-      .filter(api => typeof api?.requestPermission === 'function')
-      .map(api => api.requestPermission()));
-    return results.every(result => result === 'granted');
-  } catch { return false; }
-}
-
-export function createCompanionGestureDetector(threshold) {
-  let sign = 0;
-  let count = 0;
-  let lastTime = -Infinity;
-  return (value, time) => {
-    if (!Number.isFinite(value) || !Number.isFinite(time) || Math.abs(value) < threshold) return false;
-    if (time - lastTime > 900 || time < lastTime) { count = 0; sign = 0; }
-    const nextSign = Math.sign(value);
-    if (nextSign === sign || time - lastTime < 80) return false;
-    sign = nextSign;
-    lastTime = time;
-    count += 1;
-    if (count < 3) return false;
-    count = 0;
-    return true;
-  };
-}
-
 export function chooseCompanionAction(previous, random = Math.random) {
   const choices = previous && !DANCES.includes(previous)
     ? DANCES : [...DANCES, ...DANCES, 'run', 'jump', 'slide'];
@@ -144,56 +117,6 @@ export function createDancingCompanion(host, random = Math.random) {
   let pageHidden = false;
   let destroyed = false;
   let sceneWidth = 400;
-  let shake;
-  let tilt;
-  let gravityY = null;
-  let sensorAngle = null;
-  let reacting = false;
-
-  function resetGestures() {
-    shake = createCompanionGestureDetector(3);
-    tilt = createCompanionGestureDetector(12);
-    gravityY = null;
-    reacting = false;
-  }
-  resetGestures();
-
-  function react(next) {
-    if (reacting) return;
-    action = next;
-    elapsed = 0;
-    previousTime = null;
-    reacting = true;
-  }
-
-  function sensorAxes() {
-    const angle = win.screen?.orientation?.angle ?? win.orientation ?? 0;
-    if (angle !== sensorAngle) { resetGestures(); sensorAngle = angle; }
-    const radians = angle * Math.PI / 180;
-    return [Math.cos(radians), Math.sin(radians)];
-  }
-
-  function onMotion(event) {
-    if (host.dataset.running !== 'true') return;
-    const [cos, sin] = sensorAxes();
-    const acceleration = event.acceleration;
-    const direct = Number.isFinite(acceleration?.x) && Number.isFinite(acceleration?.y);
-    const data = direct ? acceleration : event.accelerationIncludingGravity;
-    if (!Number.isFinite(data?.x) || !Number.isFinite(data?.y)) return;
-    let vertical = data.y * cos - data.x * sin;
-    if (!direct) {
-      gravityY = gravityY === null ? vertical : gravityY * 0.9 + vertical * 0.1;
-      vertical -= gravityY;
-    }
-    if (shake(vertical, event.timeStamp)) react('jump');
-  }
-
-  function onOrientation(event) {
-    if (host.dataset.running !== 'true') return;
-    const [cos, sin] = sensorAxes();
-    if (!Number.isFinite(event.gamma) || !Number.isFinite(event.beta)) return;
-    if (tilt(event.gamma * cos + event.beta * sin, event.timeStamp)) react('sway');
-  }
 
   function draw(pose) {
     const point = p => `${p[0].toFixed(2)},${p[1].toFixed(2)}`;
@@ -209,7 +132,6 @@ export function createDancingCompanion(host, random = Math.random) {
     if (previousTime !== null) elapsed += Math.min(50, Math.max(0, timestamp - previousTime));
     previousTime = timestamp;
     if (elapsed >= COMPANION_DURATIONS[action]) {
-      reacting = false;
       elapsed -= COMPANION_DURATIONS[action];
       action = chooseCompanionAction(action, random);
     }
@@ -227,7 +149,6 @@ export function createDancingCompanion(host, random = Math.random) {
     const running = visible && !media.matches;
     host.dataset.running = String(running);
     if (!running) {
-      resetGestures();
       if (raf !== null) win.cancelAnimationFrame(raf);
       raf = null;
       previousTime = null;
@@ -242,8 +163,6 @@ export function createDancingCompanion(host, random = Math.random) {
   doc.addEventListener('visibilitychange', sync);
   win.addEventListener('pagehide', hide);
   win.addEventListener('pageshow', show);
-  win.addEventListener('devicemotion', onMotion);
-  win.addEventListener('deviceorientation', onOrientation);
   media.addEventListener('change', sync);
   const observer = new win.ResizeObserver(() => {
     if (destroyed) return;
@@ -265,8 +184,6 @@ export function createDancingCompanion(host, random = Math.random) {
       doc.removeEventListener('visibilitychange', sync);
       win.removeEventListener('pagehide', hide);
       win.removeEventListener('pageshow', show);
-      win.removeEventListener('devicemotion', onMotion);
-      win.removeEventListener('deviceorientation', onOrientation);
       media.removeEventListener('change', sync);
       observer.disconnect();
       host.dataset.running = 'false';
