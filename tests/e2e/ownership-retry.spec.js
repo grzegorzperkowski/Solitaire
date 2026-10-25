@@ -6,6 +6,7 @@ for (const trigger of ['menu', 'focus', 'visibility']) {
     const reader = await context.newPage();
     // Control foreground triggers so closing the writer cannot race the tested action.
     await reader.addInitScript(() => {
+      Object.defineProperty(document, 'hidden', { get: () => false });
       window.addEventListener('focus', e => { if (e.isTrusted) e.stopImmediatePropagation(); }, true);
       document.addEventListener('visibilitychange', e => { if (e.isTrusted) e.stopImmediatePropagation(); }, true);
     });
@@ -23,6 +24,10 @@ for (const trigger of ['menu', 'focus', 'visibility']) {
         window.__SOLITAIRE_APP__.setDancingCompanion(true);
       });
       await writer.close();
+      // Page closure can finish before Chromium releases its Web Lock.
+      await expect.poll(() => reader.evaluate(() => navigator.locks.request(
+        'pl.solitaire.browser.writer', { ifAvailable: true }, lock => Boolean(lock),
+      ))).toBe(true);
       const reload = reader.waitForEvent('load');
       if (trigger === 'menu') await reader.getByRole('button', { name: 'Ponów dostęp do zapisu' }).click();
       else await reader.evaluate(type => {

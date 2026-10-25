@@ -1,3 +1,7 @@
+# T038 test repair REVIEW — 2026-10-25
+
+Coordinator assigned ownership-retry.spec repair. Test controls document.hidden alongside foreground events and probes actual Web Lock availability after writer closure before testing the retry trigger. Runtime unchanged. 30 repeated ownership/26 related Chromium checks and build pass; lint 0 errors/17 existing warnings. Await acceptance; no push or physical-device/full-suite checks. Both unrelated JSON diagnostics preserved. See reports/T038.md.
+
 # T035 landing follow-up REVIEW — 2026-10-25
 
 Delivered 600ms knee bend/recovery and automatic dance resume after phone drag. Native-touch regression RED→GREEN; 24 companion unit/24 Chromium/build pass; lint 0 errors/17 warnings. Landing screenshot inspected. Await coordinator acceptance; no physical phone/Safari checks or push. Both unrelated JSON diagnostics preserved.
