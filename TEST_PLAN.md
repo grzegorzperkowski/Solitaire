@@ -343,3 +343,5 @@ T035 pointer regressions: dancing-companion.spec.js checks click/keyboard stop/r
 T035 iPhone hold regression: use exact elementFromPoint hit testing 26 CSS px from the moving figure center in compact layout, then native CDP touch held 650ms, drag upwards and release into parachute descent. This failed with the small SVG target. The HTML button stays at least 64x64 CSS px and avoids SVG-specific interaction; physical iPhone 15 Pro/Safari confirmation is still required.
 
 T035 developer version placement: compact regression also checks bottom position without the companion, opacity <=0.45, and no duplicate Menu version. Existing seven-viewport checks keep controls reachable.
+
+T037: `tests/e2e/storage-modes.spec.js` runs browser and simulated standalone pages together on one origin. Assert independent ownership, moves/preferences/storage keys and reload restoration; duplicate PWA stays read-only. Both modes ignore legacy bytes without modifying them. Existing storage tests retain same-mode browser exclusion, corruption recovery, quota handling and unavailable-storage coverage. Real installed Android verification remains separate.

@@ -15,7 +15,7 @@ test.describe('T008 storage and tab ownership E2E', () => {
     expect(result.ok).toBe(true);
 
     // Verify storage has envelope
-    const rawStored = await page.evaluate(() => localStorage.getItem('pl.solitaire.save'));
+    const rawStored = await page.evaluate(() => localStorage.getItem('pl.solitaire.browser.save'));
     expect(rawStored).toBeTruthy();
     const stored = JSON.parse(rawStored);
     expect(stored.session.commands.length).toBe(1);
@@ -43,7 +43,7 @@ test.describe('T008 storage and tab ownership E2E', () => {
     await expect(page.locator('#notice-banner')).toContainText('Korzystaj z jednej karty gry.');
     await page.locator('#stock-container').click();
     await expect(page.locator('#moves-display')).toHaveText('1');
-    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.save')).session.cursor)).toBe(1);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.browser.save')).session.cursor)).toBe(1);
     expect(errors).toEqual([]);
   });
 
@@ -83,7 +83,7 @@ test.describe('T015 safe preferences and recovery', () => {
   test('quota failure on preference change retains the prior bytes and shows warning', async ({ page }) => {
     await page.goto('/');
     await page.locator('#stock-container').click();
-    const original = await page.evaluate(() => localStorage.getItem('pl.solitaire.save'));
+    const original = await page.evaluate(() => localStorage.getItem('pl.solitaire.browser.save'));
     await page.evaluate(() => { Storage.prototype.setItem = () => { throw new DOMException('Quota', 'QuotaExceededError'); }; });
     await page.locator('#btn-menu').click();
     await page.getByRole('button', { name: 'Nowa gra', exact: true }).click();
@@ -91,19 +91,19 @@ test.describe('T015 safe preferences and recovery', () => {
     await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
     await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Nie udało się zapisać gry' })).toBeVisible();
-    expect(await page.evaluate(() => localStorage.getItem('pl.solitaire.save'))).toBe(original);
+    expect(await page.evaluate(() => localStorage.getItem('pl.solitaire.browser.save'))).toBe(original);
     await page.locator('#stock-container').click();
     await expect(page.locator('#stock-count-badge')).toHaveText('21');
   });
 
   for (const raw of ['{broken', '{"schemaVersion":999,"revision":99}']) {
     test(`unreadable save is retained until explicit replacement: ${raw}`, async ({ page }) => {
-      await page.addInitScript((raw) => localStorage.setItem('pl.solitaire.save', raw), raw);
+      await page.addInitScript((raw) => localStorage.setItem('pl.solitaire.browser.save', raw), raw);
       await page.goto('/');
       await expect(page.getByRole('dialog', { name: 'Nie można wczytać gry' })).toBeVisible();
       await page.getByRole('button', { name: 'Graj tymczasowo' }).click();
       await page.locator('#stock-container').click();
-      expect(await page.evaluate(() => localStorage.getItem('pl.solitaire.save'))).toBe(raw);
+      expect(await page.evaluate(() => localStorage.getItem('pl.solitaire.browser.save'))).toBe(raw);
       await page.locator('#btn-menu').click();
       await page.getByRole('button', { name: 'Nowa gra', exact: true }).click();
       await expect(page.getByRole('dialog')).toContainText('zastąpi');
@@ -111,7 +111,7 @@ test.describe('T015 safe preferences and recovery', () => {
       await page.getByLabel('Seed (opcjonalnie)').fill('0');
       await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
       await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
-      const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.save')));
+      const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.browser.save')));
       expect(saved.session.options.seed).toBe(0);
       expect(saved.schemaVersion).toBe(2);
     });

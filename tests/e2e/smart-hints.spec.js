@@ -17,7 +17,7 @@ test('diagnostic menu downloads a replayable hint state at 320px without changin
   await page.waitForFunction(() => window.__SOLITAIRE_APP__.getState().hint);
   await page.locator('#btn-menu').click();
   const before = await page.evaluate(() => ({
-    app: window.__SOLITAIRE_APP__.getState(), save: localStorage.getItem('pl.solitaire.save'),
+    app: window.__SOLITAIRE_APP__.getState(), save: localStorage.getItem('pl.solitaire.browser.save'),
   }));
   const downloadEvent = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Zapisz stan do analizy', exact: true }).click();
@@ -32,7 +32,7 @@ test('diagnostic menu downloads a replayable hint state at 320px without changin
   expect(restored.session.commands).toHaveLength(2);
   expect(diagnostic.hint).toEqual(before.app.hint);
   expect(diagnostic.build).toBe(await page.locator('#build-stamp').textContent());
-  expect(await page.evaluate(() => localStorage.getItem('pl.solitaire.save'))).toBe(before.save);
+  expect(await page.evaluate(() => localStorage.getItem('pl.solitaire.browser.save'))).toBe(before.save);
   await expect(page.locator('#diagnostic-export-status')).toContainText('pobieranie');
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
 });

@@ -5,8 +5,9 @@ import { isWon } from './engine/game.js';
 import { searchProgress } from './engine/progress.js';
 import { searchSmartHint, createHintContext } from './engine/smart-hints.js';
 import { getNextVictoryAnimation } from './ui/victory-bag.js';
+import { STORAGE_PREFIX } from './storage-scope.js';
 
-export const LOCK_NAME = 'pl.solitaire.writer';
+export const LOCK_NAME = `${STORAGE_PREFIX}.writer`;
 const HINT_BATCH_MS = 4;
 const HINT_ACTIVE_MS = 100;
 

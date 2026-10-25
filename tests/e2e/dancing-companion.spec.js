@@ -117,9 +117,9 @@ test('T035 a read-only tab cannot change the setting or animate the companion', 
   await expect(reader.getByRole('dialog', { name: 'Menu gry' })).toContainText('Tryb tylko do odczytu.');
   await expect(reader.getByRole('checkbox', { name: 'Tańczący ludzik' })).toBeDisabled();
   await expect(reader.getByRole('checkbox', { name: 'Tańczący ludzik' })).toBeChecked();
-  const before = await reader.evaluate(() => localStorage.getItem('pl.solitaire.save'));
+  const before = await reader.evaluate(() => localStorage.getItem('pl.solitaire.browser.save'));
   await reader.evaluate(() => window.__SOLITAIRE_APP__.setDancingCompanion(false));
-  expect(await reader.evaluate(() => localStorage.getItem('pl.solitaire.save'))).toBe(before);
+  expect(await reader.evaluate(() => localStorage.getItem('pl.solitaire.browser.save'))).toBe(before);
   await writer.close();
   await reader.reload();
   await reader.getByRole('button', { name: 'Otwórz menu gry' }).click();
@@ -256,7 +256,7 @@ test('T035 winning stops the companion and Undo resumes without a second award',
   const fixture = nearWin(1);
   const save = JSON.parse(fixture.save);
   save.preferences.dancingCompanion = true;
-  await page.addInitScript(raw => localStorage.setItem('pl.solitaire.save', raw), JSON.stringify(save));
+  await page.addInitScript(raw => localStorage.setItem('pl.solitaire.browser.save', raw), JSON.stringify(save));
   await page.goto('/');
   await page.getByRole('button', { name: 'Wznów grę', exact: true }).click();
   await expect(page.locator('#dancing-companion')).toHaveAttribute('data-running', 'true');

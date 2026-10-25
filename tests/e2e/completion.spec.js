@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 const save = readFileSync(new URL('../fixtures/completion-save.json', import.meta.url), 'utf8');
 
 async function loadPosition(page) {
-  await page.addInitScript(bytes => localStorage.setItem('pl.solitaire.save', bytes), save);
+  await page.addInitScript(bytes => localStorage.setItem('pl.solitaire.browser.save', bytes), save);
   await page.goto('/');
   await page.waitForFunction(() => window.__SOLITAIRE_APP__?.getState().isWriter);
   await page.evaluate(() => window.__SOLITAIRE_APP__.resume());

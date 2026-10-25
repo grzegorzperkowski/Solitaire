@@ -1,8 +1,10 @@
+import { STORAGE_PREFIX } from '../storage-scope.js';
+
 export const VICTORY_ANIMATIONS = Object.freeze([
   'classic-cascade', 'magic-fan', 'suit-fireworks', 'card-tornado',
 ]);
 
-const STORAGE_KEY = 'pl.solitaire.victory-bag.v1';
+const STORAGE_KEY = `${STORAGE_PREFIX}.victory-bag.v1`;
 let memoryState = { version: 1, bag: [], last: null };
 
 function copyState(state) {

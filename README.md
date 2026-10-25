@@ -140,3 +140,5 @@ Baselines are commits 2447cff and 5320616 with only imports relocated to the com
 engine. Cooperative planners receive AbortSignal and remembered plan tails, matching
 the controller; legacy planners are closed at cutoff. See
 [the integration report](.project/reports/T028-integration.md).
+
+PWA and normal browser tabs use independent saves (including statistics and preferences) and independent writer locks. The mode is selected at page startup from standalone display mode. Legacy shared saves are not imported; both modes start fresh after this change. Multiple windows in the same mode still share one save and allow only one writer.

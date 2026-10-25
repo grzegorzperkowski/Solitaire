@@ -2,8 +2,9 @@ import { createGame } from './engine/cards.js';
 import { applyMove, assertInvariants, isWon } from './engine/game.js';
 import { restoreSessionState } from './session.js';
 import { visibleCards } from './engine/knowledge.js';
+import { STORAGE_PREFIX } from './storage-scope.js';
 
-export const STORAGE_KEY = 'pl.solitaire.save';
+export const STORAGE_KEY = `${STORAGE_PREFIX}.save`;
 export const SCHEMA_VERSION = 2;
 export const MAX_SERIALIZED_BYTES = 1024 * 1024; // 1 MiB
 export const MAX_COMMANDS = 10000;

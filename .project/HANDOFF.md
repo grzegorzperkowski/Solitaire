@@ -1,3 +1,7 @@
+# T037 REVIEW — 2026-10-25
+
+Independent PWA/browser session, preferences, statistics, victory bag and writer locks delivered without legacy migration. Namespace fixed from initial standalone display mode; same-mode exclusion preserved. Regression RED→GREEN; 56 unit/70 Chromium checks, production build and lint (0 errors/17 existing warnings) pass. Android ADB confirmed the original conflicting Chrome/PWA pages; new build has not been published or tested as an installed Android PWA. Both unrelated diagnostics preserved. See reports/T037.md; await coordinator acceptance.
+
 # T035 developer version placement REVIEW — 2026-10-25
 
 Version remains muted at page bottom right, including companion-off mode; removed Menu duplication. Viewport minimum and auto top margin reuse the existing footer. Build and 24 companion Chromium checks pass; lint 0 errors/17 existing warnings. Await acceptance; no push or physical Safari check. Preserve both diagnostics.

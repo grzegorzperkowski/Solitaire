@@ -67,3 +67,5 @@ T000–T014 have accepted original implementations. T001 acceptance on 2026-10-1
 Suitability suggestions in each task describe needed tools/skills, not performance rankings or permanent owners. Codex or another CLI-capable model suits toolchain/CI/persistence work; Codex, Grok or another algorithm-capable model can handle pure engine/session work; Grok, Codex or another browser/SVG-capable model can handle UI/artwork. Physical-device gates require actual device evidence or human assistance regardless of model. The human may assign any capable model; the implementer records its identity only when assigned.
 
 All new tasks must be explicitly scoped/assigned by the coordinator; do not create an automated queue runner, agent orchestration, model-specific branches or worktrees.
+
+| [T037](tasks/T037.md) | Persistence | Independent PWA/browser saves and ownership | None | REVIEW | 56 unit/70 Chromium/build pass; no legacy migration; [report](reports/T037.md). |

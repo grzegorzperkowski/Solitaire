@@ -516,7 +516,7 @@ test.describe('T015 seed, statistics and results', () => {
     await page.getByLabel('Tryb nowej gry').selectOption('3');
     await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
     await page.getByRole('button', { name: 'Rozpocznij', exact: true }).click();
-    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.save')));
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pl.solitaire.browser.save')));
     expect(saved.session.options).toMatchObject({ seed: 123, drawCount: 3 });
     expect(saved.preferences.drawCount).toBe(3);
     expect(saved.session.cursor).toBe(0);
@@ -535,7 +535,7 @@ test.describe('T015 seed, statistics and results', () => {
     test(`first win, saved result, Undo and practice in Draw ${drawCount}`, async ({ page }) => {
       const fixture = nearWin(drawCount);
       await page.addInitScript((save) => {
-        if (!localStorage.getItem('pl.solitaire.save')) localStorage.setItem('pl.solitaire.save', save);
+        if (!localStorage.getItem('pl.solitaire.browser.save')) localStorage.setItem('pl.solitaire.browser.save', save);
       }, fixture.save);
       await page.clock.install();
       await page.goto('/');
@@ -589,7 +589,7 @@ test.describe('T015 seed, statistics and results', () => {
 
 test('T029 reduced motion opens the result without starting a victory effect', async ({ page }) => {
   const fixture = nearWin(1);
-  await page.addInitScript((save) => localStorage.setItem('pl.solitaire.save', save), fixture.save);
+  await page.addInitScript((save) => localStorage.setItem('pl.solitaire.browser.save', save), fixture.save);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await page.getByRole('button', { name: 'Wznów grę' }).click();

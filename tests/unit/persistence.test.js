@@ -70,7 +70,7 @@ describe('T007 persistence: serialization, restore and storage handling', () => 
   });
 
   test('constants and Polish error messages are defined correctly', () => {
-    expect(STORAGE_KEY).toBe('pl.solitaire.save');
+    expect(STORAGE_KEY).toBe('pl.solitaire.browser.save');
     expect(SCHEMA_VERSION).toBe(2);
     expect(MAX_SERIALIZED_BYTES).toBe(1024 * 1024);
     expect(MAX_COMMANDS).toBe(10000);
