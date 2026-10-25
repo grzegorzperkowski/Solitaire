@@ -9,6 +9,22 @@ async function enableCompanion(page) {
   await page.getByRole('button', { name: 'Wróć do gry' }).click();
 }
 
+for (const viewport of [{ width: 568, height: 320 }, { width: 844, height: 390 }, { width: 390, height: 400 }]) {
+  test(`T035 Menu stays onscreen without auto-scroll at ${viewport.width}x${viewport.height}`, async ({ browser }) => {
+    const context = await browser.newContext({ viewport, isMobile: true, hasTouch: true });
+    const page = await context.newPage();
+    try {
+      await page.goto('http://localhost:5173/');
+      await page.evaluate(() => window.__SOLITAIRE_APP__.setDancingCompanion(true));
+      const menu = await page.locator('#btn-menu').boundingBox();
+      expect(menu.y).toBeGreaterThanOrEqual(0);
+      expect(menu.y + menu.height).toBeLessThanOrEqual(viewport.height);
+      await page.touchscreen.tap(menu.x + menu.width / 2, menu.y + menu.height / 2);
+      await expect(page.getByRole('dialog', { name: 'Menu gry' })).toBeVisible();
+    } finally { await context.close(); }
+  });
+}
+
 test('T035 knee slide travels through a viewport-wide scene and adapts on resize', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 });
   await page.addInitScript(() => { Math.random = () => 0.99; });
@@ -37,23 +53,28 @@ test('T035 knee slide travels through a viewport-wide scene and adapts on resize
   }
 });
 
-test('T035 native touch can scroll short landscape to the bottom controls', async ({ browser }) => {
+test('T035 native touch scrolls the compact board while bottom controls stay onscreen', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 568, height: 320 }, hasTouch: true, isMobile: true });
   const page = await context.newPage();
   try {
     await page.goto('http://localhost:5173/');
     await enableCompanion(page);
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => { document.querySelector('#board-area').scrollTop = 0; });
     const cdp = await context.newCDPSession(page);
-    const point = y => ({ x: 10, y, id: 1 });
-    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point(280)] });
-    for (let y = 260; y >= 100; y -= 20) {
+    const board = await page.locator('#board-area').boundingBox();
+    const startY = board.y + board.height - 8;
+    const point = y => ({ x: board.x + 2, y, id: 1 });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [point(startY)] });
+    for (let delta = 20; delta <= 100; delta += 20) {
+      const y = startY - delta;
       await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [point(y)] });
       await page.evaluate(() => new Promise(requestAnimationFrame));
     }
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
-    await page.getByRole('button', { name: 'Otwórz menu gry' }).tap();
+    await expect.poll(() => page.locator('#board-area').evaluate(el => el.scrollTop)).toBeGreaterThan(0);
+    const menu = await page.locator('#btn-menu').boundingBox();
+    expect(menu.y + menu.height).toBeLessThanOrEqual(320);
+    await page.touchscreen.tap(menu.x + menu.width / 2, menu.y + menu.height / 2);
     await expect(page.getByRole('checkbox', { name: 'Tańczący ludzik' })).toBeVisible();
     await cdp.detach();
   } finally { await context.close(); }
@@ -162,12 +183,15 @@ for (const viewport of [
       const box = selector => document.querySelector(selector).getBoundingClientRect().toJSON();
       const grid = document.querySelector('#tableau-grid');
       grid.style.minHeight = '1200px';
-      return { stage: box('#dancing-companion'), scroller: box('#tableau-scroller'), footer: box('.bottom-bar'),
+      return { stage: box('#dancing-companion'), board: box('#board-area'), footer: box('.bottom-bar'),
+        boardOverflow: getComputedStyle(document.querySelector('#board-area')).overflowY,
         columns: [...document.querySelectorAll('.tableau-column')].map(el => el.getBoundingClientRect().toJSON()),
         overflow: document.documentElement.scrollWidth > innerWidth + 1 };
     });
     expect(layout.overflow).toBe(false);
-    expect(layout.stage.y).toBeGreaterThanOrEqual(layout.scroller.bottom - 1);
+    expect(layout.stage.y).toBeGreaterThanOrEqual(layout.board.bottom - 1);
+    expect(layout.boardOverflow).toBe('auto');
+    expect(layout.footer.bottom).toBeLessThanOrEqual(viewport.height);
     expect(layout.footer.y).toBeGreaterThanOrEqual(layout.stage.bottom);
     expect(layout.stage.height).toBe(viewport.height <= 500 && viewport.width > viewport.height ? 56 : 88);
     expect(layout.stage.width).toBeCloseTo(viewport.width, 0);

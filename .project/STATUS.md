@@ -1,3 +1,11 @@
+# T035 mobile regression REVIEW — 2026-10-25
+
+Fixed board minimum-height overflow that hid Menu on short mobile viewports. Board now scrolls independently; controls remain onscreen. Three viewport regressions RED→GREEN, final 124 Chromium/build pass; lint 0 errors/16 warnings. Coordinator authorized commit/push; acceptance still pending. Preserve unrelated README/package.json edits and both diagnostics. See [report](reports/T035.md).
+
+# T035 mobile regression assignment — 2026-10-25
+
+Coordinator reports missing Menu with the companion enabled in mobile mode. Assigned diagnosis and layout fix from `57c6d8f`; preserve both unrelated JSON diagnostics and game state.
+
 # T035 follow-up REVIEW — 2026-10-25
 
 Random knee-slide phrase delivered with run-up, grounded knees, folded feet, braking and recovery. Strip uses full viewport width with uniform SVG scaling; run/slide reach both sides. 435 unit/121 Chromium/build pass; lint 0 errors/16 warnings. Await coordinator acceptance, no push; device/performance checks remain open. Both unrelated diagnostics preserved. See [report](reports/T035.md).

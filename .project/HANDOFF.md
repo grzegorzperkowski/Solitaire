@@ -1,3 +1,11 @@
+# T035 mobile regression REVIEW — 2026-10-25
+
+Shared CSS fix keeps Menu inside short mobile viewports by scrolling the board rather than pushing down controls. Three raw-touch/viewport regressions and all 124 Chromium tests pass; build/lint pass (16 informational warnings). Coordinator explicitly authorized commit/push; do not mark DONE without acceptance. Preserve concurrent README.md/package.json changes and both diagnostic JSON files. See [report](reports/T035.md); physical Safari remains unverified.
+
+# T035 mobile regression assignment — 2026-10-25
+
+Resume T035 for reported mobile Menu disappearance. Reproduce viewport access without auto-scroll; fix shared layout and add regression. No other task/acceptance/push is implied; preserve unrelated diagnostics.
+
 # T035 follow-up REVIEW — 2026-10-25
 
 Knee-slide effect and full viewport-width scene implemented. Random slide includes run-up, knees down/folded shins, braking/recovery; uniform figure scaling follows resize. 435 unit/121 Chromium/build pass; lint 0 errors/16 warnings. See [report](reports/T035.md). Await coordinator review; no successor, push, dependencies or engine changes. Preserve both diagnostic JSON files; physical devices remain unverified.

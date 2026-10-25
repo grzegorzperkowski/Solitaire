@@ -78,6 +78,8 @@ The required release includes offline play and installation support after a succ
 
 ### T035 optional dancing companion — assigned 2026-10-25
 
+Mobile Menu regression correction: in ordinary short-screen layouts the primary controls must remain inside the viewport without scrolling the document. Permit the board area itself (upper piles and tableau section) to scroll when space is insufficient, retaining the separate tableau scroller and card sizes. Extreme zoom/oversized text may still require document scrolling for accessibility.
+
 Follow-up: include a randomly selected run-up → knee slide → stand/recover phrase. Knees reach the floor with feet folded behind and the body leaning back. The strip spans the viewport width (including beyond the centered board on desktop); run/slide travel approaches both edges with room for the figure. Preserve drawing proportions and strip height on resize, without stretching the character or covering cards/controls.
 
 Menu offers a default-off Polish checkbox "Tańczący ludzik". When enabled, an original line-drawn SVG character appears in a reserved strip above notices and primary controls. It randomly alternates three distinct whole-body dances with occasional brief runs and jumps; consecutive phrases differ and run/jump phrases are separated by a dance. All motion remains within its strip. Hands, feet, head, hips and a curved torso move together. No sound or gameplay effect.

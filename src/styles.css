@@ -465,7 +465,13 @@ body:has(.has-companion) {
 }
 
 .has-companion .board-area {
-  min-height: calc(var(--card-height) + 102px);
+  min-height: 44px;
+  overflow-y: auto;
+}
+
+.has-companion .tableau-section {
+  /* Keep a card band and the 44px scroll controls reachable inside the board. */
+  min-height: 92px;
 }
 
 .has-companion .tableau-scroller {

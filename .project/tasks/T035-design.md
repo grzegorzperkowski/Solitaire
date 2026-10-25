@@ -1,5 +1,7 @@
 # T035 — Tańczący ludzik: badania i projekt techniczny
 
+**Poprawka Menu w mobile, 2026-10-25:** wcześniejsze dopuszczenie przewijania strony w zwykłym niskim układzie zastępuje przewijany obszar planszy. Plansza może skurczyć się do 44px; sekcja kolumn zachowuje minimum 92px na pas karty i przyciski przewijania. Dzięki temu ludzik i główne sterowanie pozostają na ekranie. Przy ekstremalnym powiększeniu tekstu nadal dopuszczalne jest przewijanie dokumentu.
+
 **Dalsze rozszerzenie, 2026-10-25:** zlecono ślizg na kolanach po rozbiegu (5,2 s, z wyhamowaniem i wstawaniem) oraz ruch na całej szerokości ekranu. Pas otrzymuje `100vw`; obserwator rozmiaru wylicza szerokość `viewBox` przy stałej wysokości 140 jednostek, zachowując proporcje postaci. Bieg i ślizg docierają w pobliże obu brzegów z marginesem na sylwetkę. Ślizg jest losowany jak pozostałe figury specjalne i przedzielany tańcem. To rozszerzenie ma pierwszeństwo nad wcześniejszym ograniczeniem szerokości do planszy.
 
 Data: 2026-10-25. Status: propozycja do oceny koordynatora. Zakres obejmuje dokumentację, nie wdrożenie. Podstawa kodowa: `324c17f` na `master`.
