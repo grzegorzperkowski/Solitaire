@@ -106,10 +106,15 @@ function createHarness() {
   const parts = Object.fromEntries(['head', 'back', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'].map(part => [part, {
     dataset: { part }, setAttribute: vi.fn(),
   }]));
-  const svg = { style: {}, setAttribute: vi.fn() };
+  const node = () => Object.assign(new EventTarget(), { style: {}, setAttribute: vi.fn(), removeAttribute: vi.fn() });
+  const svg = node();
+  const figure = node();
+  const hit = node();
+  const parachute = node();
   const host = {
     ownerDocument: doc, dataset: {}, hidden: true,
-    querySelector: () => svg,
+    removeAttribute: vi.fn(),
+    querySelector: selector => ({ '[data-figure]': figure, '[data-hit]': hit, '[data-parachute]': parachute })[selector] || svg,
     querySelectorAll: () => Object.values(parts),
     replaceChildren: vi.fn(),
     getBoundingClientRect: () => ({ width: 1280, height: 88 }),

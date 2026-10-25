@@ -56,7 +56,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 
 | [T034](tasks/T034.md) | Maintainability | Simplify the five prioritized functions without behavior changes | None | REVIEW | 403 unit/13 simulation/107 E2E/build pass; 315 restore cases/108 planner traces unchanged. [Report](reports/T034.md). |
 
-| [T035](tasks/T035.md) | UI | Optional dancing hand-drawn companion | None | REVIEW | Toggle diagnosis: read-only guard; Menu guidance and 20 Chromium checks pass; adaptive compact layout: 18 Chromium/build/lint pass; previous placement follow-up: companion immediately above buttons; 17 Chromium/build/lint pass. Earlier implementation accepted at `8dd1b65`. [Report](reports/T035.md). |
+| [T035](tasks/T035.md) | UI | Optional dancing hand-drawn companion | None | REVIEW | Click/drag/parachute delivered; 438 unit/23 Chromium/build pass; Toggle diagnosis: read-only guard; Menu guidance and 20 Chromium checks pass; adaptive compact layout: 18 Chromium/build/lint pass; previous placement follow-up: companion immediately above buttons; 17 Chromium/build/lint pass. Earlier implementation accepted at `8dd1b65`. [Report](reports/T035.md). |
 
 | [T036](tasks/T036.md) | UI | Four small-success animations | T017, T029 | REVIEW | 438 unit/40 Chromium/build pass; lint 0 errors/16 existing warnings. [Report](reports/T036.md). |
 

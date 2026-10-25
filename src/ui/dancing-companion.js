@@ -96,7 +96,13 @@ export function createDancingCompanion(host, random = Math.random) {
   const win = doc.defaultView;
   const media = win.matchMedia('(prefers-reduced-motion: reduce)');
   host.innerHTML = `<svg viewBox="0 0 400 140" aria-hidden="true" focusable="false">
-    <g fill="none" stroke="currentColor" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round">
+    <g data-figure fill="none" stroke="currentColor" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round">
+      <g data-parachute style="display:none" stroke-width="2">
+        <path d="M -40 -75 Q 0 -125 40 -75 Q 20 -84 0 -75 Q -20 -84 -40 -75 Z" fill="#e9ba57"/>
+        <path d="M -40 -75 L -12 -10 M 40 -75 L 12 -10 M 0 -75 L 0 -10"/>
+      </g>
+      <rect data-hit x="-35" y="-65" width="70" height="105" fill="transparent" stroke="none"
+        role="button" tabindex="0" aria-label="Zatrzymaj ludzika. Przeciągnij, aby go podnieść."/>
       <path data-part="leftLeg"/><path data-part="rightLeg"/>
       <path data-part="back"/><path data-part="leftArm"/><path data-part="rightArm"/>
       <g data-part="head">
@@ -108,6 +114,12 @@ export function createDancingCompanion(host, random = Math.random) {
     </g>
   </svg>`;
   const svg = host.querySelector('svg');
+  const figure = host.querySelector('[data-figure]');
+  const hit = host.querySelector('[data-hit]');
+  const parachute = host.querySelector('[data-parachute]');
+  const events = new AbortController();
+  host.removeAttribute('aria-hidden');
+  svg.removeAttribute('aria-hidden');
   const parts = Object.fromEntries(Array.from(host.querySelectorAll('[data-part]'), node => [node.dataset.part, node]));
   let state = null;
   let raf = null;
@@ -117,19 +129,46 @@ export function createDancingCompanion(host, random = Math.random) {
   let pageHidden = false;
   let destroyed = false;
   let sceneWidth = 400;
+  let pose = sampleCompanionPose('sway', 0);
+  let stopped = false;
+  let gesture = null;
+  let falling = false;
+  let offset = [0, 0];
 
-  function draw(pose) {
+  function place() {
+    figure.setAttribute('transform', `translate(${offset[0]},${offset[1]})`);
+    hit.setAttribute('x', pose.hip[0] - 35);
+    hit.setAttribute('y', pose.hip[1] - 65);
+    parachute.setAttribute('transform', `translate(${pose.head[0]},${pose.head[1]})`);
+    parachute.style.display = falling ? '' : 'none';
+    host.dataset.interaction = gesture ? 'held' : falling ? 'falling' : stopped ? 'stopped' : 'dancing';
+    hit.setAttribute('aria-label', stopped ? 'Wznów ruch ludzika. Przeciągnij, aby go podnieść.' : 'Zatrzymaj ludzika. Przeciągnij, aby go podnieść.');
+  }
+
+  function draw(nextPose) {
+    pose = nextPose;
     const point = p => `${p[0].toFixed(2)},${p[1].toFixed(2)}`;
     for (const name of ['leftArm', 'rightArm', 'leftLeg', 'rightLeg']) {
       parts[name].setAttribute('d', `M ${pose[name].map(point).join(' L ')}`);
     }
     parts.back.setAttribute('d', `M ${point(pose.hip)} C ${pose.back.map(point).join(' ')} ${point(pose.shoulder)}`);
     parts.head.setAttribute('transform', `translate(${point(pose.head)}) rotate(${pose.head[2].toFixed(2)})`);
+    place();
   }
 
   function frame(timestamp) {
     raf = null;
-    if (previousTime !== null) elapsed += Math.min(50, Math.max(0, timestamp - previousTime));
+    const delta = previousTime === null ? 0 : Math.min(50, Math.max(0, timestamp - previousTime));
+    if (falling) {
+      const ground = 127 - Math.max(pose.leftLeg[2][1], pose.rightLeg[2][1]);
+      offset[1] = Math.min(ground, offset[1] + delta * 0.09);
+      if (offset[1] >= ground) falling = false;
+      previousTime = timestamp;
+      place();
+      sync();
+      return;
+    }
+    elapsed += delta;
     previousTime = timestamp;
     if (elapsed >= COMPANION_DURATIONS[action]) {
       elapsed -= COMPANION_DURATIONS[action];
@@ -146,17 +185,86 @@ export function createDancingCompanion(host, random = Math.random) {
     const visible = !host.hidden && !doc.hidden && !pageHidden && state.isWriter && !state.hasConflict
       && !state.isPaused && !state.activeDialog && !state.isWon && !state.victoryAnimation;
     svg.style.visibility = visible ? 'visible' : 'hidden';
-    const running = visible && !media.matches;
+    if ((!visible && (gesture || falling)) || (media.matches && falling)) {
+      resetPosition();
+    }
+    const running = visible && !media.matches && !gesture && (!stopped || falling);
     host.dataset.running = String(running);
     if (!running) {
       if (raf !== null) win.cancelAnimationFrame(raf);
       raf = null;
       previousTime = null;
-      if (visible) draw(sampleCompanionPose('sway', 0, sceneWidth));
+      if (visible && media.matches) draw(sampleCompanionPose('sway', 0, sceneWidth));
     } else if (raf === null) {
       raf = win.requestAnimationFrame(frame);
     }
   }
+
+  function resetPosition() {
+    const pointerId = gesture?.id;
+    gesture = null;
+    falling = false;
+    offset = [0, 0];
+    if (pointerId !== undefined && hit.hasPointerCapture(pointerId)) hit.releasePointerCapture(pointerId);
+    place();
+  }
+
+  function toggle() {
+    stopped = !stopped;
+    falling = false;
+    offset = [0, 0];
+    place();
+    sync();
+  }
+
+  hit.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || !event.isPrimary || svg.style.visibility !== 'visible' || gesture) return;
+    event.preventDefault();
+    event.stopPropagation();
+    gesture = { id: event.pointerId, x: event.clientX, y: event.clientY, offset: [...offset], moved: false, wasStopped: stopped };
+    falling = false;
+    stopped = true;
+    hit.setPointerCapture(event.pointerId);
+    place();
+    sync();
+  }, { signal: events.signal });
+  hit.addEventListener('pointermove', event => {
+    if (gesture?.id !== event.pointerId) return;
+    const dx = event.clientX - gesture.x;
+    const dy = event.clientY - gesture.y;
+    gesture.moved ||= Math.hypot(dx, dy) > 6;
+    if (!gesture.moved) return;
+    const bounds = host.getBoundingClientRect();
+    const scale = 140 / bounds.height;
+    offset[0] = Math.max((40 - bounds.left) * scale - pose.hip[0],
+      Math.min((win.innerWidth - 40 - bounds.left) * scale - pose.hip[0], gesture.offset[0] + dx * scale));
+    offset[1] = Math.max((90 - bounds.top) * scale - pose.head[1],
+      Math.min(127 - Math.max(pose.leftLeg[2][1], pose.rightLeg[2][1]), gesture.offset[1] + dy * scale));
+    place();
+  }, { signal: events.signal });
+  function release(event) {
+    if (gesture?.id !== event.pointerId) return;
+    const held = gesture;
+    gesture = null;
+    if (event.type === 'pointerup' && !held.moved) {
+      stopped = held.wasStopped;
+      toggle();
+    } else {
+      falling = held.moved && !media.matches;
+      if (!falling) offset = [0, 0];
+      place();
+      sync();
+    }
+    if (hit.hasPointerCapture(event.pointerId)) hit.releasePointerCapture(event.pointerId);
+  }
+  for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) hit.addEventListener(type, release, { signal: events.signal });
+  hit.addEventListener('click', event => event.stopPropagation(), { signal: events.signal });
+  hit.addEventListener('keydown', event => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    event.stopPropagation();
+    toggle();
+  }, { signal: events.signal });
 
   const hide = () => { pageHidden = true; sync(); };
   const show = () => { pageHidden = false; sync(); };
@@ -168,9 +276,11 @@ export function createDancingCompanion(host, random = Math.random) {
     if (destroyed) return;
     const { width, height } = host.getBoundingClientRect();
     if (width <= 0 || height <= 0) return;
+    resetPosition();
     sceneWidth = width * 140 / height;
     svg.setAttribute('viewBox', `0 0 ${sceneWidth} 140`);
     draw(sampleCompanionPose(media.matches ? 'sway' : action, media.matches ? 0 : elapsed, sceneWidth));
+    sync();
   });
   observer.observe(host);
   draw(sampleCompanionPose('sway', 0));
@@ -180,6 +290,8 @@ export function createDancingCompanion(host, random = Math.random) {
     destroy() {
       if (destroyed) return;
       destroyed = true;
+      resetPosition();
+      events.abort();
       if (raf !== null) win.cancelAnimationFrame(raf);
       doc.removeEventListener('visibilitychange', sync);
       win.removeEventListener('pagehide', hide);

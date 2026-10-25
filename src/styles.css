@@ -427,7 +427,9 @@ body {
   height: 88px;
   color: #f8f4e9;
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
+  z-index: 5;
 }
 
 .dancing-companion[hidden] {
@@ -435,10 +437,24 @@ body {
 }
 
 .dancing-companion svg {
+  overflow: visible;
+  touch-action: pinch-zoom;
   display: block;
   width: 100%;
   height: 100%;
 }
+
+.dancing-companion [data-hit] {
+  pointer-events: all;
+  cursor: grab;
+}
+
+.dancing-companion [data-hit]:focus-visible {
+  stroke: #e9ba57;
+  stroke-width: 2;
+}
+
+.dancing-companion[data-interaction="held"] [data-hit] { cursor: grabbing; }
 
 body:has(.has-companion) {
   height: 100vh;

@@ -329,3 +329,76 @@ for (const height of [670, 844]) {
     } finally { await context.close(); }
   });
 }
+
+for (const reducedMotion of ['no-preference', 'reduce']) {
+  test(`T035 click freezes, drag lifts and parachute lands (${reducedMotion})`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.emulateMedia({ reducedMotion });
+    await page.goto('/');
+    await enableCompanion(page);
+    const host = page.locator('#dancing-companion');
+    const hit = host.locator('[data-hit]');
+    await hit.focus();
+    await page.keyboard.press('Enter');
+    await expect(host).toHaveAttribute('data-interaction', 'stopped');
+    const before = await host.locator('[data-part="back"]').getAttribute('d');
+    await page.waitForTimeout(120);
+    expect(await host.locator('[data-part="back"]').getAttribute('d')).toBe(before);
+    const box = await hit.boundingBox();
+    await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+    await expect(host).toHaveAttribute('data-interaction', 'dancing');
+    await hit.focus();
+    await page.keyboard.press('Enter');
+    const start = await hit.boundingBox();
+    const x = start.x + start.width / 2;
+    const y = start.y + start.height / 2;
+    await page.mouse.move(x, y);
+    await page.mouse.down();
+    await page.mouse.move(x - 55, y - 160, { steps: 8 });
+    await expect(host).toHaveAttribute('data-interaction', 'held');
+    expect((await hit.boundingBox()).y).toBeLessThan(start.y - 130);
+    await page.mouse.up();
+    if (reducedMotion === 'no-preference') {
+      await expect(host).toHaveAttribute('data-interaction', 'falling');
+      await expect(host.locator('[data-parachute]')).toBeVisible();
+      await page.screenshot({ path: 'test-results/screenshots/companion-parachute.png' });
+      const lifted = await hit.boundingBox();
+      await expect.poll(async () => (await hit.boundingBox()).y).toBeGreaterThan(lifted.y + 15);
+    }
+    await expect(host).toHaveAttribute('data-interaction', 'stopped', { timeout: 8000 });
+    await expect(host.locator('[data-parachute]')).toBeHidden();
+    await expect(page.locator('#moves-display')).toHaveText('0');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  });
+}
+
+test('T035 native touch lifts from compact strip; Menu and resize cancel the gesture', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 390, height: 670 }, hasTouch: true, isMobile: true });
+  const page = await context.newPage();
+  try {
+    await page.goto('http://localhost:5173/');
+    await enableCompanion(page);
+    const host = page.locator('#dancing-companion');
+    const hit = host.locator('[data-hit]');
+    await hit.focus();
+    await page.keyboard.press('Enter');
+    const box = await hit.boundingBox();
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height / 2;
+    const cdp = await context.newCDPSession(page);
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y, id: 1 }] });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 10, y: y - 130, id: 1 }] });
+    await expect(host).toHaveAttribute('data-interaction', 'held');
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    await expect(host).toHaveAttribute('data-interaction', 'falling');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+    await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
+    await expect(host).toHaveAttribute('data-interaction', 'stopped');
+    await expect(host.locator('[data-parachute]')).toBeHidden();
+    await page.getByRole('button', { name: 'Wróć do gry' }).click();
+    await page.setViewportSize({ width: 320, height: 568 });
+    await expect(host).toHaveAttribute('data-running', 'false');
+    await expect(host.locator('[data-figure]')).toHaveAttribute('transform', 'translate(0,0)');
+    await cdp.detach();
+  } finally { await context.close(); }
+});

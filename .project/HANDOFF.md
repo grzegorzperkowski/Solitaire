@@ -1,3 +1,7 @@
+# T035 pointer interaction REVIEW — 2026-10-25
+
+Click/Enter/Space stop and resume the figure; captured mouse/touch dragging lifts it, release opens a parachute and lowers it to the strip, leaving it stopped. Reduced motion lands immediately. UI-only state, no engine/save changes. Build, 438 unit tests, final 23 companion Chromium tests and lint (0 errors/17 warnings, one new sync complexity warning) pass. Parachute screenshot inspected. Await coordinator acceptance; no push or physical-device/Safari verification. Preserve both unrelated diagnostic JSON files.
+
 # T035 toggle diagnosis REVIEW — 2026-10-25
 
 Coordinator confirms New Game/redeal disabled while Help/Statistics work: read-only ownership guard. Added Menu explanation and close-other-tabs/reload guidance. Two touch cases pass; 20 companion Chromium/build pass; recovery focused test passes; lint 0 errors/16 existing warnings. Await acceptance; no push or physical Safari verification. Both diagnostics preserved.
