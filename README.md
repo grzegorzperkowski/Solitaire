@@ -18,10 +18,10 @@ Requirements checked against the published npm package `engines`/peer dependenci
 
 ```sh
 npm ci
-npm run dev
+npm start
 ```
 
-Use the local URL printed by Vite. To preview production output:
+Use the local URL printed by Vite. `npm run dev` also works. To preview production output:
 
 ```sh
 npm run build
