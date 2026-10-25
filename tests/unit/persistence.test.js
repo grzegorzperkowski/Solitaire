@@ -48,6 +48,27 @@ function createMockStorage(initialData = {}) {
 }
 
 describe('T007 persistence: serialization, restore and storage handling', () => {
+  test.each([false, true])('T035 companion preference round-trips: %s', (dancingCompanion) => {
+    const session = createSession({ seed: 42, drawCount: 1 });
+    const result = restoreSession(serializeSession(session, { preferences: { dancingCompanion } }));
+    expect(result.ok).toBe(true);
+    expect(result.metadata.preferences.dancingCompanion).toBe(dancingCompanion);
+    expect(result.session.state).toEqual(session.state);
+  });
+
+  test('T035 old saves without the companion preference default to off', () => {
+    const result = restoreSession(JSON.stringify(createTestEnvelope()));
+    expect(result.ok).toBe(true);
+    expect(result.metadata.preferences.dancingCompanion).toBe(false);
+  });
+
+  test.each([null, 'true', 1, {}, []])('T035 malformed companion preference preserves prior save: %j', (dancingCompanion) => {
+    const raw = JSON.stringify(createTestEnvelope({ preferences: { drawCount: 1, touchHelpSeen: false, dancingCompanion } }));
+    const storage = createMockStorage({ [STORAGE_KEY]: raw });
+    expect(loadSession(storage)).toMatchObject({ ok: false, reason: 'invalid-preferences' });
+    expect(storage.getItem(STORAGE_KEY)).toBe(raw);
+  });
+
   test('constants and Polish error messages are defined correctly', () => {
     expect(STORAGE_KEY).toBe('pl.solitaire.save');
     expect(SCHEMA_VERSION).toBe(2);
@@ -94,7 +115,7 @@ describe('T007 persistence: serialization, restore and storage handling', () => 
     expect(restoredMeta.schemaVersion).toBe(2);
     expect(restoredMeta.revision).toBe(3);
     expect(restoredMeta.savedAt).toBe('2026-10-10T12:30:00.000Z');
-    expect(restoredMeta.preferences).toEqual({ drawCount: 1, touchHelpSeen: true });
+    expect(restoredMeta.preferences).toEqual({ drawCount: 1, touchHelpSeen: true, dancingCompanion: false });
   });
 
   test.each([false, true])('restored transfer commands resist mutation, including redo tail: %s', (undone) => {

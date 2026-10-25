@@ -1,3 +1,11 @@
+# T035 implementation REVIEW — 2026-10-25
+
+Feature implemented on master: Menu → "Tańczący ludzik" (default off), three nonrepeating random dances with occasional run/jump phrases, saved boolean preference, reserved bottom strip, static reduced motion and pause/dialog/visibility/win/ownership cleanup. Full 429 unit/13 simulation/120 Chromium/build pass; final sampler 17/17, lint 0 errors/16 warnings. Production subpath and gzip budgets pass. Inspect [report](reports/T035.md) for exact commands and evidence gaps. Await coordinator acceptance; do not start a successor. No push/dependencies/engine changes; preserve both unrelated diagnostic JSON files. Local visual diagnostics are under ignored `.cache/T035-*`.
+
+# T035 implementation assignment — 2026-10-25
+
+Implementation explicitly assigned: optional SVG companion with random dances plus occasional running/jumping. Resume T035 on master from `006acb2`; previous documentation-only stop is superseded. Use Context7, preserve game contracts and both unrelated diagnostic JSON files. No agents/worktrees/dependencies/push.
+
 # T035 REVIEW — 2026-10-25
 
 Read [T035 design](tasks/T035-design.md) for the proposed dancing companion and [report](reports/T035.md) for research/verification evidence. This assignment ends at research and technical design; no application code was changed. A subsequent explicit implementation assignment is required. Primary risks: short-landscape space and believable foot contact. Prior REVIEW tasks remain unchanged. No agents, worktrees, dependencies, push or publication; preserve both unrelated diagnostic JSON files.

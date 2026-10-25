@@ -14,6 +14,30 @@ function createMockStorage(initial = {}) {
 }
 
 describe('T008 app controller: clock, lifecycle and ownership', () => {
+  test('T035 toggling saves only a preference, survives restart/reload, and cleans up once', () => {
+    const storage = createMockStorage();
+    const app = createApp({ storage, lockManager: null }).init();
+    const before = app.getState().session;
+    const cleanup = vi.fn();
+    app.setDancingCompanionCleanup(cleanup);
+    try {
+      expect(app.getState().preferences.dancingCompanion).toBe(false);
+      app.setDancingCompanion(true);
+      expect(app.getState().session).toBe(before);
+      expect(app.getState().started).toBe(false);
+      expect(JSON.parse(storage.getItem(STORAGE_KEY)).preferences.dancingCompanion).toBe(true);
+      app.restart();
+      expect(app.getState().preferences.dancingCompanion).toBe(true);
+      app.newGame({ seed: 123, drawCount: 3 });
+      expect(app.getState().preferences.dancingCompanion).toBe(true);
+    } finally { app.destroy(); }
+    app.destroy();
+    expect(cleanup).toHaveBeenCalledTimes(1);
+    const restored = createApp({ storage, lockManager: null }).init();
+    try { expect(restored.getState().preferences.dancingCompanion).toBe(true); }
+    finally { restored.destroy(); }
+  });
+
   let fakeNow = 1000;
   const mockPerformance = {
     now: () => fakeNow,
@@ -409,6 +433,7 @@ describe('T008 app controller: clock, lifecycle and ownership', () => {
       expect(app.restart()).toBe(before.session);
       expect(app.newGame({ seed: 1, drawCount: 3 })).toBe(before.session);
       app.setDrawPreference(3);
+      app.setDancingCompanion(true);
       app.markTouchHelpSeen();
       fakeNow += 5000;
       app.settleElapsed(true);

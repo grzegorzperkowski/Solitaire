@@ -1,9 +1,10 @@
 import './styles.css';
 import { createApp } from './app.js';
-import { renderGame, renderProgressNotice } from './ui/render.js';
+import { renderGame, renderProgressNotice, checkScrollerOverflow } from './ui/render.js';
 import { setupResponsiveLayout } from './ui/layout.js';
 import { createInputController } from './ui/input.js';
 import { playVictoryAnimation } from './ui/victory-animation.js';
+import { createDancingCompanion } from './ui/dancing-companion.js';
 
 const app = createApp();
 
@@ -46,7 +47,17 @@ if (typeof document !== 'undefined') {
 
     renderGame(root, app.getState(), currentDims, inputCtrl, app);
 
+    const companion = createDancingCompanion(root.querySelector('#dancing-companion'));
+    companion.update(app.getState());
+    const scrollerObserver = new ResizeObserver(() => checkScrollerOverflow(root));
+    scrollerObserver.observe(root.querySelector('#tableau-scroller'));
+    app.setDancingCompanionCleanup(() => {
+      companion.destroy();
+      scrollerObserver.disconnect();
+    });
+
     app.subscribe((state, progressOnly) => {
+      companion.update(state);
       if (progressOnly) {
         renderProgressNotice(root, state);
         return;

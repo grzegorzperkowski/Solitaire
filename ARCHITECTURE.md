@@ -4,6 +4,10 @@ Status: proposed implementation design. [REQUIREMENTS.md](REQUIREMENTS.md) owns 
 
 ## 1. Structure and alternatives
 
+T035 adds `src/ui/dancing-companion.js`: a UI-only articulated SVG, three dance samplers and occasional run/jump phrases. `main.js` mounts one instance and updates it from the existing app subscription; `app.destroy()` invokes its registered cleanup, including a scroller ResizeObserver. Each phrase begins/ends in the same resting pose. Only phrase selection uses ambient randomness; engine/seeds/session history remain independent. RAF advances a separate timestamp-based animation clock, capped at 50ms per frame, and never renders the game or writes storage. Visibility/media/pagehide/pageshow handlers stop/resume it and are removed on destroy.
+
+Optional `preferences.dancingCompanion` is serialized as boolean in existing schema v2; missing values in v1/v2 normalize to false, present non-booleans reject. No game-state/history migration. An older client may discard this decoration setting when resaving, without losing gameplay data. Setting changes use the existing ownership/write guard and save/error flow. The renderer keeps a stable, noninteractive SVG host and applies a viewport flex layout only while enabled; scroller size changes refresh the existing overflow controls. See [T035 design](.project/tasks/T035-design.md), including its implementation addendum.
+
 Use pure engine functions, a small session/controller layer and DOM rendering with inline SVG card artwork. Engine state is authoritative; DOM geometry and gesture state are disposable views. Input, hints and optional completion all submit the same validated commands.
 
 This is preferable to a monolithic DOM-driven implementation, whose history and tests would depend on visual state. Canvas would offer drawing control but require separate hit testing, focus and accessibility infrastructure. A framework/state-management package adds no needed capability for 52 cards.

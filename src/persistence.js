@@ -106,6 +106,7 @@ export function serializeSession(session, metadata = {}) {
   const preferences = {
     drawCount: prefDrawCount,
     touchHelpSeen: Boolean(metadata?.preferences?.touchHelpSeen),
+    dancingCompanion: metadata?.preferences?.dancingCompanion === true,
   };
 
   const rawStats = metadata?.statistics ?? session.statistics;
@@ -189,6 +190,9 @@ function validateSaveEnvelope(envelope) {
     return { ok: false, reason: 'invalid-preferences' };
   }
   if (typeof prefs.touchHelpSeen !== 'boolean') {
+    return { ok: false, reason: 'invalid-preferences' };
+  }
+  if (Object.hasOwn(prefs, 'dancingCompanion') && typeof prefs.dancingCompanion !== 'boolean') {
     return { ok: false, reason: 'invalid-preferences' };
   }
 
@@ -425,6 +429,7 @@ export function restoreSession(text) {
     preferences: Object.freeze({
       drawCount: prefs.drawCount,
       touchHelpSeen: prefs.touchHelpSeen,
+      dancingCompanion: prefs.dancingCompanion ?? false,
     }),
     statistics: Object.freeze({
       draw1: Object.freeze({ ...stats.draw1 }),

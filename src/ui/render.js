@@ -85,6 +85,8 @@ export function createBoardStructure(rootElement) {
         </section>
       </div>
 
+      <div id="dancing-companion" class="dancing-companion" aria-hidden="true" hidden></div>
+
       <!-- Bottom notices (Hint explanation & Progress guidance above controls) -->
       <div class="bottom-notice-container" id="bottom-notice-container">
         <div id="completion-notice" class="notice-banner bottom-notice hidden">
@@ -138,6 +140,9 @@ export function renderGame(rootElement, state, layoutDims = null, inputControlle
     container = rootElement.querySelector('#game-container');
   }
   container.inert = Boolean(state.victoryAnimation);
+  const companionChanged = container.classList.contains('has-companion') !== Boolean(state.preferences?.dancingCompanion);
+  container.classList.toggle('has-companion', Boolean(state.preferences?.dancingCompanion));
+  if (companionChanged) inputController?.cancelDrag?.();
   const readOnly = !state.isWriter || state.hasConflict;
   rootElement.querySelector('#board-area').inert = readOnly || state.isCompleting;
   rootElement.querySelector('#btn-hint').disabled = readOnly || state.isCompleting;
@@ -557,7 +562,7 @@ function renderTableau(rootElement, tableauColumns, dims, selection, legalDestin
   }
 }
 
-function checkScrollerOverflow(rootElement) {
+export function checkScrollerOverflow(rootElement) {
   const scroller = rootElement.querySelector('#tableau-scroller');
   const scrollControls = rootElement.querySelector('#tableau-scroll-controls');
   if (!scroller || !scrollControls) return;

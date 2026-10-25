@@ -420,6 +420,92 @@ body {
   font-weight: 700;
 }
 
+.dancing-companion {
+  flex: 0 0 88px;
+  width: 100%;
+  max-width: var(--board-width);
+  height: 88px;
+  color: #f8f4e9;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.dancing-companion[hidden] {
+  display: none;
+}
+
+.dancing-companion svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+body:has(.has-companion) {
+  height: 100vh;
+  height: 100dvh;
+  overflow: visible;
+}
+
+#game-app:has(.has-companion),
+.game-container.has-companion {
+  flex: 1;
+  min-height: 0;
+}
+
+.has-companion > :not(.board-area),
+.has-companion .top-row,
+.has-companion .tableau-scroll-controls {
+  flex-shrink: 0;
+}
+
+.has-companion .board-area,
+.has-companion .tableau-section {
+  flex: 1;
+  min-height: 0;
+}
+
+.has-companion .board-area {
+  min-height: calc(var(--card-height) + 102px);
+}
+
+.has-companion .tableau-scroller {
+  flex: 1;
+  width: 100%;
+  min-height: 44px;
+  max-height: none;
+}
+
+.companion-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.companion-option input {
+  width: 20px;
+  height: 20px;
+  accent-color: #d4af37;
+}
+
+.companion-motion-note {
+  display: none;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .companion-motion-note { display: block; }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .dancing-companion {
+    flex-basis: 56px;
+    height: 56px;
+  }
+}
+
 /* Bottom Bar */
 .bottom-bar {
   width: 100%;

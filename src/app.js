@@ -27,7 +27,7 @@ export function createApp({
   random = Math.random,
 } = {}) {
   let session = null;
-  let preferences = { drawCount: initialOptions.drawCount ?? 1, touchHelpSeen: false };
+  let preferences = { drawCount: initialOptions.drawCount ?? 1, touchHelpSeen: false, dancingCompanion: false };
   let metadata = { schemaVersion: SCHEMA_VERSION, revision: 1, savedAt: new Date().toISOString() };
   let isPaused = false;
   let activeDialog = null;
@@ -48,6 +48,7 @@ export function createApp({
   let completionTimer = null;
   let victoryAnimation = null;
   let victoryAnimationCleanup = null;
+  let dancingCompanionCleanup = null;
 
   let progress = Object.freeze({ status: 'UNKNOWN', noLegalMoves: false });
   let analyzedBoard = null;
@@ -619,6 +620,17 @@ export function createApp({
     }
   }
 
+  function setDancingCompanion(enabled) {
+    if (typeof enabled !== 'boolean' || !canMutateSession()) return;
+    preferences.dancingCompanion = enabled;
+    save();
+    notifyListeners();
+  }
+
+  function setDancingCompanionCleanup(cleanup) {
+    dancingCompanionCleanup = cleanup;
+  }
+
   function markTouchHelpSeen() {
     if (!canMutateSession()) return;
     preferences.touchHelpSeen = true;
@@ -679,6 +691,8 @@ export function createApp({
   function destroy() {
     stopCompletion();
     isDestroyed = true;
+    dancingCompanionCleanup?.();
+    dancingCompanionCleanup = null;
     clearVictoryAnimation();
     victoryAnimation = null;
     clearTimeout(analysisTimer);
@@ -716,6 +730,8 @@ export function createApp({
     finishVictoryAnimation,
     setVictoryAnimationCleanup,
     setDrawPreference,
+    setDancingCompanion,
+    setDancingCompanionCleanup,
     markTouchHelpSeen,
     requestSmartHint,
     exportDiagnostic,

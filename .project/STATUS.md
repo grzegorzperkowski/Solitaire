@@ -1,3 +1,11 @@
+# T035 implementation REVIEW — 2026-10-25
+
+Optional SVG companion delivered: three random dances, occasional running/jumping, curved torso/articulated limbs, persisted opt-in menu setting, responsive bottom strip and full lifecycle/reduced-motion controls. 429 unit/13 simulation/120 Chromium E2E/build pass; final geometry rerun 17/17, lint 0 errors/16 informational warnings. Production `/Solitaire/` smoke and gzip budgets pass. Physical Safari/Android, live animation aesthetics and device performance/battery remain unverified; short landscape can scroll to controls. Await coordinator acceptance; no push, dependencies or engine edits. Both unrelated diagnostic JSON files preserved. See [report](reports/T035.md).
+
+# T035 implementation assignment — 2026-10-25
+
+Coordinator assigned implementation from `006acb2`, extending the design to random dances, occasional running and jumping. Codex works sequentially on master; no engine changes, dependencies or push. Preserve both unrelated diagnostic JSON files.
+
 # T035 REVIEW — 2026-10-25
 
 Research and technical design for an optional hand-drawn dancing companion delivered. Proposed native SVG with articulated limbs and curved torso, opt-in persisted preference, reserved bottom strip, lifecycle/reduced-motion controls and verification gates. Documentation only; no prototype, runtime edits, game tests or device/performance evidence. Await coordinator review and separate implementation assignment. Both unrelated diagnostic JSON files preserved. See [design](tasks/T035-design.md) and [report](reports/T035.md).

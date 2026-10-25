@@ -89,9 +89,15 @@ export function renderDialogs(rootElement, state, app) {
 
   modalContainer.className = 'modal-overlay is-active';
   // Clock and layout notifications must not erase form values, focus or feedback.
-  if (modalContainer._dialogHtml === dialogHtml) return;
+  if (modalContainer._dialogHtml === dialogHtml) {
+    const companionToggle = modalContainer.querySelector('#dancing-companion-toggle');
+    if (companionToggle) companionToggle.checked = Boolean(preferences?.dancingCompanion);
+    return;
+  }
   modalContainer._dialogHtml = dialogHtml;
   modalContainer.innerHTML = dialogHtml;
+  const companionToggle = modalContainer.querySelector('#dancing-companion-toggle');
+  if (companionToggle) companionToggle.checked = Boolean(preferences?.dancingCompanion);
 
   attachDialogEvents(modalContainer, dialogType, state, app, startNewGame);
 
@@ -119,6 +125,11 @@ function renderMenuHtml(readOnly) {
         <button id="btn-menu-restart" class="menu-action-btn" ${readOnly ? 'disabled' : ''}>Rozdaj ponownie</button>
         <button id="btn-menu-statistics" class="menu-action-btn">Statystyki</button>
         <button id="btn-menu-help" class="menu-action-btn">Zasady i pomoc</button>
+        <label class="companion-option">
+          <input id="dancing-companion-toggle" type="checkbox" ${readOnly ? 'disabled' : ''} aria-describedby="companion-motion-note">
+          Tańczący ludzik
+        </label>
+        <p id="companion-motion-note" class="companion-motion-note">Animacja wyłączona przez ustawienia ograniczenia ruchu.</p>
         <button id="btn-menu-export" class="menu-action-btn">Zapisz stan do analizy</button>
         <p id="diagnostic-export-status" role="status" aria-live="polite"></p>
       </div>
@@ -314,6 +325,10 @@ function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame
 
   const isStartedAndUnwon = state.started && !state.isWon;
   const currentDrawCount = state.preferences?.drawCount ?? 1;
+
+  dialogEl.querySelector('#dancing-companion-toggle')?.addEventListener('change', (event) => {
+    app.setDancingCompanion(event.target.checked);
+  });
 
   // 1. Focus trap on Tab
   dialogEl.addEventListener('keydown', (e) => {

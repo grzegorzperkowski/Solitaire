@@ -2,6 +2,8 @@
 
 Data: 2026-10-25. Status: propozycja do oceny koordynatora. Zakres obejmuje dokumentację, nie wdrożenie. Podstawa kodowa: `324c17f` na `master`.
 
+**Aktualizacja wdrożeniowa, 2026-10-25:** koordynator zlecił wdrożenie i rozszerzył zakres o losowe tańce, podbieganie i skoki. Zastępuje to poniższe założenie jednej choreografii i granicę „tylko dokumentacja”. Implementacja ma trzy rodzaje tańca (kołysanie, disco, fala), krótkie biegi i skoki. Figury trwają odpowiednio 4,8/4,4/5,2/2,8/1,8 s. Każda dochodzi do wspólnej pozy spoczynkowej przez obwiednię sin²; bieg/skok zawsze przedziela taniec, kolejna figura nie powtarza poprzedniej. Zamiast tabeli ośmiu póz użyto małych funkcji okresowych sterujących tym samym szkieletem i giętkim tułowiem. Pas ma 88/56px; na niskich ekranach, gdy stałe elementy nie mieszczą się, strona pozostaje przewijalna. Kontrakty zapisu i cyklu życia z projektu pozostają aktualne. Ten dodatek ma pierwszeństwo nad wcześniejszym zakresem, docelowe dowody są w raporcie T035.
+
 ## 1. Rekomendacja i efekt dla gracza
 
 Zbudować jednego proceduralnie animowanego ludzika w lokalnym, liniowym SVG. W menu dodać domyślnie wyłączoną opcję „Tańczący ludzik”. Po włączeniu postać tańczy w osobnym pasie w dolnej części gry, nad komunikatami i głównymi przyciskami. Ruch obejmuje obie ręce i nogi, głowę, biodra oraz wyginający się tułów. Nie wystarczy obracać całej nieruchomej sylwetki.

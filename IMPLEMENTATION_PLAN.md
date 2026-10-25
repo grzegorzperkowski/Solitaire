@@ -2,6 +2,8 @@
 
 Status: design only. All checkboxes below describe future work. Completing these documents does not start implementation.
 
+T035 was separately assigned on 2026-10-25 as an optional presentation enhancement: SVG dancing companion with random dances, short runs and jumps. It does not change the original milestone dependencies or accept prior REVIEW tasks. Scope/status/evidence: [.project/tasks/T035.md](.project/tasks/T035.md), [.project/reports/T035.md](.project/reports/T035.md).
+
 **Goal:** ship a Polish, mobile-first Klondike game meeting [REQUIREMENTS.md](REQUIREMENTS.md).
 
 **Architecture:** pure immutable engine, command timeline with derived snapshots, one session/controller, DOM/SVG view and native browser input/storage. Read [ARCHITECTURE.md](ARCHITECTURE.md) before changing contracts.
