@@ -334,10 +334,12 @@ Unit tests cover atomic reveal, empty column, Ace, consecutive foundation intens
 
 T035 placement regression: at all seven existing viewports, assert the companion strip bottom equals both footer top and Menu button top. Notices (including wrapped/200% text) remain above the strip; keep native scrolling and direct onscreen Menu checks.
 
-T035 compact layout: at 390x670 show the real long hint text beside a 72px companion, with onscreen controls and the visible build below them at the right edge; resize to 390x844 to restore the full-width scene and larger board, then back to compact. The build must stay visible and within the viewport throughout. Menu must expose build. Existing seven-viewport geometry expects compact strip at portrait <=599x740, spacious otherwise; keep wrapped 200% text and native touch coverage.
+T035 compact layout: at 390x670 show the real long hint text beside a 72px companion, with onscreen controls and the visible build below them at the right edge; resize to 390x844 to restore the full-width scene and larger board, then back to compact. The build must stay visible and within the viewport throughout. Version stays in the muted page-bottom stamp; Menu omits build. Existing seven-viewport geometry expects compact strip at portrait <=599x740, spacious otherwise; keep wrapped 200% text and native touch coverage.
 
 T035 toggle diagnosis: native touchscreen checkbox and label toggle on 390x670/844 and persist on reload. Reader Menu explains read-only state; disabled toggle cannot write. Close writer and reload reader to restore enabled setting change.
 
 T035 pointer regressions: dancing-companion.spec.js checks click/keyboard stop/resume, stationary geometry, captured drag lift, visible parachute, progressive descent and stopped landing; reduced-motion immediate landing; native CDP touch from compact strip, Menu cancellation and resize reset. Existing card drag, geometry, lifecycle/teardown and persistence cases remain required. Inspect parachute screenshot; physical Safari/touch/pinch remains separate evidence.
 
 T035 iPhone hold regression: use exact elementFromPoint hit testing 26 CSS px from the moving figure center in compact layout, then native CDP touch held 650ms, drag upwards and release into parachute descent. This failed with the small SVG target. The HTML button stays at least 64x64 CSS px and avoids SVG-specific interaction; physical iPhone 15 Pro/Safari confirmation is still required.
+
+T035 developer version placement: compact regression also checks bottom position without the companion, opacity <=0.45, and no duplicate Menu version. Existing seven-viewport checks keep controls reachable.

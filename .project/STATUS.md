@@ -1,3 +1,7 @@
+# T035 developer version placement REVIEW — 2026-10-25
+
+Version remains muted at page bottom right, including companion-off mode; removed Menu duplication. Viewport minimum and auto top margin reuse the existing footer. Build and 24 companion Chromium checks pass; lint 0 errors/17 existing warnings. Await acceptance; no push or physical Safari check. Preserve both diagnostics.
+
 # T035 bottom-right build stamp REVIEW — 2026-10-25
 
 Restored the game version below controls at the right edge by removing compact companion CSS hiding. Existing alignment reused; no runtime JS/save/input changes. Focused visibility test RED to GREEN; production build and 24 companion Chromium checks pass; compact screenshot inspected, controls remain onscreen. Await acceptance; no push or physical Safari check. Both unrelated diagnostic JSON files preserved.

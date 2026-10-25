@@ -133,7 +133,6 @@ function renderMenuHtml(readOnly) {
         <p id="companion-motion-note" class="companion-motion-note">Animacja wyłączona przez ustawienia ograniczenia ruchu.</p>
         <button id="btn-menu-export" class="menu-action-btn">Zapisz stan do analizy</button>
         <p id="diagnostic-export-status" role="status" aria-live="polite"></p>
-        <small class="menu-build-stamp">${BUILD_INFO}</small>
       </div>
       <footer class="dialog-footer">
         <button id="btn-menu-resume" class="btn-primary w-full">Wróć do gry</button>

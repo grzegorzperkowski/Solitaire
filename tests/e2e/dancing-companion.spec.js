@@ -276,6 +276,10 @@ test('T035 winning stops the companion and Undo resumes without a second award',
 test('T035 compact bubble shares space and returns to roomy layout with more height', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 670 });
   await page.goto('/');
+  const stamp = page.locator('#build-stamp');
+  await expect(stamp).toBeVisible();
+  expect((await stamp.boundingBox()).y).toBeGreaterThan(630);
+  expect(await stamp.evaluate(el => Number(getComputedStyle(el).opacity))).toBeLessThanOrEqual(0.45);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await enableCompanion(page);
   await page.evaluate(() => {
@@ -307,7 +311,7 @@ test('T035 compact bubble shares space and returns to roomy layout with more hei
   await page.setViewportSize({ width: 390, height: 670 });
   await expect(page.locator('#build-stamp')).toBeVisible();
   await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
-  await expect(page.locator('.menu-build-stamp')).toContainText('Build');
+  await expect(page.locator('.menu-build-stamp')).toHaveCount(0);
 });
 
 
