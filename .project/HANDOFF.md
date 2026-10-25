@@ -1,3 +1,7 @@
+# T035 DONE — 2026-10-25
+
+Coordinator tested and explicitly closed the companion project, accepting implementation through `8dd1b651b6d115b992df863b44ac767772ac5c48`: "projekt ludzika zamykamy, przetestowany - jest OK". Includes random dances/run/jump, knee slide, full viewport width and mobile Menu correction. No further task is assigned. Device/OS/browser details were not provided. Preserve the two diagnostic JSON files and unrelated subsequent `34a0ab8`; earlier REVIEW instructions are superseded. See [report](reports/T035.md).
+
 # T035 mobile regression REVIEW — 2026-10-25
 
 Shared CSS fix keeps Menu inside short mobile viewports by scrolling the board rather than pushing down controls. Three raw-touch/viewport regressions and all 124 Chromium tests pass; build/lint pass (16 informational warnings). Coordinator explicitly authorized commit/push; do not mark DONE without acceptance. Preserve concurrent README.md/package.json changes and both diagnostic JSON files. See [report](reports/T035.md); physical Safari remains unverified.

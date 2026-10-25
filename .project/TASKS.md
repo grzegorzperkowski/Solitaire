@@ -56,7 +56,7 @@ Coordinator acceptance is recorded in the accepted task's report, then its row b
 
 | [T034](tasks/T034.md) | Maintainability | Simplify the five prioritized functions without behavior changes | None | REVIEW | 403 unit/13 simulation/107 E2E/build pass; 315 restore cases/108 planner traces unchanged. [Report](reports/T034.md). |
 
-| [T035](tasks/T035.md) | UI | Optional dancing hand-drawn companion | None | REVIEW | Mobile Menu regression fixed with compact-board scrolling; RED→GREEN 3 viewport cases, 124 Chromium/build pass, lint 0 errors/16 warnings. Commit/push explicitly authorized. [Report](reports/T035.md). |
+| [T035](tasks/T035.md) | UI | Optional dancing hand-drawn companion | None | DONE | Coordinator tested/accepted and closed 2026-10-25 at `8dd1b65`, including mobile Menu fix. [Report](reports/T035.md). |
 
 ## Selection and model suitability
 

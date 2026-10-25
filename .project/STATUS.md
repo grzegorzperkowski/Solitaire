@@ -1,3 +1,7 @@
+# T035 DONE — 2026-10-25
+
+Human coordinator confirmed testing and accepted/closed the complete companion feature: "projekt ludzika zamykamy, przetestowany - jest OK". Accepted commit `8dd1b651b6d115b992df863b44ac767772ac5c48`, including the mobile Menu fix. Device/browser versions were not supplied. No successor assigned; preserve both unrelated diagnostic JSON files. See [report](reports/T035.md). Earlier REVIEW notes are historical.
+
 # T035 mobile regression REVIEW — 2026-10-25
 
 Fixed board minimum-height overflow that hid Menu on short mobile viewports. Board now scrolls independently; controls remain onscreen. Three viewport regressions RED→GREEN, final 124 Chromium/build pass; lint 0 errors/16 warnings. Coordinator authorized commit/push; acceptance still pending. Preserve unrelated README/package.json edits and both diagnostics. See [report](reports/T035.md).
