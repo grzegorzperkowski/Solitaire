@@ -1,3 +1,11 @@
+# T035 phone motion REVIEW — 2026-10-25
+
+Shake → jump, cyclic tilt → sway; Menu permission/retry and lifecycle guards retained. 445 unit/13 simulation/130 Chromium/build pass; lint 0 errors/16 existing warnings. Await acceptance and physical-phone calibration. No push. Both diagnostics preserved. See [report](reports/T035.md).
+
+# T035 motion follow-up IN_PROGRESS — 2026-10-25
+
+Coordinator explicitly reopens T035 for phone vertical shake → jump and cyclic left/right tilt → sway. Start `2feb2cd`, master; preserve both unrelated diagnostic JSON files. No engine/save changes, dependencies or push.
+
 # T035 toggle diagnosis REVIEW — 2026-10-25
 
 Coordinator confirms New Game/redeal disabled while Help/Statistics work: read-only ownership guard. Added Menu explanation and close-other-tabs/reload guidance. Two touch cases pass; 20 companion Chromium/build pass; recovery focused test passes; lint 0 errors/16 existing warnings. Await acceptance; no push or physical Safari verification. Both diagnostics preserved.

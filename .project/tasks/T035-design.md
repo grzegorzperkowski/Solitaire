@@ -134,3 +134,7 @@ Przy wdrożeniu: `npm run lint`, `npm test`, `npm run test:simulation -- --profi
 ## 8. Granica decyzji
 
 Projekt rekomenduje SVG, jedną choreografię, opt-in z zapisem i osobny pas dolny. Ustawienia koloru, rozmiaru i tempa są parametrami do dopracowania wizualnego w implementacji, nie obietnicą zweryfikowanej animacji. Największe ryzyka to mało naturalny ruch stóp i zbyt mało miejsca w krótkim poziomie. Wdrożenie wymaga osobnego polecenia koordynatora; akceptacja tego dokumentu nie jest dowodem spełnienia przyszłych testów.
+
+## Phone motion addendum — 2026-10-25
+
+Coordinator reopened T035 for phone shake/jump and tilt/sway. Reuse the existing phrases, with local bounded alternating-extreme detectors and screen-relative axes; do not store readings or alter commands. Menu supplies explicit sensor permission activation/retry where required. All existing lifecycle and reduced-motion guards apply. Initial thresholds require physical-device calibration; synthetic unit/Chromium results are separate evidence.
