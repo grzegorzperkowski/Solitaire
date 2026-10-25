@@ -1,3 +1,7 @@
+# T035 placement follow-up REVIEW — 2026-10-25
+
+Companion strip now directly adjoins buttons; notices moved above it. 17 Chromium checks/build pass; lint 0 errors/16 existing warnings. Screenshot at 320px inspected. Await coordinator acceptance; no physical-device checks or push. Both diagnostic JSON files preserved.
+
 # T036 duration revision REVIEW — 2026-10-25
 
 All four effects now last 456ms. Build and both focused Chromium tests pass, including reduced motion. Await coordinator acceptance; no push.

@@ -4,6 +4,8 @@ Status: proposed implementation design. [REQUIREMENTS.md](REQUIREMENTS.md) owns 
 
 ## 1. Structure and alternatives
 
+T035 placement follow-up: notices precede the companion strip; the strip sits directly above the bottom buttons, with no footer top margin/padding in companion mode. Reserved notice space no longer separates the feet from controls.
+
 T035 mobile Menu correction: companion mode allows `.board-area` to shrink to 44px and scroll vertically, with a 92px minimum tableau section (44px scroll controls + 4px gap + 44px card band). This replaces the card-height-plus-102px minimum that pushed the bottom controls below short viewports. Overflow is clipped within the board, so the companion and footer remain outside it; normal tall-screen layout and card dimensions are unchanged.
 
 T035 width/slide follow-up: the strip uses `100vw`, independent of the board's desktop width cap. A component-owned ResizeObserver derives SVG scene width from host width/height at a fixed 140-unit scene height, preserving uniform scaling; disconnect on destroy. Sampling accepts this scene width and reserves 56 scene units at either edge for the body/limbs. Running reaches both edges; the 5.2s slide combines run-up, lowered knees/folded shins, travel with acceleration/braking and recovery, returning to the shared pose. Slide, like run/jump, is separated from another special action by a dance.

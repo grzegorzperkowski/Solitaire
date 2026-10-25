@@ -481,6 +481,11 @@ body:has(.has-companion) {
   max-height: none;
 }
 
+.has-companion .bottom-bar {
+  margin-top: 0;
+  padding-top: 0;
+}
+
 .companion-option {
   display: flex;
   align-items: center;

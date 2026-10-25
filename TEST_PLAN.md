@@ -331,3 +331,5 @@ Device/Safari checks and held-out longer-game validation remain separate evidenc
 ## T036 — Small-success animation gates (T09/T19/T22)
 
 Unit tests cover atomic reveal, empty column, Ace, consecutive foundation intensity capped at four, reset by draw, history navigation, initial/unchanged render, new attempt and a fresh branch after Undo. Chromium renderer tests use valid 52-card fixtures at 320px: actual CSS effect/duration/level, empty slot, preserved focus, no horizontal overflow, Undo/Redo suppression and reduced-motion bypass. Existing input/accessibility/completion checks guard interaction and travel. Physical Safari/Android aesthetics and performance remain unverified.
+
+T035 placement regression: at all seven existing viewports, assert the companion strip bottom equals both footer top and Menu button top. Notices (including wrapped/200% text) remain above the strip; keep native scrolling and direct onscreen Menu checks.

@@ -192,7 +192,9 @@ for (const viewport of [
     expect(layout.stage.y).toBeGreaterThanOrEqual(layout.board.bottom - 1);
     expect(layout.boardOverflow).toBe('auto');
     expect(layout.footer.bottom).toBeLessThanOrEqual(viewport.height);
-    expect(layout.footer.y).toBeGreaterThanOrEqual(layout.stage.bottom);
+    expect(layout.footer.y).toBeCloseTo(layout.stage.bottom, 1);
+    const button = await page.locator('#btn-menu').boundingBox();
+    expect(button.y).toBeCloseTo(layout.stage.bottom, 1);
     expect(layout.stage.height).toBe(viewport.height <= 500 && viewport.width > viewport.height ? 56 : 88);
     expect(layout.stage.width).toBeCloseTo(viewport.width, 0);
     expect(layout.stage.x).toBeCloseTo(0, 0);
