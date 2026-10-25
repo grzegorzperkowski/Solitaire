@@ -1,3 +1,7 @@
+# T032 focus-test follow-up REVIEW — 2026-10-25
+
+Coordinator assigned the clock-focus CI failure. Reproduced a race with draw focus restoration in requestAnimationFrame; the test now awaits that frame before focusing the card. Build, 39 accessibility checks and 10 focused repetitions pass; lint has 0 errors/16 existing warnings. Runtime unchanged. Await coordinator acceptance; no push. Preserve both diagnostic JSON files. See reports/T032.md.
+
 # T035 DONE — 2026-10-25
 
 Coordinator tested and explicitly closed the companion project, accepting implementation through `8dd1b651b6d115b992df863b44ac767772ac5c48`: "projekt ludzika zamykamy, przetestowany - jest OK". Includes random dances/run/jump, knee slide, full viewport width and mobile Menu correction. No further task is assigned. Device/OS/browser details were not provided. Preserve the two diagnostic JSON files and unrelated subsequent `34a0ab8`; earlier REVIEW instructions are superseded. See [report](reports/T035.md).

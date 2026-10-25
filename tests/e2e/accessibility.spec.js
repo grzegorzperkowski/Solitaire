@@ -177,9 +177,12 @@ test.describe('T010 Accessibility and keyboard navigation (T18)', () => {
 
   test('clock ticks preserve the focused card DOM node while time advances', async ({ page }) => {
     await page.locator('#stock-container').click();
+    // Let the draw's scheduled focus restoration finish before focusing a card.
+    await page.evaluate(() => new Promise(resolve => { requestAnimationFrame(resolve); }));
     const card = page.locator('#column-0 .card-face-up');
     const original = await card.elementHandle();
     await card.focus();
+    await expect(card).toBeFocused();
     const timer = page.locator('#timer-display');
     const before = await timer.textContent();
     await expect(timer).not.toHaveText(before);
