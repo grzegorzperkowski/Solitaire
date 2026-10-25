@@ -4,6 +4,8 @@ Status: proposed implementation design. [REQUIREMENTS.md](REQUIREMENTS.md) owns 
 
 ## 1. Structure and alternatives
 
+T035 adaptive compact layout: a display-contents wrapper preserves normal notice/companion flow. At portrait viewport width <=599px and height <=740px it becomes a two-column grid: flexible notice bubble and 72px companion scene. Existing ResizeObserver keeps uniform SVG scaling in the narrower scene. Only this compact companion layout hides the board build stamp; Menu always exposes the same build string. Taller/fullscreen viewports and landscape keep the existing spacious layout. Native CSS media queries respond to viewport height changes; no additional layout state or listeners.
+
 T035 placement follow-up: notices precede the companion strip; the strip sits directly above the bottom buttons, with no footer top margin/padding in companion mode. Reserved notice space no longer separates the feet from controls.
 
 T035 mobile Menu correction: companion mode allows `.board-area` to shrink to 44px and scroll vertically, with a 92px minimum tableau section (44px scroll controls + 4px gap + 44px card band). This replaces the card-height-plus-102px minimum that pushed the bottom controls below short viewports. Overflow is clipped within the board, so the companion and footer remain outside it; normal tall-screen layout and card dimensions are unchanged.

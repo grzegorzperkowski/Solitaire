@@ -1,3 +1,7 @@
+# T035 adaptive compact layout REVIEW — 2026-10-25
+
+Delivered portrait compact layout at <=599px width/<=740px height: hint bubble beside 72px figure, build in Menu; taller/fullscreen and landscape preserve spacious layout. 18 Chromium/build pass; lint 0 errors/16 existing warnings. Compact/roomy screenshots inspected. Await coordinator acceptance; no push, physical Safari check or full suite. Both diagnostics preserved.
+
 # T035 placement follow-up REVIEW — 2026-10-25
 
 Companion strip now directly adjoins buttons; notices moved above it. 17 Chromium checks/build pass; lint 0 errors/16 existing warnings. Screenshot at 320px inspected. Await coordinator acceptance; no physical-device checks or push. Both diagnostic JSON files preserved.

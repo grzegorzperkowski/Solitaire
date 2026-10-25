@@ -44,7 +44,7 @@ test('T035 knee slide travels through a viewport-wide scene and adapts on resize
   }).toBeGreaterThan(300);
   await page.screenshot({ path: 'test-results/screenshots/companion-slide-1280.png' });
   for (const width of [320, 1920]) {
-    await page.setViewportSize({ width, height: 720 });
+    await page.setViewportSize({ width, height: 844 });
     await expect.poll(() => host.locator('svg').evaluate(svg => svg.viewBox.baseVal.width)).toBeCloseTo(width * 140 / 88, 1);
     const bounds = await host.boundingBox();
     expect(bounds.x).toBeCloseTo(0, 0);
@@ -195,9 +195,10 @@ for (const viewport of [
     expect(layout.footer.y).toBeCloseTo(layout.stage.bottom, 1);
     const button = await page.locator('#btn-menu').boundingBox();
     expect(button.y).toBeCloseTo(layout.stage.bottom, 1);
-    expect(layout.stage.height).toBe(viewport.height <= 500 && viewport.width > viewport.height ? 56 : 88);
-    expect(layout.stage.width).toBeCloseTo(viewport.width, 0);
-    expect(layout.stage.x).toBeCloseTo(0, 0);
+    const compact = viewport.width <= 599 && viewport.height <= 740 && viewport.height > viewport.width;
+    expect(layout.stage.height).toBe(compact ? 72 : viewport.height <= 500 && viewport.width > viewport.height ? 56 : 88);
+    expect(layout.stage.width).toBeCloseTo(compact ? 72 : viewport.width, 0);
+    if (!compact) expect(layout.stage.x).toBeCloseTo(0, 0);
     for (const col of layout.columns) {
       expect(col.x).toBeGreaterThanOrEqual(0);
       expect(col.right).toBeLessThanOrEqual(viewport.width + 1);
@@ -262,4 +263,38 @@ test('T035 winning stops the companion and Undo resumes without a second award',
   });
   await expect(page.locator('#dancing-companion')).toHaveAttribute('data-running', 'true');
   expect(await page.evaluate(() => window.__SOLITAIRE_APP__.getState().session.statistics.draw1.wins)).toBe(1);
+});
+
+
+test('T035 compact bubble shares space and returns to roomy layout with more height', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 670 });
+  await page.goto('/');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await enableCompanion(page);
+  await page.evaluate(() => {
+    const notice = document.querySelector('#hint-notice');
+    notice.classList.remove('hidden');
+    notice.textContent = 'Dobierz kartę ze stosu. To pierwszy z jedenastu ruchów, które pozwolą odsłonić kartę.';
+  });
+  const boxes = () => page.evaluate(() => {
+    const box = s => document.querySelector(s).getBoundingClientRect().toJSON();
+    return { notice: box('#hint-notice'), figure: box('#dancing-companion'), menu: box('#btn-menu'), board: box('#board-area') };
+  });
+  const compact = await boxes();
+  expect(compact.notice.right).toBeLessThan(compact.figure.x);
+  expect(compact.notice.bottom).toBeGreaterThan(compact.figure.y);
+  expect(compact.menu.bottom).toBeLessThanOrEqual(670);
+  await expect(page.locator('#build-stamp')).toBeHidden();
+  await page.screenshot({ path: 'test-results/screenshots/companion-bubble-compact.png' });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('#build-stamp')).toBeVisible();
+  const roomy = await boxes();
+  expect(roomy.figure.width).toBe(390);
+  expect(roomy.figure.y).toBeGreaterThanOrEqual(roomy.notice.bottom);
+  expect(roomy.board.height).toBeGreaterThan(compact.board.height);
+  await page.screenshot({ path: 'test-results/screenshots/companion-bubble-roomy.png' });
+  await page.setViewportSize({ width: 390, height: 670 });
+  await expect(page.locator('#build-stamp')).toBeHidden();
+  await page.getByRole('button', { name: 'Otwórz menu gry' }).click();
+  await expect(page.locator('.menu-build-stamp')).toContainText('Build');
 });

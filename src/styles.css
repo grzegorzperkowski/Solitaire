@@ -1304,3 +1304,50 @@ button {
 }
 
 .seed-disclosure[open] .seed-chevron { transform: rotate(225deg); }
+
+/* Keep the roomy layout when browser chrome/fullscreen leaves enough height. */
+.companion-notice-area {
+  display: contents;
+}
+
+.menu-build-stamp {
+  display: block;
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+@media (max-width: 599px) and (max-height: 740px) and (orientation: portrait) {
+  .has-companion .companion-notice-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 72px;
+    align-items: end;
+    width: 100%;
+    max-width: var(--board-width);
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .has-companion .bottom-notice-container {
+    min-height: 0;
+    margin: 0 0 8px;
+    position: relative;
+  }
+
+  .has-companion .bottom-notice-container:has(.bottom-notice:not(.hidden))::after {
+    content: "";
+    position: absolute;
+    right: -7px;
+    bottom: 16px;
+    border-block: 7px solid transparent;
+    border-left: 8px solid #78350f;
+  }
+
+  .has-companion .dancing-companion {
+    width: 72px;
+    height: 72px;
+  }
+
+  .has-companion > .build-stamp {
+    display: none;
+  }
+}

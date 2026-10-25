@@ -86,6 +86,7 @@ export function createBoardStructure(rootElement) {
         </section>
       </div>
 
+      <div class="companion-notice-area">
       <!-- Bottom notices (Hint explanation & Progress guidance above controls) -->
       <div class="bottom-notice-container" id="bottom-notice-container">
         <div id="completion-notice" class="notice-banner bottom-notice hidden">
@@ -97,6 +98,8 @@ export function createBoardStructure(rootElement) {
       </div>
 
       <div id="dancing-companion" class="dancing-companion" aria-hidden="true" hidden></div>
+
+      </div>
 
       <!-- Bottom controls bar (U06: 44x44 targets) -->
       <footer class="bottom-bar" aria-label="Główne przyciski">
