@@ -121,7 +121,7 @@ function renderMenuHtml(readOnly) {
         <button id="btn-dialog-close" class="dialog-close-btn" aria-label="Zamknij menu">✕</button>
       </header>
       <div class="dialog-body">
-        ${readOnly ? '<p class="notice-banner" role="status">Tryb tylko do odczytu. Aby rozpocząć grę lub zmienić ustawienia, zamknij pozostałe karty pasjansa i odśwież tę kartę.</p>' : ''}
+        ${readOnly ? '<p class="notice-banner" role="status">Tryb tylko do odczytu. Zamknij pozostałe okna pasjansa w tym samym trybie uruchomienia i ponów dostęp do zapisu. Po odzyskaniu dostępu gra wczyta aktualny zapis.</p><button id="btn-menu-retry-save" class="menu-action-btn">Ponów dostęp do zapisu</button>' : ''}
         <button id="btn-menu-new-game" class="menu-action-btn" ${readOnly ? 'disabled' : ''}>Nowa gra</button>
         <button id="btn-menu-restart" class="menu-action-btn" ${readOnly ? 'disabled' : ''}>Rozdaj ponownie</button>
         <button id="btn-menu-statistics" class="menu-action-btn">Statystyki</button>
@@ -391,6 +391,10 @@ function attachDialogEvents(modalContainer, dialogType, state, app, startNewGame
     }
 
     // Menu actions
+    if (e.target.closest('#btn-menu-retry-save')) {
+      app.retryOwnership();
+      return;
+    }
     if (e.target.closest('#btn-menu-export')) {
       const status = dialogEl.querySelector('#diagnostic-export-status');
       const result = app.exportDiagnostic(BUILD_INFO);

@@ -1,3 +1,7 @@
+# T038 REVIEW — 2026-10-25
+
+Menu/foreground/focus retries probe writer availability and reload the latest save before enabling writes. Occupied/rejected probes remain read-only; requests coalesce and destroyed callbacks cannot reload. 54 unit/50 Chromium/build pass; lint 0 errors/17 complexity warnings. Coordinator authorized commit and push; acceptance pending. Preserve both diagnostics; no physical-device verification of the new build. See reports/T038.md.
+
 # T037 REVIEW — 2026-10-25
 
 Independent PWA/browser session, preferences, statistics, victory bag and writer locks delivered without legacy migration. Namespace fixed from initial standalone display mode; same-mode exclusion preserved. Regression RED→GREEN; 56 unit/70 Chromium checks, production build and lint (0 errors/17 existing warnings) pass. Android ADB confirmed the original conflicting Chrome/PWA pages; new build has not been published or tested as an installed Android PWA. Both unrelated diagnostics preserved. See reports/T037.md; await coordinator acceptance.

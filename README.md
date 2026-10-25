@@ -142,3 +142,5 @@ the controller; legacy planners are closed at cutoff. See
 [the integration report](.project/reports/T028-integration.md).
 
 PWA and normal browser tabs use independent saves (including statistics and preferences) and independent writer locks. The mode is selected at page startup from standalone display mode. Legacy shared saves are not imported; both modes start fresh after this change. Multiple windows in the same mode still share one save and allow only one writer.
+
+If another window holds the writer lock, the read-only game retries when it returns to the foreground or via Menu → Ponów dostęp do zapisu. Once access is available, it reloads the latest saved game before play resumes.

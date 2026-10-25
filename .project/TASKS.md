@@ -69,3 +69,5 @@ Suitability suggestions in each task describe needed tools/skills, not performan
 All new tasks must be explicitly scoped/assigned by the coordinator; do not create an automated queue runner, agent orchestration, model-specific branches or worktrees.
 
 | [T037](tasks/T037.md) | Persistence | Independent PWA/browser saves and ownership | None | REVIEW | 56 unit/70 Chromium/build pass; no legacy migration; [report](reports/T037.md). |
+
+| [T038](tasks/T038.md) | Persistence | Retry writer ownership safely | None | REVIEW | 54 unit/50 Chromium/build pass; commit/push authorized; [report](reports/T038.md). |

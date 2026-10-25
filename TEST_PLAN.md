@@ -345,3 +345,5 @@ T035 iPhone hold regression: use exact elementFromPoint hit testing 26 CSS px fr
 T035 developer version placement: compact regression also checks bottom position without the companion, opacity <=0.45, and no duplicate Menu version. Existing seven-viewport checks keep controls reachable.
 
 T037: `tests/e2e/storage-modes.spec.js` runs browser and simulated standalone pages together on one origin. Assert independent ownership, moves/preferences/storage keys and reload restoration; duplicate PWA stays read-only. Both modes ignore legacy bytes without modifying them. Existing storage tests retain same-mode browser exclusion, corruption recovery, quota handling and unavailable-storage coverage. Real installed Android verification remains separate.
+
+T038: `ownership-retry.spec.js` covers Menu, focus and visibility retries against real Chromium Web Locks. Assert no writer takeover while busy, latest board/preferences restored paused, and the next move persisted without stale overwrite. Unit tests cover coalesced retries, rejected retry remaining read-only and late callback after destroy. Existing storage-mode, corruption and accessibility/Menu checks stay required.

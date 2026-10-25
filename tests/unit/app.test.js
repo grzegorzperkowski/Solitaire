@@ -503,6 +503,46 @@ describe('T008 app controller: clock, lifecycle and ownership', () => {
     expect(app.getState().lockNotice).toBe(null);
   });
 
+  test('ownership retries do not overlap or reload after destroy', async () => {
+    let callback;
+    const reload = vi.fn();
+    const request = vi.fn()
+      .mockImplementationOnce((_name, _options, fn) => fn(null))
+      .mockImplementation((_name, _options, fn) => { callback = fn; return Promise.resolve(); });
+    const app = createApp({ storage: createMockStorage(), lockManager: { request },
+      window: { location: { reload } } }).init();
+    app.retryOwnership();
+    app.retryOwnership();
+    expect(request).toHaveBeenCalledTimes(2);
+    app.destroy();
+    await callback({ name: LOCK_NAME });
+    app.retryOwnership();
+    expect(reload).not.toHaveBeenCalled();
+    expect(request).toHaveBeenCalledTimes(2);
+  });
+
+  test('rejected ownership retry stays read-only and can be retried without saving stale state', async () => {
+    const storage = createMockStorage();
+    const reload = vi.fn();
+    const request = vi.fn()
+      .mockImplementationOnce((_name, _options, fn) => fn(null))
+      .mockRejectedValueOnce(new Error('denied'))
+      .mockImplementation((_name, _options, fn) => fn({ name: LOCK_NAME }));
+    const app = createApp({ storage, lockManager: { request }, window: { location: { reload } } }).init();
+    try {
+      app.retryOwnership();
+      await Promise.resolve();
+      expect(app.getState().isWriter).toBe(false);
+      expect(app.getState().lockNotice).toContain('Spróbuj ponownie');
+      app.retryOwnership();
+      app.retryOwnership();
+      expect(reload).toHaveBeenCalledTimes(1);
+      expect(request).toHaveBeenCalledTimes(3);
+      expect(storage.setItem).not.toHaveBeenCalled();
+      expect(app.getState().isWriter).toBe(false);
+    } finally { app.destroy(); }
+  });
+
   test('Web Lock grants exclusive writer to first tab and denies second tab', async () => {
     const storage = createMockStorage();
     let lockHolder = null;

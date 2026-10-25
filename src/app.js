@@ -42,6 +42,7 @@ export function createApp({
   let timerIntervalId = null;
   let checkpointIntervalId = null;
   let releaseLockFn = null;
+  let lockRequestPending = false;
   let isDestroyed = false;
   let completionBoard = null;
   let completionPlan = null;
@@ -241,11 +242,19 @@ export function createApp({
     }
   }
 
-  async function acquireLock() {
+  async function acquireLock(reloadOnAcquire = false) {
+    if (isDestroyed || lockRequestPending) return;
+    lockRequestPending = true;
     if (lockManager && typeof lockManager.request === 'function') {
       try {
         await lockManager.request(LOCK_NAME, { ifAvailable: true }, async (lock) => {
           if (isDestroyed) return;
+          if (lock && reloadOnAcquire) {
+            // Reload the latest save before allowing this stale reader to write.
+            window.location.reload();
+            return;
+          }
+          lockRequestPending = false;
           if (!lock) {
             isWriter = false;
             hasConflict = true;
@@ -263,12 +272,24 @@ export function createApp({
           });
         });
       } catch {
+        lockRequestPending = false;
         if (isDestroyed) return;
-        setupFallbackOwnership();
+        if (reloadOnAcquire) lockNotice = 'Nie udało się sprawdzić blokady zapisu. Spróbuj ponownie.';
+        else setupFallbackOwnership();
         notifyListeners();
       }
     } else {
+      lockRequestPending = false;
       setupFallbackOwnership();
+    }
+  }
+
+  function retryOwnership() {
+    if (isDestroyed || lockRequestPending || isDocumentHidden() || (isWriter && !hasConflict)) return;
+    if (releaseLockFn || !lockManager || typeof lockManager.request !== 'function') {
+      window?.location?.reload();
+    } else {
+      void acquireLock(true);
     }
   }
 
@@ -334,6 +355,7 @@ export function createApp({
       }
     } else {
       lastTickTime = performance ? performance.now() : Date.now();
+      retryOwnership();
     }
     notifyListeners();
   }
@@ -418,6 +440,7 @@ export function createApp({
       window.addEventListener('storage', handleStorageEvent);
       window.addEventListener('pagehide', handlePageHide);
       window.addEventListener('resize', handleViewportResize);
+      window.addEventListener('focus', retryOwnership);
     }
     if (document && typeof document.addEventListener === 'function') {
       document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -709,6 +732,7 @@ export function createApp({
       window.removeEventListener('storage', handleStorageEvent);
       window.removeEventListener('pagehide', handlePageHide);
       window.removeEventListener('resize', handleViewportResize);
+      window.removeEventListener('focus', retryOwnership);
     }
     if (document && typeof document.removeEventListener === 'function') {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
@@ -737,6 +761,7 @@ export function createApp({
     requestSmartHint,
     exportDiagnostic,
     save,
+    retryOwnership,
     getState,
     subscribe,
     destroy,

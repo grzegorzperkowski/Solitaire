@@ -166,3 +166,7 @@ T035 companion interaction: clicking the enabled figure stops it; clicking again
 ## T037 — Independent PWA and browser persistence
 
 Coordinator assigned 2026-10-25: standalone PWA and normal browser tabs keep independent sessions, statistics, preferences and writer locks. Detect initial standalone display mode; keep the namespace for the page lifetime. Duplicate windows within the same mode retain single-writer protection. No backward compatibility or migration of legacy saves is required; legacy data is left untouched.
+
+## T038 — Retry writer access
+
+A read-only game retries writer access on foreground/focus or through Menu → Ponów dostęp do zapisu. A busy lock keeps it read-only. When the lock is available, reload the latest save before enabling mutations; never write the stale board. Request rejection must not grant ownership. Retain validation/recovery and the existing no-Web-Locks fallback.
