@@ -1,3 +1,7 @@
+# T035 REVIEW — 2026-10-25
+
+Research and technical design for an optional hand-drawn dancing companion delivered. Proposed native SVG with articulated limbs and curved torso, opt-in persisted preference, reserved bottom strip, lifecycle/reduced-motion controls and verification gates. Documentation only; no prototype, runtime edits, game tests or device/performance evidence. Await coordinator review and separate implementation assignment. Both unrelated diagnostic JSON files preserved. See [design](tasks/T035-design.md) and [report](reports/T035.md).
+
 # T034 REVIEW — 2026-10-21
 
 Five scoped refactorings delivered: keyboard dispatch, status rendering, save validation/replay, arrow targets/effects and SmartHint public results. Final 403 unit/13 simulation/107 Chromium E2E/build pass; 315 persistence cases and 108 planner traces match baseline. Lint 0 errors/16 informational warnings; validation remains intact. Await coordinator acceptance; no push/device/performance claim. Both unrelated diagnostic JSON files preserved. See reports/T034.md.

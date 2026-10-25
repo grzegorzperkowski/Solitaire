@@ -1,3 +1,7 @@
+# T035 REVIEW — 2026-10-25
+
+Read [T035 design](tasks/T035-design.md) for the proposed dancing companion and [report](reports/T035.md) for research/verification evidence. This assignment ends at research and technical design; no application code was changed. A subsequent explicit implementation assignment is required. Primary risks: short-landscape space and believable foot contact. Prior REVIEW tasks remain unchanged. No agents, worktrees, dependencies, push or publication; preserve both unrelated diagnostic JSON files.
+
 # T034 REVIEW — 2026-10-21
 
 Five-function refactoring delivered sequentially: cb1789c keyboard; ace986d renderer; 1542472 persistence; 1b8ac09 arrow navigation; final T034 commit publishes SmartHint result helpers and evidence. Final 403 unit/13 simulation/107 Chromium E2E/build pass; 315 restore cases and 108 complete planner traces unchanged; lint 0 errors/16 informational warnings. No strategy/rules/schema changes or measured speed claim. Await acceptance; no push, agents, worktrees or device check. Preserve both unrelated diagnostic JSON files; prior REVIEW tasks remain unchanged. See reports/T034.md.
