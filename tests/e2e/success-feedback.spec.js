@@ -63,7 +63,7 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       expect(result.levels).toEqual([null, null, null]);
     } else {
       expect(result.revealAce.map(el => el.animation)).toEqual(['success-pulse', 'success-glow']);
-      expect(result.revealAce.every(el => el.duration === '0.18s')).toBe(true);
+      expect(result.revealAce.every(el => el.duration === '0.456s')).toBe(true);
       expect(result.levels).toEqual(['2', '3', '4']);
       expect(result.empty.some(el => el.kind.includes('success-empty'))).toBe(true);
       await page.screenshot({ path: '.cache/T036-320.png' });

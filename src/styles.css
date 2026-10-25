@@ -683,11 +683,11 @@ body:has(.has-companion) {
 .card-node.success-reveal,
 .pile-slot.success-empty,
 .card-node.success-streak {
-  animation: success-glow 180ms ease-out;
+  animation: success-glow 456ms ease-out;
 }
 
 .card-node.success-ace {
-  animation: success-pulse 180ms ease-out;
+  animation: success-pulse 456ms ease-out;
 }
 
 @keyframes success-glow {

@@ -1,3 +1,7 @@
+# T036 duration revision REVIEW — 2026-10-25
+
+All four effects now last 456ms. Build and both focused Chromium tests pass, including reduced motion. Await coordinator acceptance; no push.
+
 # T036 REVIEW — 2026-10-25
 
 Four small-success effects implemented (180ms glow/pulse; foundation streak capped at four). Fresh commands only, reduced-motion bypass, no engine/save changes. 438 unit/40 Chromium/build pass; lint 0 errors/16 existing warnings. See reports/T036.md. Await coordinator acceptance; no push. Preserve both unrelated diagnostic JSON files. Physical-device aesthetics/performance unverified.
