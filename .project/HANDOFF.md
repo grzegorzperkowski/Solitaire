@@ -1,3 +1,11 @@
+# T035 follow-up REVIEW — 2026-10-25
+
+Knee-slide effect and full viewport-width scene implemented. Random slide includes run-up, knees down/folded shins, braking/recovery; uniform figure scaling follows resize. 435 unit/121 Chromium/build pass; lint 0 errors/16 warnings. See [report](reports/T035.md). Await coordinator review; no successor, push, dependencies or engine changes. Preserve both diagnostic JSON files; physical devices remain unverified.
+
+# T035 follow-up assignment — 2026-10-25
+
+Coordinator assigned run-up/knee slide/recovery and full viewport width. Resume T035 from `0e20525`, keep bottom-strip height and existing guards; no agents, dependencies, engine changes or push.
+
 # T035 implementation REVIEW — 2026-10-25
 
 Feature implemented on master: Menu → "Tańczący ludzik" (default off), three nonrepeating random dances with occasional run/jump phrases, saved boolean preference, reserved bottom strip, static reduced motion and pause/dialog/visibility/win/ownership cleanup. Full 429 unit/13 simulation/120 Chromium/build pass; final sampler 17/17, lint 0 errors/16 warnings. Production subpath and gzip budgets pass. Inspect [report](reports/T035.md) for exact commands and evidence gaps. Await coordinator acceptance; do not start a successor. No push/dependencies/engine changes; preserve both unrelated diagnostic JSON files. Local visual diagnostics are under ignored `.cache/T035-*`.

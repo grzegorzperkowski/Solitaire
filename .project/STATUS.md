@@ -1,3 +1,11 @@
+# T035 follow-up REVIEW — 2026-10-25
+
+Random knee-slide phrase delivered with run-up, grounded knees, folded feet, braking and recovery. Strip uses full viewport width with uniform SVG scaling; run/slide reach both sides. 435 unit/121 Chromium/build pass; lint 0 errors/16 warnings. Await coordinator acceptance, no push; device/performance checks remain open. Both unrelated diagnostics preserved. See [report](reports/T035.md).
+
+# T035 follow-up assignment — 2026-10-25
+
+Assigned knee-slide effect with run-up and full-screen-width travel from `0e20525`. Sequential work on master; preserve unrelated JSON diagnostics, game state and lifecycle contracts.
+
 # T035 implementation REVIEW — 2026-10-25
 
 Optional SVG companion delivered: three random dances, occasional running/jumping, curved torso/articulated limbs, persisted opt-in menu setting, responsive bottom strip and full lifecycle/reduced-motion controls. 429 unit/13 simulation/120 Chromium E2E/build pass; final geometry rerun 17/17, lint 0 errors/16 informational warnings. Production `/Solitaire/` smoke and gzip budgets pass. Physical Safari/Android, live animation aesthetics and device performance/battery remain unverified; short landscape can scroll to controls. Await coordinator acceptance; no push, dependencies or engine edits. Both unrelated diagnostic JSON files preserved. See [report](reports/T035.md).

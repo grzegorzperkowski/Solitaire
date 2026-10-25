@@ -9,6 +9,34 @@ async function enableCompanion(page) {
   await page.getByRole('button', { name: 'Wróć do gry' }).click();
 }
 
+test('T035 knee slide travels through a viewport-wide scene and adapts on resize', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.addInitScript(() => { Math.random = () => 0.99; });
+  await page.goto('/');
+  await enableCompanion(page);
+  const host = page.locator('#dancing-companion');
+  await expect(host).toHaveAttribute('data-action', 'slide');
+  const leg = host.locator('[data-part="leftLeg"]');
+  await expect.poll(async () => {
+    const numbers = (await leg.getAttribute('d')).match(/-?\d+(?:\.\d+)?/g).map(Number);
+    return numbers[1] > 107 && numbers[3] > 124 && numbers[4] < numbers[2] - 15;
+  }).toBe(true);
+  const firstX = await leg.evaluate(el => Number(el.getAttribute('d').match(/-?\d+(?:\.\d+)?/g)[0]));
+  await expect.poll(async () => {
+    const nextX = await leg.evaluate(el => Number(el.getAttribute('d').match(/-?\d+(?:\.\d+)?/g)[0]));
+    return nextX - firstX;
+  }).toBeGreaterThan(300);
+  await page.screenshot({ path: 'test-results/screenshots/companion-slide-1280.png' });
+  for (const width of [320, 1920]) {
+    await page.setViewportSize({ width, height: 720 });
+    await expect.poll(() => host.locator('svg').evaluate(svg => svg.viewBox.baseVal.width)).toBeCloseTo(width * 140 / 88, 1);
+    const bounds = await host.boundingBox();
+    expect(bounds.x).toBeCloseTo(0, 0);
+    expect(bounds.width).toBe(width);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+  }
+});
+
 test('T035 native touch can scroll short landscape to the bottom controls', async ({ browser }) => {
   const context = await browser.newContext({ viewport: { width: 568, height: 320 }, hasTouch: true, isMobile: true });
   const page = await context.newPage();
@@ -142,6 +170,8 @@ for (const viewport of [
     expect(layout.stage.y).toBeGreaterThanOrEqual(layout.scroller.bottom - 1);
     expect(layout.footer.y).toBeGreaterThanOrEqual(layout.stage.bottom);
     expect(layout.stage.height).toBe(viewport.height <= 500 && viewport.width > viewport.height ? 56 : 88);
+    expect(layout.stage.width).toBeCloseTo(viewport.width, 0);
+    expect(layout.stage.x).toBeCloseTo(0, 0);
     for (const col of layout.columns) {
       expect(col.x).toBeGreaterThanOrEqual(0);
       expect(col.right).toBeLessThanOrEqual(viewport.width + 1);

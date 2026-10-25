@@ -1,9 +1,9 @@
-export const COMPANION_DURATIONS = Object.freeze({ sway: 4800, disco: 4400, wave: 5200, run: 2800, jump: 1800 });
+export const COMPANION_DURATIONS = Object.freeze({ sway: 4800, disco: 4400, wave: 5200, run: 2800, jump: 1800, slide: 5200 });
 const DANCES = ['sway', 'disco', 'wave'];
 
 export function chooseCompanionAction(previous, random = Math.random) {
-  const choices = previous === 'run' || previous === 'jump'
-    ? DANCES : [...DANCES, ...DANCES, 'run', 'jump'];
+  const choices = previous && !DANCES.includes(previous)
+    ? DANCES : [...DANCES, ...DANCES, 'run', 'jump', 'slide'];
   const available = choices.filter(action => action !== previous);
   return available[Math.floor(random() * available.length)];
 }
@@ -13,14 +13,21 @@ function segment(origin, length, degrees) {
   return [origin[0] + length * Math.sin(angle), origin[1] + length * Math.cos(angle)];
 }
 
-export function sampleCompanionPose(action, elapsedMs) {
+function smooth(value) {
+  const t = Math.max(0, Math.min(1, value));
+  return t * t * (3 - 2 * t);
+}
+
+export function sampleCompanionPose(action, elapsedMs, sceneWidth = 400) {
   const p = Math.max(0, Math.min(1, elapsedMs / COMPANION_DURATIONS[action]));
   // Every phrase meets the same resting pose with zero velocity at its ends.
   const envelope = Math.sin(Math.PI * p) ** 2;
-  const beat = p * Math.PI * (action === 'run' ? 16 : 8);
+  const beat = p * Math.PI * (action === 'run' || action === 'slide' ? 16 : 8);
   const swing = Math.sin(beat) * envelope;
   const bounce = (1 - Math.cos(beat * 2)) * envelope;
-  let x = 200 + swing * 6;
+  const center = sceneWidth / 2;
+  const travel = Math.max(0, center - 56);
+  let x = center + swing * 6;
   let y = 91 - bounce * 2;
   let lean = swing * 9;
   let bend = swing * 10;
@@ -38,7 +45,7 @@ export function sampleCompanionPose(action, elapsedMs) {
     y += bounce * 2;
     headTilt = swing * 18;
   } else if (action === 'run') {
-    x = 200 + Math.sin(p * Math.PI * 2) * envelope * 105;
+    x = center + Math.sin(smooth(p) * Math.PI * 2) * travel;
     y -= bounce * 2;
     lean = Math.cos(p * Math.PI * 2) * envelope * 10;
     arms = [-55 + swing * 65, -25 - envelope * 65, 55 + swing * 65, 25 + envelope * 65];
@@ -46,10 +53,23 @@ export function sampleCompanionPose(action, elapsedMs) {
       12 - swing * 50, 8 - Math.max(0, swing) * 85];
   } else if (action === 'jump') {
     const lift = Math.sin(Math.PI * p) ** 4;
-    x = 200 + Math.sin(p * Math.PI * 2) * envelope * 12;
+    x = center + Math.sin(p * Math.PI * 2) * envelope * 12;
     y = 91 - lift * 22;
     arms = [-55 - lift * 95, -25 - lift * 20, 55 + lift * 95, 25 + lift * 20];
     legs = [-12 - lift * 24, -8 + lift * 55, 12 + lift * 24, 8 - lift * 55];
+  } else if (action === 'slide') {
+    const kneel = smooth((p - 0.22) / 0.12) * (1 - smooth((p - 0.72) / 0.14));
+    x = p < 0.25 ? center - travel * smooth(p / 0.25)
+      : p < 0.8 ? center + travel * (2 * smooth((p - 0.25) / 0.55) - 1)
+        : center + travel * (1 - smooth((p - 0.8) / 0.2));
+    y = 91 + kneel * 17 - bounce * (1 - kneel) * 2;
+    lean = swing * 9 * (1 - kneel) - kneel * 13;
+    bend = swing * 10 * (1 - kneel) - kneel * 8;
+    headTilt = -kneel * 12;
+    arms = [-55 - swing * 50 - kneel * 75, -25, 55 - swing * 50 + kneel * 65, 25];
+    legs = [-12 + swing * 45, -8 + Math.max(0, -swing) * 85,
+      12 - swing * 45, 8 - Math.max(0, swing) * 85]
+      .map((angle, i) => angle * (1 - kneel) + [-5, -100, 5, -110][i] * kneel);
   }
 
   const hip = [x, y];
@@ -96,6 +116,7 @@ export function createDancingCompanion(host, random = Math.random) {
   let action = chooseCompanionAction(null, random);
   let pageHidden = false;
   let destroyed = false;
+  let sceneWidth = 400;
 
   function draw(pose) {
     const point = p => `${p[0].toFixed(2)},${p[1].toFixed(2)}`;
@@ -115,7 +136,7 @@ export function createDancingCompanion(host, random = Math.random) {
       action = chooseCompanionAction(action, random);
     }
     host.dataset.action = action;
-    draw(sampleCompanionPose(action, elapsed));
+    draw(sampleCompanionPose(action, elapsed, sceneWidth));
     raf = win.requestAnimationFrame(frame);
   }
 
@@ -131,7 +152,7 @@ export function createDancingCompanion(host, random = Math.random) {
       if (raf !== null) win.cancelAnimationFrame(raf);
       raf = null;
       previousTime = null;
-      if (visible) draw(sampleCompanionPose('sway', 0));
+      if (visible) draw(sampleCompanionPose('sway', 0, sceneWidth));
     } else if (raf === null) {
       raf = win.requestAnimationFrame(frame);
     }
@@ -143,6 +164,15 @@ export function createDancingCompanion(host, random = Math.random) {
   win.addEventListener('pagehide', hide);
   win.addEventListener('pageshow', show);
   media.addEventListener('change', sync);
+  const observer = new win.ResizeObserver(() => {
+    if (destroyed) return;
+    const { width, height } = host.getBoundingClientRect();
+    if (width <= 0 || height <= 0) return;
+    sceneWidth = width * 140 / height;
+    svg.setAttribute('viewBox', `0 0 ${sceneWidth} 140`);
+    draw(sampleCompanionPose(media.matches ? 'sway' : action, media.matches ? 0 : elapsed, sceneWidth));
+  });
+  observer.observe(host);
   draw(sampleCompanionPose('sway', 0));
 
   return {
@@ -155,6 +185,7 @@ export function createDancingCompanion(host, random = Math.random) {
       win.removeEventListener('pagehide', hide);
       win.removeEventListener('pageshow', show);
       media.removeEventListener('change', sync);
+      observer.disconnect();
       host.dataset.running = 'false';
       host.replaceChildren();
     },

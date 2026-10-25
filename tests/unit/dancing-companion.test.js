@@ -9,7 +9,7 @@ describe('T035 articulated companion', () => {
         const action = chooseCompanionAction(previous, () => i / 100);
         seen.add(action);
         expect(action).not.toBe(previous);
-        if (previous === 'run' || previous === 'jump') expect(['sway', 'disco', 'wave']).toContain(action);
+        if (previous && !['sway', 'disco', 'wave'].includes(previous)) expect(['sway', 'disco', 'wave']).toContain(action);
       }
     }
     expect([...seen].sort()).toEqual(Object.keys(COMPANION_DURATIONS).sort());
@@ -55,13 +55,49 @@ describe('T035 articulated companion', () => {
     expect(dance.back[0][0]).not.toBe(dance.hip[0]);
     expect(Math.abs(dance.head[2])).toBeGreaterThan(1);
   });
+
+  test('knee slide lowers both knees to the floor, folds feet back and brakes before standing', () => {
+    const duration = COMPANION_DURATIONS.slide;
+    const slide = sampleCompanionPose('slide', duration * 0.55);
+    expect(slide.hip[1]).toBeCloseTo(108);
+    expect(slide.shoulder[0]).toBeLessThan(slide.hip[0]);
+    for (const limb of [slide.leftLeg, slide.rightLeg]) {
+      expect(limb[1][1]).toBeCloseTo(126, 0);
+      expect(limb[2][0]).toBeLessThan(limb[1][0] - 15);
+    }
+    const advance = p => sampleCompanionPose('slide', duration * (p + 0.005)).hip[0]
+      - sampleCompanionPose('slide', duration * p).hip[0];
+    expect(advance(0.32)).toBeLessThan(advance(0.5));
+    expect(advance(0.76)).toBeLessThan(advance(0.5));
+  });
+
+  test.each([509, 1420, 3054])('travel reaches both edges at scene width %i without stretching bones', (width) => {
+    for (const action of ['run', 'slide']) {
+      const positions = Array.from({ length: 201 }, (_, i) => sampleCompanionPose(action, COMPANION_DURATIONS[action] * i / 200, width));
+      expect(Math.min(...positions.map(pose => pose.hip[0]))).toBeLessThan(60);
+      expect(Math.max(...positions.map(pose => pose.hip[0]))).toBeGreaterThan(width - 60);
+      for (const pose of positions) {
+        for (const part of ['leftArm', 'rightArm', 'leftLeg', 'rightLeg']) {
+          for (const [x, y] of pose[part]) {
+            expect(x).toBeGreaterThan(1);
+            expect(x).toBeLessThan(width - 1);
+            expect(y).toBeGreaterThan(1);
+            expect(y).toBeLessThan(139);
+          }
+        }
+      }
+    }
+  });
 });
 
 function createHarness() {
   const media = Object.assign(new EventTarget(), { matches: false });
   const callbacks = new Map();
   let id = 0;
+  let resize;
+  const observer = { observe: vi.fn(), disconnect: vi.fn() };
   const win = Object.assign(new EventTarget(), {
+    ResizeObserver: vi.fn(function (callback) { resize = callback; return observer; }),
     matchMedia: () => media,
     requestAnimationFrame: vi.fn(cb => { callbacks.set(++id, cb); return id; }),
     cancelAnimationFrame: vi.fn(key => callbacks.delete(key)),
@@ -70,21 +106,22 @@ function createHarness() {
   const parts = Object.fromEntries(['head', 'back', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'].map(part => [part, {
     dataset: { part }, setAttribute: vi.fn(),
   }]));
-  const svg = { style: {} };
+  const svg = { style: {}, setAttribute: vi.fn() };
   const host = {
     ownerDocument: doc, dataset: {}, hidden: true,
     querySelector: () => svg,
     querySelectorAll: () => Object.values(parts),
     replaceChildren: vi.fn(),
+    getBoundingClientRect: () => ({ width: 1280, height: 88 }),
   };
-  const companion = createDancingCompanion(host, () => 0.99);
+  const companion = createDancingCompanion(host, () => 0.85);
   const state = { preferences: { dancingCompanion: true }, isWriter: true };
   function tick(time) {
     const pending = [...callbacks.values()];
     callbacks.clear();
     pending.forEach(cb => cb(time));
   }
-  return { companion, host, doc, win, media, callbacks, parts, svg, state, tick };
+  return { companion, host, doc, win, media, callbacks, parts, svg, state, tick, resize, observer };
 }
 
 describe('T035 companion lifecycle', () => {
@@ -147,6 +184,19 @@ describe('T035 companion lifecycle', () => {
     h.companion.update(h.state);
     expect(h.callbacks.size).toBe(0);
     expect(h.host.replaceChildren).toHaveBeenCalledTimes(1);
+    expect(h.observer.disconnect).toHaveBeenCalledTimes(1);
+  });
+
+  test('resizing expands the scene width while keeping a uniformly scaled figure', () => {
+    const h = createHarness();
+    h.companion.update(h.state);
+    h.resize();
+    expect(h.svg.setAttribute).toHaveBeenLastCalledWith('viewBox', `0 0 ${1280 * 140 / 88} 140`);
+    h.host.getBoundingClientRect = () => ({ width: 320, height: 88 });
+    h.resize();
+    expect(h.svg.setAttribute).toHaveBeenLastCalledWith('viewBox', `0 0 ${320 * 140 / 88} 140`);
+    expect(h.callbacks.size).toBe(1);
+    h.companion.destroy();
   });
 
   test('phrase scheduler changes actions at their boundaries without duplicate RAFs', () => {

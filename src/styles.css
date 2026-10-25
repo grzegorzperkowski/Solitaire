@@ -422,8 +422,8 @@ body {
 
 .dancing-companion {
   flex: 0 0 88px;
-  width: 100%;
-  max-width: var(--board-width);
+  width: 100vw;
+  max-width: none;
   height: 88px;
   color: #f8f4e9;
   pointer-events: none;

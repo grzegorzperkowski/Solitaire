@@ -78,6 +78,8 @@ The required release includes offline play and installation support after a succ
 
 ### T035 optional dancing companion — assigned 2026-10-25
 
+Follow-up: include a randomly selected run-up → knee slide → stand/recover phrase. Knees reach the floor with feet folded behind and the body leaning back. The strip spans the viewport width (including beyond the centered board on desktop); run/slide travel approaches both edges with room for the figure. Preserve drawing proportions and strip height on resize, without stretching the character or covering cards/controls.
+
 Menu offers a default-off Polish checkbox "Tańczący ludzik". When enabled, an original line-drawn SVG character appears in a reserved strip above notices and primary controls. It randomly alternates three distinct whole-body dances with occasional brief runs and jumps; consecutive phrases differ and run/jump phrases are separated by a dance. All motion remains within its strip. Hands, feet, head, hips and a curved torso move together. No sound or gameplay effect.
 
 Persist only the boolean preference; old saves default to off. Pause/dialogs, hidden pages, read-only/conflicting ownership and won boards stop and conceal the figure without collapsing its reserved space. Reduced motion displays a static figure and explains the system setting in the menu. The option can always be disabled through Menu. Keep seven-column/card sizes, scroll access, safe areas and keyboard play; compact landscape uses a 56px strip and may scroll the page when its fixed content cannot fit. Portrait/desktop strip is 88px. Device/performance evidence remains a separate gate. See [.project/tasks/T035.md](.project/tasks/T035.md).
