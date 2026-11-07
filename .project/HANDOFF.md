@@ -1,6 +1,7 @@
-# T039 touch inset REVIEW — 2026-11-07
+# T039 layout rollback REVIEW — 2026-11-07
 
-First browser guard failed physical iPhone/Android checks. Revised `b40b8a4` keeps touch cards >=24px from both edges (38px cards/1px gaps at 320px); removed interception/click fallback and restored native pinch. Local 444 unit/106 Chromium/11 nested/build/lint pass; full GitHub CI 444 unit/13 simulation/153 E2E pass. Playground run `42377494612` succeeded; live build `71408fe08fd4` geometry verified at 320/390px. Await physical revalidation: the empty outer gutter still permits native Back. Both diagnostics preserved; Playground tracked files unchanged. See reports/T039.md.
+Coordinator rejected touch gutters/smaller cards. Restored pre-inset CSS/geometry/requirements exactly; removed gap compression and inset tests, preserved passive native input/saves/diagnostics. 6 unit/40 Chromium/build/nested checks pass. Republish under standing authorization; no reserved edge strips or substitute navigation workaround. Original Back defect remains unresolved; await acceptance. See reports/T039.md.
+
 
 # T009 desktop card margins REVIEW — 2026-10-25
 

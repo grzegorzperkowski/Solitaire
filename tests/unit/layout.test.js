@@ -50,14 +50,6 @@ describe('T009 layout and geometry calculations', () => {
     }
   });
 
-  test.each([288, 294, 300])('touch-inset container at %ipx retains 38px cards and fits', (width) => {
-    const dims = calculateBoardDimensions(width);
-    expect(dims.containerWidth).toBe(width);
-    expect(dims.cardWidth).toBeGreaterThanOrEqual(MIN_CARD_WIDTH);
-    expect(dims.boardWidth + 2 * dims.padding).toBeLessThanOrEqual(width);
-    expect(dims.gap).toBeGreaterThanOrEqual(1);
-  });
-
   test('desktop 1440 px caps card width at 104 px', () => {
     const dims = calculateBoardDimensions(1440);
     expect(dims.cardWidth).toBe(104);

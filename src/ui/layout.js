@@ -34,11 +34,10 @@ export function getSidePadding(width) {
  * Computes complete board dimensions for a given container width and height.
  */
 export function calculateBoardDimensions(containerWidth, containerHeight = null) {
-  const safeWidth = Math.max(288, containerWidth);
+  const safeWidth = Math.max(300, containerWidth);
+  const gap = getGap(safeWidth);
   const padding = getSidePadding(safeWidth);
   const usableWidth = safeWidth - 2 * padding;
-  // Compress gaps before shrinking cards when touch gutters narrow the board.
-  const gap = Math.min(getGap(safeWidth), Math.max(1, (usableWidth - 7 * MIN_CARD_WIDTH) / 6));
 
   // 7 columns with 6 gaps: cardWidth = min(104, (W - 6g) / 7)
   const computedCardWidth = (usableWidth - 6 * gap) / 7;

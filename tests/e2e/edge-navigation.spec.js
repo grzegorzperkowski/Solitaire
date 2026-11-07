@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('T039 Touch-safe card edges', () => {
+test.describe('T039 First-column card gestures', () => {
   test.use({ viewport: { width: 320, height: 568 }, hasTouch: true });
 
   test.beforeEach(async ({ page }) => {
@@ -12,37 +12,13 @@ test.describe('T039 Touch-safe card edges', () => {
     expect(await page.evaluate(() => getComputedStyle(document.documentElement).overscrollBehaviorX)).toBe('none');
   });
 
-  for (const viewport of [
-    { width: 320, height: 568 }, { width: 360, height: 640 },
-    { width: 390, height: 844 }, { width: 430, height: 932 },
-    { width: 568, height: 320 }, { width: 844, height: 390 },
-  ]) {
-    test(`cards stay 24px inside both edges at ${viewport.width}x${viewport.height}`, async ({ page }) => {
-      await page.setViewportSize(viewport);
-      const columns = await page.locator('.tableau-column').all();
-      expect(columns).toHaveLength(7);
-      for (const column of columns) {
-        const box = await column.boundingBox();
-        expect(box.x).toBeGreaterThanOrEqual(23.9);
-        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width - 23.9);
-        expect(box.width).toBeGreaterThanOrEqual(37.9);
-      }
-      for (const selector of ['#stock-container', '#foundation-3']) {
-        const box = await page.locator(selector).boundingBox();
-        expect(box.x).toBeGreaterThanOrEqual(23.9);
-        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width - 23.9);
-      }
-      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
-    });
-  }
-
   test('native Chromium taps on the first column select and double tap moves exactly once', async ({ page }) => {
     await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 0, drawCount: 1 }));
     const card = page.locator('#column-0 .card-face-up');
     const box = await card.boundingBox();
     const x = box.x + 2;
     const y = box.y + box.height / 2;
-    expect(x).toBeGreaterThanOrEqual(24);
+    expect(x).toBeLessThanOrEqual(20);
     await page.touchscreen.tap(x, y);
     await expect(card).toHaveClass(/is-selected/);
     await expect(page.locator('#moves-display')).toHaveText('0');
@@ -60,7 +36,7 @@ test.describe('T039 Touch-safe card edges', () => {
     const touch = (x, y) => ({ x, y, id: 1 });
     const x = source.x + 2;
     const y = source.y + source.height / 2;
-    expect(x).toBeGreaterThanOrEqual(24);
+    expect(x).toBeLessThanOrEqual(20);
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [touch(x, y)] });
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [touch(x + 12, y)] });
     await expect(page.locator('#drag-overlay')).toBeVisible();
