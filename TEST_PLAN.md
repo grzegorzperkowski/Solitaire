@@ -62,6 +62,8 @@ T035 extends T11/T12/T16–T19/T22: random selection reaches sway/disco/wave/run
 
 Playwright's documented touchscreen support is limited to taps; use device contexts for taps, mouse APIs for true mouse drags and explicitly labelled synthetic Pointer Events for handler edge cases. Synthetic touch/pointer dispatch does not demonstrate native browser scroll arbitration. See [Playwright Touchscreen](https://playwright.dev/docs/api/class-touchscreen) and [device emulation](https://playwright.dev/docs/emulation). T16/T19 physical-device evidence remains mandatory.
 
+T039 extends T15/T16/T19: `tests/e2e/edge-navigation.spec.js` checks root horizontal containment, cancelable edge-card touchstart, untouched central/face-down/background/stock/multi-touch starts, native Chromium edge taps/double taps/drag and second-finger cancellation. On physical Android/iOS, enter Solitaire from the installed Playground launcher so a prior page exists; drag from the left/right edge of playable cards, verify exactly one move and no navigation, repeat invalid/canceled attempts and test pinch away from the edge strip, normal scrolling and intentional Back/Playground navigation. Record any OS gesture that claims input before browser events; automation is not physical acceptance.
+
 ## 4. Seeded simulations
 
 Use independent deterministic generators for the game seed and the action selector; do not reuse the engine PRNG implementation as the only test oracle. Every failure prints seed, drawCount, rule/shuffle versions, selector seed, step, action history and failed assertion so it can become a compact regression fixture.

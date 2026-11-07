@@ -48,7 +48,7 @@ html, body {
 }
 
 html {
-  overscroll-behavior-y: none;
+  overscroll-behavior: none;
   touch-action: manipulation;
 }
 

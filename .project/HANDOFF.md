@@ -1,3 +1,7 @@
+# T039 edge navigation REVIEW — 2026-11-07
+
+Shared Solitaire browser guard delivered: horizontal containment, early edge-card touch cancellation, preserved taps/double taps and second-finger cancellation. 441 unit/77 standalone + 6 nested Chromium/build/lint pass; actual launcher/drag/intentional Back smoke passes. Await physical Android/iOS and coordinator acceptance: OS Back may intercept before web events; native pinch must start outside the narrow 20px card edge strip. Both unrelated diagnostics preserved; Playground tracked files unchanged; no push/publication. See reports/T039.md.
+
 # T009 desktop card margins REVIEW — 2026-10-25
 
 Fixed desktop corner clipping: 20px corner height could not contain 33px ranks (browser regression measured -5.64px margin). Shared CSS now grows corner height with rank size, retaining 20px on phones. Regression RED on 828/1440px, GREEN after fix. Build, 6 unit/15 Chromium layout checks pass; 1440px and 320px screenshots inspected. Await coordinator PC acceptance; no push or physical phone/Safari verification. Both diagnostic JSON files preserved.
