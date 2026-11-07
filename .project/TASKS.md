@@ -72,4 +72,4 @@ All new tasks must be explicitly scoped/assigned by the coordinator; do not crea
 
 | [T038](tasks/T038.md) | Persistence | Retry writer ownership safely | None | REVIEW | Test repair: 30 repeated/26 related Chromium checks, build/lint pass; [report](reports/T038.md). |
 
-| [T039](tasks/T039.md) | Input | Prevent card edge drags from navigating back | None | REVIEW | Single-document host `mygame` `4112835` published as `e47694f4c2b1`; 23 Node + local/live browser/state/offline checks pass. Await phone acceptance. [Report](reports/T039.md). |
+| [T039](tasks/T039.md) | Input | Prevent card edge drags from navigating back | None | REVIEW | Rejected shell rolled back in mygame `2a9070a`, deployed as `f016fa5c08a6`; 13 Node + local/public smoke checks pass. Native Back unresolved; exact symptoms/direction pending. [Report](reports/T039.md). |

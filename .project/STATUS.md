@@ -1,6 +1,6 @@
-# T039 single-document host REVIEW — 2026-11-07
+# T039 shell rollback REVIEW — 2026-11-07
 
-Single-document PWA host `mygame` `4112835` published successfully via `42382788195`, build `e47694f4c2b1`: full-viewport frame, real `#solitaire` route, protected cancelable Back, explicit exit, secure messages, full-shell reload and legacy URL/save migration. 23 Node plus complete local/live Chromium interaction/state/ownership/offline checks pass; browser-initiated Back canceled. Core/card dimensions and diagnostics unchanged. Await coordinator phone acceptance; API support required, no physical success claimed. See reports/T039.md.
+Coordinator rejected shell `4112835` on both phones. Rolled back in mygame `2a9070a`, exact pre-shell tree restored; deployment `42386826834` succeeded with public build `f016fa5c08a6` (16:32 CET). 13 Node tests, nested build and local/public direct navigation, full-width cards, save/reload/return checks pass. Solitaire runtime and both diagnostics unchanged. Native edge Back unresolved; exact worsening symptoms requested, no further workaround or acceptance. See reports/T039.md.
 
 # T009 desktop card margins REVIEW — 2026-10-25
 
