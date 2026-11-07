@@ -1,6 +1,6 @@
-# T039 layout rollback REVIEW — 2026-11-07
+# T039 Context7 findings REVIEW — 2026-11-07
 
-Coordinator rejected touch gutters/smaller cards. Rollback `a18b434` restores pre-inset CSS/geometry/requirements exactly, removes gap compression and preserves native input/saves/diagnostics. 6 unit/40 Chromium/build/nested checks pass. Playground run `42378206399` succeeded; live build `f016fa5c08a6` restores 3/4px gaps and previous card widths at 320/390px. Original Back defect remains unresolved; no reserved strips or substitute workaround; await acceptance. See reports/T039.md.
+Context7 research and four-strategy browser probe delivered. Current cross-document Back cannot be canceled; same-document programmatic cancellation works in Chromium. Candidate is a persistent Playground document/full-viewport game view, subject to Navigation API support (Safari/iOS >=26.2) and physical validation; not a verified gesture fix. Full-width production build `f016fa5c08a6` and both diagnostics untouched. No runtime change, push or deployment. See reports/T039-context7.md and reports/T039.md.
 
 # T009 desktop card margins REVIEW — 2026-10-25
 
