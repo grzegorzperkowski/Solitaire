@@ -72,4 +72,4 @@ All new tasks must be explicitly scoped/assigned by the coordinator; do not crea
 
 | [T038](tasks/T038.md) | Persistence | Retry writer ownership safely | None | REVIEW | Test repair: 30 repeated/26 related Chromium checks, build/lint pass; [report](reports/T038.md). |
 
-| [T039](tasks/T039.md) | Input | Prevent card edge drags from navigating back | None | REVIEW | Browser guard delivered; 441 unit/77 standalone + 6 nested Chromium/build/lint pass. Physical Android/iOS acceptance pending; [report](reports/T039.md). |
+| [T039](tasks/T039.md) | Input | Prevent card edge drags from navigating back | None | REVIEW | Browser guard delivered; 441 unit/77 standalone + 6 nested Chromium/build/lint pass. Published 2026-11-07, Playground run `42375939444` success. Physical acceptance pending; [report](reports/T039.md). |
