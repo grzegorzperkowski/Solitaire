@@ -72,4 +72,4 @@ All new tasks must be explicitly scoped/assigned by the coordinator; do not crea
 
 | [T038](tasks/T038.md) | Persistence | Retry writer ownership safely | None | REVIEW | Test repair: 30 repeated/26 related Chromium checks, build/lint pass; [report](reports/T038.md). |
 
-| [T039](tasks/T039.md) | Input | Prevent card edge drags from navigating back | None | REVIEW | First browser guard failed physical iPhone/Android checks. Touch inset revision: 444 unit/106 Chromium/11 nested/build/lint pass; await physical revalidation. [Report](reports/T039.md). |
+| [T039](tasks/T039.md) | Input | Prevent card edge drags from navigating back | None | REVIEW | First guard failed physical checks. Touch inset `b40b8a4`: CI 444 unit/13 simulation/153 E2E pass; published build `71408fe08fd4`. Await physical revalidation. [Report](reports/T039.md). |

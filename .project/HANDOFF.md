@@ -1,6 +1,6 @@
 # T039 touch inset REVIEW — 2026-11-07
 
-First browser guard failed physical iPhone/Android checks. Revised touch layout keeps cards >=24px from both edges, with 38px cards/1px gaps at 320px. Removed ineffective touchstart interception/click fallback; native pinch restored. 444 unit/106 Chromium/11 nested/build/lint pass; 320/390px mobile screenshots inspected. Await physical revalidation: swiping in the empty outer gutter can still navigate Back. Both diagnostics preserved; previous push/redeployment authorization persists. See reports/T039.md.
+First browser guard failed physical iPhone/Android checks. Revised `b40b8a4` keeps touch cards >=24px from both edges (38px cards/1px gaps at 320px); removed interception/click fallback and restored native pinch. Local 444 unit/106 Chromium/11 nested/build/lint pass; full GitHub CI 444 unit/13 simulation/153 E2E pass. Playground run `42377494612` succeeded; live build `71408fe08fd4` geometry verified at 320/390px. Await physical revalidation: the empty outer gutter still permits native Back. Both diagnostics preserved; Playground tracked files unchanged. See reports/T039.md.
 
 # T009 desktop card margins REVIEW — 2026-10-25
 
