@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('T039 Card edge gestures', () => {
+test.describe('T039 Touch-safe card edges', () => {
   test.use({ viewport: { width: 320, height: 568 }, hasTouch: true });
 
   test.beforeEach(async ({ page }) => {
@@ -12,46 +12,37 @@ test.describe('T039 Card edge gestures', () => {
     expect(await page.evaluate(() => getComputedStyle(document.documentElement).overscrollBehaviorX)).toBe('none');
   });
 
-  test('cancels edge card touchstart before native navigation, preserving other touch starts', async ({ page }) => {
-    const result = await page.evaluate(() => {
-      const input = window.__SOLITAIRE_INPUT__;
-      const card = document.querySelector('#column-0 .card-face-up');
-      const back = document.querySelector('#column-1 .card-node:not(.card-face-up)');
-      function start(target, x, count = 1, cancelable = true) {
-        input.cancelDrag();
-        target.dispatchEvent(new PointerEvent('pointerdown', {
-          pointerId: 1, pointerType: 'touch', clientX: x, clientY: 200, bubbles: true,
-        }));
-        const event = new Event('touchstart', { bubbles: true, cancelable });
-        Object.defineProperty(event, 'touches', {
-          value: Array.from({ length: count }, (_, i) => ({ clientX: x + i, clientY: 200 })),
-        });
-        target.dispatchEvent(event);
-        const blocked = event.defaultPrevented;
-        input.cancelDrag();
-        return blocked;
+  for (const viewport of [
+    { width: 320, height: 568 }, { width: 360, height: 640 },
+    { width: 390, height: 844 }, { width: 430, height: 932 },
+    { width: 568, height: 320 }, { width: 844, height: 390 },
+  ]) {
+    test(`cards stay 24px inside both edges at ${viewport.width}x${viewport.height}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      const columns = await page.locator('.tableau-column').all();
+      expect(columns).toHaveLength(7);
+      for (const column of columns) {
+        const box = await column.boundingBox();
+        expect(box.x).toBeGreaterThanOrEqual(23.9);
+        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width - 23.9);
+        expect(box.width).toBeGreaterThanOrEqual(37.9);
       }
-      return {
-        left: start(card, 16), right: start(card, innerWidth - 16),
-        center: start(card, 100), pinch: start(card, 16, 2),
-        faceDown: start(back, 16), background: start(document.querySelector('#column-0'), 16),
-        stock: start(document.querySelector('#stock-container'), 16),
-        noncancelable: start(card, 16, 1, false),
-      };
+      for (const selector of ['#stock-container', '#foundation-3']) {
+        const box = await page.locator(selector).boundingBox();
+        expect(box.x).toBeGreaterThanOrEqual(23.9);
+        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width - 23.9);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     });
-    expect(result).toEqual({
-      left: true, right: true, center: false, pinch: false,
-      faceDown: false, background: false, stock: false, noncancelable: false,
-    });
-  });
+  }
 
-  test('native Chromium edge taps select and double tap moves exactly once', async ({ page }) => {
+  test('native Chromium taps on the first column select and double tap moves exactly once', async ({ page }) => {
     await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 0, drawCount: 1 }));
     const card = page.locator('#column-0 .card-face-up');
     const box = await card.boundingBox();
     const x = box.x + 2;
     const y = box.y + box.height / 2;
-    expect(x).toBeLessThanOrEqual(20);
+    expect(x).toBeGreaterThanOrEqual(24);
     await page.touchscreen.tap(x, y);
     await expect(card).toHaveClass(/is-selected/);
     await expect(page.locator('#moves-display')).toHaveText('0');
@@ -60,7 +51,7 @@ test.describe('T039 Card edge gestures', () => {
     await expect(page.locator('#foundation-1 .card-face-up')).toBeVisible();
   });
 
-  test('native Chromium edge drag commits once and stays on the game page', async ({ page }) => {
+  test('native Chromium drag from the first column commits once and stays on the game page', async ({ page }) => {
     const gameUrl = page.url();
     await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 0, drawCount: 1 }));
     const source = await page.locator('#column-0 .card-face-up').boundingBox();
@@ -69,7 +60,7 @@ test.describe('T039 Card edge gestures', () => {
     const touch = (x, y) => ({ x, y, id: 1 });
     const x = source.x + 2;
     const y = source.y + source.height / 2;
-    expect(x).toBeLessThanOrEqual(20);
+    expect(x).toBeGreaterThanOrEqual(24);
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [touch(x, y)] });
     await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [touch(x + 12, y)] });
     await expect(page.locator('#drag-overlay')).toBeVisible();
@@ -84,7 +75,7 @@ test.describe('T039 Card edge gestures', () => {
     await cdp.detach();
   });
 
-  test('an edge selection allows an immediate destination tap', async ({ page }) => {
+  test('a first-column selection allows an immediate destination tap', async ({ page }) => {
     await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 0, drawCount: 1 }));
     const source = await page.locator('#column-0 .card-face-up').boundingBox();
     const target = await page.locator('#foundation-1').boundingBox();
@@ -94,7 +85,7 @@ test.describe('T039 Card edge gestures', () => {
     await expect(page.locator('#foundation-1 .card-face-up')).toBeVisible();
   });
 
-  test('a second finger cancels an edge gesture without making a move', async ({ page }) => {
+  test('a second finger cancels a card gesture without making a move', async ({ page }) => {
     await page.evaluate(() => window.__SOLITAIRE_APP__.newGame({ seed: 0, drawCount: 1 }));
     const source = await page.locator('#column-0 .card-face-up').boundingBox();
     const target = await page.locator('#foundation-1').boundingBox();

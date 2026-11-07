@@ -639,6 +639,14 @@ body:has(.has-companion) {
   }
 }
 
+@media (any-pointer: coarse) {
+  body {
+    /* Together with board padding, keep cards 24px away from native Back edges. */
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
+
 @media (orientation: landscape) and (max-height: 500px) {
   body {
     padding-top: 4px;

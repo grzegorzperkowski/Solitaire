@@ -1,6 +1,6 @@
-# T039 edge navigation REVIEW — 2026-11-07
+# T039 touch inset REVIEW — 2026-11-07
 
-Shared Solitaire browser guard delivered in `87bc914`: 441 unit/77 standalone + 6 nested Chromium/build/lint pass. Coordinator authorized push/redeployment on 2026-11-07; push confirmed already up to date, Solitaire CI passed, Playground run `42375939444` succeeded. Public build `53144c189758` verified with both guards. Await physical Android/iOS and coordinator acceptance: OS Back may intercept before web events; native pinch must start outside the 20px card edge strip. Both unrelated diagnostics preserved; Playground tracked files unchanged. See reports/T039.md.
+First browser guard failed physical iPhone/Android checks. Revised touch layout keeps cards >=24px from both edges, with 38px cards/1px gaps at 320px. Removed ineffective touchstart interception/click fallback; native pinch restored. 444 unit/106 Chromium/11 nested/build/lint pass; 320/390px mobile screenshots inspected. Await physical revalidation: swiping in the empty outer gutter can still navigate Back. Both diagnostics preserved; previous push/redeployment authorization persists. See reports/T039.md.
 
 # T009 desktop card margins REVIEW — 2026-10-25
 

@@ -1082,7 +1082,6 @@ export function createInputController(app, rootElement) {
       && lastTouchTap?.state === state
       && now - lastTouchTap.time <= 350
       && isSameSource(lastTouchTap.source, source);
-    const needsClick = endedOnSource && activeGesture.preventedTouchStart;
     activeGesture = null;
 
     if (isDoubleTap) {
@@ -1098,11 +1097,6 @@ export function createInputController(app, rootElement) {
     }
 
     lastTouchTap = endedOnSource ? { source, state, time: now } : null;
-    if (needsClick) {
-      // Cancelling edge touchstart also suppresses the compatibility click.
-      suppressNextClick = false;
-      handleClick(e);
-    }
   }
 
   function handleTouchStart(e) {
@@ -1111,13 +1105,6 @@ export function createInputController(app, rootElement) {
       cancelDrag();
       return;
     }
-    if (e.touches.length !== 1 || !e.cancelable || activeGesture?.pointerType !== 'touch'
-      || !(e.target instanceof Element) || !activeGesture.sourceElement.contains(e.target)) return;
-    const x = e.touches[0].clientX;
-    if (x > 20 && x < window.innerWidth - 20) return;
-    // Safari claims edge navigation at touchstart, before the drag threshold.
-    e.preventDefault();
-    activeGesture.preventedTouchStart = true;
   }
 
   function handleTouchMove(e) {
@@ -1270,7 +1257,7 @@ export function createInputController(app, rootElement) {
     window.addEventListener('pagehide', cancelDrag);
     window.addEventListener('resize', cancelDrag);
     window.addEventListener('orientationchange', cancelDrag);
-    window.addEventListener('touchstart', handleTouchStart, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
     window.addEventListener('touchmove', handleTouchMove, { passive: false });
     window.addEventListener('touchend', handleTouchEnd, { passive: true });
     window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
