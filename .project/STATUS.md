@@ -1,6 +1,6 @@
 # T039 layout rollback REVIEW — 2026-11-07
 
-Coordinator rejected touch gutters/smaller cards. Restored pre-inset CSS/geometry/requirements exactly; removed gap compression and inset tests, preserved passive native input/saves/diagnostics. 6 unit/40 Chromium/build/nested checks pass. Republish under standing authorization; no reserved edge strips or substitute navigation workaround. Original Back defect remains unresolved; await acceptance. See reports/T039.md.
+Coordinator rejected touch gutters/smaller cards. Rollback `a18b434` restores pre-inset CSS/geometry/requirements exactly, removes gap compression and preserves native input/saves/diagnostics. 6 unit/40 Chromium/build/nested checks pass. Playground run `42378206399` succeeded; live build `f016fa5c08a6` restores 3/4px gaps and previous card widths at 320/390px. Original Back defect remains unresolved; no reserved strips or substitute workaround; await acceptance. See reports/T039.md.
 
 # T009 desktop card margins REVIEW — 2026-10-25
 
