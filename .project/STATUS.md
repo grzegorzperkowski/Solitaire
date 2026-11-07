@@ -1,6 +1,6 @@
 # T039 single-document host REVIEW — 2026-11-07
 
-Single-document PWA host delivered in mygame `4112835`: full-viewport frame, real `#solitaire` route, protected cancelable Back, explicit exit, secure messages, full-shell reload and direct legacy URL migration. 23 Node tests plus complete assembled Chromium interaction/state/ownership/offline checks pass; browser-initiated Back was canceled. Core/card dimensions and diagnostics unchanged. Publish for coordinator phone testing; no physical success or acceptance implied. See reports/T039.md.
+Single-document PWA host `mygame` `4112835` published successfully via `42382788195`, build `e47694f4c2b1`: full-viewport frame, real `#solitaire` route, protected cancelable Back, explicit exit, secure messages, full-shell reload and legacy URL/save migration. 23 Node plus complete local/live Chromium interaction/state/ownership/offline checks pass; browser-initiated Back canceled. Core/card dimensions and diagnostics unchanged. Await coordinator phone acceptance; API support required, no physical success claimed. See reports/T039.md.
 
 # T009 desktop card margins REVIEW — 2026-10-25
 
