@@ -1,6 +1,6 @@
-# T039 Context7 findings REVIEW — 2026-11-07
+# T039 single-document host REVIEW — 2026-11-07
 
-Context7 research and four-strategy browser probe delivered. Current cross-document Back cannot be canceled; same-document programmatic cancellation works in Chromium. Candidate is a persistent Playground document/full-viewport game view, subject to Navigation API support (Safari/iOS >=26.2) and physical validation; not a verified gesture fix. Full-width production build `f016fa5c08a6` and both diagnostics untouched. No runtime change, push or deployment. See reports/T039-context7.md and reports/T039.md.
+Single-document PWA host delivered in mygame `4112835`: full-viewport frame, real `#solitaire` route, protected cancelable Back, explicit exit, secure messages, full-shell reload and direct legacy URL migration. 23 Node tests plus complete assembled Chromium interaction/state/ownership/offline checks pass; browser-initiated Back was canceled. Core/card dimensions and diagnostics unchanged. Publish for coordinator phone testing; no physical success or acceptance implied. See reports/T039.md.
 
 
 # T009 desktop card margins REVIEW — 2026-10-25

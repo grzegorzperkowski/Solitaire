@@ -72,4 +72,4 @@ All new tasks must be explicitly scoped/assigned by the coordinator; do not crea
 
 | [T038](tasks/T038.md) | Persistence | Retry writer ownership safely | None | REVIEW | Test repair: 30 repeated/26 related Chromium checks, build/lint pass; [report](reports/T038.md). |
 
-| [T039](tasks/T039.md) | Input | Prevent card edge drags from navigating back | None | REVIEW | Context7 research/probe delivered: cross-document cancellation unavailable; same-document candidate tested programmatically. Production unchanged; [findings](reports/T039-context7.md). |
+| [T039](tasks/T039.md) | Input | Prevent card edge drags from navigating back | None | REVIEW | Single-document host `mygame` `4112835`; 23 Node + assembled browser/state/offline checks pass; await publication/phone acceptance. [Report](reports/T039.md). |
